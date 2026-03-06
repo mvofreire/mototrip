@@ -114,7 +114,7 @@ export class RoutesService {
   static async saveRoute(routeId: string, userId: string) {
     const { data, error } = await supabase
       .from('saved_routes')
-      .insert({ route_id: routeId, user_id: userId })
+      .insert({ route_id: routeId, user_id: userId } as any)
       .select()
       .single()
 
@@ -154,7 +154,7 @@ export class RoutesService {
         route_id: routeId,
         user_id: userId,
         ...ratings,
-      })
+      } as any)
       .select()
       .single()
 
