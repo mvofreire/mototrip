@@ -326,6 +326,8 @@ npm run dev
    - Adicione `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (se tiver)
 6. Clique em "Deploy"
 
+**✅ Configuração para Yarn 4:** O projeto já inclui `vercel.json` e `.npmrc` configurados para usar Yarn 4 via Corepack. A Vercel detectará automaticamente.
+
 **Deploy automático:** Cada push na branch `main` fará deploy automaticamente!
 
 #### Outras Opções
