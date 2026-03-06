@@ -8,7 +8,9 @@ import { RouteCard } from '@/components/features/routes/route-card'
 import { RouteFilters } from '@/components/features/routes/route-filters'
 import { mockRoutes } from '@/lib/mock-data'
 import { RouteFilters as RouteFiltersType } from '@/types'
-import { Search, SlidersHorizontal } from 'lucide-react'
+import { Search, SlidersHorizontal, LayoutGrid, List } from 'lucide-react'
+
+type ViewMode = 'grid' | 'list'
 
 export default function ExplorePage({
   params: { locale },
@@ -19,6 +21,7 @@ export default function ExplorePage({
   const [filters, setFilters] = useState<RouteFiltersType>({})
   const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
+  const [viewMode, setViewMode] = useState<ViewMode>('grid')
 
   // Filter logic (simplified for MVP)
   const filteredRoutes = mockRoutes.filter(route => {
@@ -85,7 +88,7 @@ export default function ExplorePage({
         {/* Main Content */}
         <div className="grid gap-8 md:grid-cols-[280px_1fr]">
           {/* Filters Sidebar */}
-          <aside className={`${showFilters ? 'block' : 'hidden'} md:block`}>
+          <aside className={`${showFilters ? 'block' : 'hidden'} md:block md:sticky md:top-20 md:self-start`}>
             <RouteFilters filters={filters} onFiltersChange={setFilters} />
           </aside>
 
@@ -95,14 +98,42 @@ export default function ExplorePage({
               <p className="text-sm text-muted-foreground">
                 {t('results', { count: filteredRoutes.length })}
               </p>
+              
+              {/* View Mode Toggle */}
+              <div className="flex items-center gap-1 border rounded-lg p-1">
+                <Button
+                  variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('grid')}
+                  className="h-8 w-8 p-0"
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'secondary' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                  className="h-8 w-8 p-0"
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
 
             {filteredRoutes.length > 0 ? (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-                {filteredRoutes.map((route) => (
-                  <RouteCard key={route.id} route={route} locale={locale} />
-                ))}
-              </div>
+              viewMode === 'grid' ? (
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+                  {filteredRoutes.map((route) => (
+                    <RouteCard key={route.id} route={route} locale={locale} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col gap-6">
+                  {filteredRoutes.map((route) => (
+                    <RouteCard key={route.id} route={route} locale={locale} variant="list" />
+                  ))}
+                </div>
+              )
             ) : (
               <div className="text-center py-12">
                 <p className="text-muted-foreground">{t('noResults')}</p>
