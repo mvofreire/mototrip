@@ -30,6 +30,17 @@
       "riders": "Motociclistas",
       "reviews": "Avaliações"
     },
+    "clarification": {
+      "title": "Não Somos um GPS",
+      "subtitle": "Curamos rotas bonitas para viagens memoráveis",
+      "description": "MotoTrip é uma plataforma colaborativa que compartilha as melhores rotas de moto do mundo. Não fornecemos navegação em tempo real—em vez disso, ajudamos você a descobrir rotas cênicas, bem organizadas e que tornam sua viagem bonita, segura e inesquecível.",
+      "feature1Title": "Rotas Curadas",
+      "feature1Desc": "Selecionadas por motociclistas experientes",
+      "feature2Title": "Estradas Cênicas",
+      "feature2Desc": "Paisagens lindas e mirantes",
+      "feature3Title": "Avaliações da Comunidade",
+      "feature3Desc": "Feedback real de outros motociclistas"
+    },
     "featured": {
       "title": "Rotas em Destaque",
       "subtitle": "Rotas selecionadas que oferecem experiências excepcionais de pilotagem",
@@ -150,5 +161,11 @@
     "photoGalleryDesc": "Belas imagens da comunidade",
     "discussions": "Discussões",
     "discussionsDesc": "Compartilhe dicas e experiências"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Histórias, dicas e inspiração da estrada",
+    "comingSoon": "Em Breve",
+    "comingSoonDesc": "Estamos trabalhando para trazer histórias incríveis de motociclistas ao redor do mundo. Volte em breve!"
   }
 }

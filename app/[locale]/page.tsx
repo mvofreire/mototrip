@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
-import { ArrowRight, MapPin, Users, Star } from 'lucide-react'
+import { ArrowRight, MapPin, Users, Star, Navigation, Map, MessageCircle } from 'lucide-react'
 import { RouteCard } from '@/components/features/routes/route-card'
 import { mockRoutes } from '@/lib/mock-data'
 
@@ -73,6 +73,54 @@ export default async function HomePage({
                 </div>
                 <div className="text-2xl font-bold">50K+</div>
                 <div className="text-sm text-muted-foreground">{t('stats.reviews')}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Clarification Section */}
+      <section className="border-t bg-gradient-to-b from-sunshine-yellow-50/30 to-background">
+        <div className="container py-16 md:py-24">
+          <div className="mx-auto max-w-4xl space-y-12">
+            <div className="text-center space-y-4">
+              <div className="inline-flex items-center justify-center p-3 bg-sunshine-orange-100 dark:bg-sunshine-orange-500/10 rounded-full mb-4">
+                <Navigation className="h-8 w-8 text-sunshine-orange-500" strokeWidth={2.5} />
+              </div>
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+                {t('clarification.title')}
+              </h2>
+              <p className="text-lg text-sunshine-orange-600 dark:text-sunshine-orange-400 font-medium">
+                {t('clarification.subtitle')}
+              </p>
+              <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                {t('clarification.description')}
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="flex flex-col items-center text-center space-y-3 p-6 rounded-lg border bg-card hover:shadow-md transition-shadow">
+                <div className="p-3 bg-sunshine-yellow-100 dark:bg-sunshine-yellow-500/10 rounded-full">
+                  <Star className="h-6 w-6 text-sunshine-yellow-600 dark:text-sunshine-yellow-400" />
+                </div>
+                <h3 className="font-semibold text-lg">{t('clarification.feature1Title')}</h3>
+                <p className="text-sm text-muted-foreground">{t('clarification.feature1Desc')}</p>
+              </div>
+
+              <div className="flex flex-col items-center text-center space-y-3 p-6 rounded-lg border bg-card hover:shadow-md transition-shadow">
+                <div className="p-3 bg-sunshine-pink-100 dark:bg-sunshine-pink-500/10 rounded-full">
+                  <Map className="h-6 w-6 text-sunshine-pink-600 dark:text-sunshine-pink-400" />
+                </div>
+                <h3 className="font-semibold text-lg">{t('clarification.feature2Title')}</h3>
+                <p className="text-sm text-muted-foreground">{t('clarification.feature2Desc')}</p>
+              </div>
+
+              <div className="flex flex-col items-center text-center space-y-3 p-6 rounded-lg border bg-card hover:shadow-md transition-shadow">
+                <div className="p-3 bg-sunshine-coral-100 dark:bg-sunshine-coral-500/10 rounded-full">
+                  <MessageCircle className="h-6 w-6 text-sunshine-coral-600 dark:text-sunshine-coral-400" />
+                </div>
+                <h3 className="font-semibold text-lg">{t('clarification.feature3Title')}</h3>
+                <p className="text-sm text-muted-foreground">{t('clarification.feature3Desc')}</p>
               </div>
             </div>
           </div>

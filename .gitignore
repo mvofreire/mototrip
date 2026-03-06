@@ -4,8 +4,9 @@
 /node_modules
 /.pnp
 .pnp.js
+package-lock.json
 
-# yarn
+# yarn (legacy)
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
@@ -13,6 +14,8 @@
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+.yarnrc.yml
+yarn.lock
 
 # testing
 /coverage

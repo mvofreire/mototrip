@@ -192,7 +192,7 @@ full: 9999px
   framework: "Next.js 14 (App Router)",
   language: "TypeScript",
   runtime: "Node.js 18+",
-  packageManager: "Yarn 4.1.1+ (via Corepack)",
+  packageManager: "npm 9+",
   
   // Styling
   styling: "TailwindCSS",

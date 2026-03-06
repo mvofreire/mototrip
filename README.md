@@ -75,13 +75,11 @@ mototrip/
 Antes de começar, certifique-se de ter instalado:
 
 - **Node.js** 18.17+ ou superior, incluindo Node.js 23 ([Download](https://nodejs.org/))
-- **Yarn** 4.x ([Instalação](https://yarnpkg.com/getting-started/install))
+- **npm** 9+ (incluido com Node.js)
 - **Git** para clonar o repositório
 - Uma conta no **Supabase** ([Criar conta gratuita](https://supabase.com))
 - _(Opcional)_ Chave de API do **Google Maps** ou **Mapbox**
 
-> **⚠️ Importante:** Este projeto usa **Yarn 4** como package manager. Não use npm ou pnpm.
-> 
 > **✅ Compatibilidade:** Testado com Node.js 18, 20, 22 e 23.
 
 ### Instalação Completa
@@ -185,7 +183,7 @@ NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=sua_chave_google_maps
 
 ```bash
 npm run dev
-yar
+```
 
 Você verá algo como:
 
@@ -221,19 +219,19 @@ Use o seletor de idioma no header para alternar entre eles.
 
 ```bash
 # Iniciar servidor de desenvolvimento
-yarn dev
+npm run dev
 
 # Criar build de produção
-yarn build
+npm run build
 
 # Iniciar servidor de produção
-yarn start
+npm start
 
 # Executar linter
-yarn lint
+npm run lint
 
 # Verificar tipos TypeScript
-yarn type-check
+npm run type-check
 ```
 
 ---
@@ -255,14 +253,8 @@ Confira se tudo está funcionando:
 #### Erro: "Module not found"
 ```bash
 # Limpe node_modules e reinstale
-rm -rf node_modules yarn.lock .yarn/cache
-yarn install
-```
-
-#### Erro: "Yarn command not found"
-```bash
-# Configure o Yarn no projeto
-corepack prepare yarn@4.1.1 --activate
+rm -rf node_modules package-lock.json
+npm install
 ```
 
 #### Erro: "ENOENT: no such file or directory, stat '.yarn/releases/yarn-4.1.1.cjs'"
@@ -326,9 +318,7 @@ npm run dev
    - Adicione `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (se tiver)
 6. Clique em "Deploy"
 
-**✅ Configuração para Yarn 4:** O projeto já inclui `vercel.json` e `.npmrc` configurados para usar Yarn 4 via Corepack. A Vercel detectará automaticamente.
-
-**Deploy automático:** Cada push na branch `main` fará deploy automaticamente!
+**✅ Deploy Automático:** A Vercel detecta automaticamente Next.js e usa npm. Cada push na branch `main` fará deploy automaticamente!
 
 #### Outras Opções
 

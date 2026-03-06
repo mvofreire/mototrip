@@ -13,7 +13,7 @@
     
     /* Primary: Sunshine Orange */
     --primary: 24 95% 53%;
-    --primary-foreground: 40 20% 99%;
+    --primary-foreground: 0 0% 100%; /* Branco puro para contraste */
     
     /* Secondary: Warm Sand */
     --secondary: 24 9.8% 88%;
@@ -35,24 +35,24 @@
   }
 
   .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 40 20% 97%;
-    --card: 24 9.8% 10%;
-    --card-foreground: 40 20% 97%;
-    --popover: 20 14.3% 4.1%;
-    --popover-foreground: 40 20% 97%;
+    --background: 20 14.3% 8%;
+    --foreground: 40 20% 96%;
+    --card: 24 10% 12%;
+    --card-foreground: 40 20% 96%;
+    --popover: 24 10% 10%;
+    --popover-foreground: 40 20% 96%;
     --primary: 24 95% 53%;
-    --primary-foreground: 26 83.3% 14.1%;
-    --secondary: 12 6.5% 15.1%;
-    --secondary-foreground: 40 20% 97%;
-    --muted: 12 6.5% 15.1%;
-    --muted-foreground: 24 5.4% 63.9%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 24 10% 18%;
+    --secondary-foreground: 40 20% 96%;
+    --muted: 24 10% 18%;
+    --muted-foreground: 24 8% 70%;
     --accent: 43 96% 56%;
-    --accent-foreground: 40 20% 97%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 40 20% 97%;
-    --border: 12 6.5% 15.1%;
-    --input: 12 6.5% 15.1%;
+    --accent-foreground: 26 83.3% 14.1%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 24 10% 20%;
+    --input: 24 10% 20%;
     --ring: 24 95% 53%;
   }
 }
@@ -64,6 +64,11 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Garantir que botões primary sempre tenham background visível */
+  button[class*="bg-primary"]:not([class*="bg-gradient"]) {
+    background-color: hsl(var(--primary)) !important;
   }
 }
 

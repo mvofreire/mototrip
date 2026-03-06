@@ -1,15 +1,22 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { MapPin, Menu, User } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/language-switcher'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export function Header() {
   const t = useTranslations('nav')
   const tCommon = useTranslations('common')
   const locale = useLocale()
+  const pathname = usePathname()
+
+  const isActive = (path: string) => {
+    return pathname === `/${locale}${path}` || pathname.startsWith(`/${locale}${path}/`)
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -25,19 +32,31 @@ export function Header() {
           <nav className="hidden md:flex items-center gap-6">
             <Link
               href={`/${locale}/explore`}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className={`text-sm font-medium transition-colors ${
+                isActive('/explore')
+                  ? 'text-foreground font-semibold'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               {t('exploreRoutes')}
             </Link>
             <Link
               href={`/${locale}/submit`}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className={`text-sm font-medium transition-colors ${
+                isActive('/submit')
+                  ? 'text-foreground font-semibold'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               {t('submitRoute')}
             </Link>
             <Link
               href={`/${locale}/community`}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className={`text-sm font-medium transition-colors ${
+                isActive('/community')
+                  ? 'text-foreground font-semibold'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               {t('community')}
             </Link>
@@ -50,6 +69,7 @@ export function Header() {
           </Button>
 
           <div className="hidden md:flex items-center gap-2">
+            <ThemeToggle />
             <LanguageSwitcher />
             <Button variant="ghost" size="sm">
               <User className="h-4 w-4 mr-2" />
