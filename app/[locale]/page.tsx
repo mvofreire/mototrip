@@ -5,6 +5,15 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowRight, MapPin, Users, Star, Navigation, Map, MessageCircle } from 'lucide-react'
 import { RouteCard } from '@/components/features/routes/route-card'
 import { mockRoutes } from '@/lib/mock-data'
+import {
+  Section,
+  SectionContainer,
+  SectionContent,
+  SectionHeader,
+  SectionTitle,
+  SectionDescription,
+  SectionGrid,
+} from '@/components/ui/section'
 
 export default async function HomePage({
   params: { locale },
@@ -20,22 +29,20 @@ export default async function HomePage({
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b bg-gradient-to-b from-sand-50 to-background">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(252,211,77,0.1),transparent_50%),radial-gradient(circle_at_70%_60%,rgba(251,146,60,0.1),transparent_50%)]" />
-
-        <div className="container relative py-24 md:py-32">
-          <div className="mx-auto max-w-3xl text-center space-y-8">
-            <div className="space-y-4">
-              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+      <Section variant="hero" padding="hero" withRadialGradient>
+        <SectionContainer relative>
+          <SectionContent centered maxWidth="3xl" className="space-y-8">
+            <SectionHeader>
+              <SectionTitle as="h1">
                 {t('hero.title')}
-                <span className="block mt-2 bg-gradient-sunshine bg-clip-text text-transparent">
+                <span className="block mt-2 text-gradient-sunshine text-transparent">
                   {t('hero.titleHighlight')}
                 </span>
-              </h1>
-              <p className="text-lg text-muted-foreground md:text-xl max-w-2xl mx-auto">
+              </SectionTitle>
+              <SectionDescription size="lg" className="max-w-2xl mx-auto">
                 {t('hero.subtitle')}
-              </p>
-            </div>
+              </SectionDescription>
+            </SectionHeader>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild className="bg-gradient-sunshine hover:opacity-90">
@@ -75,30 +82,30 @@ export default async function HomePage({
                 <div className="text-sm text-muted-foreground">{t('stats.reviews')}</div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </SectionContent>
+        </SectionContainer>
+      </Section>
 
       {/* Clarification Section */}
-      <section className="border-t bg-gradient-to-b from-sunshine-yellow-50/30 to-background">
-        <div className="container py-16 md:py-24">
-          <div className="mx-auto max-w-4xl space-y-12">
-            <div className="text-center space-y-4">
+      <Section variant="clarification">
+        <SectionContainer>
+          <SectionContent centered maxWidth="4xl" className="space-y-12">
+            <SectionHeader className="text-center space-y-4">
               <div className="inline-flex items-center justify-center p-3 bg-sunshine-orange-100 dark:bg-sunshine-orange-500/10 rounded-full mb-4">
                 <Navigation className="h-8 w-8 text-sunshine-orange-500" strokeWidth={2.5} />
               </div>
-              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+              <SectionTitle as="h2">
                 {t('clarification.title')}
-              </h2>
+              </SectionTitle>
               <p className="text-lg text-sunshine-orange-600 dark:text-sunshine-orange-400 font-medium">
                 {t('clarification.subtitle')}
               </p>
-              <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              <SectionDescription className="max-w-2xl mx-auto leading-relaxed">
                 {t('clarification.description')}
-              </p>
-            </div>
+              </SectionDescription>
+            </SectionHeader>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <SectionGrid cols={3}>
               <div className="flex flex-col items-center text-center space-y-3 p-6 rounded-lg border bg-card hover:shadow-md transition-shadow">
                 <div className="p-3 bg-sunshine-yellow-100 dark:bg-sunshine-yellow-500/10 rounded-full">
                   <Star className="h-6 w-6 text-sunshine-yellow-600 dark:text-sunshine-yellow-400" />
@@ -122,19 +129,19 @@ export default async function HomePage({
                 <h3 className="font-semibold text-lg">{t('clarification.feature3Title')}</h3>
                 <p className="text-sm text-muted-foreground">{t('clarification.feature3Desc')}</p>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            </SectionGrid>
+          </SectionContent>
+        </SectionContainer>
+      </Section>
 
       {/* Featured Routes Section */}
-      <section className="container py-16 md:py-24">
-        <div className="space-y-8">
+      <Section variant="ghost">
+        <SectionContainer className="space-y-8">
           <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tight">{t('featured.title')}</h2>
-              <p className="text-muted-foreground">{t('featured.subtitle')}</p>
-            </div>
+            <SectionHeader>
+              <SectionTitle as="h2">{t('featured.title')}</SectionTitle>
+              <SectionDescription>{t('featured.subtitle')}</SectionDescription>
+            </SectionHeader>
             <Button variant="ghost" asChild>
               <Link href={`/${locale}/explore`}>
                 {t('featured.viewAll')}
@@ -143,42 +150,40 @@ export default async function HomePage({
             </Button>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <SectionGrid cols={3}>
             {featuredRoutes.map((route) => (
               <RouteCard key={route.id} route={route} locale={locale} />
             ))}
-          </div>
-        </div>
-      </section>
+          </SectionGrid>
+        </SectionContainer>
+      </Section>
 
       {/* Popular Routes Section */}
-      <section className="border-t bg-sand-50/50">
-        <div className="container py-16 md:py-24">
-          <div className="space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tight">{t('popular.title')}</h2>
-              <p className="text-muted-foreground">{t('popular.subtitle')}</p>
-            </div>
+      <Section variant="default">
+        <SectionContainer className="space-y-8">
+          <SectionHeader>
+            <SectionTitle as="h2">{t('popular.title')}</SectionTitle>
+            <SectionDescription>{t('popular.subtitle')}</SectionDescription>
+          </SectionHeader>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {popularRoutes.map((route) => (
-                <RouteCard key={route.id} route={route} locale={locale} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+          <SectionGrid cols={3}>
+            {popularRoutes.map((route) => (
+              <RouteCard key={route.id} route={route} locale={locale} />
+            ))}
+          </SectionGrid>
+        </SectionContainer>
+      </Section>
 
       {/* CTA Section */}
-      <section className="border-t">
-        <div className="container py-16 md:py-24">
-          <div className="mx-auto max-w-3xl text-center space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+      <Section variant="ghost" className="border-t">
+        <SectionContainer>
+          <SectionContent centered maxWidth="3xl" className="space-y-8">
+            <SectionHeader>
+              <SectionTitle as="h2">
                 {t('cta.title')}
-              </h2>
-              <p className="text-lg text-muted-foreground">{t('cta.subtitle')}</p>
-            </div>
+              </SectionTitle>
+              <SectionDescription size="lg">{t('cta.subtitle')}</SectionDescription>
+            </SectionHeader>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild className="bg-gradient-sunshine hover:opacity-90">
@@ -188,9 +193,10 @@ export default async function HomePage({
                 <Link href={`/${locale}/submit`}>{t('cta.submitYourRoute')}</Link>
               </Button>
             </div>
-          </div>
-        </div>
-      </section>
+          </SectionContent>
+        </SectionContainer>
+      </Section>
     </div>
   )
 }
+

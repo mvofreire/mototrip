@@ -78,6 +78,16 @@
     text-wrap: balance;
   }
   
+  .bg-gradient-sunshine {
+    background: linear-gradient(135deg, #FCD34D 0%, #FB923C 50%, #F472B6 100%);
+  }
+  
+  .text-gradient-sunshine {
+    background: linear-gradient(135deg, #FCD34D 0%, #FB923C 50%, #F472B6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  
   .gradient-sunshine {
     background: linear-gradient(135deg, #FCD34D 0%, #FB923C 50%, #F472B6 100%);
   }

@@ -4,15 +4,24 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
-import { MapPin, Menu, User } from 'lucide-react'
+import { MapPin, Menu, User, X } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { ThemeToggle } from '@/components/theme-toggle'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { useState } from 'react'
 
 export function Header() {
   const t = useTranslations('nav')
   const tCommon = useTranslations('common')
   const locale = useLocale()
   const pathname = usePathname()
+  const [open, setOpen] = useState(false)
 
   const isActive = (path: string) => {
     return pathname === `/${locale}${path}` || pathname.startsWith(`/${locale}${path}/`)
@@ -64,10 +73,88 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="h-5 w-5" />
-          </Button>
+          {/* Mobile Menu */}
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <SheetHeader>
+                <SheetTitle className="flex items-center gap-2">
+                  <div className="h-8 w-8 rounded-md bg-gradient-sunshine flex items-center justify-center">
+                    <MapPin className="h-5 w-5 text-white" />
+                  </div>
+                  {tCommon('mototrip')}
+                </SheetTitle>
+              </SheetHeader>
+              
+              <div className="flex flex-col gap-6 mt-8">
+                {/* Navigation Links */}
+                <nav className="flex flex-col gap-4">
+                  <Link
+                    href={`/${locale}/explore`}
+                    onClick={() => setOpen(false)}
+                    className={`text-lg font-medium transition-colors py-2 ${
+                      isActive('/explore')
+                        ? 'text-foreground font-semibold'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {t('exploreRoutes')}
+                  </Link>
+                  <Link
+                    href={`/${locale}/submit`}
+                    onClick={() => setOpen(false)}
+                    className={`text-lg font-medium transition-colors py-2 ${
+                      isActive('/submit')
+                        ? 'text-foreground font-semibold'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {t('submitRoute')}
+                  </Link>
+                  <Link
+                    href={`/${locale}/community`}
+                    onClick={() => setOpen(false)}
+                    className={`text-lg font-medium transition-colors py-2 ${
+                      isActive('/community')
+                        ? 'text-foreground font-semibold'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {t('community')}
+                  </Link>
+                </nav>
 
+                {/* Divider */}
+                <div className="border-t" />
+
+                {/* Theme & Language */}
+                <div className="flex items-center gap-4">
+                  <ThemeToggle />
+                  <LanguageSwitcher />
+                </div>
+
+                {/* Divider */}
+                <div className="border-t" />
+
+                {/* Auth Buttons */}
+                <div className="flex flex-col gap-3">
+                  <Button variant="ghost" className="justify-start">
+                    <User className="h-4 w-4 mr-2" />
+                    {t('signIn')}
+                  </Button>
+                  <Button className="bg-gradient-sunshine hover:opacity-90">
+                    {t('getStarted')}
+                  </Button>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-2">
             <ThemeToggle />
             <LanguageSwitcher />
