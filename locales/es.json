@@ -1,0 +1,154 @@
+{
+  "common": {
+    "mototrip": "MotoTrip",
+    "loading": "Cargando...",
+    "error": "Error",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "share": "Compartir",
+    "back": "Volver"
+  },
+  "nav": {
+    "exploreRoutes": "Explorar Rutas",
+    "submitRoute": "Enviar Ruta",
+    "community": "Comunidad",
+    "signIn": "Iniciar Sesión",
+    "getStarted": "Comenzar"
+  },
+  "home": {
+    "hero": {
+      "title": "Descubre las Mejores",
+      "titleHighlight": "Rutas en Moto",
+      "subtitle": "Explora rutas de conducción curadas por motociclistas de todo el mundo. Encuentra carreteras escénicas, puertos de montaña y rutas costeras que hacen cada viaje inolvidable.",
+      "exploreRoutes": "Explorar Rutas",
+      "submitRoute": "Enviar una Ruta"
+    },
+    "stats": {
+      "routes": "Rutas",
+      "riders": "Motociclistas",
+      "reviews": "Reseñas"
+    },
+    "featured": {
+      "title": "Rutas Destacadas",
+      "subtitle": "Rutas seleccionadas que ofrecen experiencias excepcionales de conducción",
+      "viewAll": "Ver todas"
+    },
+    "popular": {
+      "title": "Populares Este Mes",
+      "subtitle": "Rutas más queridas por la comunidad"
+    },
+    "cta": {
+      "title": "¿Listo para Salir a la Carretera?",
+      "subtitle": "Únete a miles de motociclistas descubriendo nuevas aventuras. Comparte tus rutas favoritas e inspira a otros.",
+      "startExploring": "Comenzar a Explorar",
+      "submitYourRoute": "Enviar Tu Ruta"
+    }
+  },
+  "explore": {
+    "title": "Explorar Rutas",
+    "subtitle": "Descubre tu próxima aventura entre {count} rutas de motocicleta curadas",
+    "searchPlaceholder": "Buscar rutas...",
+    "filters": "Filtros",
+    "results": "{count} rutas encontradas",
+    "noResults": "No se encontraron rutas con tus criterios.",
+    "clearFilters": "Limpiar filtros"
+  },
+  "filters": {
+    "title": "Filtros",
+    "reset": "Restablecer",
+    "category": "Categoría",
+    "difficulty": "Dificultad",
+    "distance": "Distancia (km)",
+    "duration": "Duración (horas)",
+    "minimumRating": "Calificación Mínima"
+  },
+  "categories": {
+    "scenic": "Escénica",
+    "mountain": "Montaña",
+    "coastal": "Costera",
+    "weekend": "Fin de Semana",
+    "adventure": "Aventura"
+  },
+  "difficulty": {
+    "easy": "Fácil",
+    "moderate": "Moderada",
+    "challenging": "Desafiante",
+    "expert": "Experto"
+  },
+  "route": {
+    "distance": "Distancia",
+    "duration": "Duración",
+    "elevation": "Ganancia de Elevación",
+    "region": "Región",
+    "rating": "Calificación",
+    "reviews": "{count} reseñas",
+    "featured": "Destacada",
+    "saveRoute": "Guardar Ruta",
+    "aboutRoute": "Sobre Esta Ruta",
+    "routeMap": "Mapa de la Ruta",
+    "recommendedStops": "Paradas Recomendadas",
+    "reviewsTitle": "Reseñas",
+    "stop": "Parada {number}"
+  },
+  "stopTypes": {
+    "viewpoint": "Mirador",
+    "cafe": "Café",
+    "gas_station": "Gasolinera",
+    "restaurant": "Restaurante",
+    "landmark": "Punto de Interés",
+    "accommodation": "Alojamiento"
+  },
+  "ratings": {
+    "scenic": "Escenario",
+    "roadQuality": "Calidad de la Carretera",
+    "funFactor": "Factor Diversión"
+  },
+  "footer": {
+    "tagline": "Descubre y comparte las mejores rutas de motocicleta alrededor del mundo.",
+    "routes": "Rutas",
+    "scenicRides": "Paseos Escénicos",
+    "mountainPasses": "Puertos de Montaña",
+    "coastalRoutes": "Rutas Costeras",
+    "adventureTrails": "Senderos de Aventura",
+    "community": "Comunidad",
+    "submitRoute": "Enviar una Ruta",
+    "popularRoutes": "Rutas Populares",
+    "topRiders": "Mejores Motociclistas",
+    "communityGuidelines": "Guías de la Comunidad",
+    "company": "Empresa",
+    "aboutUs": "Sobre Nosotros",
+    "blog": "Blog",
+    "privacyPolicy": "Política de Privacidad",
+    "termsOfService": "Términos de Servicio",
+    "copyright": "© 2026 MotoTrip. Todos los derechos reservados.",
+    "builtForRiders": "Hecho para motociclistas, por motociclistas 🏍️"
+  },
+  "notFound": {
+    "title": "404",
+    "subtitle": "Página No Encontrada",
+    "description": "Parece que esta carretera no existe. Vamos a ponerte de nuevo en el camino.",
+    "backToHome": "Volver al Inicio",
+    "exploreRoutes": "Explorar Rutas"
+  },
+  "submit": {
+    "title": "Enviar una Ruta",
+    "subtitle": "Comparte tu ruta de conducción favorita con la comunidad",
+    "formTitle": "Formulario de Envío de Ruta",
+    "formDescription": "Esta función incluirá un mapa interactivo donde puedes dibujar tu ruta, agregar paradas, subir fotos y proporcionar detalles de la ruta.",
+    "toBeImplemented": "Por implementar con integración de mapa"
+  },
+  "community": {
+    "title": "Comunidad",
+    "subtitle": "Conéctate con motociclistas de todo el mundo",
+    "topContributors": "Principales Contribuidores",
+    "topContributorsDesc": "Ve quién está compartiendo las mejores rutas",
+    "featuredRiders": "Motociclistas Destacados",
+    "featuredRidersDesc": "Motociclistas con contribuciones excepcionales",
+    "photoGallery": "Galería de Fotos",
+    "photoGalleryDesc": "Hermosas imágenes de la comunidad",
+    "discussions": "Discusiones",
+    "discussionsDesc": "Comparte consejos y experiencias"
+  }
+}

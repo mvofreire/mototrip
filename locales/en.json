@@ -1,0 +1,154 @@
+{
+  "common": {
+    "mototrip": "MotoTrip",
+    "loading": "Loading...",
+    "error": "Error",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "share": "Share",
+    "back": "Back"
+  },
+  "nav": {
+    "exploreRoutes": "Explore Routes",
+    "submitRoute": "Submit Route",
+    "community": "Community",
+    "signIn": "Sign In",
+    "getStarted": "Get Started"
+  },
+  "home": {
+    "hero": {
+      "title": "Discover the Best",
+      "titleHighlight": "Motorcycle Routes",
+      "subtitle": "Explore curated riding routes from riders around the world. Find scenic roads, mountain passes, and coastal rides that make every journey unforgettable.",
+      "exploreRoutes": "Explore Routes",
+      "submitRoute": "Submit a Route"
+    },
+    "stats": {
+      "routes": "Routes",
+      "riders": "Riders",
+      "reviews": "Reviews"
+    },
+    "featured": {
+      "title": "Featured Routes",
+      "subtitle": "Handpicked routes that offer exceptional riding experiences",
+      "viewAll": "View all"
+    },
+    "popular": {
+      "title": "Popular This Month",
+      "subtitle": "Most loved routes by the community"
+    },
+    "cta": {
+      "title": "Ready to Hit the Road?",
+      "subtitle": "Join thousands of riders discovering new adventures. Share your favorite routes and inspire others.",
+      "startExploring": "Start Exploring",
+      "submitYourRoute": "Submit Your Route"
+    }
+  },
+  "explore": {
+    "title": "Explore Routes",
+    "subtitle": "Discover your next adventure from {count} curated motorcycle routes",
+    "searchPlaceholder": "Search routes...",
+    "filters": "Filters",
+    "results": "{count} routes found",
+    "noResults": "No routes found matching your criteria.",
+    "clearFilters": "Clear filters"
+  },
+  "filters": {
+    "title": "Filters",
+    "reset": "Reset",
+    "category": "Category",
+    "difficulty": "Difficulty",
+    "distance": "Distance (km)",
+    "duration": "Duration (hours)",
+    "minimumRating": "Minimum Rating"
+  },
+  "categories": {
+    "scenic": "Scenic",
+    "mountain": "Mountain",
+    "coastal": "Coastal",
+    "weekend": "Weekend",
+    "adventure": "Adventure"
+  },
+  "difficulty": {
+    "easy": "Easy",
+    "moderate": "Moderate",
+    "challenging": "Challenging",
+    "expert": "Expert"
+  },
+  "route": {
+    "distance": "Distance",
+    "duration": "Duration",
+    "elevation": "Elevation Gain",
+    "region": "Region",
+    "rating": "Rating",
+    "reviews": "{count} reviews",
+    "featured": "Featured",
+    "saveRoute": "Save Route",
+    "aboutRoute": "About This Route",
+    "routeMap": "Route Map",
+    "recommendedStops": "Recommended Stops",
+    "reviewsTitle": "Reviews",
+    "stop": "Stop {number}"
+  },
+  "stopTypes": {
+    "viewpoint": "Viewpoint",
+    "cafe": "Café",
+    "gas_station": "Gas Station",
+    "restaurant": "Restaurant",
+    "landmark": "Landmark",
+    "accommodation": "Accommodation"
+  },
+  "ratings": {
+    "scenic": "Scenic",
+    "roadQuality": "Road Quality",
+    "funFactor": "Fun Factor"
+  },
+  "footer": {
+    "tagline": "Discover and share the best motorcycle riding routes around the world.",
+    "routes": "Routes",
+    "scenicRides": "Scenic Rides",
+    "mountainPasses": "Mountain Passes",
+    "coastalRoutes": "Coastal Routes",
+    "adventureTrails": "Adventure Trails",
+    "community": "Community",
+    "submitRoute": "Submit a Route",
+    "popularRoutes": "Popular Routes",
+    "topRiders": "Top Riders",
+    "communityGuidelines": "Community Guidelines",
+    "company": "Company",
+    "aboutUs": "About Us",
+    "blog": "Blog",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "copyright": "© 2026 MotoTrip. All rights reserved.",
+    "builtForRiders": "Built for riders, by riders 🏍️"
+  },
+  "notFound": {
+    "title": "404",
+    "subtitle": "Page Not Found",
+    "description": "Looks like this road doesn't exist. Let's get you back on track.",
+    "backToHome": "Back to Home",
+    "exploreRoutes": "Explore Routes"
+  },
+  "submit": {
+    "title": "Submit a Route",
+    "subtitle": "Share your favorite riding route with the community",
+    "formTitle": "Route Submission Form",
+    "formDescription": "This feature will include an interactive map where you can draw your route, add stops, upload photos, and provide route details.",
+    "toBeImplemented": "To be implemented with map integration"
+  },
+  "community": {
+    "title": "Community",
+    "subtitle": "Connect with riders around the world",
+    "topContributors": "Top Contributors",
+    "topContributorsDesc": "See who's sharing the best routes",
+    "featuredRiders": "Featured Riders",
+    "featuredRidersDesc": "Riders with exceptional contributions",
+    "photoGallery": "Photo Gallery",
+    "photoGalleryDesc": "Beautiful shots from the community",
+    "discussions": "Discussions",
+    "discussionsDesc": "Share tips and experiences"
+  }
+}

@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 20% 97%; /* Warm off-white */
+    --foreground: 20 14.3% 4.1%; /* Dark brown */
+    --card: 40 20% 99%;
+    --card-foreground: 20 14.3% 4.1%;
+    --popover: 40 20% 99%;
+    --popover-foreground: 20 14.3% 4.1%;
+    
+    /* Primary: Sunshine Orange */
+    --primary: 24 95% 53%;
+    --primary-foreground: 40 20% 99%;
+    
+    /* Secondary: Warm Sand */
+    --secondary: 24 9.8% 88%;
+    --secondary-foreground: 24 9.8% 10%;
+    
+    --muted: 24 9.8% 88%;
+    --muted-foreground: 25 5.3% 44.7%;
+    
+    /* Accent: Sunshine Yellow */
+    --accent: 43 96% 56%;
+    --accent-foreground: 26 83.3% 14.1%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 40 20% 99%;
+    --border: 24 9.8% 88%;
+    --input: 24 9.8% 88%;
+    --ring: 24 95% 53%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 20 14.3% 4.1%;
+    --foreground: 40 20% 97%;
+    --card: 24 9.8% 10%;
+    --card-foreground: 40 20% 97%;
+    --popover: 20 14.3% 4.1%;
+    --popover-foreground: 40 20% 97%;
+    --primary: 24 95% 53%;
+    --primary-foreground: 26 83.3% 14.1%;
+    --secondary: 12 6.5% 15.1%;
+    --secondary-foreground: 40 20% 97%;
+    --muted: 12 6.5% 15.1%;
+    --muted-foreground: 24 5.4% 63.9%;
+    --accent: 43 96% 56%;
+    --accent-foreground: 40 20% 97%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 40 20% 97%;
+    --border: 12 6.5% 15.1%;
+    --input: 12 6.5% 15.1%;
+    --ring: 24 95% 53%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .gradient-sunshine {
+    background: linear-gradient(135deg, #FCD34D 0%, #FB923C 50%, #F472B6 100%);
+  }
+  
+  .gradient-sunshine-subtle {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FFEDD5 50%, #FCE7F3 100%);
+  }
+}
