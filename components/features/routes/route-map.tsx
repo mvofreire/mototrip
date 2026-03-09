@@ -2,11 +2,50 @@
 
 import { RouteWithDetails } from '@/types'
 import { Card } from '@/components/ui/card'
-import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps'
-import { useMemo } from 'react'
+import { APIProvider, Map, AdvancedMarker, Marker, useMap } from '@vis.gl/react-google-maps'
+import { useMemo, useEffect } from 'react'
 
 interface RouteMapProps {
   route: RouteWithDetails
+}
+
+// Component to draw the route polyline
+function RoutePolyline({ coordinates }: { coordinates: Array<{ lat: number; lng: number }> }) {
+  const map = useMap()
+
+  useEffect(() => {
+    if (!map || coordinates.length < 2) return
+
+    const polyline = new google.maps.Polyline({
+      path: coordinates,
+      geodesic: true,
+      strokeColor: '#3b82f6',
+      strokeOpacity: 0.8,
+      strokeWeight: 4,
+    })
+
+    polyline.setMap(map)
+
+    // Calculate bounds to fit the entire route
+    const bounds = new google.maps.LatLngBounds()
+    coordinates.forEach(coord => {
+      bounds.extend(coord)
+    })
+
+    // Fit map to show the entire route with some padding
+    map.fitBounds(bounds, {
+      top: 50,
+      bottom: 50,
+      left: 50,
+      right: 50,
+    })
+
+    return () => {
+      polyline.setMap(null)
+    }
+  }, [map, coordinates])
+
+  return null
 }
 
 export function RouteMap({ route }: RouteMapProps) {
@@ -28,8 +67,8 @@ export function RouteMap({ route }: RouteMapProps) {
       return { lat: 40.4168, lng: -3.7038 } // Madrid default
     }
     
-    const avgLat = coordinates.reduce((sum, coord) => sum + coord.lat, 0) / coordinates.length
-    const avgLng = coordinates.reduce((sum, coord) => sum + coord.lng, 0) / coordinates.length
+    const avgLat = coordinates.reduce((sum: number, coord: { lat: number; lng: number }) => sum + coord.lat, 0) / coordinates.length
+    const avgLng = coordinates.reduce((sum: number, coord: { lat: number; lng: number }) => sum + coord.lng, 0) / coordinates.length
     
     return { lat: avgLat, lng: avgLng }
   }, [coordinates])
@@ -77,44 +116,20 @@ export function RouteMap({ route }: RouteMapProps) {
             fullscreenControl={true}
             zoomControl={true}
             className="w-full h-full"
-            onLoadError={(error) => {
-              console.error('Google Maps Load Error:', error)
-            }}
           >
-            {/* Add start marker */}
-            {coordinates.length > 0 && (
-              <AdvancedMarker
-                position={coordinates[0]}
-                title="Start"
-              >
-                <div style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  background: '#22c55e',
-                  border: '3px solid #16a34a',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  fontSize: '14px',
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.3)'
-                }}>
-                  S
-                </div>
-              </AdvancedMarker>
-            )}
+            {/* Draw the route line */}
+            <RoutePolyline coordinates={coordinates} />
 
             {/* Add end marker */}
             {coordinates.length > 1 && (
               <AdvancedMarker
                 position={coordinates[coordinates.length - 1]}
                 title="End"
+                zIndex={10}
               >
                 <div style={{
-                  width: '32px',
-                  height: '32px',
+                  width: '36px',
+                  height: '36px',
                   borderRadius: '50%',
                   background: '#ef4444',
                   border: '3px solid #dc2626',
@@ -124,9 +139,37 @@ export function RouteMap({ route }: RouteMapProps) {
                   color: 'white',
                   fontWeight: 'bold',
                   fontSize: '14px',
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.3)'
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.4)',
+                  transform: 'translate(12px, 0)' // Offset to the right
                 }}>
                   E
+                </div>
+              </AdvancedMarker>
+            )}
+
+            {/* Add start marker */}
+            {coordinates.length > 0 && (
+              <AdvancedMarker
+                position={coordinates[0]}
+                title="Start"
+                zIndex={20}
+              >
+                <div style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  background: '#22c55e',
+                  border: '3px solid #16a34a',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.4)',
+                  transform: 'translate(-12px, 0)' // Offset to the left
+                }}>
+                  S
                 </div>
               </AdvancedMarker>
             )}
