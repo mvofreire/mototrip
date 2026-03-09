@@ -1,18 +1,7 @@
--- Create users table (extends Supabase auth.users)
-CREATE TABLE public.users (
-  id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
-  email TEXT NOT NULL,
-  name TEXT,
-  avatar_url TEXT,
-  bio TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
-  updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
-);
-
--- Create routes table
+-- Create routes table (references auth.users directly)
 CREATE TABLE public.routes (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES public.users(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   title TEXT NOT NULL,
   description TEXT,
   difficulty TEXT NOT NULL CHECK (difficulty IN ('easy', 'moderate', 'challenging', 'expert')),
@@ -48,7 +37,7 @@ CREATE TABLE public.route_stops (
 CREATE TABLE public.route_photos (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   route_id UUID REFERENCES public.routes(id) ON DELETE CASCADE NOT NULL,
-  user_id UUID REFERENCES public.users(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   url TEXT NOT NULL,
   caption TEXT,
   order_index INTEGER DEFAULT 0,
@@ -59,7 +48,7 @@ CREATE TABLE public.route_photos (
 CREATE TABLE public.route_ratings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   route_id UUID REFERENCES public.routes(id) ON DELETE CASCADE NOT NULL,
-  user_id UUID REFERENCES public.users(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   scenic_rating DECIMAL(3, 1) NOT NULL CHECK (scenic_rating >= 0 AND scenic_rating <= 10),
   road_quality_rating DECIMAL(3, 1) NOT NULL CHECK (road_quality_rating >= 0 AND road_quality_rating <= 10),
   fun_factor_rating DECIMAL(3, 1) NOT NULL CHECK (fun_factor_rating >= 0 AND fun_factor_rating <= 10),
@@ -72,7 +61,7 @@ CREATE TABLE public.route_ratings (
 -- Create saved_routes table
 CREATE TABLE public.saved_routes (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES public.users(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   route_id UUID REFERENCES public.routes(id) ON DELETE CASCADE NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
   UNIQUE(user_id, route_id)
@@ -143,11 +132,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Create triggers for updated_at
-CREATE TRIGGER trigger_users_updated_at
-BEFORE UPDATE ON public.users
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at_column();
-
 CREATE TRIGGER trigger_routes_updated_at
 BEFORE UPDATE ON public.routes
 FOR EACH ROW
@@ -159,7 +143,6 @@ FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 
 -- Enable Row Level Security
-ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.routes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.route_stops ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.route_photos ENABLE ROW LEVEL SECURITY;
@@ -167,15 +150,6 @@ ALTER TABLE public.route_ratings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.saved_routes ENABLE ROW LEVEL SECURITY;
 
 -- Create RLS Policies
-
--- Users: Users can read all profiles, but only update their own
-CREATE POLICY "Public profiles are viewable by everyone"
-  ON public.users FOR SELECT
-  USING (true);
-
-CREATE POLICY "Users can update own profile"
-  ON public.users FOR UPDATE
-  USING (auth.uid() = id);
 
 -- Routes: Anyone can read published routes, only owners can modify
 CREATE POLICY "Published routes are viewable by everyone"

@@ -47,19 +47,19 @@ export function RouteStats({ route }: RouteStatsProps) {
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Primary Stats */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 md:gap-4 grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, index) => (
-          <Card key={index}>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-sunshine-orange-100 flex items-center justify-center">
-                  <stat.icon className="h-5 w-5 text-sunshine-orange-600" />
+          <Card key={index} className="overflow-hidden">
+            <CardContent className="pt-4 md:pt-6 p-3 md:p-6">
+              <div className="flex items-center gap-2 md:gap-3">
+                <div className="h-8 w-8 md:h-10 md:w-10 shrink-0 rounded-lg bg-sunshine-orange-100 flex items-center justify-center">
+                  <stat.icon className="h-4 w-4 md:h-5 md:w-5 text-sunshine-orange-600" />
                 </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
-                  <p className="text-lg font-semibold">{stat.value}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs text-muted-foreground truncate">{stat.label}</p>
+                  <p className="text-sm md:text-lg font-semibold truncate">{stat.value}</p>
                 </div>
               </div>
             </CardContent>
@@ -68,12 +68,12 @@ export function RouteStats({ route }: RouteStatsProps) {
       </div>
 
       {/* Ratings */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Star className="h-5 w-5 fill-sunshine-yellow-400 text-sunshine-yellow-400" />
-              <span className="text-2xl font-bold">
+      <Card className="overflow-hidden">
+        <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
+          <div className="space-y-3 md:space-y-4">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Star className="h-5 w-5 shrink-0 fill-sunshine-yellow-400 text-sunshine-yellow-400" />
+              <span className="text-xl md:text-2xl font-bold">
                 {route.average_rating ? formatRating(route.average_rating) : 'N/A'}
               </span>
               {route.rating_count && (
@@ -83,16 +83,16 @@ export function RouteStats({ route }: RouteStatsProps) {
               )}
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
               {ratings.map((rating, index) => (
                 <div key={index} className="space-y-1">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">{rating.label}</span>
-                    <span className="font-semibold">{formatRating(rating.value)}</span>
+                  <div className="flex items-center justify-between text-sm gap-2">
+                    <span className="text-muted-foreground truncate">{rating.label}</span>
+                    <span className="font-semibold shrink-0">{formatRating(rating.value)}</span>
                   </div>
                   <div className="h-2 bg-sand-200 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gradient-sunshine"
+                      className="h-full bg-gradient-sunshine transition-all"
                       style={{ width: `${(rating.value / 10) * 100}%` }}
                     />
                   </div>

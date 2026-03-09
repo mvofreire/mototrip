@@ -25,14 +25,14 @@ export function RouteHero({ route }: RouteHeroProps) {
   }
 
   return (
-    <div className="relative h-[400px] md:h-[500px] overflow-hidden bg-sand-100 border-b">
+    <div className="relative h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden bg-sand-100 border-b">
       {/* Placeholder hero image */}
       <div className="absolute inset-0 bg-gradient-to-br from-sunshine-yellow-200 via-sunshine-orange-200 to-sunshine-pink-200" />
       
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
 
-      <div className="container relative h-full flex flex-col justify-end pb-8 md:pb-12">
-        <div className="space-y-4">
+      <div className="container mx-auto max-w-7xl relative h-full flex flex-col justify-end pb-6 md:pb-8 lg:pb-12 px-4">
+        <div className="space-y-3 md:space-y-4">
           <div className="flex flex-wrap gap-2">
             <Badge variant="outline" className={getCategoryColor(route.category)}>
               {categoryLabels[route.category]}
@@ -47,17 +47,17 @@ export function RouteHero({ route }: RouteHeroProps) {
             )}
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight max-w-3xl">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight max-w-3xl break-words">
             {route.title}
           </h1>
 
-          <div className="flex items-center gap-4">
-            <Button className="bg-gradient-sunshine hover:opacity-90">
-              <Bookmark className="h-4 w-4 mr-2" />
+          <div className="flex flex-wrap items-center gap-2 md:gap-4">
+            <Button className="bg-gradient-sunshine hover:opacity-90 text-sm md:text-base">
+              <Bookmark className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
               Save Route
             </Button>
-            <Button variant="outline">
-              <Share2 className="h-4 w-4 mr-2" />
+            <Button variant="outline" className="text-sm md:text-base">
+              <Share2 className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
               Share
             </Button>
           </div>

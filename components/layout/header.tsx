@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
-import { MapPin, Menu, User, X } from 'lucide-react'
+import { MapPin, Menu, User, LogOut, Shield } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { ThemeToggle } from '@/components/theme-toggle'
 import {
@@ -15,6 +15,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { useState } from 'react'
+import { useAuth } from '@/hooks/use-auth'
 
 export function Header() {
   const t = useTranslations('nav')
@@ -22,6 +23,9 @@ export function Header() {
   const locale = useLocale()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const { user, loading, signOut } = useAuth()
+
+  const isAdmin = user?.profile?.role === 'admin'
 
   const isActive = (path: string) => {
     return pathname === `/${locale}${path}` || pathname.startsWith(`/${locale}${path}/`)
@@ -142,13 +146,53 @@ export function Header() {
 
                 {/* Auth Buttons */}
                 <div className="flex flex-col gap-3">
-                  <Button variant="ghost" className="justify-start">
-                    <User className="h-4 w-4 mr-2" />
-                    {t('signIn')}
-                  </Button>
-                  <Button className="bg-gradient-sunshine hover:opacity-90">
-                    {t('getStarted')}
-                  </Button>
+                  {loading ? (
+                    <Button variant="ghost" disabled>
+                      Carregando...
+                    </Button>
+                  ) : user ? (
+                    <>
+                      <Link href={`/${locale}/profile`} onClick={() => setOpen(false)}>
+                        <Button variant="ghost" className="w-full justify-start">
+                          <User className="h-4 w-4 mr-2" />
+                          {user.profile?.full_name || user.email}
+                        </Button>
+                      </Link>
+                      {isAdmin && (
+                        <Link href={`/${locale}/profile/admin`} onClick={() => setOpen(false)}>
+                          <Button variant="ghost" className="w-full justify-start text-amber-600 hover:text-amber-700">
+                            <Shield className="h-4 w-4 mr-2" />
+                            Admin
+                          </Button>
+                        </Link>
+                      )}
+                      <Button 
+                        variant="ghost" 
+                        className="justify-start text-destructive hover:text-destructive"
+                        onClick={() => {
+                          signOut()
+                          setOpen(false)
+                        }}
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Sair
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Link href={`/${locale}/auth/login`} onClick={() => setOpen(false)}>
+                        <Button variant="ghost" className="w-full justify-start">
+                          <User className="h-4 w-4 mr-2" />
+                          {t('signIn')}
+                        </Button>
+                      </Link>
+                      <Link href={`/${locale}/auth/register`} onClick={() => setOpen(false)}>
+                        <Button className="w-full bg-gradient-sunshine hover:opacity-90">
+                          {t('getStarted')}
+                        </Button>
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </SheetContent>
@@ -158,13 +202,51 @@ export function Header() {
           <div className="hidden md:flex items-center gap-2">
             <ThemeToggle />
             <LanguageSwitcher />
-            <Button variant="ghost" size="sm">
-              <User className="h-4 w-4 mr-2" />
-              {t('signIn')}
-            </Button>
-            <Button size="sm" className="bg-gradient-sunshine hover:opacity-90">
-              {t('getStarted')}
-            </Button>
+            {loading ? (
+              <Button variant="ghost" size="sm" disabled>
+                Carregando...
+              </Button>
+            ) : user ? (
+              <>
+                <Link href={`/${locale}/profile`}>
+                  <Button variant="ghost" size="sm">
+                    <User className="h-4 w-4 mr-2" />
+                    {user.profile?.full_name || user.email}
+                  </Button>
+                </Link>
+                {isAdmin && (
+                  <Link href={`/${locale}/profile/admin`}>
+                    <Button variant="ghost" size="sm" className="text-amber-600 hover:text-amber-700">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Admin
+                    </Button>
+                  </Link>
+                )}
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={signOut}
+                  className="text-destructive hover:text-destructive"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sair
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link href={`/${locale}/auth/login`}>
+                  <Button variant="ghost" size="sm">
+                    <User className="h-4 w-4 mr-2" />
+                    {t('signIn')}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/auth/register`}>
+                  <Button size="sm" className="bg-gradient-sunshine hover:opacity-90">
+                    {t('getStarted')}
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

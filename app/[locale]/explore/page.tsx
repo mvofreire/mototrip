@@ -1,16 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { RouteCard } from '@/components/features/routes/route-card'
 import { RouteFilters } from '@/components/features/routes/route-filters'
-import { mockRoutes } from '@/lib/mock-data'
+import { RoutesOverviewMap } from '@/components/features/routes/routes-overview-map'
+import { RoutesService } from '@/lib/services/routes.service'
 import { RouteFilters as RouteFiltersType } from '@/types'
-import { Search, SlidersHorizontal, LayoutGrid, List } from 'lucide-react'
+import { Search, SlidersHorizontal, LayoutGrid, List, Map as MapIcon, Loader2 } from 'lucide-react'
 
-type ViewMode = 'grid' | 'list'
+type ViewMode = 'grid' | 'list' | 'map'
 
 export default function ExplorePage({
   params: { locale },
@@ -22,35 +23,34 @@ export default function ExplorePage({
   const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
+  const [routes, setRoutes] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Filter logic (simplified for MVP)
-  const filteredRoutes = mockRoutes.filter(route => {
-    if (searchQuery && !route.title.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false
+  // Fetch routes from Supabase
+  useEffect(() => {
+    async function fetchRoutes() {
+      setLoading(true)
+      setError(null)
+      try {
+        const data = await RoutesService.getRoutes({
+          ...filters,
+          search: searchQuery || undefined,
+        })
+        setRoutes(data)
+      } catch (err) {
+        console.error('Error fetching routes:', err)
+        setError('Erro ao carregar rotas')
+      } finally {
+        setLoading(false)
+      }
     }
-    if (filters.category?.length && !filters.category.includes(route.category)) {
-      return false
-    }
-    if (filters.difficulty?.length && !filters.difficulty.includes(route.difficulty)) {
-      return false
-    }
-    if (filters.min_distance && route.distance_km < filters.min_distance) {
-      return false
-    }
-    if (filters.max_distance && route.distance_km > filters.max_distance) {
-      return false
-    }
-    if (filters.min_duration && route.duration_minutes < filters.min_duration) {
-      return false
-    }
-    if (filters.max_duration && route.duration_minutes > filters.max_duration) {
-      return false
-    }
-    if (filters.min_scenic_score && route.scenic_score < filters.min_scenic_score) {
-      return false
-    }
-    return true
-  })
+
+    fetchRoutes()
+  }, [filters, searchQuery])
+
+  // Filter logic is now handled by the service
+  const filteredRoutes = routes
 
   return (
     <div className="container py-8">
@@ -59,7 +59,7 @@ export default function ExplorePage({
         <div className="space-y-4">
           <h1 className="text-4xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground text-lg">
-            {t('subtitle', { count: mockRoutes.length })}
+            {t('subtitle', { count: routes.length })}
           </p>
         </div>
 
@@ -106,6 +106,7 @@ export default function ExplorePage({
                   size="sm"
                   onClick={() => setViewMode('grid')}
                   className="h-8 w-8 p-0"
+                  title="Grid view"
                 >
                   <LayoutGrid className="h-4 w-4" />
                 </Button>
@@ -114,26 +115,55 @@ export default function ExplorePage({
                   size="sm"
                   onClick={() => setViewMode('list')}
                   className="h-8 w-8 p-0"
+                  title="List view"
                 >
                   <List className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'map' ? 'secondary' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('map')}
+                  className="h-8 w-8 p-0"
+                  title="Map view"
+                >
+                  <MapIcon className="h-4 w-4" />
                 </Button>
               </div>
             </div>
 
-            {filteredRoutes.length > 0 ? (
-              viewMode === 'grid' ? (
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-                  {filteredRoutes.map((route) => (
-                    <RouteCard key={route.id} route={route} locale={locale} />
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-col gap-6">
-                  {filteredRoutes.map((route) => (
-                    <RouteCard key={route.id} route={route} locale={locale} variant="list" />
-                  ))}
-                </div>
-              )
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              </div>
+            ) : error ? (
+              <div className="text-center py-12">
+                <p className="text-destructive">{error}</p>
+              </div>
+            ) : filteredRoutes.length > 0 ? (
+              <>
+                {viewMode === 'map' ? (
+                  <div className="space-y-6">
+                    <RoutesOverviewMap routes={filteredRoutes} locale={locale} />
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+                      {filteredRoutes.map((route) => (
+                        <RouteCard key={route.id} route={route} locale={locale} />
+                      ))}
+                    </div>
+                  </div>
+                ) : viewMode === 'grid' ? (
+                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+                    {filteredRoutes.map((route) => (
+                      <RouteCard key={route.id} route={route} locale={locale} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-6">
+                    {filteredRoutes.map((route) => (
+                      <RouteCard key={route.id} route={route} locale={locale} variant="list" />
+                    ))}
+                  </div>
+                )}
+              </>
             ) : (
               <div className="text-center py-12">
                 <p className="text-muted-foreground">{t('noResults')}</p>

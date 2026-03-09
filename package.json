@@ -11,7 +11,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "generate:routes": "tsx jobs/routes_generator.ts",
+    "validate:routes": "tsx jobs/validate_routes.ts"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.4",
@@ -24,11 +26,13 @@
     "@radix-ui/react-slider": "^1.1.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
+    "@supabase/auth-helpers-nextjs": "^0.15.0",
     "@supabase/supabase-js": "^2.39.3",
     "@tanstack/react-query": "^5.17.19",
     "@vis.gl/react-google-maps": "^1.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "date-fns": "^4.1.0",
     "lucide-react": "^0.312.0",
     "next": "14.1.0",
     "next-intl": "^3.9.0",
@@ -39,14 +43,20 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@turf/turf": "^7.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
+    "axios": "^1.6.7",
+    "dotenv": "^16.4.5",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
+    "p-limit": "^5.0.0",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
+    "tsx": "^4.7.1",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "yarn@4.1.1+sha512.ec40d0639bb307441b945d9467139cbb88d14394baac760b52eca038b330d16542d66fef61574271534ace5a200518dabf3b53a85f1f9e4bfa37141b538a9590"
 }

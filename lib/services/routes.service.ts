@@ -10,7 +10,6 @@ export class RoutesService {
       .from('routes')
       .select(`
         *,
-        user:users(*),
         stops:route_stops(*),
         photos:route_photos(*),
         ratings:route_ratings(*)
@@ -75,7 +74,6 @@ export class RoutesService {
       .from('routes')
       .select(`
         *,
-        user:users(*),
         stops:route_stops(*),
         photos:route_photos(*),
         ratings:route_ratings(*)
@@ -95,7 +93,6 @@ export class RoutesService {
       .from('routes')
       .select(`
         *,
-        user:users(*),
         stops:route_stops(*),
         photos:route_photos(*)
       `)
@@ -172,7 +169,6 @@ export class RoutesService {
         *,
         route:routes(
           *,
-          user:users(*),
           stops:route_stops(*),
           photos:route_photos(*)
         )

@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 import { ArrowRight, MapPin, Users, Star, Navigation, Map, MessageCircle } from 'lucide-react'
 import { RouteCard } from '@/components/features/routes/route-card'
-import { mockRoutes } from '@/lib/mock-data'
+import { RoutesService } from '@/lib/services/routes.service'
 import {
   Section,
   SectionContainer,
@@ -23,8 +23,17 @@ export default async function HomePage({
   const t = await getTranslations({ locale, namespace: 'home' })
   const tNav = await getTranslations({ locale, namespace: 'nav' })
   
-  const featuredRoutes = mockRoutes.filter((route) => route.featured).slice(0, 3)
-  const popularRoutes = mockRoutes.slice(0, 6)
+  // Fetch featured and popular routes from database
+  let featuredRoutes: any[] = []
+  let popularRoutes: any[] = []
+  
+  try {
+    featuredRoutes = await RoutesService.getFeaturedRoutes(3)
+    popularRoutes = await RoutesService.getRoutes({}, { field: 'created_at', direction: 'desc' })
+    popularRoutes = popularRoutes.slice(0, 6)
+  } catch (error) {
+    console.error('Error fetching routes:', error)
+  }
 
   return (
     <div className="flex flex-col">
