@@ -13,7 +13,15 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Badge } from '@/components/ui/badge'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Checkbox } from '@/components/ui/checkbox'
 
 interface EditRouteDialogProps {
   open: boolean
@@ -36,9 +44,9 @@ export function EditRouteDialog({
     difficulty: route.difficulty,
     distance_km: route.distance_km,
     duration_minutes: route.duration_minutes,
-    elevation_gain_m: route.elevation_gain_m || 0,
-    region: route.region || '',
     category: route.category,
+    published: route.published,
+    featured: route.featured,
   })
 
   const [loading, setLoading] = useState(false)
@@ -50,9 +58,9 @@ export function EditRouteDialog({
       difficulty: route.difficulty,
       distance_km: route.distance_km,
       duration_minutes: route.duration_minutes,
-      elevation_gain_m: route.elevation_gain_m || 0,
-      region: route.region || '',
       category: route.category,
+      published: route.published,
+      featured: route.featured,
     })
   }, [route])
 
@@ -68,21 +76,33 @@ export function EditRouteDialog({
     }
   }
 
-  const difficulties = ['easy', 'moderate', 'challenging', 'expert']
-  const categories = ['scenic', 'mountain', 'coastal', 'weekend', 'adventure']
+  const difficulties = [
+    { value: 'easy', label: translations.difficulties?.easy || 'Easy' },
+    { value: 'moderate', label: translations.difficulties?.moderate || 'Moderate' },
+    { value: 'challenging', label: translations.difficulties?.challenging || 'Challenging' },
+    { value: 'expert', label: translations.difficulties?.expert || 'Expert' },
+  ]
+
+  const categories = [
+    { value: 'scenic', label: translations.categories?.scenic || 'Scenic' },
+    { value: 'mountain', label: translations.categories?.mountain || 'Mountain' },
+    { value: 'coastal', label: translations.categories?.coastal || 'Coastal' },
+    { value: 'weekend', label: translations.categories?.weekend || 'Weekend' },
+    { value: 'adventure', label: translations.categories?.adventure || 'Adventure' },
+  ]
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{translations.editTitle}</DialogTitle>
+          <DialogTitle>{translations.editRoute || 'Editar Rota'}</DialogTitle>
           <DialogDescription>
-            {translations.editDescription}
+            {translations.editRouteDescription || 'Faça alterações na rota abaixo.'}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="title">{translations.titleLabel}</Label>
+            <Label htmlFor="title">{translations.title || 'Título'}</Label>
             <Input
               id="title"
               value={formData.title}
@@ -92,105 +112,118 @@ export function EditRouteDialog({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">{translations.descriptionLabel}</Label>
-            <textarea
+            <Label htmlFor="description">{translations.description || 'Descrição'}</Label>
+            <Textarea
               id="description"
-              className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={3}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="difficulty">{translations.difficultyLabel}</Label>
-              <div className="flex flex-wrap gap-2">
-                {difficulties.map((diff) => (
-                  <Badge
-                    key={diff}
-                    className="cursor-pointer"
-                    variant={formData.difficulty === diff ? 'default' : 'outline'}
-                    onClick={() => setFormData({ ...formData, difficulty: diff as any })}
-                  >
-                    {translations.difficulties[diff]}
-                  </Badge>
-                ))}
-              </div>
+              <Label htmlFor="difficulty">{translations.difficulty || 'Dificuldade'}</Label>
+              <Select
+                value={formData.difficulty}
+                onValueChange={(value) => setFormData({ ...formData, difficulty: value as any })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione a dificuldade" />
+                </SelectTrigger>
+                <SelectContent>
+                  {difficulties.map((difficulty) => (
+                    <SelectItem key={difficulty.value} value={difficulty.value}>
+                      {difficulty.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="category">{translations.categoryLabel}</Label>
-              <div className="flex flex-wrap gap-2">
-                {categories.map((cat) => (
-                  <Badge
-                    key={cat}
-                    className="cursor-pointer"
-                    variant={formData.category === cat ? 'default' : 'outline'}
-                    onClick={() => setFormData({ ...formData, category: cat as any })}
-                  >
-                    {translations.categories[cat]}
-                  </Badge>
-                ))}
-              </div>
+              <Label htmlFor="category">{translations.category || 'Categoria'}</Label>
+              <Select
+                value={formData.category}
+                onValueChange={(value) => setFormData({ ...formData, category: value as any })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione a categoria" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category.value} value={category.value}>
+                      {category.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="distance">{translations.distanceLabel}</Label>
+              <Label htmlFor="distance">{translations.distance || 'Distância (km)'}</Label>
               <Input
                 id="distance"
                 type="number"
                 step="0.1"
                 value={formData.distance_km}
                 onChange={(e) =>
-                  setFormData({ ...formData, distance_km: parseFloat(e.target.value) })
+                  setFormData({ ...formData, distance_km: parseFloat(e.target.value) || 0 })
                 }
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="duration">{translations.durationLabel}</Label>
+              <Label htmlFor="duration">{translations.duration || 'Duração (min)'}</Label>
               <Input
                 id="duration"
                 type="number"
                 value={formData.duration_minutes}
                 onChange={(e) =>
-                  setFormData({ ...formData, duration_minutes: parseInt(e.target.value) })
+                  setFormData({ ...formData, duration_minutes: parseInt(e.target.value) || 0 })
                 }
                 required
               />
             </div>
+          </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="elevation">{translations.elevationLabel}</Label>
-              <Input
-                id="elevation"
-                type="number"
-                value={formData.elevation_gain_m}
-                onChange={(e) =>
-                  setFormData({ ...formData, elevation_gain_m: parseInt(e.target.value) })
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="published"
+                checked={formData.published}
+                onCheckedChange={(checked) => 
+                  setFormData({ ...formData, published: checked as boolean })
                 }
               />
+              <Label htmlFor="published">
+                {translations.published || 'Publicada'}
+              </Label>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="featured"
+                checked={formData.featured}
+                onCheckedChange={(checked) => 
+                  setFormData({ ...formData, featured: checked as boolean })
+                }
+              />
+              <Label htmlFor="featured">
+                {translations.featured || 'Em destaque'}
+              </Label>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="region">{translations.regionLabel}</Label>
-            <Input
-              id="region"
-              value={formData.region}
-              onChange={(e) => setFormData({ ...formData, region: e.target.value })}
-            />
-          </div>
-
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
-              {translations.cancel}
+            <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
+              {translations.cancel || 'Cancelar'}
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? translations.saving : translations.save}
+              {loading ? (translations.saving || 'Salvando...') : (translations.save || 'Salvar')}
             </Button>
           </DialogFooter>
         </form>

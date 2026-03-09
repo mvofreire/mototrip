@@ -29,8 +29,11 @@ export class AdminService {
       return []
     }
 
+    // Type assertion to work around Supabase typing issues
+    const typedRoutes = routes as any[]
+
     // Get all unique user IDs
-    const userIds = [...new Set(routes.map(r => r.user_id))]
+    const userIds = [...new Set(typedRoutes.map(r => r.user_id))]
 
     // Get profiles for these users
     const { data: profiles, error: profilesError } = await supabase
@@ -44,11 +47,11 @@ export class AdminService {
 
     // Create a map of profiles by id
     const profileMap = new Map(
-      profiles?.map(p => [p.id, p]) || []
+      (profiles as any[])?.map(p => [p.id, p]) || []
     )
 
     // Combine routes with profile info
-    return routes.map((route) => {
+    return typedRoutes.map((route) => {
       const profile = profileMap.get(route.user_id)
       return {
         ...route,
@@ -62,7 +65,7 @@ export class AdminService {
    * Update route (admin only)
    */
   static async updateRoute(id: string, updates: RouteUpdate): Promise<Route> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('routes')
       .update(updates)
       .eq('id', id)
@@ -122,6 +125,6 @@ export class AdminService {
 
     if (error || !data) return false
 
-    return data.role === 'admin'
+    return (data as any).role === 'admin'
   }
 }

@@ -99,7 +99,7 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
 
       const { data, error: insertError } = await supabase
         .from('routes')
-        .insert(routeData)
+        .insert(routeData as any)
         .select()
         .single()
 

@@ -58,7 +58,7 @@ async function validateSystemUser(): Promise<ValidationResult> {
       result.passed = false;
       result.errors.push('System user not found. Run migration 003_routes_generator_setup.sql first.');
     } else {
-      console.log('✓ System user exists:', data.name);
+      console.log('✓ System user exists:', (data as any).name);
     }
   } catch (error) {
     result.passed = false;
@@ -90,8 +90,11 @@ async function validateRoutes(): Promise<ValidationResult> {
 
     console.log(`\n✓ Found ${routes.length} generated routes`);
 
+    // Type assertion to work around Supabase typing issues
+    const typedRoutes = routes as any[];
+
     // Validate each route
-    for (const route of routes) {
+    for (const route of typedRoutes) {
       // Check required fields
       if (!route.title) {
         result.errors.push(`Route ${route.id}: Missing title`);
@@ -169,7 +172,7 @@ async function validateRouteStops(): Promise<ValidationResult> {
       return result;
     }
 
-    const routeIds = routes.map(r => r.id);
+    const routeIds = typedRoutes.map(r => r.id);
 
     const { data: stops, error } = await supabase
       .from('route_stops')
@@ -189,8 +192,11 @@ async function validateRouteStops(): Promise<ValidationResult> {
 
     console.log(`\n✓ Found ${stops.length} route stops`);
 
+    // Type assertion to work around Supabase typing issues
+    const typedStops = stops as any[];
+
     // Validate each stop
-    for (const stop of stops) {
+    for (const stop of typedStops) {
       // Check coordinates
       if (stop.latitude < -90 || stop.latitude > 90) {
         result.errors.push(
@@ -240,13 +246,16 @@ async function generateStatistics() {
       return;
     }
 
+    // Type assertion to work around Supabase typing issues
+    const typedRoutes = routes as any[];
+
     // Overall stats
-    const totalRoutes = routes.length;
-    const totalDistance = routes.reduce((sum, r) => sum + Number(r.distance_km), 0);
+    const totalRoutes = typedRoutes.length;
+    const totalDistance = typedRoutes.reduce((sum, r) => sum + Number(r.distance_km), 0);
     const avgDistance = totalDistance / totalRoutes;
-    const avgScenicScore = routes.reduce((sum, r) => sum + Number(r.scenic_score), 0) / totalRoutes;
-    const avgFunFactor = routes.reduce((sum, r) => sum + Number(r.fun_factor_score), 0) / totalRoutes;
-    const featuredCount = routes.filter(r => r.featured).length;
+    const avgScenicScore = typedRoutes.reduce((sum, r) => sum + Number(r.scenic_score), 0) / totalRoutes;
+    const avgFunFactor = typedRoutes.reduce((sum, r) => sum + Number(r.fun_factor_score), 0) / totalRoutes;
+    const featuredCount = typedRoutes.filter(r => r.featured).length;
 
     console.log(`\nOverall Statistics:`);
     console.log(`  Total Routes: ${totalRoutes}`);
@@ -257,7 +266,7 @@ async function generateStatistics() {
     console.log(`  Featured Routes: ${featuredCount} (${((featuredCount/totalRoutes)*100).toFixed(1)}%)`);
 
     // By region
-    const byRegion = routes.reduce((acc, r) => {
+    const byRegion = typedRoutes.reduce((acc, r) => {
       const region = r.region || 'Unknown';
       if (!acc[region]) acc[region] = [];
       acc[region].push(r);
@@ -270,7 +279,7 @@ async function generateStatistics() {
     }
 
     // By difficulty
-    const byDifficulty = routes.reduce((acc, r) => {
+    const byDifficulty = typedRoutes.reduce((acc, r) => {
       if (!acc[r.difficulty]) acc[r.difficulty] = 0;
       acc[r.difficulty]++;
       return acc;
@@ -282,7 +291,7 @@ async function generateStatistics() {
     }
 
     // By category
-    const byCategory = routes.reduce((acc, r) => {
+    const byCategory = typedRoutes.reduce((acc, r) => {
       if (!acc[r.category]) acc[r.category] = 0;
       acc[r.category]++;
       return acc;
@@ -294,7 +303,7 @@ async function generateStatistics() {
     }
 
     // Top routes
-    const topRoutes = routes
+    const topRoutes = typedRoutes
       .sort((a, b) => Number(b.fun_factor_score) - Number(a.fun_factor_score))
       .slice(0, 5);
 

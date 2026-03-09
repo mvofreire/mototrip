@@ -21,6 +21,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 dotenv.config({ path: join(__dirname, '../.env.local') });
 
+// Check for dry run flag
+const DRY_RUN = process.argv.includes('--dry');
+
 // ================================================================================
 // CONFIGURATION
 // ================================================================================
@@ -590,8 +593,31 @@ function generateRouteDescription(route: GeneratedRoute): string {
 // POI EXTRACTION
 // ================================================================================
 
-async function extractStops(route: GeneratedRoute, routeId: string): Promise<RouteStop[]> {
+async function extractStops(route: GeneratedRoute, routeId: string, dryRun: boolean = false): Promise<RouteStop[]> {
   const stops: RouteStop[] = [];
+  
+  if (dryRun) {
+    // For dry run, return mock stops without making API calls
+    logger.info(`[DRY RUN] Would search for POIs along the route`);
+    return [
+      {
+        name: 'Mock Viewpoint',
+        description: 'A scenic viewpoint along the route',
+        type: 'viewpoint',
+        latitude: route.points[Math.floor(route.points.length * 0.25)].lat,
+        longitude: route.points[Math.floor(route.points.length * 0.25)].lon,
+        order_index: 0,
+      },
+      {
+        name: 'Mock Cafe',
+        description: 'A cafe for a break',
+        type: 'cafe',
+        latitude: route.points[Math.floor(route.points.length * 0.5)].lat,
+        longitude: route.points[Math.floor(route.points.length * 0.5)].lon,
+        order_index: 1,
+      },
+    ];
+  }
   
   // Sample points along the route for POI search
   const sampleIndices = [
@@ -668,10 +694,36 @@ function mapOSMTagsToStopType(tags: Record<string, string>): RouteStop['type'] |
 // DATABASE OPERATIONS
 // ================================================================================
 
-async function saveRouteToDatabase(route: GeneratedRoute): Promise<string | null> {
+async function saveRouteToDatabase(route: GeneratedRoute, dryRun: boolean = false): Promise<string | null> {
   const title = generateRouteTitle(route);
   const description = generateRouteDescription(route);
   const scores = scoreRoute(route);
+  
+  if (dryRun) {
+    // Log what would be saved without actually saving
+    logger.info(`[DRY RUN] Would save route: ${title}`);
+    logger.info(`  Description: ${description}`);
+    logger.info(`  Distance: ${Math.round(route.distance_km * 100) / 100} km`);
+    logger.info(`  Duration: ${Math.round((route.distance_km / 50) * 60)} minutes`);
+    logger.info(`  Difficulty: ${route.difficulty}`);
+    logger.info(`  Category: ${route.category}`);
+    logger.info(`  Region: ${route.region}`);
+    logger.info(`  Scenic Score: ${scores.scenic_score}`);
+    logger.info(`  Road Quality Score: ${scores.road_quality_score}`);
+    logger.info(`  Fun Factor Score: ${scores.fun_factor_score}`);
+    logger.info(`  Featured: ${scores.fun_factor_score > 8}`);
+    logger.info(`  Points: ${route.points.length} coordinates`);
+    
+    // Show what stops would be extracted
+    const mockStops = await extractStops(route, 'dry-run-route', true);
+    logger.info(`  Would extract ${mockStops.length} stops:`);
+    mockStops.forEach((stop, index) => {
+      logger.info(`    ${index + 1}. ${stop.name} (${stop.type}) at ${stop.latitude.toFixed(4)}, ${stop.longitude.toFixed(4)}`);
+    });
+    
+    // Return a fake ID for dry run
+    return `dry-run-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }
   
   // Convert points to GeoJSON LineString
   const polyline_coordinates = {
@@ -684,25 +736,27 @@ async function saveRouteToDatabase(route: GeneratedRoute): Promise<string | null
   
   try {
     // Insert route
-    const { data: routeData, error: routeError } = await supabase
+    const routeInsert: Database['public']['Tables']['routes']['Insert'] = {
+      user_id: SYSTEM_USER_ID,
+      title,
+      description,
+      difficulty: route.difficulty,
+      distance_km: Math.round(route.distance_km * 100) / 100,
+      duration_minutes,
+      elevation_gain_m: route.elevation_gain_m,
+      polyline_coordinates,
+      region: route.region,
+      category: route.category,
+      scenic_score: scores.scenic_score,
+      road_quality_score: scores.road_quality_score,
+      fun_factor_score: scores.fun_factor_score,
+      featured: scores.fun_factor_score > 8, // Feature high-scoring routes
+      published: true,
+    }
+
+    const { data: routeData, error: routeError } = await (supabase as any)
       .from('routes')
-      .insert({
-        user_id: SYSTEM_USER_ID,
-        title,
-        description,
-        difficulty: route.difficulty,
-        distance_km: Math.round(route.distance_km * 100) / 100,
-        duration_minutes,
-        elevation_gain_m: route.elevation_gain_m,
-        polyline_coordinates,
-        region: route.region,
-        category: route.category,
-        scenic_score: scores.scenic_score,
-        road_quality_score: scores.road_quality_score,
-        fun_factor_score: scores.fun_factor_score,
-        featured: scores.fun_factor_score > 8, // Feature high-scoring routes
-        published: true,
-      } as any)
+      .insert(routeInsert)
       .select('id')
       .single();
     
@@ -711,19 +765,26 @@ async function saveRouteToDatabase(route: GeneratedRoute): Promise<string | null
       return null;
     }
     
-    const routeId = routeData.id;
+    if (!routeData) {
+      logger.error('No route data returned after insert');
+      return null;
+    }
+    
+    const routeId = (routeData as { id: string }).id;
     logger.success(`Saved route: ${title} (${routeId})`);
     
     // Insert stops
-    const stops = await extractStops(route, routeId);
+    const stops = await extractStops(route, routeId, dryRun);
     
-    if (stops.length > 0) {
-      const { error: stopsError } = await supabase
+    if (stops.length > 0 && !dryRun) {
+      const stopsInsert: Database['public']['Tables']['route_stops']['Insert'][] = stops.map(stop => ({
+        route_id: routeId,
+        ...stop,
+      }))
+
+      const { error: stopsError } = await (supabase as any)
         .from('route_stops')
-        .insert(stops.map(stop => ({
-          route_id: routeId,
-          ...stop,
-        })));
+        .insert(stopsInsert);
       
       if (stopsError) {
         logger.warn(`Failed to insert stops for route ${routeId}:`, stopsError);
@@ -746,6 +807,12 @@ async function saveRouteToDatabase(route: GeneratedRoute): Promise<string | null
 async function main() {
   logger.info('='.repeat(80));
   logger.info('Starting Motorcycle Routes Generator');
+  if (DRY_RUN) {
+    logger.info('🔍 DRY RUN MODE - No data will be saved to database');
+  } else {
+    logger.info('💾 PRODUCTION MODE - Data will be saved to database');
+  }
+  logger.info('Usage: npm run generate:routes [-- --dry]');
   logger.info('='.repeat(80));
   
   // Validate environment
@@ -790,7 +857,7 @@ async function main() {
   const savePromises = allRoutes.map((route, index) =>
     limit(async () => {
       logger.info(`[${index + 1}/${allRoutes.length}] Saving route in ${route.region}...`);
-      const routeId = await saveRouteToDatabase(route);
+      const routeId = await saveRouteToDatabase(route, DRY_RUN);
       
       if (routeId) {
         savedCount++;
@@ -804,10 +871,18 @@ async function main() {
   
   // Final summary
   logger.info(`\n${'='.repeat(80)}`);
-  logger.success('Route Generation Complete!');
-  logger.info(`Total routes generated: ${allRoutes.length}`);
-  logger.info(`Successfully saved: ${savedCount}`);
-  logger.info(`Failed: ${failedCount}`);
+  if (DRY_RUN) {
+    logger.success('Route Generation Complete! (DRY RUN)');
+    logger.info(`Total routes that would be generated: ${allRoutes.length}`);
+    logger.info(`Routes that would be saved: ${savedCount}`);
+    logger.info(`Routes that would fail: ${failedCount}`);
+    logger.info('💡 Run without --dry flag to actually save to database');
+  } else {
+    logger.success('Route Generation Complete!');
+    logger.info(`Total routes generated: ${allRoutes.length}`);
+    logger.info(`Successfully saved: ${savedCount}`);
+    logger.info(`Failed: ${failedCount}`);
+  }
   logger.info('='.repeat(80));
 }
 
