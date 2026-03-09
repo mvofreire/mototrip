@@ -15,6 +15,17 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
+function getBaseUrl(): string {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  
+  // Se a URL não tem protocolo, adicionar https://
+  if (!siteUrl.startsWith('http://') && !siteUrl.startsWith('https://')) {
+    return `https://${siteUrl}`
+  }
+  
+  return siteUrl
+}
+
 export async function generateMetadata({
   params: { locale },
 }: {
@@ -23,7 +34,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: 'home.hero' })
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+    metadataBase: new URL(getBaseUrl()),
     title: {
       default: 'MotoTrip - ' + t('title') + ' ' + t('titleHighlight'),
       template: '%s | MotoTrip',
