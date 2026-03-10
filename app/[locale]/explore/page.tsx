@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -19,13 +20,84 @@ export default function ExplorePage({
   params: { locale: string }
 }) {
   const t = useTranslations('explore')
-  const [filters, setFilters] = useState<RouteFiltersType>({})
-  const [searchQuery, setSearchQuery] = useState('')
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  
+  // Initialize filters from URL params
+  const getFiltersFromURL = (): RouteFiltersType => {
+    const urlFilters: RouteFiltersType = {}
+    
+    const categories = searchParams.getAll('category')
+    if (categories.length > 0) urlFilters.category = categories as any
+    
+    const difficulties = searchParams.getAll('difficulty')
+    if (difficulties.length > 0) urlFilters.difficulty = difficulties as any
+    
+    const minDistance = searchParams.get('min_distance')
+    if (minDistance) urlFilters.min_distance = parseInt(minDistance)
+    
+    const maxDistance = searchParams.get('max_distance')
+    if (maxDistance) urlFilters.max_distance = parseInt(maxDistance)
+    
+    const minDuration = searchParams.get('min_duration')
+    if (minDuration) urlFilters.min_duration = parseInt(minDuration)
+    
+    const maxDuration = searchParams.get('max_duration')
+    if (maxDuration) urlFilters.max_duration = parseInt(maxDuration)
+    
+    const minScore = searchParams.get('min_scenic_score')
+    if (minScore) urlFilters.min_scenic_score = parseFloat(minScore)
+    
+    return urlFilters
+  }
+  
+  const [filters, setFilters] = useState<RouteFiltersType>(getFiltersFromURL())
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
   const [showFilters, setShowFilters] = useState(false)
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [routes, setRoutes] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams()
+    
+    if (filters.category && filters.category.length > 0) {
+      filters.category.forEach(cat => params.append('category', cat))
+    }
+    
+    if (filters.difficulty && filters.difficulty.length > 0) {
+      filters.difficulty.forEach(diff => params.append('difficulty', diff))
+    }
+    
+    if (filters.min_distance !== undefined && filters.min_distance > 0) {
+      params.set('min_distance', filters.min_distance.toString())
+    }
+    
+    if (filters.max_distance !== undefined && filters.max_distance < 500) {
+      params.set('max_distance', filters.max_distance.toString())
+    }
+    
+    if (filters.min_duration !== undefined && filters.min_duration > 0) {
+      params.set('min_duration', filters.min_duration.toString())
+    }
+    
+    if (filters.max_duration !== undefined && filters.max_duration < 720) {
+      params.set('max_duration', filters.max_duration.toString())
+    }
+    
+    if (filters.min_scenic_score !== undefined && filters.min_scenic_score > 0) {
+      params.set('min_scenic_score', filters.min_scenic_score.toString())
+    }
+    
+    if (searchQuery) {
+      params.set('search', searchQuery)
+    }
+    
+    const newURL = `/${locale}/explore${params.toString() ? '?' + params.toString() : ''}`
+    router.replace(newURL, { scroll: false })
+  }, [filters, searchQuery, locale, router])
 
   // Fetch routes from Supabase
   useEffect(() => {

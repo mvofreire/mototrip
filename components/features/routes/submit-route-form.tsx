@@ -37,15 +37,19 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
     duration_minutes: 120,
     elevation_gain_m: 500,
     region: '',
+    country: '',
+    route_type: '' as 'loop' | 'out_and_back' | '',
     category: 'scenic' as RouteInsert['category'],
   })
   
   const [gpxData, setGpxData] = useState<GPXData | null>(null)
   const [gpxFile, setGpxFile] = useState<File | null>(null)
+  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null)
 
-  const handleGPXParsed = (parsedData: GPXData, file: File) => {
+  const handleGPXParsed = (parsedData: GPXData, file: File, thumbnail?: string) => {
     setGpxData(parsedData)
     setGpxFile(file)
+    setThumbnailUrl(thumbnail || null)
     
     // Auto-populate form fields from GPX data
     setFormData(prev => ({
@@ -72,7 +76,7 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
 
       // Validate GPX file
       if (!gpxData) {
-        setError('Por favor, faça upload de um arquivo GPX')
+        setError(t('gpxRequired'))
         setLoading(false)
         return
       }
@@ -90,6 +94,9 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
         elevation_gain_m: formData.elevation_gain_m,
         polyline_coordinates,
         region: formData.region || null,
+        country: formData.country || null,
+        route_type: formData.route_type || null,
+        thumbnail_url: thumbnailUrl,
         category: formData.category,
         scenic_score: 0,
         road_quality_score: 0,
@@ -176,6 +183,21 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
             onChange={(e) => setFormData({ ...formData, region: e.target.value })}
           />
         </div>
+
+        {/* Country */}
+        <div className="space-y-2">
+          <Label htmlFor="country">{t('country')}</Label>
+          <select
+            id="country"
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            value={formData.country}
+            onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+          >
+            <option value="">{t('countryPlaceholder')}</option>
+            <option value="PT">🇵🇹 {t('countryPortugal')}</option>
+            <option value="ES">🇪🇸 {t('countrySpain')}</option>
+          </select>
+        </div>
       </Card>
 
       {/* Route Characteristics */}
@@ -199,6 +221,21 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
             <option value="coastal">{t('categoryCoastalLabel')}</option>
             <option value="weekend">{t('categoryWeekendLabel')}</option>
             <option value="adventure">{t('categoryAdventureLabel')}</option>
+          </select>
+        </div>
+
+        {/* Route Type */}
+        <div className="space-y-2">
+          <Label htmlFor="route_type">{t('routeType')}</Label>
+          <select
+            id="route_type"
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            value={formData.route_type}
+            onChange={(e) => setFormData({ ...formData, route_type: e.target.value as 'loop' | 'out_and_back' | '' })}
+          >
+            <option value="">{t('routeTypePlaceholder')}</option>
+            <option value="loop">{t('routeTypeLoop')}</option>
+            <option value="out_and_back">{t('routeTypeOutAndBack')}</option>
           </select>
         </div>
 

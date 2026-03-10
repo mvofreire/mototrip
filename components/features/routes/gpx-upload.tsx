@@ -6,13 +6,15 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Upload, X, FileText, MapPin, TrendingUp, Mountain } from 'lucide-react'
 import { APIProvider, Map, useMap } from '@vis.gl/react-google-maps'
+import { useTranslations } from 'next-intl'
 
 interface GPXUploadProps {
-  onGPXParsed: (gpxData: GPXData, file: File) => void
+  onGPXParsed: (gpxData: GPXData, file: File, thumbnailDataUrl?: string) => void
   locale: string
 }
 
 export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
+  const t = useTranslations('submit')
   const [file, setFile] = useState<File | null>(null)
   const [gpxData, setGpxData] = useState<GPXData | null>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -22,7 +24,7 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
 
   const handleFileSelect = async (selectedFile: File) => {
     if (!selectedFile.name.toLowerCase().endsWith('.gpx')) {
-      setError('Por favor, selecione um arquivo GPX válido')
+      setError(t('gpxError'))
       return
     }
 
@@ -33,7 +35,11 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
       const parsedData = await parseGPXFile(selectedFile)
       setFile(selectedFile)
       setGpxData(parsedData)
-      onGPXParsed(parsedData, selectedFile)
+      
+      // Generate thumbnail URL using Google Maps Static API
+      const thumbnailUrl = generateMapThumbnail(parsedData.points, parsedData.bounds)
+      
+      onGPXParsed(parsedData, selectedFile, thumbnailUrl)
     } catch (err) {
       console.error('Error parsing GPX:', err)
       setError(err instanceof Error ? err.message : 'Erro ao processar arquivo GPX')
@@ -80,6 +86,32 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
     return Math.round(m)
   }
 
+  const generateMapThumbnail = (points: { lat: number; lng: number }[], bounds: any): string => {
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
+    
+    // Sample points to keep URL length reasonable (max 100 points)
+    const sampledPoints = points.filter((_, i) => i % Math.ceil(points.length / 100) === 0)
+    
+    // Create path parameter for polyline
+    const path = sampledPoints.map(p => `${p.lat},${p.lng}`).join('|')
+    
+    // Calculate center and zoom to fit bounds
+    const centerLat = (bounds.north + bounds.south) / 2
+    const centerLng = (bounds.east + bounds.west) / 2
+    
+    // Generate Static Maps API URL
+    const url = `https://maps.googleapis.com/maps/api/staticmap?` +
+      `center=${centerLat},${centerLng}&` +
+      `zoom=10&` +
+      `size=640x360&` +
+      `scale=2&` +
+      `maptype=roadmap&` +
+      `path=color:0xff0000ff|weight:3|${path}&` +
+      `key=${apiKey}`
+    
+    return url
+  }
+
   if (gpxData && file) {
     return (
       <Card className="p-6 space-y-4">
@@ -111,7 +143,7 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
             <MapPin className="h-4 w-4 text-muted-foreground" />
             <div>
               <div className="font-medium">{formatDistance(gpxData.totalDistance)} km</div>
-              <div className="text-xs text-muted-foreground">Distância</div>
+              <div className="text-xs text-muted-foreground">{t('gpxDistance')}</div>
             </div>
           </div>
           
@@ -119,7 +151,7 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
             <div>
               <div className="font-medium">{formatElevation(gpxData.elevationGain)} m</div>
-              <div className="text-xs text-muted-foreground">Ganho</div>
+              <div className="text-xs text-muted-foreground">{t('gpxElevationGain')}</div>
             </div>
           </div>
           
@@ -129,7 +161,7 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
               <div className="font-medium">
                 {gpxData.maxElevation ? `${formatElevation(gpxData.maxElevation)} m` : 'N/A'}
               </div>
-              <div className="text-xs text-muted-foreground">Alt. Máx</div>
+              <div className="text-xs text-muted-foreground">{t('gpxPoints')}</div>
             </div>
           </div>
         </div>
@@ -187,13 +219,13 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
         <div className="space-y-2">
           <p className="text-sm font-medium">
             {isDragging
-              ? 'Solte o arquivo aqui'
+              ? t('gpxUploadTitle')
               : isLoading
-              ? 'Processando arquivo...'
-              : 'Clique para fazer upload ou arraste um arquivo GPX'}
+              ? t('submitting')
+              : t('gpxUploadTitle')}
           </p>
           <p className="text-xs text-muted-foreground">
-            Arquivo GPX com track ou rota de até 10MB
+            {t('gpxUploadDesc')}
           </p>
         </div>
 
@@ -208,7 +240,7 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
               fileInputRef.current?.click()
             }}
           >
-            Selecionar arquivo
+            {t('gpxSelectFile')}
           </Button>
         )}
       </div>
@@ -220,11 +252,11 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
       )}
 
       <div className="text-xs text-muted-foreground space-y-1">
-        <p><strong>Dica:</strong> Você pode exportar rotas GPX de aplicativos como:</p>
+        <p><strong>{t('gpxTipTitle')}</strong> {t('gpxTipDescription')}</p>
         <ul className="list-disc list-inside ml-2 space-y-0.5">
-          <li>Strava, Komoot, Ride with GPS</li>
-          <li>Garmin Connect, Wahoo</li>
-          <li>Google Maps (usando ferramentas de terceiros)</li>
+          <li>{t('gpxTipApp1')}</li>
+          <li>{t('gpxTipApp2')}</li>
+          <li>{t('gpxTipApp3')}</li>
         </ul>
       </div>
     </Card>

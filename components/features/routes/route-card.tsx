@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 import { RouteWithDetails } from '@/types'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { MapPin, Clock, Mountain, Star, Bookmark } from 'lucide-react'
+import { MapPin, Clock, Mountain, Star, Bookmark, Repeat, MoveHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   formatDistance,
@@ -47,10 +47,30 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
           <div className="flex flex-col md:flex-row">
             {/* Image */}
             <div className="relative w-full md:w-64 h-48 md:h-auto overflow-hidden bg-sand-100 shrink-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-sunshine-yellow-100 to-sunshine-orange-100" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <MapPin className="h-12 w-12 text-sunshine-orange-300" />
-              </div>
+              {route.thumbnail_url ? (
+                route.thumbnail_url.includes('maps.googleapis.com') ? (
+                  <img
+                    src={route.thumbnail_url}
+                    alt={route.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src={route.thumbnail_url}
+                    alt={route.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 256px"
+                  />
+                )
+              ) : (
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-br from-sunshine-yellow-100 to-sunshine-orange-100" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <MapPin className="h-12 w-12 text-sunshine-orange-300" />
+                  </div>
+                </>
+              )}
 
               {route.featured && (
                 <div className="absolute top-3 left-3">
@@ -155,11 +175,31 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
       <Card className="group overflow-hidden transition-all hover:shadow-lg">
         <CardHeader className="p-0">
           <div className="relative aspect-[16/9] overflow-hidden bg-sand-100">
-            {/* Placeholder for route image */}
-            <div className="absolute inset-0 bg-gradient-to-br from-sunshine-yellow-100 to-sunshine-orange-100" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <MapPin className="h-16 w-16 text-sunshine-orange-300" />
-            </div>
+            {route.thumbnail_url ? (
+              route.thumbnail_url.includes('maps.googleapis.com') ? (
+                <img
+                  src={route.thumbnail_url}
+                  alt={route.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              ) : (
+                <Image
+                  src={route.thumbnail_url}
+                  alt={route.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+              )
+            ) : (
+              <>
+                {/* Placeholder for route image */}
+                <div className="absolute inset-0 bg-gradient-to-br from-sunshine-yellow-100 to-sunshine-orange-100" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <MapPin className="h-16 w-16 text-sunshine-orange-300" />
+                </div>
+              </>
+            )}
 
             {/* Featured badge */}
             {route.featured && (
@@ -195,6 +235,24 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
               <Badge variant="outline" className={getDifficultyColor(route.difficulty)}>
                 {difficultyLabels[route.difficulty]}
               </Badge>
+              {route.route_type && (
+                <div className="flex items-center gap-1 text-muted-foreground" title={route.route_type === 'loop' ? 'Loop (Circular)' : 'Vai e Volta'}>
+                  {route.route_type === 'loop' ? (
+                    <Repeat className="h-4 w-4" />
+                  ) : (
+                    <MoveHorizontal className="h-4 w-4" />
+                  )}
+                </div>
+              )}
+              {route.route_type && (
+                <div className="flex items-center gap-1 text-muted-foreground" title={route.route_type === 'loop' ? 'Loop (Circular)' : 'Vai e Volta'}>
+                  {route.route_type === 'loop' ? (
+                    <Repeat className="h-4 w-4" />
+                  ) : (
+                    <MoveHorizontal className="h-4 w-4" />
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Title */}

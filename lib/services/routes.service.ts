@@ -49,6 +49,14 @@ export class RoutesService {
       query = query.in('region', filters.region)
     }
 
+    if (filters?.country?.length) {
+      query = query.in('country', filters.country)
+    }
+
+    if (filters?.route_type?.length) {
+      query = query.in('route_type', filters.route_type)
+    }
+
     if (filters?.search) {
       query = query.ilike('title', `%${filters.search}%`)
     }

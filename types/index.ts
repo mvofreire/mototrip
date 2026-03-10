@@ -62,6 +62,8 @@ export interface RouteFilters {
   min_duration?: number
   max_duration?: number
   region?: string[]
+  country?: string[]
+  route_type?: ('loop' | 'out_and_back')[]
   min_scenic_score?: number
   search?: string
 }

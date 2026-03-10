@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import { Metadata } from 'next'
 import { SubmitRouteForm } from '@/components/features/routes/submit-route-form'
+import { ProtectedRoute } from '@/components/auth/protected-route'
 
 export async function generateMetadata({
   params: { locale },
@@ -15,6 +16,8 @@ export async function generateMetadata({
   }
 }
 
+
+
 export default async function SubmitRoutePage({
   params: { locale },
 }: {
@@ -23,19 +26,21 @@ export default async function SubmitRoutePage({
   const t = await getTranslations({ locale, namespace: 'submit' })
 
   return (
-    <div className="container py-12">
-      <div className="max-w-3xl mx-auto">
-        <div className="space-y-8">
-          {/* Header */}
-          <div className="space-y-2 text-center">
-            <h1 className="text-4xl font-bold tracking-tight">{t('title')}</h1>
-            <p className="text-muted-foreground text-lg">{t('subtitle')}</p>
-          </div>
+    <ProtectedRoute>
+      <div className="container py-12">
+        <div className="max-w-3xl mx-auto">
+          <div className="space-y-8">
+            {/* Header */}
+            <div className="space-y-2 text-center">
+              <h1 className="text-4xl font-bold tracking-tight">{t('title')}</h1>
+              <p className="text-muted-foreground text-lg">{t('subtitle')}</p>
+            </div>
 
-          {/* Form */}
-          <SubmitRouteForm locale={locale} />
+            {/* Form */}
+            <SubmitRouteForm locale={locale} />
+          </div>
         </div>
       </div>
-    </div>
+    </ProtectedRoute>
   )
 }

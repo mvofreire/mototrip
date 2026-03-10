@@ -45,6 +45,7 @@ export function EditRouteDialog({
     distance_km: route.distance_km,
     duration_minutes: route.duration_minutes,
     category: route.category,
+    route_type: route.route_type || '',
     published: route.published,
     featured: route.featured,
   })
@@ -59,6 +60,7 @@ export function EditRouteDialog({
       distance_km: route.distance_km,
       duration_minutes: route.duration_minutes,
       category: route.category,
+      route_type: route.route_type || '',
       published: route.published,
       featured: route.featured,
     })
@@ -89,6 +91,11 @@ export function EditRouteDialog({
     { value: 'coastal', label: translations.categories?.coastal || 'Coastal' },
     { value: 'weekend', label: translations.categories?.weekend || 'Weekend' },
     { value: 'adventure', label: translations.categories?.adventure || 'Adventure' },
+  ]
+
+  const routeTypes = [
+    { value: 'loop', label: '🔄 Loop (Circular)' },
+    { value: 'out_and_back', label: '⇄ ' + (translations.outAndBack || 'Vai e Volta') },
   ]
 
   return (
@@ -159,6 +166,26 @@ export function EditRouteDialog({
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="route_type">{translations.routeType || 'Tipo de Rota'}</Label>
+            <Select
+              value={formData.route_type}
+              onValueChange={(value) => setFormData({ ...formData, route_type: value })}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione o tipo de rota" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">{translations.none || 'Nenhum'}</SelectItem>
+                {routeTypes.map((routeType) => (
+                  <SelectItem key={routeType.value} value={routeType.value}>
+                    {routeType.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

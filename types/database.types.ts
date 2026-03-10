@@ -42,6 +42,9 @@ export type Database = {
           elevation_gain_m: number | null
           polyline_coordinates: any // GeoJSON LineString
           region: string | null
+          country: string | null
+          route_type: 'loop' | 'out_and_back' | null
+          thumbnail_url: string | null
           category: 'scenic' | 'mountain' | 'coastal' | 'weekend' | 'adventure'
           scenic_score: number
           road_quality_score: number
@@ -62,6 +65,9 @@ export type Database = {
           elevation_gain_m?: number | null
           polyline_coordinates: any
           region?: string | null
+          country?: string | null
+          route_type?: 'loop' | 'out_and_back' | null
+          thumbnail_url?: string | null
           category: 'scenic' | 'mountain' | 'coastal' | 'weekend' | 'adventure'
           scenic_score?: number
           road_quality_score?: number
@@ -82,6 +88,9 @@ export type Database = {
           elevation_gain_m?: number | null
           polyline_coordinates?: any
           region?: string | null
+          country?: string | null
+          route_type?: 'loop' | 'out_and_back' | null
+          thumbnail_url?: string | null
           category?: 'scenic' | 'mountain' | 'coastal' | 'weekend' | 'adventure'
           scenic_score?: number
           road_quality_score?: number

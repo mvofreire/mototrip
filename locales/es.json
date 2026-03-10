@@ -101,7 +101,9 @@
     "routeMap": "Mapa de la Ruta",
     "recommendedStops": "Paradas Recomendadas",
     "reviewsTitle": "Reseñas",
-    "stop": "Parada {number}"
+    "stop": "Parada {number}",
+    "downloadGPX": "Descargar GPX",
+    "openInGoogleMaps": "Abrir en Google Maps"
   },
   "stopTypes": {
     "viewpoint": "Mirador",
@@ -156,6 +158,14 @@
     "descriptionPlaceholder": "Describe la ruta, puntos de interés, tipos de carreteras...",
     "region": "Región",
     "regionPlaceholder": "Ej: Norte de Portugal, Serra da Estrela",
+    "country": "País",
+    "countryPlaceholder": "Selecciona un país",
+    "countryPortugal": "Portugal",
+    "countrySpain": "España",
+    "routeType": "Tipo de Ruta",
+    "routeTypePlaceholder": "Selecciona el tipo de ruta",
+    "routeTypeLoop": "🔄 Loop (Circular)",
+    "routeTypeOutAndBack": "⇄ Ida y Vuelta",
     "routeCharacteristics": "Características de la Ruta",
     "category": "Categoría",
     "categoryScenicLabel": "🌄 Escénica",
@@ -178,6 +188,17 @@
     "gpxUploadTitle": "Haz clic para subir o arrastra un archivo GPX",
     "gpxUploadDesc": "Archivo GPX con track o ruta de hasta 10MB",
     "gpxRequired": "Por favor, sube un archivo GPX",
+    "gpxSelectFile": "Seleccionar archivo",
+    "gpxError": "Por favor, selecciona un archivo GPX válido",
+    "gpxTipTitle": "Consejo:",
+    "gpxTipDescription": "Puedes exportar rutas GPX desde aplicaciones como:",
+    "gpxTipApp1": "Strava, Komoot, Ride with GPS",
+    "gpxTipApp2": "Garmin Connect, Wahoo",
+    "gpxTipApp3": "Google Maps (usando herramientas de terceros)",
+    "gpxDistance": "Distancia",
+    "gpxElevationGain": "Ganancia de Elevación",
+    "gpxPoints": "Puntos del Track",
+    "gpxRemove": "Eliminar",
     "required": "*",
     "cancel": "Cancelar",
     "submitButton": "Enviar Ruta",
@@ -206,6 +227,185 @@
     "subtitle": "Historias, consejos e inspiración de la carretera",
     "comingSoon": "Próximamente",
     "comingSoonDesc": "Estamos trabajando para traerte historias increíbles de motociclistas de todo el mundo. ¡Vuelve pronto!"
+  },
+  "about": {
+    "title": "Sobre Nosotros",
+    "description": "Conoce la historia y misión de MotoTrip",
+    "subtitle": "Conectando motociclistas a través de las mejores rutas del mundo",
+    "mission": {
+      "title": "Nuestra Misión",
+      "description": "Creemos que los mejores recuerdos se hacen en la carretera. MotoTrip nació de la pasión por el motociclismo y el deseo de compartir las rutas más increíbles del mundo. Nuestra plataforma conecta motociclistas, permitiéndoles compartir sus experiencias y descubrir nuevas aventuras."
+    },
+    "values": {
+      "title": "Nuestros Valores",
+      "community": {
+        "title": "Comunidad",
+        "description": "Construimos una comunidad global de motociclistas que comparten pasión por la carretera y espíritu de aventura."
+      },
+      "safety": {
+        "title": "Seguridad",
+        "description": "Priorizamos la seguridad en todas las rutas, proporcionando información detallada sobre condiciones de carretera y niveles de dificultad."
+      },
+      "adventure": {
+        "title": "Aventura",
+        "description": "Fomentamos la exploración y descubrimiento de nuevos lugares, siempre respetando la naturaleza y comunidades locales."
+      },
+      "global": {
+        "title": "Global",
+        "description": "Conectamos motociclistas de todos los continentes, creando una red verdaderamente internacional de entusiastas."
+      }
+    },
+    "story": {
+      "title": "Nuestra Historia",
+      "paragraph1": "MotoTrip comenzó en 2024 cuando un grupo de amigos motociclistas se dio cuenta de que faltaba una plataforma dedicada a compartir y descubrir rutas de moto increíbles.",
+      "paragraph2": "Cansados de depender solo de aplicaciones de navegación que no capturaban la esencia de una buena ruta de moto, decidimos crear algo diferente. Una plataforma donde la comunidad pudiera compartir no solo coordenadas GPS, sino historias, fotos y experiencias reales.",
+      "paragraph3": "Hoy, miles de motociclistas en todo el mundo usan MotoTrip para planificar sus próximas aventuras, descubrir rutas escénicas y conectarse con otros entusiastas que comparten la misma pasión por las dos ruedas."
+    },
+    "cta": {
+      "title": "Únete a Nuestra Comunidad",
+      "description": "Forma parte de una comunidad global de motociclistas apasionados",
+      "button": "Envía Tu Primera Ruta"
+    }
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "description": "Cómo recopilamos, usamos y protegemos tu información",
+    "lastUpdated": "Última actualización",
+    "date": "10 de marzo de 2026",
+    "intro": "En MotoTrip, respetamos tu privacidad y nos comprometemos a proteger tu información personal. Esta Política de Privacidad explica cómo recopilamos, usamos y compartimos información cuando usas nuestra plataforma.",
+    "collection": {
+      "title": "Información que Recopilamos",
+      "personal": {
+        "title": "Información Personal",
+        "description": "Cuando creas una cuenta, recopilamos:",
+        "item1": "Nombre y dirección de correo electrónico",
+        "item2": "Foto de perfil (opcional)",
+        "item3": "Ubicación general (opcional)"
+      },
+      "route": {
+        "title": "Información de Rutas",
+        "description": "Cuando envías rutas, recopilamos:",
+        "item1": "Datos de GPS y coordenadas",
+        "item2": "Fotos y descripciones",
+        "item3": "Reseñas y comentarios"
+      }
+    },
+    "usage": {
+      "title": "Cómo Usamos Tu Información",
+      "description": "Usamos tu información para:",
+      "item1": "Proporcionar y mejorar nuestros servicios",
+      "item2": "Personalizar tu experiencia en la plataforma",
+      "item3": "Enviar notificaciones importantes sobre el servicio",
+      "item4": "Prevenir fraudes y abusos",
+      "item5": "Cumplir con obligaciones legales"
+    },
+    "sharing": {
+      "title": "Compartir Datos",
+      "description": "No vendemos tu información personal. Podemos compartir datos con:",
+      "item1": "Otros usuarios (información pública del perfil y rutas)",
+      "item2": "Proveedores de servicios (alojamiento, análisis)",
+      "item3": "Autoridades legales (cuando lo requiera la ley)"
+    },
+    "security": {
+      "title": "Seguridad de Datos",
+      "description": "Implementamos medidas de seguridad técnicas y organizativas para proteger tu información contra acceso no autorizado, alteración, divulgación o destrucción."
+    },
+    "rights": {
+      "title": "Tus Derechos",
+      "description": "Tienes derecho a:",
+      "item1": "Acceder a tu información personal",
+      "item2": "Corregir datos inexactos",
+      "item3": "Solicitar la eliminación de tu cuenta",
+      "item4": "Exportar tus datos"
+    },
+    "cookies": {
+      "title": "Cookies",
+      "description": "Usamos cookies y tecnologías similares para mejorar tu experiencia, analizar el uso de la plataforma y personalizar contenido. Puedes controlar el uso de cookies a través de la configuración de tu navegador."
+    },
+    "children": {
+      "title": "Privacidad de Niños",
+      "description": "Nuestro servicio no está dirigido a menores de 16 años. No recopilamos intencionalmente información personal de niños."
+    },
+    "changes": {
+      "title": "Cambios en esta Política",
+      "description": "Podemos actualizar esta política periódicamente. Te notificaremos sobre cambios significativos a través del correo electrónico registrado o un aviso en la plataforma."
+    },
+    "contact": {
+      "title": "Contáctanos",
+      "description": "Si tienes preguntas sobre esta Política de Privacidad, contáctanos:"
+    }
+  },
+  "terms": {
+    "title": "Términos de Servicio",
+    "description": "Términos y condiciones de uso de la plataforma MotoTrip",
+    "lastUpdated": "Última actualización",
+    "date": "10 de marzo de 2026",
+    "intro": "Bienvenido a MotoTrip. Al usar nuestra plataforma, aceptas estos Términos de Servicio. Léelos cuidadosamente.",
+    "acceptance": {
+      "title": "Aceptación de los Términos",
+      "description": "Al acceder y usar MotoTrip, aceptas y acuerdas estar vinculado a estos Términos de Servicio y nuestra Política de Privacidad. Si no estás de acuerdo con alguno de estos términos, no uses nuestra plataforma."
+    },
+    "accounts": {
+      "title": "Cuentas de Usuario",
+      "description": "Para usar ciertas funciones, debes crear una cuenta. Aceptas:",
+      "item1": "Proporcionar información precisa y completa",
+      "item2": "Mantener la seguridad de tu contraseña",
+      "item3": "Notificarnos inmediatamente sobre uso no autorizado",
+      "item4": "Ser responsable de todas las actividades en tu cuenta"
+    },
+    "content": {
+      "title": "Contenido del Usuario",
+      "ownership": {
+        "title": "Propiedad",
+        "description": "Mantienes todos los derechos sobre el contenido que envías a MotoTrip, incluidas rutas, fotos y comentarios."
+      },
+      "license": {
+        "title": "Licencia",
+        "description": "Al enviar contenido, nos otorgas una licencia mundial, no exclusiva y libre de regalías para usar, mostrar y distribuir tu contenido en la plataforma."
+      },
+      "prohibited": {
+        "title": "Contenido Prohibido",
+        "description": "Aceptas no enviar contenido que:",
+        "item1": "Sea ilegal, ofensivo o difamatorio",
+        "item2": "Viole derechos de propiedad intelectual",
+        "item3": "Contenga virus o código malicioso",
+        "item4": "Promueva actividades peligrosas o ilegales",
+        "item5": "Incluya información falsa o engañosa"
+      }
+    },
+    "routes": {
+      "title": "Información de Rutas",
+      "description": "Las rutas compartidas en la plataforma son contribuciones de la comunidad. Aunque nos esforzamos por garantizar la calidad, no podemos garantizar la precisión, seguridad o condición actual de todas las rutas.",
+      "disclaimer": "ADVERTENCIA: Siempre verifica las condiciones de la carretera localmente, sigue las leyes de tránsito y conduce con seguridad. MotoTrip no es responsable de accidentes o problemas durante tus viajes."
+    },
+    "intellectual": {
+      "title": "Propiedad Intelectual",
+      "description": "MotoTrip y su contenido original, características y funcionalidad son propiedad exclusiva de MotoTrip y están protegidos por leyes de derechos de autor internacionales."
+    },
+    "disclaimer": {
+      "title": "Renuncia de Garantías",
+      "description": "El servicio se proporciona 'tal cual' y 'según disponibilidad', sin garantías de ningún tipo, expresas o implícitas. No garantizamos que el servicio sea ininterrumpido, seguro o libre de errores."
+    },
+    "liability": {
+      "title": "Limitación de Responsabilidad",
+      "description": "MotoTrip no será responsable de ningún daño indirecto, incidental, especial, consecuente o punitivo resultante de tu uso o incapacidad de usar el servicio."
+    },
+    "termination": {
+      "title": "Terminación",
+      "description": "Nos reservamos el derecho de suspender o terminar tu cuenta en cualquier momento, sin previo aviso, por violación de estos términos o por cualquier otra razón."
+    },
+    "law": {
+      "title": "Ley Aplicable",
+      "description": "Estos Términos se regirán por las leyes de Portugal, sin considerar conflictos de disposiciones legales."
+    },
+    "changes": {
+      "title": "Cambios en los Términos",
+      "description": "Podemos modificar estos términos en cualquier momento. Al continuar usando el servicio después de los cambios, aceptas los nuevos términos."
+    },
+    "contact": {
+      "title": "Contáctanos",
+      "description": "Para asuntos legales o preguntas sobre estos términos, contacta:"
+    }
   },
   "admin": {
     "pageTitle": "Panel de Administración",
@@ -261,6 +461,83 @@
       "regionLabel": "Región",
       "save": "Guardar",
       "saving": "Guardando..."
+    }
+  },
+  "riders": {
+    "title": "Mejores Motociclistas",
+    "description": "Conoce a los principales contribuidores de la comunidad MotoTrip",
+    "subtitle": "Reconociendo a nuestros miembros más activos y valiosos",
+    "topContributors": {
+      "title": "Principales Contribuidores",
+      "description": "Estos motociclistas han compartido las rutas más increíbles y ayudado a construir nuestra comunidad.",
+      "member": "Miembro desde 2024",
+      "routes": "Rutas",
+      "rating": "Calificación"
+    },
+    "cta": {
+      "title": "Conviértete en Contribuidor",
+      "description": "Comparte tus mejores rutas y únete a nuestros mejores motociclistas",
+      "button": "Envía Tu Primera Ruta"
+    }
+  },
+  "guidelines": {
+    "title": "Guías de la Comunidad",
+    "description": "Reglas y mejores prácticas para la comunidad MotoTrip",
+    "subtitle": "Construyendo una comunidad respetuosa y útil para todos los motociclistas",
+    "intro": "Bienvenido a las Guías de la Comunidad MotoTrip. Estas reglas nos ayudan a mantener un ambiente positivo, seguro y útil para todos los miembros. Al usar nuestra plataforma, aceptas seguir estas directrices.",
+    "values": {
+      "title": "Nuestros Valores Fundamentales",
+      "respect": {
+        "title": "Respeto",
+        "description": "Trata a todos los miembros con respeto y cortesía. Las diferencias de opinión son bienvenidas, pero siempre mantén las discusiones civilizadas."
+      },
+      "safety": {
+        "title": "Seguridad",
+        "description": "Siempre prioriza la seguridad en las carreteras. Comparte información precisa y advertencias sobre condiciones peligrosas."
+      },
+      "collaboration": {
+        "title": "Colaboración",
+        "description": "Trabaja junto con otros miembros. Comparte conocimiento, proporciona comentarios constructivos y ayuda a mejorar la comunidad."
+      },
+      "quality": {
+        "title": "Calidad",
+        "description": "Mantén altos estándares en tus contribuciones. Proporciona información detallada y precisa sobre las rutas."
+      }
+    },
+    "content": {
+      "title": "Directrices de Contenido",
+      "description": "Al compartir rutas e interactuar con la comunidad:",
+      "do": {
+        "title": "Haz:",
+        "item1": "Proporciona descripciones de rutas detalladas y precisas",
+        "item2": "Incluye advertencias sobre condiciones de carretera y niveles de dificultad",
+        "item3": "Usa tus propias fotos o aquellas con permiso apropiado",
+        "item4": "Actualiza información si las condiciones cambian",
+        "item5": "Sé honesto en tus reseñas y comentarios"
+      },
+      "dont": {
+        "title": "No hagas:",
+        "item1": "Publicar contenido ofensivo, discriminatorio o ilegal",
+        "item2": "Compartir información falsa o engañosa",
+        "item3": "Hacer spam o promover productos no relacionados",
+        "item4": "Usar fotos o contenido de otros sin permiso",
+        "item5": "Fomentar actividades peligrosas o ilegales"
+      }
+    },
+    "reporting": {
+      "title": "Reportar Violaciones",
+      "description": "Si encuentras contenido que viole estas directrices, por favor háznoslo saber:"
+    },
+    "consequences": {
+      "title": "Consecuencias",
+      "description": "Las violaciones de estas directrices pueden resultar en:",
+      "item1": "Advertencia y solicitud para eliminar/modificar contenido",
+      "item2": "Suspensión temporal de la cuenta",
+      "item3": "Prohibición permanente en casos graves o reincidentes"
+    },
+    "thankYou": {
+      "title": "Gracias por Ser Parte de Nuestra Comunidad",
+      "message": "¡Juntos, estamos construyendo la mejor plataforma de rutas de motocicleta del mundo!"
     }
   }
 }

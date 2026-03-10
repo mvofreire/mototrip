@@ -1,0 +1,40 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="400" fill="#e5e7eb"/>
+  
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#d1d5db" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="400" fill="url(#grid)"/>
+  
+  <!-- Winding road path -->
+  <path d="M 50,200 Q 150,100 250,200 T 450,200 L 550,250" 
+        fill="none" 
+        stroke="#3b82f6" 
+        stroke-width="8" 
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+  
+  <!-- Road markers -->
+  <circle cx="50" cy="200" r="8" fill="#22c55e"/>
+  <circle cx="550" cy="250" r="8" fill="#ef4444"/>
+  
+  <!-- Motorcycle icon -->
+  <g transform="translate(280, 185)">
+    <ellipse cx="0" cy="15" rx="8" ry="8" fill="#1f2937"/>
+    <ellipse cx="25" cy="15" rx="8" ry="8" fill="#1f2937"/>
+    <path d="M 5,15 L 10,5 L 15,5 L 20,15" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="12" cy="8" r="3" fill="#3b82f6"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="300" y="350" font-family="Arial, sans-serif" font-size="24" fill="#6b7280" text-anchor="middle" font-weight="600">
+    Motorcycle Route
+  </text>
+  <text x="300" y="380" font-family="Arial, sans-serif" font-size="16" fill="#9ca3af" text-anchor="middle">
+    No preview available
+  </text>
+</svg>

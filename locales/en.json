@@ -101,7 +101,9 @@
     "routeMap": "Route Map",
     "recommendedStops": "Recommended Stops",
     "reviewsTitle": "Reviews",
-    "stop": "Stop {number}"
+    "stop": "Stop {number}",
+    "downloadGPX": "Download GPX",
+    "openInGoogleMaps": "Open in Google Maps"
   },
   "stopTypes": {
     "viewpoint": "Viewpoint",
@@ -156,6 +158,14 @@
     "descriptionPlaceholder": "Describe the route, points of interest, road types...",
     "region": "Region",
     "regionPlaceholder": "Ex: North Portugal, Serra da Estrela",
+    "country": "Country",
+    "countryPlaceholder": "Select a country",
+    "countryPortugal": "Portugal",
+    "countrySpain": "Spain",
+    "routeType": "Route Type",
+    "routeTypePlaceholder": "Select route type",
+    "routeTypeLoop": "🔄 Loop (Circular)",
+    "routeTypeOutAndBack": "⇄ Out and Back",
     "routeCharacteristics": "Route Characteristics",
     "category": "Category",
     "categoryScenicLabel": "🌄 Scenic",
@@ -178,6 +188,17 @@
     "gpxUploadTitle": "Click to upload or drag a GPX file",
     "gpxUploadDesc": "GPX file with track or route up to 10MB",
     "gpxRequired": "Please upload a GPX file",
+    "gpxSelectFile": "Select file",
+    "gpxError": "Please select a valid GPX file",
+    "gpxTipTitle": "Tip:",
+    "gpxTipDescription": "You can export GPX routes from apps like:",
+    "gpxTipApp1": "Strava, Komoot, Ride with GPS",
+    "gpxTipApp2": "Garmin Connect, Wahoo",
+    "gpxTipApp3": "Google Maps (using third-party tools)",
+    "gpxDistance": "Distance",
+    "gpxElevationGain": "Elevation Gain",
+    "gpxPoints": "Track Points",
+    "gpxRemove": "Remove",
     "required": "*",
     "cancel": "Cancel",
     "submitButton": "Submit Route",
@@ -206,6 +227,185 @@
     "subtitle": "Stories, tips, and inspiration from the road",
     "comingSoon": "Coming Soon",
     "comingSoonDesc": "We're working on bringing you amazing stories from riders around the world. Check back soon!"
+  },
+  "about": {
+    "title": "About Us",
+    "description": "Learn about MotoTrip's story and mission",
+    "subtitle": "Connecting riders through the world's best routes",
+    "mission": {
+      "title": "Our Mission",
+      "description": "We believe the best memories are made on the road. MotoTrip was born from a passion for motorcycling and a desire to share the world's most incredible routes. Our platform connects riders, allowing them to share experiences and discover new adventures."
+    },
+    "values": {
+      "title": "Our Values",
+      "community": {
+        "title": "Community",
+        "description": "We build a global community of riders who share a passion for the road and a spirit of adventure."
+      },
+      "safety": {
+        "title": "Safety",
+        "description": "We prioritize safety in all routes, providing detailed information about road conditions and difficulty levels."
+      },
+      "adventure": {
+        "title": "Adventure",
+        "description": "We encourage exploration and discovery of new places, always respecting nature and local communities."
+      },
+      "global": {
+        "title": "Global",
+        "description": "We connect riders from all continents, creating a truly international network of enthusiasts."
+      }
+    },
+    "story": {
+      "title": "Our Story",
+      "paragraph1": "MotoTrip started in 2024 when a group of motorcycle friends realized there was a lack of a dedicated platform for sharing and discovering amazing motorcycle routes.",
+      "paragraph2": "Tired of relying solely on navigation apps that didn't capture the essence of a good motorcycle route, we decided to create something different. A platform where the community could share not just GPS coordinates, but stories, photos, and real experiences.",
+      "paragraph3": "Today, thousands of riders around the world use MotoTrip to plan their next adventures, discover scenic routes, and connect with other enthusiasts who share the same passion for two wheels."
+    },
+    "cta": {
+      "title": "Join Our Community",
+      "description": "Be part of a global community of passionate riders",
+      "button": "Submit Your First Route"
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "description": "How we collect, use, and protect your information",
+    "lastUpdated": "Last updated",
+    "date": "March 10, 2026",
+    "intro": "At MotoTrip, we respect your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and share information when you use our platform.",
+    "collection": {
+      "title": "Information We Collect",
+      "personal": {
+        "title": "Personal Information",
+        "description": "When you create an account, we collect:",
+        "item1": "Name and email address",
+        "item2": "Profile picture (optional)",
+        "item3": "General location (optional)"
+      },
+      "route": {
+        "title": "Route Information",
+        "description": "When you submit routes, we collect:",
+        "item1": "GPS data and coordinates",
+        "item2": "Photos and descriptions",
+        "item3": "Reviews and comments"
+      }
+    },
+    "usage": {
+      "title": "How We Use Your Information",
+      "description": "We use your information to:",
+      "item1": "Provide and improve our services",
+      "item2": "Personalize your experience on the platform",
+      "item3": "Send important service notifications",
+      "item4": "Prevent fraud and abuse",
+      "item5": "Comply with legal obligations"
+    },
+    "sharing": {
+      "title": "Data Sharing",
+      "description": "We do not sell your personal information. We may share data with:",
+      "item1": "Other users (public profile information and routes)",
+      "item2": "Service providers (hosting, analytics)",
+      "item3": "Legal authorities (when required by law)"
+    },
+    "security": {
+      "title": "Data Security",
+      "description": "We implement technical and organizational security measures to protect your information from unauthorized access, alteration, disclosure, or destruction."
+    },
+    "rights": {
+      "title": "Your Rights",
+      "description": "You have the right to:",
+      "item1": "Access your personal information",
+      "item2": "Correct inaccurate data",
+      "item3": "Request deletion of your account",
+      "item4": "Export your data"
+    },
+    "cookies": {
+      "title": "Cookies",
+      "description": "We use cookies and similar technologies to improve your experience, analyze platform usage, and personalize content. You can control cookie usage through your browser settings."
+    },
+    "children": {
+      "title": "Children's Privacy",
+      "description": "Our service is not directed at children under 16. We do not knowingly collect personal information from children."
+    },
+    "changes": {
+      "title": "Changes to This Policy",
+      "description": "We may update this policy periodically. We will notify you of significant changes via registered email or a notice on the platform."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "If you have questions about this Privacy Policy, contact us:"
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "description": "Terms and conditions for using the MotoTrip platform",
+    "lastUpdated": "Last updated",
+    "date": "March 10, 2026",
+    "intro": "Welcome to MotoTrip. By using our platform, you agree to these Terms of Service. Please read them carefully.",
+    "acceptance": {
+      "title": "Acceptance of Terms",
+      "description": "By accessing and using MotoTrip, you accept and agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree with any of these terms, do not use our platform."
+    },
+    "accounts": {
+      "title": "User Accounts",
+      "description": "To use certain features, you must create an account. You agree to:",
+      "item1": "Provide accurate and complete information",
+      "item2": "Maintain the security of your password",
+      "item3": "Notify us immediately of unauthorized use",
+      "item4": "Be responsible for all activities on your account"
+    },
+    "content": {
+      "title": "User Content",
+      "ownership": {
+        "title": "Ownership",
+        "description": "You retain all rights to content you submit to MotoTrip, including routes, photos, and comments."
+      },
+      "license": {
+        "title": "License",
+        "description": "By submitting content, you grant us a worldwide, non-exclusive, royalty-free license to use, display, and distribute your content on the platform."
+      },
+      "prohibited": {
+        "title": "Prohibited Content",
+        "description": "You agree not to submit content that:",
+        "item1": "Is illegal, offensive, or defamatory",
+        "item2": "Violates intellectual property rights",
+        "item3": "Contains viruses or malicious code",
+        "item4": "Promotes dangerous or illegal activities",
+        "item5": "Includes false or misleading information"
+      }
+    },
+    "routes": {
+      "title": "Route Information",
+      "description": "Routes shared on the platform are community contributions. While we strive to ensure quality, we cannot guarantee the accuracy, safety, or current condition of all routes.",
+      "disclaimer": "WARNING: Always verify local road conditions, follow traffic laws, and ride safely. MotoTrip is not responsible for accidents or problems during your trips."
+    },
+    "intellectual": {
+      "title": "Intellectual Property",
+      "description": "MotoTrip and its original content, features, and functionality are the exclusive property of MotoTrip and are protected by international copyright laws."
+    },
+    "disclaimer": {
+      "title": "Disclaimer of Warranties",
+      "description": "The service is provided 'as is' and 'as available', without warranties of any kind, express or implied. We do not warrant that the service will be uninterrupted, secure, or error-free."
+    },
+    "liability": {
+      "title": "Limitation of Liability",
+      "description": "MotoTrip shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use or inability to use the service."
+    },
+    "termination": {
+      "title": "Termination",
+      "description": "We reserve the right to suspend or terminate your account at any time, without prior notice, for violation of these terms or any other reason."
+    },
+    "law": {
+      "title": "Governing Law",
+      "description": "These Terms shall be governed by the laws of Portugal, without regard to its conflict of law provisions."
+    },
+    "changes": {
+      "title": "Changes to Terms",
+      "description": "We may modify these terms at any time. By continuing to use the service after changes, you accept the new terms."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "For legal matters or questions about these terms, contact:"
+    }
   },
   "admin": {
     "pageTitle": "Admin Dashboard",
@@ -261,6 +461,83 @@
       "regionLabel": "Region",
       "save": "Save",
       "saving": "Saving..."
+    }
+  },
+  "riders": {
+    "title": "Top Riders",
+    "description": "Meet the leading contributors of the MotoTrip community",
+    "subtitle": "Recognizing our most active and valuable community members",
+    "topContributors": {
+      "title": "Top Contributors",
+      "description": "These riders have shared the most amazing routes and helped build our community.",
+      "member": "Member since 2024",
+      "routes": "Routes",
+      "rating": "Rating"
+    },
+    "cta": {
+      "title": "Become a Contributor",
+      "description": "Share your best routes and join our top riders",
+      "button": "Submit Your First Route"
+    }
+  },
+  "guidelines": {
+    "title": "Community Guidelines",
+    "description": "Rules and best practices for the MotoTrip community",
+    "subtitle": "Building a respectful and helpful community for all riders",
+    "intro": "Welcome to the MotoTrip Community Guidelines. These rules help us maintain a positive, safe, and helpful environment for all members. By using our platform, you agree to follow these guidelines.",
+    "values": {
+      "title": "Our Core Values",
+      "respect": {
+        "title": "Respect",
+        "description": "Treat all members with respect and courtesy. Differences of opinion are welcome, but always keep discussions civil."
+      },
+      "safety": {
+        "title": "Safety",
+        "description": "Always prioritize safety on the roads. Share accurate information and warnings about dangerous conditions."
+      },
+      "collaboration": {
+        "title": "Collaboration",
+        "description": "Work together with other members. Share knowledge, provide constructive feedback, and help improve the community."
+      },
+      "quality": {
+        "title": "Quality",
+        "description": "Maintain high standards in your contributions. Provide detailed and accurate information about routes."
+      }
+    },
+    "content": {
+      "title": "Content Guidelines",
+      "description": "When sharing routes and interacting with the community:",
+      "do": {
+        "title": "Do:",
+        "item1": "Provide detailed and accurate route descriptions",
+        "item2": "Include warnings about road conditions and difficulty levels",
+        "item3": "Use your own photos or those with appropriate permission",
+        "item4": "Update information if conditions change",
+        "item5": "Be honest in your reviews and comments"
+      },
+      "dont": {
+        "title": "Don't:",
+        "item1": "Post offensive, discriminatory, or illegal content",
+        "item2": "Share false or misleading information",
+        "item3": "Spam or promote unrelated products",
+        "item4": "Use others' photos or content without permission",
+        "item5": "Encourage dangerous or illegal activities"
+      }
+    },
+    "reporting": {
+      "title": "Report Violations",
+      "description": "If you encounter content that violates these guidelines, please let us know:"
+    },
+    "consequences": {
+      "title": "Consequences",
+      "description": "Violations of these guidelines may result in:",
+      "item1": "Warning and request to remove/modify content",
+      "item2": "Temporary account suspension",
+      "item3": "Permanent ban in severe or repeat cases"
+    },
+    "thankYou": {
+      "title": "Thank You for Being Part of Our Community",
+      "message": "Together, we're building the best motorcycle route platform in the world!"
     }
   }
 }
