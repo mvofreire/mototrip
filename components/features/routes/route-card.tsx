@@ -8,6 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { MapPin, Clock, Mountain, Star, Bookmark, Repeat, MoveHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { CommentsCount } from '@/components/features/comments'
 import {
   formatDistance,
   formatDuration,
@@ -150,16 +151,19 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
                       </div>
                     </div>
                   )}
-                  <div className="flex items-center gap-2 ml-auto">
-                    <Star className="h-4 w-4 fill-sunshine-yellow-400 text-sunshine-yellow-400" />
-                    <span className="text-sm font-medium">
-                      {route.average_rating ? formatRating(route.average_rating) : 'N/A'}
-                    </span>
-                    {route.rating_count && (
-                      <span className="text-xs text-muted-foreground">
-                        ({route.rating_count})
+                  <div className="flex items-center gap-4 ml-auto">
+                    <div className="flex items-center gap-2">
+                      <Star className="h-4 w-4 fill-sunshine-yellow-400 text-sunshine-yellow-400" />
+                      <span className="text-sm font-medium">
+                        {route.average_rating ? formatRating(route.average_rating) : 'N/A'}
                       </span>
-                    )}
+                      {route.rating_count && (
+                        <span className="text-xs text-muted-foreground">
+                          ({route.rating_count})
+                        </span>
+                      )}
+                    </div>
+                    <CommentsCount routeId={route.id} />
                   </div>
                 </div>
               </div>
@@ -291,10 +295,11 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
 
         <CardFooter className="p-4 pt-0">
           <div className="flex items-center justify-between w-full text-xs text-muted-foreground">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-3">
               {route.rating_count && (
                 <span>{route.rating_count} reviews</span>
               )}
+              <CommentsCount routeId={route.id} />
             </div>
             {route.elevation_gain_m && (
               <div className="flex items-center gap-1">

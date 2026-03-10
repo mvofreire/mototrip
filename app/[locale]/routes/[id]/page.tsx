@@ -5,6 +5,7 @@ import { RouteStats } from '@/components/features/routes/route-stats'
 import { RouteMap } from '@/components/features/routes/route-map'
 import { StopsTimeline } from '@/components/features/routes/stops-timeline'
 import { RouteRatings } from '@/components/features/routes/route-ratings'
+import { CommentsList } from '@/components/features/comments'
 import { Metadata } from 'next'
 
 interface RoutePageProps {
@@ -75,10 +76,16 @@ export default async function RoutePage({ params }: RoutePageProps) {
               </div>
             )}
 
-            {/* Ratings & Reviews */}
+            {/* Ratings & Reviews
             <div className="space-y-3">
               <h2 className="text-xl md:text-2xl font-bold">Reviews</h2>
               <RouteRatings route={route} />
+            </div> */}
+
+            {/* Comments Section */}
+            <div className="space-y-3">
+              <h2 className="text-xl md:text-2xl font-bold">Comments</h2>
+              <CommentsList routeId={route.id} locale={params.locale} />
             </div>
           </div>
 

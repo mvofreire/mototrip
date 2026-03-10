@@ -539,5 +539,48 @@
       "title": "Gracias por Ser Parte de Nuestra Comunidad",
       "message": "¡Juntos, estamos construyendo la mejor plataforma de rutas de motocicleta del mundo!"
     }
+  },
+  "comments": {
+    "title": "Comentarios",
+    "loginPrompt": "Inicia sesión para comentar en esta ruta",
+    "empty": "No hay comentarios aún. ¡Sé el primero en comentar!",
+    "loading": "Cargando comentarios...",
+    "retry": "Intentar de nuevo",
+    "form": {
+      "label": "Tu comentario",
+      "placeholder": "Comparte tu experiencia sobre esta ruta...",
+      "submit": "Comentar",
+      "update": "Actualizar",
+      "cancel": "Cancelar",
+      "submitting": "Enviando...",
+      "charactersRemaining": "{count} caracteres restantes"
+    },
+    "item": {
+      "anonymous": "Anónimo",
+      "edited": "editado",
+      "actions": {
+        "edit": "Editar",
+        "delete": "Eliminar"
+      }
+    },
+    "deleteDialog": {
+      "title": "Eliminar comentario",
+      "description": "¿Estás seguro de que deseas eliminar este comentario? Esta acción no se puede deshacer.",
+      "cancel": "Cancelar",
+      "confirm": "Eliminar",
+      "deleting": "Eliminando..."
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página {current} de {total}"
+    },
+    "errors": {
+      "empty": "El comentario no puede estar vacío",
+      "tooLong": "El comentario no puede tener más de 500 caracteres",
+      "submitFailed": "Error al enviar comentario",
+      "loadFailed": "Error al cargar comentarios",
+      "loginRequired": "Necesitas iniciar sesión para comentar"
+    }
   }
 }

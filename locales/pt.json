@@ -539,5 +539,48 @@
       "title": "Obrigado por Fazer Parte da Nossa Comunidade",
       "message": "Juntos, estamos construindo a melhor plataforma de rotas de motocicleta do mundo!"
     }
+  },
+  "comments": {
+    "title": "Comentários",
+    "loginPrompt": "Faça login para comentar nesta rota",
+    "empty": "Nenhum comentário ainda. Seja o primeiro a comentar!",
+    "loading": "Carregando comentários...",
+    "retry": "Tentar novamente",
+    "form": {
+      "label": "Seu comentário",
+      "placeholder": "Compartilhe suas experiências sobre esta rota...",
+      "submit": "Comentar",
+      "update": "Atualizar",
+      "cancel": "Cancelar",
+      "submitting": "Enviando...",
+      "charactersRemaining": "{count} caracteres restantes"
+    },
+    "item": {
+      "anonymous": "Anônimo",
+      "edited": "editado",
+      "actions": {
+        "edit": "Editar",
+        "delete": "Excluir"
+      }
+    },
+    "deleteDialog": {
+      "title": "Excluir comentário",
+      "description": "Tem certeza que deseja excluir este comentário? Esta ação não pode ser desfeita.",
+      "cancel": "Cancelar",
+      "confirm": "Excluir",
+      "deleting": "Excluindo..."
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Próxima",
+      "page": "Página {current} de {total}"
+    },
+    "errors": {
+      "empty": "O comentário não pode estar vazio",
+      "tooLong": "O comentário não pode ter mais de 500 caracteres",
+      "submitFailed": "Falha ao enviar comentário",
+      "loadFailed": "Falha ao carregar comentários",
+      "loginRequired": "Você precisa estar logado para comentar"
+    }
   }
 }

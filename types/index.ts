@@ -35,6 +35,11 @@ export type SavedRoute = Database['public']['Tables']['saved_routes']['Row']
 export type SavedRouteInsert = Database['public']['Tables']['saved_routes']['Insert']
 export type SavedRouteUpdate = Database['public']['Tables']['saved_routes']['Update']
 
+// Route Comment types
+export type RouteComment = Database['public']['Tables']['route_comments']['Row']
+export type RouteCommentInsert = Database['public']['Tables']['route_comments']['Insert']
+export type RouteCommentUpdate = Database['public']['Tables']['route_comments']['Update']
+
 // Extended types with relations
 export interface RouteWithDetails extends Route {
   user?: User
@@ -51,6 +56,14 @@ export interface UserProfile extends User {
   saved_routes_count?: number
   contributed_routes?: Route[]
   saved_routes?: SavedRoute[]
+}
+
+export interface RouteCommentWithUser extends RouteComment {
+  user: {
+    id: string
+    name: string | null
+    avatar_url: string | null
+  }
 }
 
 // Filter types
