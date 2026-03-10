@@ -19,7 +19,7 @@ interface CommentsListProps {
 
 export function CommentsList({ routeId, locale }: CommentsListProps) {
   const t = useTranslations('comments')
-  const { user, profile } = useAuth()
+  const { user } = useAuth()
   
   const [comments, setComments] = useState<RouteCommentWithUser[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -95,7 +95,7 @@ export function CommentsList({ routeId, locale }: CommentsListProps) {
       throw new Error(t('errors.loginRequired'))
     }
 
-    const isAdmin = profile?.is_admin || false
+    const isAdmin = user.profile?.role === 'admin'
     await commentsService.deleteComment(commentId, user.id, isAdmin)
     
     // Remove comment from list
@@ -175,7 +175,7 @@ export function CommentsList({ routeId, locale }: CommentsListProps) {
               key={comment.id}
               comment={comment}
               currentUserId={user?.id}
-              isAdmin={profile?.is_admin || false}
+              isAdmin={user?.profile?.role === 'admin'}
               locale={locale}
               onUpdate={handleUpdateComment}
               onDelete={handleDeleteComment}

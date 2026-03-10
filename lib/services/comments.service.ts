@@ -109,7 +109,7 @@ export class CommentsService {
       counts[id] = 0
     })
 
-    data?.forEach((comment) => {
+    data?.forEach((comment: { route_id: string }) => {
       counts[comment.route_id] = (counts[comment.route_id] || 0) + 1
     })
 
@@ -133,13 +133,13 @@ export class CommentsService {
       throw new Error('O comentário não pode ter mais de 500 caracteres')
     }
 
-    const commentData: RouteCommentInsert = {
+    const commentData = {
       route_id: routeId,
       user_id: userId,
       content: content.trim()
     }
 
-    const { data, error } = await this.supabase
+    const { data, error } = await (this.supabase as any)
       .from('route_comments')
       .insert(commentData)
       .select(`
@@ -197,15 +197,15 @@ export class CommentsService {
       throw new Error('Comentário não encontrado')
     }
 
-    if (existingComment.user_id !== userId) {
+    if ((existingComment as any).user_id !== userId) {
       throw new Error('Você não tem permissão para editar este comentário')
     }
 
-    const updateData: RouteCommentUpdate = {
+    const updateData = {
       content: content.trim()
     }
 
-    const { data, error } = await this.supabase
+    const { data, error } = await (this.supabase as any)
       .from('route_comments')
       .update(updateData)
       .eq('id', commentId)
@@ -252,7 +252,7 @@ export class CommentsService {
         throw new Error('Comentário não encontrado')
       }
 
-      if (existingComment.user_id !== userId) {
+      if ((existingComment as any).user_id !== userId) {
         throw new Error('Você não tem permissão para deletar este comentário')
       }
     }
@@ -282,7 +282,7 @@ export class CommentsService {
 
     if (error || !data) return false
 
-    return data.user_id === userId
+    return (data as any).user_id === userId
   }
 }
 
