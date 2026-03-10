@@ -55,8 +55,7 @@ mototrip/
 ├── lib/
 │   ├── services/          # API layer
 │   ├── supabase/          # Supabase client
-│   ├── utils.ts           # Utilities
-│   └── mock-data.ts       # Sample data
+│   └── utils.ts           # Utilities
 ├── locales/               # Translation files
 │   ├── en.json            # English
 │   ├── pt.json            # Portuguese

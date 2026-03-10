@@ -274,9 +274,7 @@ mototrip/
 │   │   └── client.ts
 │   │
 │   ├── hooks/                  # Custom hooks (futuro)
-│   ├── utils.ts                # Utilitários
-│   ├── mock-data.ts            # Dados mock
-│   └── seed.ts                 # Script de seed
+│   └── utils.ts                # Utilitários
 │
 ├── types/
 │   ├── database.types.ts       # Tipos do Supabase
@@ -546,7 +544,6 @@ not-found.tsx
 // Utilitários e serviços: kebab-case
 utils.ts
 routes.service.ts
-mock-data.ts
 
 // Tipos: kebab-case
 database.types.ts
@@ -605,7 +602,6 @@ export function RouteCard({ route, onSave, className }: RouteCardProps) {
 ```tsx
 import { Metadata } from 'next'
 import { RouteCard } from '@/components/features/routes/route-card'
-import { mockRoutes } from '@/lib/mock-data'
 
 export const metadata: Metadata = {
   title: 'Explore Routes',
