@@ -171,14 +171,13 @@ export function EditRouteDialog({
           <div className="space-y-2">
             <Label htmlFor="route_type">{translations.routeType || 'Tipo de Rota'}</Label>
             <Select
-              value={formData.route_type}
+              value={formData.route_type || undefined}
               onValueChange={(value) => setFormData({ ...formData, route_type: value })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Selecione o tipo de rota" />
+                <SelectValue placeholder={translations.selectRouteType || "Selecione o tipo de rota"} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">{translations.none || 'Nenhum'}</SelectItem>
                 {routeTypes.map((routeType) => (
                   <SelectItem key={routeType.value} value={routeType.value}>
                     {routeType.label}

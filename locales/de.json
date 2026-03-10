@@ -1,0 +1,586 @@
+{
+  "common": {
+    "mototrip": "MotoTrip",
+    "loading": "Laden...",
+    "error": "Fehler",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "share": "Teilen",
+    "back": "Zurück"
+  },
+  "nav": {
+    "exploreRoutes": "Routen Erkunden",
+    "submitRoute": "Route Einreichen",
+    "community": "Gemeinschaft",
+    "signIn": "Anmelden",
+    "getStarted": "Loslegen"
+  },
+  "home": {
+    "hero": {
+      "title": "Entdecken Sie die Besten",
+      "titleHighlight": "Motorradrouten",
+      "subtitle": "Erkunden Sie kuratierte Fahrrouten von Fahrern aus der ganzen Welt. Finden Sie malerische Straßen, Bergpässe und Küstenstraßen, die jede Reise unvergesslich machen.",
+      "exploreRoutes": "Routen Erkunden",
+      "submitRoute": "Route Einreichen"
+    },
+    "stats": {
+      "routes": "Routen",
+      "riders": "Fahrer",
+      "reviews": "Bewertungen"
+    },
+    "clarification": {
+      "title": "Wir sind kein GPS",
+      "subtitle": "Wir kuratieren schöne Routen für unvergessliche Reisen",
+      "description": "MotoTrip ist eine gemeinschaftsgetriebene Plattform, die die besten Motorradrouten der Welt teilt. Wir bieten keine Echtzeit-Navigation – stattdessen helfen wir Ihnen, malerische, gut organisierte Routen zu entdecken, die Ihre Reise schön, sicher und unvergesslich machen.",
+      "feature1Title": "Kuratierte Routen",
+      "feature1Desc": "Handverlesen von erfahrenen Fahrern",
+      "feature2Title": "Malerische Straßen",
+      "feature2Desc": "Schöne Landschaften und Aussichtspunkte",
+      "feature3Title": "Community-Bewertungen",
+      "feature3Desc": "Echtes Feedback von Mitfahrern"
+    },
+    "featured": {
+      "title": "Featured Routen",
+      "subtitle": "Handverlesene Routen, die außergewöhnliche Fahrerlebnisse bieten",
+      "viewAll": "Alle ansehen"
+    },
+    "popular": {
+      "title": "Beliebt Diesen Monat",
+      "subtitle": "Die beliebtesten Routen der Community"
+    },
+    "cta": {
+      "title": "Bereit, Loszufahren?",
+      "subtitle": "Schließen Sie sich Tausenden von Fahrern an, die neue Abenteuer entdecken. Teilen Sie Ihre Lieblingsrouten und inspirieren Sie andere.",
+      "startExploring": "Mit Erkunden Beginnen",
+      "submitYourRoute": "Ihre Route Einreichen"
+    }
+  },
+  "explore": {
+    "title": "Routen Erkunden",
+    "subtitle": "Entdecken Sie Ihr nächstes Abenteuer aus {count} kuratierten Motorradrouten",
+    "searchPlaceholder": "Routen suchen...",
+    "filters": "Filter",
+    "results": "{count} Routen gefunden",
+    "noResults": "Keine Routen gefunden, die Ihren Kriterien entsprechen.",
+    "clearFilters": "Filter löschen"
+  },
+  "filters": {
+    "title": "Filter",
+    "reset": "Zurücksetzen",
+    "category": "Kategorie",
+    "difficulty": "Schwierigkeit",
+    "distance": "Entfernung (km)",
+    "duration": "Dauer (Stunden)",
+    "minimumRating": "Mindestbewertung"
+  },
+  "categories": {
+    "scenic": "Malerisch",
+    "mountain": "Bergig",
+    "coastal": "Küsten",
+    "weekend": "Wochenende",
+    "adventure": "Abenteuer"
+  },
+  "difficulty": {
+    "easy": "Leicht",
+    "moderate": "Mittel",
+    "challenging": "Anspruchsvoll",
+    "expert": "Experte"
+  },
+  "route": {
+    "distance": "Entfernung",
+    "duration": "Dauer",
+    "elevation": "Höhenmeter",
+    "region": "Region",
+    "rating": "Bewertung",
+    "reviews": "{count} Bewertungen",
+    "featured": "Featured",
+    "saveRoute": "Route Speichern",
+    "aboutRoute": "Über Diese Route",
+    "routeMap": "Routenkarte",
+    "recommendedStops": "Empfohlene Stopps",
+    "reviewsTitle": "Bewertungen",
+    "stop": "Stopp {number}",
+    "downloadGPX": "GPX Herunterladen",
+    "openInGoogleMaps": "In Google Maps Öffnen"
+  },
+  "stopTypes": {
+    "viewpoint": "Aussichtspunkt",
+    "cafe": "Café",
+    "gas_station": "Tankstelle",
+    "restaurant": "Restaurant",
+    "landmark": "Wahrzeichen",
+    "accommodation": "Unterkunft"
+  },
+  "ratings": {
+    "scenic": "Malerisch",
+    "roadQuality": "Straßenqualität",
+    "funFactor": "Spaßfaktor"
+  },
+  "footer": {
+    "tagline": "Entdecken und teilen Sie die besten Motorradrouten der Welt.",
+    "routes": "Routen",
+    "scenicRides": "Malerische Fahrten",
+    "mountainPasses": "Bergpässe",
+    "coastalRoutes": "Küstenrouten",
+    "adventureTrails": "Abenteuerpfade",
+    "community": "Gemeinschaft",
+    "submitRoute": "Route Einreichen",
+    "popularRoutes": "Beliebte Routen",
+    "topRiders": "Top Fahrer",
+    "communityGuidelines": "Gemeinschaftsrichtlinien",
+    "company": "Unternehmen",
+    "aboutUs": "Über Uns",
+    "blog": "Blog",
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "termsOfService": "Nutzungsbedingungen",
+    "copyright": "© 2026 MotoTrip. Alle Rechte vorbehalten.",
+    "builtForRiders": "Von Fahrern für Fahrer gebaut 🏍️"
+  },
+  "notFound": {
+    "title": "404",
+    "subtitle": "Seite Nicht Gefunden",
+    "description": "Sieht so aus, als ob diese Straße nicht existiert. Bringen wir Sie zurück auf die richtige Spur.",
+    "backToHome": "Zurück zur Startseite",
+    "exploreRoutes": "Routen Erkunden"
+  },
+  "submit": {
+    "title": "Route Einreichen",
+    "subtitle": "Teilen Sie Ihre Lieblingsroute mit der Community",
+    "formTitle": "Routen-Einreichungsformular",
+    "formDescription": "Diese Funktion wird eine interaktive Karte enthalten, auf der Sie Ihre Route zeichnen, Stopps hinzufügen, Fotos hochladen und Routendetails angeben können.",
+    "toBeImplemented": "Mit Kartenintegration zu implementieren",
+    "basicInfo": "Grundinformationen",
+    "routeTitle": "Routentitel",
+    "routeTitlePlaceholder": "Z.B.: Serra da Estrela Panorama-Schleife",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Beschreiben Sie die Route, Sehenswürdigkeiten, Straßentypen...",
+    "region": "Region",
+    "regionPlaceholder": "Z.B.: Nordportugal, Serra da Estrela",
+    "country": "Land",
+    "countryPlaceholder": "Wählen Sie ein Land",
+    "countryPortugal": "Portugal",
+    "countrySpain": "Spanien",
+    "routeType": "Routentyp",
+    "routeTypePlaceholder": "Routentyp auswählen",
+    "routeTypeLoop": "🔄 Rundfahrt (Kreisförmig)",
+    "routeTypeOutAndBack": "⇄ Hin und Zurück",
+    "routeCharacteristics": "Routenmerkmale",
+    "category": "Kategorie",
+    "categoryScenicLabel": "🌄 Malerisch",
+    "categoryMountainLabel": "⛰️ Bergig",
+    "categoryCoastalLabel": "🌊 Küsten",
+    "categoryWeekendLabel": "🏕️ Wochenende",
+    "categoryAdventureLabel": "🏍️ Abenteuer",
+    "difficultyLabel": "Schwierigkeit",
+    "difficultyEasyLabel": "🟢 Leicht - Anfänger",
+    "difficultyModerateLabel": "🟡 Mittel - Fortgeschrittene",
+    "difficultyChallengingLabel": "🟠 Anspruchsvoll - Erfahrene",
+    "difficultyExpertLabel": "🔴 Experte - Nur Profis",
+    "distanceLabel": "Entfernung",
+    "distanceUnit": "km",
+    "durationLabel": "Geschätzte Dauer",
+    "durationFormat": "{hours}h {minutes}min",
+    "elevationLabel": "Höhenmeter",
+    "elevationUnit": "m",
+    "gpxFile": "GPX-Datei",
+    "gpxUploadTitle": "Klicken zum Hochladen oder GPX-Datei ziehen",
+    "gpxUploadDesc": "GPX-Datei mit Track oder Route bis zu 10 MB",
+    "gpxRequired": "Bitte laden Sie eine GPX-Datei hoch",
+    "gpxSelectFile": "Datei auswählen",
+    "gpxError": "Bitte wählen Sie eine gültige GPX-Datei",
+    "gpxTipTitle": "Tipp:",
+    "gpxTipDescription": "Sie können GPX-Routen aus Apps wie diesen exportieren:",
+    "gpxTipApp1": "Strava, Komoot, Ride with GPS",
+    "gpxTipApp2": "Garmin Connect, Wahoo",
+    "gpxTipApp3": "Google Maps (mit Drittanbieter-Tools)",
+    "gpxDistance": "Entfernung",
+    "gpxElevationGain": "Höhenmeter",
+    "gpxPoints": "Track-Punkte",
+    "gpxRemove": "Entfernen",
+    "required": "*",
+    "cancel": "Abbrechen",
+    "submitButton": "Route Einreichen",
+    "submitting": "Wird eingereicht...",
+    "successTitle": "Route Erfolgreich Eingereicht!",
+    "successMessage": "Weiterleitung zu Routen erkunden...",
+    "loginRequired": "Sie müssen angemeldet sein, um eine Route einzureichen",
+    "errorMessage": "Fehler beim Einreichen der Route",
+    "noteTitle": "Hinweis:",
+    "noteMessage": "Eingereichte Routen werden überprüft, bevor sie veröffentlicht werden. Sie können sie jederzeit in Ihrem Profil bearbeiten."
+  },
+  "community": {
+    "title": "Gemeinschaft",
+    "subtitle": "Vernetzen Sie sich mit Fahrern auf der ganzen Welt",
+    "topContributors": "Top-Mitwirkende",
+    "topContributorsDesc": "Sehen Sie, wer die besten Routen teilt",
+    "featuredRiders": "Featured Fahrer",
+    "featuredRidersDesc": "Fahrer mit außergewöhnlichen Beiträgen",
+    "photoGallery": "Fotogalerie",
+    "photoGalleryDesc": "Schöne Aufnahmen aus der Community",
+    "discussions": "Diskussionen",
+    "discussionsDesc": "Teilen Sie Tipps und Erfahrungen"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Geschichten, Tipps und Inspiration von der Straße",
+    "comingSoon": "Demnächst Verfügbar",
+    "comingSoonDesc": "Wir arbeiten daran, Ihnen erstaunliche Geschichten von Fahrern aus der ganzen Welt zu bringen. Schauen Sie bald wieder vorbei!"
+  },
+  "about": {
+    "title": "Über Uns",
+    "description": "Erfahren Sie mehr über die Geschichte und Mission von MotoTrip",
+    "subtitle": "Fahrer durch die besten Routen der Welt verbinden",
+    "mission": {
+      "title": "Unsere Mission",
+      "description": "Wir glauben, dass die besten Erinnerungen auf der Straße entstehen. MotoTrip entstand aus einer Leidenschaft für das Motorradfahren und dem Wunsch, die unglaublichsten Routen der Welt zu teilen. Unsere Plattform verbindet Fahrer und ermöglicht es ihnen, Erfahrungen zu teilen und neue Abenteuer zu entdecken."
+    },
+    "values": {
+      "title": "Unsere Werte",
+      "community": {
+        "title": "Gemeinschaft",
+        "description": "Wir bauen eine globale Gemeinschaft von Fahrern auf, die eine Leidenschaft für die Straße und einen Abenteuergeist teilen."
+      },
+      "safety": {
+        "title": "Sicherheit",
+        "description": "Wir priorisieren Sicherheit auf allen Routen und liefern detaillierte Informationen über Straßenbedingungen und Schwierigkeitsgrade."
+      },
+      "adventure": {
+        "title": "Abenteuer",
+        "description": "Wir ermutigen zur Erkundung und Entdeckung neuer Orte, immer mit Respekt für die Natur und lokale Gemeinschaften."
+      },
+      "global": {
+        "title": "Global",
+        "description": "Wir verbinden Fahrer von allen Kontinenten und schaffen ein wahrhaft internationales Netzwerk von Enthusiasten."
+      }
+    },
+    "story": {
+      "title": "Unsere Geschichte",
+      "paragraph1": "MotoTrip begann 2024, als eine Gruppe von Motorradfreunden erkannte, dass es an einer dedizierten Plattform zum Teilen und Entdecken großartiger Motorradrouten mangelte.",
+      "paragraph2": "Müde von der alleinigen Abhängigkeit von Navigations-Apps, die die Essenz einer guten Motorradroute nicht erfassten, beschlossen wir, etwas Anderes zu schaffen. Eine Plattform, auf der die Community nicht nur GPS-Koordinaten, sondern Geschichten, Fotos und echte Erfahrungen teilen konnte.",
+      "paragraph3": "Heute nutzen Tausende von Fahrern auf der ganzen Welt MotoTrip, um ihre nächsten Abenteuer zu planen, malerische Routen zu entdecken und sich mit anderen Enthusiasten zu vernetzen, die die gleiche Leidenschaft für zwei Räder teilen."
+    },
+    "cta": {
+      "title": "Treten Sie Unserer Gemeinschaft Bei",
+      "description": "Werden Sie Teil einer globalen Gemeinschaft leidenschaftlicher Fahrer",
+      "button": "Reichen Sie Ihre Erste Route Ein"
+    }
+  },
+  "privacy": {
+    "title": "Datenschutzrichtlinie",
+    "description": "Wie wir Ihre Informationen sammeln, verwenden und schützen",
+    "lastUpdated": "Zuletzt aktualisiert",
+    "date": "10. März 2026",
+    "intro": "Bei MotoTrip respektieren wir Ihre Privatsphäre und verpflichten uns, Ihre persönlichen Informationen zu schützen. Diese Datenschutzrichtlinie erklärt, wie wir Informationen sammeln, verwenden und teilen, wenn Sie unsere Plattform nutzen.",
+    "collection": {
+      "title": "Informationen, Die Wir Sammeln",
+      "personal": {
+        "title": "Persönliche Informationen",
+        "description": "Wenn Sie ein Konto erstellen, sammeln wir:",
+        "item1": "Name und E-Mail-Adresse",
+        "item2": "Profilbild (optional)",
+        "item3": "Allgemeiner Standort (optional)"
+      },
+      "route": {
+        "title": "Routeninformationen",
+        "description": "Wenn Sie Routen einreichen, sammeln wir:",
+        "item1": "GPS-Daten und Koordinaten",
+        "item2": "Fotos und Beschreibungen",
+        "item3": "Bewertungen und Kommentare"
+      }
+    },
+    "usage": {
+      "title": "Wie Wir Ihre Informationen Verwenden",
+      "description": "Wir verwenden Ihre Informationen, um:",
+      "item1": "Unsere Dienste bereitzustellen und zu verbessern",
+      "item2": "Ihr Erlebnis auf der Plattform zu personalisieren",
+      "item3": "Wichtige Service-Benachrichtigungen zu senden",
+      "item4": "Betrug und Missbrauch zu verhindern",
+      "item5": "Gesetzliche Verpflichtungen zu erfüllen"
+    },
+    "sharing": {
+      "title": "Datenweitergabe",
+      "description": "Wir verkaufen Ihre persönlichen Informationen nicht. Wir können Daten teilen mit:",
+      "item1": "Anderen Nutzern (öffentliche Profilinformationen und Routen)",
+      "item2": "Dienstleistern (Hosting, Analytik)",
+      "item3": "Rechtsbehörden (wenn gesetzlich vorgeschrieben)"
+    },
+    "security": {
+      "title": "Datensicherheit",
+      "description": "Wir implementieren technische und organisatorische Sicherheitsmaßnahmen zum Schutz Ihrer Informationen vor unbefugtem Zugriff, Änderung, Offenlegung oder Zerstörung."
+    },
+    "rights": {
+      "title": "Ihre Rechte",
+      "description": "Sie haben das Recht:",
+      "item1": "Auf Ihre persönlichen Informationen zuzugreifen",
+      "item2": "Ungenaue Daten zu korrigieren",
+      "item3": "Die Löschung Ihres Kontos zu beantragen",
+      "item4": "Ihre Daten zu exportieren"
+    },
+    "cookies": {
+      "title": "Cookies",
+      "description": "Wir verwenden Cookies und ähnliche Technologien, um Ihr Erlebnis zu verbessern, die Plattformnutzung zu analysieren und Inhalte zu personalisieren. Sie können die Cookie-Nutzung über Ihre Browser-Einstellungen steuern."
+    },
+    "children": {
+      "title": "Privatsphäre von Kindern",
+      "description": "Unser Service richtet sich nicht an Kinder unter 16 Jahren. Wir sammeln wissentlich keine persönlichen Informationen von Kindern."
+    },
+    "changes": {
+      "title": "Änderungen Dieser Richtlinie",
+      "description": "Wir können diese Richtlinie regelmäßig aktualisieren. Wir werden Sie über wesentliche Änderungen per registrierter E-Mail oder durch einen Hinweis auf der Plattform informieren."
+    },
+    "contact": {
+      "title": "Kontaktieren Sie Uns",
+      "description": "Wenn Sie Fragen zu dieser Datenschutzrichtlinie haben, kontaktieren Sie uns:"
+    }
+  },
+  "terms": {
+    "title": "Nutzungsbedingungen",
+    "description": "Geschäftsbedingungen für die Nutzung der MotoTrip-Plattform",
+    "lastUpdated": "Zuletzt aktualisiert",
+    "date": "10. März 2026",
+    "intro": "Willkommen bei MotoTrip. Durch die Nutzung unserer Plattform stimmen Sie diesen Nutzungsbedingungen zu. Bitte lesen Sie sie sorgfältig.",
+    "acceptance": {
+      "title": "Annahme der Bedingungen",
+      "description": "Durch den Zugriff auf und die Nutzung von MotoTrip akzeptieren und stimmen Sie zu, an diese Nutzungsbedingungen und unsere Datenschutzrichtlinie gebunden zu sein. Wenn Sie mit einem dieser Bedingungen nicht einverstanden sind, nutzen Sie unsere Plattform nicht."
+    },
+    "accounts": {
+      "title": "Benutzerkonten",
+      "description": "Um bestimmte Funktionen zu nutzen, müssen Sie ein Konto erstellen. Sie stimmen zu:",
+      "item1": "Genaue und vollständige Informationen anzugeben",
+      "item2": "Die Sicherheit Ihres Passworts zu wahren",
+      "item3": "Uns sofort über unbefugte Nutzung zu informieren",
+      "item4": "Für alle Aktivitäten auf Ihrem Konto verantwortlich zu sein"
+    },
+    "content": {
+      "title": "Benutzerinhalte",
+      "ownership": {
+        "title": "Eigentum",
+        "description": "Sie behalten alle Rechte an Inhalten, die Sie an MotoTrip übermitteln, einschließlich Routen, Fotos und Kommentare."
+      },
+      "license": {
+        "title": "Lizenz",
+        "description": "Durch das Einreichen von Inhalten gewähren Sie uns eine weltweite, nicht-exklusive, lizenzgebührenfreie Lizenz zur Nutzung, Anzeige und Verbreitung Ihrer Inhalte auf der Plattform."
+      },
+      "prohibited": {
+        "title": "Verbotene Inhalte",
+        "description": "Sie stimmen zu, keine Inhalte einzureichen, die:",
+        "item1": "Illegal, beleidigend oder verleumderisch sind",
+        "item2": "Rechte an geistigem Eigentum verletzen",
+        "item3": "Viren oder bösartigen Code enthalten",
+        "item4": "Gefährliche oder illegale Aktivitäten fördern",
+        "item5": "Falsche oder irreführende Informationen enthalten"
+      }
+    },
+    "routes": {
+      "title": "Routeninformationen",
+      "description": "Auf der Plattform geteilte Routen sind Community-Beiträge. Obwohl wir uns um Qualität bemühen, können wir die Genauigkeit, Sicherheit oder den aktuellen Zustand aller Routen nicht garantieren.",
+      "disclaimer": "WARNUNG: Überprüfen Sie immer lokale Straßenbedingungen, befolgen Sie Verkehrsregeln und fahren Sie sicher. MotoTrip ist nicht verantwortlich für Unfälle oder Probleme während Ihrer Fahrten."
+    },
+    "intellectual": {
+      "title": "Geistiges Eigentum",
+      "description": "MotoTrip und seine ursprünglichen Inhalte, Funktionen und Funktionalitäten sind ausschließliches Eigentum von MotoTrip und durch internationale Urheberrechtsgesetze geschützt."
+    },
+    "disclaimer": {
+      "title": "Haftungsausschluss",
+      "description": "Der Service wird 'wie besehen' und 'wie verfügbar' bereitgestellt, ohne Garantien jeglicher Art, weder ausdrücklich noch stillschweigend. Wir garantieren nicht, dass der Service ununterbrochen, sicher oder fehlerfrei sein wird."
+    },
+    "liability": {
+      "title": "Haftungsbeschränkung",
+      "description": "MotoTrip haftet nicht für indirekte, zufällige, besondere, Folge- oder Strafschäden, die sich aus Ihrer Nutzung oder Unfähigkeit zur Nutzung des Services ergeben."
+    },
+    "termination": {
+      "title": "Kündigung",
+      "description": "Wir behalten uns das Recht vor, Ihr Konto jederzeit ohne Vorankündigung zu sperren oder zu kündigen, bei Verstoß gegen diese Bedingungen oder aus einem anderen Grund."
+    },
+    "law": {
+      "title": "Anwendbares Recht",
+      "description": "Diese Bedingungen unterliegen den Gesetzen Portugals, ohne Berücksichtigung seiner Kollisionsnormen."
+    },
+    "changes": {
+      "title": "Änderungen der Bedingungen",
+      "description": "Wir können diese Bedingungen jederzeit ändern. Durch die weitere Nutzung des Services nach Änderungen akzeptieren Sie die neuen Bedingungen."
+    },
+    "contact": {
+      "title": "Kontaktieren Sie Uns",
+      "description": "Für rechtliche Angelegenheiten oder Fragen zu diesen Bedingungen kontaktieren Sie:"
+    }
+  },
+  "admin": {
+    "pageTitle": "Admin-Dashboard",
+    "pageDescription": "Alle Plattform-Routen verwalten",
+    "searchPlaceholder": "Nach Titel, Benutzer, Region suchen...",
+    "refresh": "Aktualisieren",
+    "totalRoutes": "{count} Routen insgesamt",
+    "errorTogglePublished": "Fehler beim Umschalten des Veröffentlichungsstatus",
+    "errorToggleFeatured": "Fehler beim Umschalten des Featured-Status",
+    "errorDelete": "Fehler beim Löschen der Route",
+    "errorUpdate": "Fehler beim Aktualisieren der Route",
+    "table": {
+      "title": "Titel",
+      "user": "Benutzer",
+      "category": "Kategorie",
+      "difficulty": "Schwierigkeit",
+      "distance": "Entfernung",
+      "status": "Status",
+      "featured": "Featured",
+      "created": "Erstellt",
+      "actions": "Aktionen",
+      "noRoutes": "Keine Routen gefunden"
+    },
+    "categories": {
+      "scenic": "Malerisch",
+      "mountain": "Bergig",
+      "coastal": "Küsten",
+      "weekend": "Wochenende",
+      "adventure": "Abenteuer"
+    },
+    "difficulties": {
+      "easy": "Leicht",
+      "moderate": "Mittel",
+      "challenging": "Anspruchsvoll",
+      "expert": "Experte"
+    },
+    "deleteDialog": {
+      "title": "Löschen Bestätigen",
+      "description": "Sind Sie sicher, dass Sie diese Route löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "cancel": "Abbrechen",
+      "delete": "Löschen"
+    },
+    "editDialog": {
+      "title": "Route Bearbeiten",
+      "description": "Routeninformationen aktualisieren",
+      "titleLabel": "Titel",
+      "descriptionLabel": "Beschreibung",
+      "difficultyLabel": "Schwierigkeit",
+      "categoryLabel": "Kategorie",
+      "distanceLabel": "Entfernung (km)",
+      "durationLabel": "Dauer (Minuten)",
+      "elevationLabel": "Höhenmeter (m)",
+      "regionLabel": "Region",
+      "save": "Speichern",
+      "saving": "Wird gespeichert..."
+    }
+  },
+  "riders": {
+    "title": "Top Fahrer",
+    "description": "Treffen Sie die führenden Mitwirkenden der MotoTrip-Community",
+    "subtitle": "Anerkennung unserer aktivsten und wertvollsten Community-Mitglieder",
+    "topContributors": {
+      "title": "Top-Mitwirkende",
+      "description": "Diese Fahrer haben die erstaunlichsten Routen geteilt und geholfen, unsere Community aufzubauen.",
+      "member": "Mitglied seit 2024",
+      "routes": "Routen",
+      "rating": "Bewertung"
+    },
+    "cta": {
+      "title": "Werden Sie ein Mitwirkender",
+      "description": "Teilen Sie Ihre besten Routen und treten Sie unseren Top-Fahrern bei",
+      "button": "Reichen Sie Ihre Erste Route Ein"
+    }
+  },
+  "guidelines": {
+    "title": "Gemeinschaftsrichtlinien",
+    "description": "Regeln und Best Practices für die MotoTrip-Community",
+    "subtitle": "Aufbau einer respektvollen und hilfreichen Community für alle Fahrer",
+    "intro": "Willkommen bei den MotoTrip-Gemeinschaftsrichtlinien. Diese Regeln helfen uns, eine positive, sichere und hilfreiche Umgebung für alle Mitglieder aufrechtzuerhalten. Durch die Nutzung unserer Plattform stimmen Sie zu, diese Richtlinien zu befolgen.",
+    "values": {
+      "title": "Unsere Grundwerte",
+      "respect": {
+        "title": "Respekt",
+        "description": "Behandeln Sie alle Mitglieder mit Respekt und Höflichkeit. Meinungsverschiedenheiten sind willkommen, aber halten Sie Diskussionen immer zivilisiert."
+      },
+      "safety": {
+        "title": "Sicherheit",
+        "description": "Priorisieren Sie immer Sicherheit auf den Straßen. Teilen Sie genaue Informationen und Warnungen über gefährliche Bedingungen."
+      },
+      "collaboration": {
+        "title": "Zusammenarbeit",
+        "description": "Arbeiten Sie mit anderen Mitgliedern zusammen. Teilen Sie Wissen, geben Sie konstruktives Feedback und helfen Sie, die Community zu verbessern."
+      },
+      "quality": {
+        "title": "Qualität",
+        "description": "Halten Sie hohe Standards in Ihren Beiträgen ein. Liefern Sie detaillierte und genaue Informationen über Routen."
+      }
+    },
+    "content": {
+      "title": "Inhaltsrichtlinien",
+      "description": "Beim Teilen von Routen und der Interaktion mit der Community:",
+      "do": {
+        "title": "Tun Sie:",
+        "item1": "Detaillierte und genaue Routenbeschreibungen bereitstellen",
+        "item2": "Warnungen über Straßenbedingungen und Schwierigkeitsgrade einschließen",
+        "item3": "Ihre eigenen Fotos oder solche mit entsprechender Erlaubnis verwenden",
+        "item4": "Informationen aktualisieren, wenn sich Bedingungen ändern",
+        "item5": "Ehrlich in Ihren Bewertungen und Kommentaren sein"
+      },
+      "dont": {
+        "title": "Unterlassen Sie:",
+        "item1": "Beleidigende, diskriminierende oder illegale Inhalte zu posten",
+        "item2": "Falsche oder irreführende Informationen zu teilen",
+        "item3": "Spam zu versenden oder nicht verwandte Produkte zu bewerben",
+        "item4": "Fotos oder Inhalte anderer ohne Erlaubnis zu verwenden",
+        "item5": "Gefährliche oder illegale Aktivitäten zu fördern"
+      }
+    },
+    "reporting": {
+      "title": "Verstöße Melden",
+      "description": "Wenn Sie auf Inhalte stoßen, die gegen diese Richtlinien verstoßen, lassen Sie es uns bitte wissen:"
+    },
+    "consequences": {
+      "title": "Konsequenzen",
+      "description": "Verstöße gegen diese Richtlinien können führen zu:",
+      "item1": "Warnung und Aufforderung zur Entfernung/Änderung von Inhalten",
+      "item2": "Vorübergehender Kontosperrung",
+      "item3": "Permanenter Ausschluss bei schweren oder wiederholten Fällen"
+    },
+    "thankYou": {
+      "title": "Vielen Dank, Dass Sie Teil Unserer Community Sind",
+      "message": "Gemeinsam bauen wir die beste Motorradrouten-Plattform der Welt!"
+    }
+  },
+  "comments": {
+    "title": "Kommentare",
+    "loginPrompt": "Melden Sie sich an, um diese Route zu kommentieren",
+    "empty": "Noch keine Kommentare. Seien Sie der Erste!",
+    "loading": "Kommentare werden geladen...",
+    "retry": "Erneut versuchen",
+    "form": {
+      "label": "Ihr Kommentar",
+      "placeholder": "Teilen Sie Ihre Erfahrung mit dieser Route...",
+      "submit": "Kommentieren",
+      "update": "Aktualisieren",
+      "cancel": "Abbrechen",
+      "submitting": "Wird eingereicht...",
+      "charactersRemaining": "{count} Zeichen verbleibend"
+    },
+    "item": {
+      "anonymous": "Anonym",
+      "edited": "bearbeitet",
+      "actions": {
+        "edit": "Bearbeiten",
+        "delete": "Löschen"
+      }
+    },
+    "deleteDialog": {
+      "title": "Kommentar löschen",
+      "description": "Sind Sie sicher, dass Sie diesen Kommentar löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "cancel": "Abbrechen",
+      "confirm": "Löschen",
+      "deleting": "Wird gelöscht..."
+    },
+    "pagination": {
+      "previous": "Zurück",
+      "next": "Weiter",
+      "page": "Seite {current} von {total}"
+    },
+    "errors": {
+      "empty": "Kommentar darf nicht leer sein",
+      "tooLong": "Kommentar darf nicht länger als 500 Zeichen sein",
+      "submitFailed": "Kommentar konnte nicht gesendet werden",
+      "loadFailed": "Kommentare konnten nicht geladen werden",
+      "loginRequired": "Sie müssen angemeldet sein, um zu kommentieren"
+    }
+  }
+}

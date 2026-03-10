@@ -49,7 +49,8 @@ export function getCategoryColor(category: string): string {
   return colors[category as keyof typeof colors] || colors.scenic
 }
 
-export function formatRating(rating: number): string {
+export function formatRating(rating: number | null | undefined): string {
+  if (rating === null || rating === undefined) return 'N/A'
   return rating.toFixed(1)
 }
 

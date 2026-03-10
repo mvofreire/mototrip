@@ -1,0 +1,586 @@
+{
+  "common": {
+    "mototrip": "MotoTrip",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "share": "Partager",
+    "back": "Retour"
+  },
+  "nav": {
+    "exploreRoutes": "Explorer les Itinéraires",
+    "submitRoute": "Soumettre un Itinéraire",
+    "community": "Communauté",
+    "signIn": "Se Connecter",
+    "getStarted": "Commencer"
+  },
+  "home": {
+    "hero": {
+      "title": "Découvrez les Meilleurs",
+      "titleHighlight": "Itinéraires Moto",
+      "subtitle": "Explorez des itinéraires sélectionnés par des motards du monde entier. Trouvez des routes panoramiques, des cols de montagne et des routes côtières qui rendent chaque voyage inoubliable.",
+      "exploreRoutes": "Explorer les Itinéraires",
+      "submitRoute": "Soumettre un Itinéraire"
+    },
+    "stats": {
+      "routes": "Itinéraires",
+      "riders": "Motards",
+      "reviews": "Avis"
+    },
+    "clarification": {
+      "title": "Nous ne sommes pas un GPS",
+      "subtitle": "Nous sélectionnons de beaux itinéraires pour des voyages mémorables",
+      "description": "MotoTrip est une plateforme communautaire qui partage les meilleurs itinéraires moto du monde. Nous ne fournissons pas de navigation en temps réel—au lieu de cela, nous vous aidons à découvrir des itinéraires panoramiques et bien organisés qui rendent votre voyage magnifique, sûr et inoubliable.",
+      "feature1Title": "Itinéraires Sélectionnés",
+      "feature1Desc": "Choisis par des motards expérimentés",
+      "feature2Title": "Routes Panoramiques",
+      "feature2Desc": "Beaux paysages et points de vue",
+      "feature3Title": "Avis de la Communauté",
+      "feature3Desc": "Vrais retours de motards"
+    },
+    "featured": {
+      "title": "Itinéraires en Vedette",
+      "subtitle": "Itinéraires sélectionnés offrant des expériences exceptionnelles",
+      "viewAll": "Voir tout"
+    },
+    "popular": {
+      "title": "Populaires ce Mois-ci",
+      "subtitle": "Itinéraires les plus appréciés par la communauté"
+    },
+    "cta": {
+      "title": "Prêt à Prendre la Route?",
+      "subtitle": "Rejoignez des milliers de motards découvrant de nouvelles aventures. Partagez vos itinéraires préférés et inspirez les autres.",
+      "startExploring": "Commencer à Explorer",
+      "submitYourRoute": "Soumettre Votre Itinéraire"
+    }
+  },
+  "explore": {
+    "title": "Explorer les Itinéraires",
+    "subtitle": "Découvrez votre prochaine aventure parmi {count} itinéraires moto sélectionnés",
+    "searchPlaceholder": "Rechercher des itinéraires...",
+    "filters": "Filtres",
+    "results": "{count} itinéraires trouvés",
+    "noResults": "Aucun itinéraire trouvé correspondant à vos critères.",
+    "clearFilters": "Effacer les filtres"
+  },
+  "filters": {
+    "title": "Filtres",
+    "reset": "Réinitialiser",
+    "category": "Catégorie",
+    "difficulty": "Difficulté",
+    "distance": "Distance (km)",
+    "duration": "Durée (heures)",
+    "minimumRating": "Note Minimale"
+  },
+  "categories": {
+    "scenic": "Panoramique",
+    "mountain": "Montagne",
+    "coastal": "Côtier",
+    "weekend": "Week-end",
+    "adventure": "Aventure"
+  },
+  "difficulty": {
+    "easy": "Facile",
+    "moderate": "Modéré",
+    "challenging": "Difficile",
+    "expert": "Expert"
+  },
+  "route": {
+    "distance": "Distance",
+    "duration": "Durée",
+    "elevation": "Dénivelé Positif",
+    "region": "Région",
+    "rating": "Note",
+    "reviews": "{count} avis",
+    "featured": "En Vedette",
+    "saveRoute": "Enregistrer l'Itinéraire",
+    "aboutRoute": "À Propos de cet Itinéraire",
+    "routeMap": "Carte de l'Itinéraire",
+    "recommendedStops": "Arrêts Recommandés",
+    "reviewsTitle": "Avis",
+    "stop": "Arrêt {number}",
+    "downloadGPX": "Télécharger GPX",
+    "openInGoogleMaps": "Ouvrir dans Google Maps"
+  },
+  "stopTypes": {
+    "viewpoint": "Point de Vue",
+    "cafe": "Café",
+    "gas_station": "Station-Service",
+    "restaurant": "Restaurant",
+    "landmark": "Monument",
+    "accommodation": "Hébergement"
+  },
+  "ratings": {
+    "scenic": "Panoramique",
+    "roadQuality": "Qualité de la Route",
+    "funFactor": "Facteur Plaisir"
+  },
+  "footer": {
+    "tagline": "Découvrez et partagez les meilleurs itinéraires moto du monde.",
+    "routes": "Itinéraires",
+    "scenicRides": "Balades Panoramiques",
+    "mountainPasses": "Cols de Montagne",
+    "coastalRoutes": "Routes Côtières",
+    "adventureTrails": "Pistes d'Aventure",
+    "community": "Communauté",
+    "submitRoute": "Soumettre un Itinéraire",
+    "popularRoutes": "Itinéraires Populaires",
+    "topRiders": "Meilleurs Motards",
+    "communityGuidelines": "Directives Communautaires",
+    "company": "Entreprise",
+    "aboutUs": "À Propos",
+    "blog": "Blog",
+    "privacyPolicy": "Politique de Confidentialité",
+    "termsOfService": "Conditions d'Utilisation",
+    "copyright": "© 2026 MotoTrip. Tous droits réservés.",
+    "builtForRiders": "Construit pour les motards, par les motards 🏍️"
+  },
+  "notFound": {
+    "title": "404",
+    "subtitle": "Page Non Trouvée",
+    "description": "Il semble que cette route n'existe pas. Remettons-vous sur la bonne voie.",
+    "backToHome": "Retour à l'Accueil",
+    "exploreRoutes": "Explorer les Itinéraires"
+  },
+  "submit": {
+    "title": "Soumettre un Itinéraire",
+    "subtitle": "Partagez votre itinéraire préféré avec la communauté",
+    "formTitle": "Formulaire de Soumission d'Itinéraire",
+    "formDescription": "Cette fonctionnalité inclura une carte interactive où vous pourrez tracer votre itinéraire, ajouter des arrêts, télécharger des photos et fournir des détails sur l'itinéraire.",
+    "toBeImplemented": "À implémenter avec intégration de carte",
+    "basicInfo": "Informations de Base",
+    "routeTitle": "Titre de l'Itinéraire",
+    "routeTitlePlaceholder": "Ex: Boucle Panoramique de la Serra da Estrela",
+    "description": "Description",
+    "descriptionPlaceholder": "Décrivez l'itinéraire, points d'intérêt, types de routes...",
+    "region": "Région",
+    "regionPlaceholder": "Ex: Nord du Portugal, Serra da Estrela",
+    "country": "Pays",
+    "countryPlaceholder": "Sélectionnez un pays",
+    "countryPortugal": "Portugal",
+    "countrySpain": "Espagne",
+    "routeType": "Type d'Itinéraire",
+    "routeTypePlaceholder": "Sélectionnez le type d'itinéraire",
+    "routeTypeLoop": "🔄 Boucle (Circulaire)",
+    "routeTypeOutAndBack": "⇄ Aller-Retour",
+    "routeCharacteristics": "Caractéristiques de l'Itinéraire",
+    "category": "Catégorie",
+    "categoryScenicLabel": "🌄 Panoramique",
+    "categoryMountainLabel": "⛰️ Montagne",
+    "categoryCoastalLabel": "🌊 Côtier",
+    "categoryWeekendLabel": "🏕️ Week-end",
+    "categoryAdventureLabel": "🏍️ Aventure",
+    "difficultyLabel": "Difficulté",
+    "difficultyEasyLabel": "🟢 Facile - Débutants",
+    "difficultyModerateLabel": "🟡 Modéré - Intermédiaire",
+    "difficultyChallengingLabel": "🟠 Difficile - Expérimentés",
+    "difficultyExpertLabel": "🔴 Expert - Professionnels uniquement",
+    "distanceLabel": "Distance",
+    "distanceUnit": "km",
+    "durationLabel": "Durée Estimée",
+    "durationFormat": "{hours}h {minutes}min",
+    "elevationLabel": "Dénivelé Positif",
+    "elevationUnit": "m",
+    "gpxFile": "Fichier GPX",
+    "gpxUploadTitle": "Cliquez pour télécharger ou glissez un fichier GPX",
+    "gpxUploadDesc": "Fichier GPX avec tracé ou itinéraire jusqu'à 10 Mo",
+    "gpxRequired": "Veuillez télécharger un fichier GPX",
+    "gpxSelectFile": "Sélectionner un fichier",
+    "gpxError": "Veuillez sélectionner un fichier GPX valide",
+    "gpxTipTitle": "Conseil:",
+    "gpxTipDescription": "Vous pouvez exporter des itinéraires GPX depuis des applications comme:",
+    "gpxTipApp1": "Strava, Komoot, Ride with GPS",
+    "gpxTipApp2": "Garmin Connect, Wahoo",
+    "gpxTipApp3": "Google Maps (en utilisant des outils tiers)",
+    "gpxDistance": "Distance",
+    "gpxElevationGain": "Dénivelé Positif",
+    "gpxPoints": "Points de Tracé",
+    "gpxRemove": "Supprimer",
+    "required": "*",
+    "cancel": "Annuler",
+    "submitButton": "Soumettre l'Itinéraire",
+    "submitting": "Soumission...",
+    "successTitle": "Itinéraire Soumis avec Succès!",
+    "successMessage": "Redirection vers les itinéraires...",
+    "loginRequired": "Vous devez être connecté pour soumettre un itinéraire",
+    "errorMessage": "Erreur lors de la soumission de l'itinéraire",
+    "noteTitle": "Note:",
+    "noteMessage": "Les itinéraires soumis seront examinés avant d'être publiés. Vous pouvez les modifier à tout moment depuis votre profil."
+  },
+  "community": {
+    "title": "Communauté",
+    "subtitle": "Connectez-vous avec des motards du monde entier",
+    "topContributors": "Meilleurs Contributeurs",
+    "topContributorsDesc": "Découvrez qui partage les meilleurs itinéraires",
+    "featuredRiders": "Motards en Vedette",
+    "featuredRidersDesc": "Motards avec des contributions exceptionnelles",
+    "photoGallery": "Galerie Photo",
+    "photoGalleryDesc": "Belles photos de la communauté",
+    "discussions": "Discussions",
+    "discussionsDesc": "Partagez des conseils et expériences"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Histoires, conseils et inspiration de la route",
+    "comingSoon": "Bientôt Disponible",
+    "comingSoonDesc": "Nous travaillons pour vous apporter des histoires incroyables de motards du monde entier. Revenez bientôt!"
+  },
+  "about": {
+    "title": "À Propos",
+    "description": "Découvrez l'histoire et la mission de MotoTrip",
+    "subtitle": "Connecter les motards à travers les meilleurs itinéraires du monde",
+    "mission": {
+      "title": "Notre Mission",
+      "description": "Nous croyons que les meilleurs souvenirs se créent sur la route. MotoTrip est né d'une passion pour la moto et d'un désir de partager les itinéraires les plus incroyables du monde. Notre plateforme connecte les motards, leur permettant de partager des expériences et de découvrir de nouvelles aventures."
+    },
+    "values": {
+      "title": "Nos Valeurs",
+      "community": {
+        "title": "Communauté",
+        "description": "Nous construisons une communauté mondiale de motards partageant une passion pour la route et un esprit d'aventure."
+      },
+      "safety": {
+        "title": "Sécurité",
+        "description": "Nous priorisons la sécurité sur tous les itinéraires, fournissant des informations détaillées sur les conditions routières et les niveaux de difficulté."
+      },
+      "adventure": {
+        "title": "Aventure",
+        "description": "Nous encourageons l'exploration et la découverte de nouveaux endroits, en respectant toujours la nature et les communautés locales."
+      },
+      "global": {
+        "title": "Mondial",
+        "description": "Nous connectons des motards de tous les continents, créant un réseau vraiment international de passionnés."
+      }
+    },
+    "story": {
+      "title": "Notre Histoire",
+      "paragraph1": "MotoTrip a commencé en 2024 lorsqu'un groupe d'amis motards a réalisé qu'il manquait une plateforme dédiée au partage et à la découverte d'itinéraires moto incroyables.",
+      "paragraph2": "Fatigués de s'appuyer uniquement sur des applications de navigation qui ne capturaient pas l'essence d'un bon itinéraire moto, nous avons décidé de créer quelque chose de différent. Une plateforme où la communauté pourrait partager non seulement des coordonnées GPS, mais des histoires, des photos et des expériences réelles.",
+      "paragraph3": "Aujourd'hui, des milliers de motards dans le monde utilisent MotoTrip pour planifier leurs prochaines aventures, découvrir des itinéraires panoramiques et se connecter avec d'autres passionnés partageant la même passion pour les deux roues."
+    },
+    "cta": {
+      "title": "Rejoignez Notre Communauté",
+      "description": "Faites partie d'une communauté mondiale de motards passionnés",
+      "button": "Soumettre Votre Premier Itinéraire"
+    }
+  },
+  "privacy": {
+    "title": "Politique de Confidentialité",
+    "description": "Comment nous collectons, utilisons et protégeons vos informations",
+    "lastUpdated": "Dernière mise à jour",
+    "date": "10 mars 2026",
+    "intro": "Chez MotoTrip, nous respectons votre vie privée et nous nous engageons à protéger vos informations personnelles. Cette Politique de Confidentialité explique comment nous collectons, utilisons et partageons les informations lorsque vous utilisez notre plateforme.",
+    "collection": {
+      "title": "Informations que Nous Collectons",
+      "personal": {
+        "title": "Informations Personnelles",
+        "description": "Lorsque vous créez un compte, nous collectons:",
+        "item1": "Nom et adresse e-mail",
+        "item2": "Photo de profil (optionnelle)",
+        "item3": "Localisation générale (optionnelle)"
+      },
+      "route": {
+        "title": "Informations d'Itinéraire",
+        "description": "Lorsque vous soumettez des itinéraires, nous collectons:",
+        "item1": "Données GPS et coordonnées",
+        "item2": "Photos et descriptions",
+        "item3": "Avis et commentaires"
+      }
+    },
+    "usage": {
+      "title": "Comment Nous Utilisons Vos Informations",
+      "description": "Nous utilisons vos informations pour:",
+      "item1": "Fournir et améliorer nos services",
+      "item2": "Personnaliser votre expérience sur la plateforme",
+      "item3": "Envoyer des notifications de service importantes",
+      "item4": "Prévenir la fraude et les abus",
+      "item5": "Respecter les obligations légales"
+    },
+    "sharing": {
+      "title": "Partage de Données",
+      "description": "Nous ne vendons pas vos informations personnelles. Nous pouvons partager des données avec:",
+      "item1": "D'autres utilisateurs (informations de profil public et itinéraires)",
+      "item2": "Fournisseurs de services (hébergement, analytique)",
+      "item3": "Autorités légales (lorsque requis par la loi)"
+    },
+    "security": {
+      "title": "Sécurité des Données",
+      "description": "Nous mettons en œuvre des mesures de sécurité techniques et organisationnelles pour protéger vos informations contre l'accès, l'altération, la divulgation ou la destruction non autorisés."
+    },
+    "rights": {
+      "title": "Vos Droits",
+      "description": "Vous avez le droit de:",
+      "item1": "Accéder à vos informations personnelles",
+      "item2": "Corriger les données inexactes",
+      "item3": "Demander la suppression de votre compte",
+      "item4": "Exporter vos données"
+    },
+    "cookies": {
+      "title": "Cookies",
+      "description": "Nous utilisons des cookies et des technologies similaires pour améliorer votre expérience, analyser l'utilisation de la plateforme et personnaliser le contenu. Vous pouvez contrôler l'utilisation des cookies via les paramètres de votre navigateur."
+    },
+    "children": {
+      "title": "Confidentialité des Enfants",
+      "description": "Notre service ne s'adresse pas aux enfants de moins de 16 ans. Nous ne collectons pas sciemment d'informations personnelles auprès d'enfants."
+    },
+    "changes": {
+      "title": "Modifications de Cette Politique",
+      "description": "Nous pouvons mettre à jour cette politique périodiquement. Nous vous informerons des modifications importantes par e-mail enregistré ou via un avis sur la plateforme."
+    },
+    "contact": {
+      "title": "Nous Contacter",
+      "description": "Si vous avez des questions concernant cette Politique de Confidentialité, contactez-nous:"
+    }
+  },
+  "terms": {
+    "title": "Conditions d'Utilisation",
+    "description": "Termes et conditions d'utilisation de la plateforme MotoTrip",
+    "lastUpdated": "Dernière mise à jour",
+    "date": "10 mars 2026",
+    "intro": "Bienvenue sur MotoTrip. En utilisant notre plateforme, vous acceptez ces Conditions d'Utilisation. Veuillez les lire attentivement.",
+    "acceptance": {
+      "title": "Acceptation des Conditions",
+      "description": "En accédant et en utilisant MotoTrip, vous acceptez et convenez d'être lié par ces Conditions d'Utilisation et notre Politique de Confidentialité. Si vous n'êtes pas d'accord avec l'un de ces termes, n'utilisez pas notre plateforme."
+    },
+    "accounts": {
+      "title": "Comptes Utilisateur",
+      "description": "Pour utiliser certaines fonctionnalités, vous devez créer un compte. Vous acceptez de:",
+      "item1": "Fournir des informations exactes et complètes",
+      "item2": "Maintenir la sécurité de votre mot de passe",
+      "item3": "Nous informer immédiatement d'une utilisation non autorisée",
+      "item4": "Être responsable de toutes les activités sur votre compte"
+    },
+    "content": {
+      "title": "Contenu Utilisateur",
+      "ownership": {
+        "title": "Propriété",
+        "description": "Vous conservez tous les droits sur le contenu que vous soumettez à MotoTrip, y compris les itinéraires, photos et commentaires."
+      },
+      "license": {
+        "title": "Licence",
+        "description": "En soumettant du contenu, vous nous accordez une licence mondiale, non exclusive et libre de redevances pour utiliser, afficher et distribuer votre contenu sur la plateforme."
+      },
+      "prohibited": {
+        "title": "Contenu Interdit",
+        "description": "Vous acceptez de ne pas soumettre de contenu qui:",
+        "item1": "Est illégal, offensant ou diffamatoire",
+        "item2": "Viole les droits de propriété intellectuelle",
+        "item3": "Contient des virus ou du code malveillant",
+        "item4": "Promeut des activités dangereuses ou illégales",
+        "item5": "Inclut des informations fausses ou trompeuses"
+      }
+    },
+    "routes": {
+      "title": "Informations d'Itinéraire",
+      "description": "Les itinéraires partagés sur la plateforme sont des contributions de la communauté. Bien que nous nous efforcions d'assurer la qualité, nous ne pouvons garantir l'exactitude, la sécurité ou l'état actuel de tous les itinéraires.",
+      "disclaimer": "AVERTISSEMENT: Vérifiez toujours les conditions routières locales, respectez le code de la route et roulez en toute sécurité. MotoTrip n'est pas responsable des accidents ou problèmes pendant vos trajets."
+    },
+    "intellectual": {
+      "title": "Propriété Intellectuelle",
+      "description": "MotoTrip et son contenu original, ses fonctionnalités et ses fonctionnalités sont la propriété exclusive de MotoTrip et sont protégés par les lois internationales sur le droit d'auteur."
+    },
+    "disclaimer": {
+      "title": "Clause de Non-Responsabilité",
+      "description": "Le service est fourni 'tel quel' et 'selon disponibilité', sans garanties d'aucune sorte, expresses ou implicites. Nous ne garantissons pas que le service sera ininterrompu, sécurisé ou sans erreur."
+    },
+    "liability": {
+      "title": "Limitation de Responsabilité",
+      "description": "MotoTrip ne sera pas responsable des dommages indirects, accessoires, spéciaux, consécutifs ou punitifs résultant de votre utilisation ou impossibilité d'utiliser le service."
+    },
+    "termination": {
+      "title": "Résiliation",
+      "description": "Nous nous réservons le droit de suspendre ou de résilier votre compte à tout moment, sans préavis, pour violation de ces conditions ou pour toute autre raison."
+    },
+    "law": {
+      "title": "Loi Applicable",
+      "description": "Ces Conditions seront régies par les lois du Portugal, sans égard à ses dispositions relatives aux conflits de lois."
+    },
+    "changes": {
+      "title": "Modifications des Conditions",
+      "description": "Nous pouvons modifier ces conditions à tout moment. En continuant à utiliser le service après les modifications, vous acceptez les nouvelles conditions."
+    },
+    "contact": {
+      "title": "Nous Contacter",
+      "description": "Pour les questions juridiques ou questions sur ces conditions, contactez:"
+    }
+  },
+  "admin": {
+    "pageTitle": "Tableau de Bord Admin",
+    "pageDescription": "Gérer tous les itinéraires de la plateforme",
+    "searchPlaceholder": "Rechercher par titre, utilisateur, région...",
+    "refresh": "Actualiser",
+    "totalRoutes": "{count} itinéraires au total",
+    "errorTogglePublished": "Erreur lors du basculement du statut de publication",
+    "errorToggleFeatured": "Erreur lors du basculement du statut en vedette",
+    "errorDelete": "Erreur lors de la suppression de l'itinéraire",
+    "errorUpdate": "Erreur lors de la mise à jour de l'itinéraire",
+    "table": {
+      "title": "Titre",
+      "user": "Utilisateur",
+      "category": "Catégorie",
+      "difficulty": "Difficulté",
+      "distance": "Distance",
+      "status": "Statut",
+      "featured": "En Vedette",
+      "created": "Créé",
+      "actions": "Actions",
+      "noRoutes": "Aucun itinéraire trouvé"
+    },
+    "categories": {
+      "scenic": "Panoramique",
+      "mountain": "Montagne",
+      "coastal": "Côtier",
+      "weekend": "Week-end",
+      "adventure": "Aventure"
+    },
+    "difficulties": {
+      "easy": "Facile",
+      "moderate": "Modéré",
+      "challenging": "Difficile",
+      "expert": "Expert"
+    },
+    "deleteDialog": {
+      "title": "Confirmer la Suppression",
+      "description": "Êtes-vous sûr de vouloir supprimer cet itinéraire? Cette action ne peut pas être annulée.",
+      "cancel": "Annuler",
+      "delete": "Supprimer"
+    },
+    "editDialog": {
+      "title": "Modifier l'Itinéraire",
+      "description": "Mettre à jour les informations de l'itinéraire",
+      "titleLabel": "Titre",
+      "descriptionLabel": "Description",
+      "difficultyLabel": "Difficulté",
+      "categoryLabel": "Catégorie",
+      "distanceLabel": "Distance (km)",
+      "durationLabel": "Durée (minutes)",
+      "elevationLabel": "Dénivelé (m)",
+      "regionLabel": "Région",
+      "save": "Enregistrer",
+      "saving": "Enregistrement..."
+    }
+  },
+  "riders": {
+    "title": "Meilleurs Motards",
+    "description": "Rencontrez les principaux contributeurs de la communauté MotoTrip",
+    "subtitle": "Reconnaissant nos membres les plus actifs et précieux",
+    "topContributors": {
+      "title": "Meilleurs Contributeurs",
+      "description": "Ces motards ont partagé les itinéraires les plus incroyables et ont aidé à construire notre communauté.",
+      "member": "Membre depuis 2024",
+      "routes": "Itinéraires",
+      "rating": "Note"
+    },
+    "cta": {
+      "title": "Devenir un Contributeur",
+      "description": "Partagez vos meilleurs itinéraires et rejoignez nos meilleurs motards",
+      "button": "Soumettre Votre Premier Itinéraire"
+    }
+  },
+  "guidelines": {
+    "title": "Directives Communautaires",
+    "description": "Règles et meilleures pratiques pour la communauté MotoTrip",
+    "subtitle": "Construire une communauté respectueuse et utile pour tous les motards",
+    "intro": "Bienvenue dans les Directives Communautaires de MotoTrip. Ces règles nous aident à maintenir un environnement positif, sûr et utile pour tous les membres. En utilisant notre plateforme, vous acceptez de suivre ces directives.",
+    "values": {
+      "title": "Nos Valeurs Fondamentales",
+      "respect": {
+        "title": "Respect",
+        "description": "Traitez tous les membres avec respect et courtoisie. Les différences d'opinion sont les bienvenues, mais gardez toujours les discussions civiles."
+      },
+      "safety": {
+        "title": "Sécurité",
+        "description": "Priorisez toujours la sécurité sur les routes. Partagez des informations précises et des avertissements sur les conditions dangereuses."
+      },
+      "collaboration": {
+        "title": "Collaboration",
+        "description": "Travaillez ensemble avec d'autres membres. Partagez vos connaissances, fournissez des commentaires constructifs et aidez à améliorer la communauté."
+      },
+      "quality": {
+        "title": "Qualité",
+        "description": "Maintenez des normes élevées dans vos contributions. Fournissez des informations détaillées et précises sur les itinéraires."
+      }
+    },
+    "content": {
+      "title": "Directives de Contenu",
+      "description": "Lors du partage d'itinéraires et de l'interaction avec la communauté:",
+      "do": {
+        "title": "À Faire:",
+        "item1": "Fournir des descriptions d'itinéraire détaillées et précises",
+        "item2": "Inclure des avertissements sur les conditions routières et les niveaux de difficulté",
+        "item3": "Utiliser vos propres photos ou celles avec autorisation appropriée",
+        "item4": "Mettre à jour les informations si les conditions changent",
+        "item5": "Être honnête dans vos avis et commentaires"
+      },
+      "dont": {
+        "title": "À Ne Pas Faire:",
+        "item1": "Publier du contenu offensant, discriminatoire ou illégal",
+        "item2": "Partager des informations fausses ou trompeuses",
+        "item3": "Spammer ou promouvoir des produits non liés",
+        "item4": "Utiliser les photos ou le contenu d'autres sans permission",
+        "item5": "Encourager des activités dangereuses ou illégales"
+      }
+    },
+    "reporting": {
+      "title": "Signaler des Violations",
+      "description": "Si vous rencontrez du contenu qui viole ces directives, veuillez nous le faire savoir:"
+    },
+    "consequences": {
+      "title": "Conséquences",
+      "description": "Les violations de ces directives peuvent entraîner:",
+      "item1": "Avertissement et demande de suppression/modification du contenu",
+      "item2": "Suspension temporaire du compte",
+      "item3": "Interdiction permanente en cas de violations graves ou répétées"
+    },
+    "thankYou": {
+      "title": "Merci de Faire Partie de Notre Communauté",
+      "message": "Ensemble, nous construisons la meilleure plateforme d'itinéraires moto au monde!"
+    }
+  },
+  "comments": {
+    "title": "Commentaires",
+    "loginPrompt": "Connectez-vous pour commenter cet itinéraire",
+    "empty": "Aucun commentaire pour le moment. Soyez le premier à commenter!",
+    "loading": "Chargement des commentaires...",
+    "retry": "Réessayer",
+    "form": {
+      "label": "Votre commentaire",
+      "placeholder": "Partagez votre expérience sur cet itinéraire...",
+      "submit": "Commenter",
+      "update": "Mettre à jour",
+      "cancel": "Annuler",
+      "submitting": "Soumission...",
+      "charactersRemaining": "{count} caractères restants"
+    },
+    "item": {
+      "anonymous": "Anonyme",
+      "edited": "modifié",
+      "actions": {
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      }
+    },
+    "deleteDialog": {
+      "title": "Supprimer le commentaire",
+      "description": "Êtes-vous sûr de vouloir supprimer ce commentaire? Cette action ne peut pas être annulée.",
+      "cancel": "Annuler",
+      "confirm": "Supprimer",
+      "deleting": "Suppression..."
+    },
+    "pagination": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "page": "Page {current} sur {total}"
+    },
+    "errors": {
+      "empty": "Le commentaire ne peut pas être vide",
+      "tooLong": "Le commentaire ne peut pas dépasser 500 caractères",
+      "submitFailed": "Échec de la soumission du commentaire",
+      "loadFailed": "Échec du chargement des commentaires",
+      "loginRequired": "Vous devez être connecté pour commenter"
+    }
+  }
+}
