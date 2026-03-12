@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase/client'
 import type { Database } from '@/types/database.types'
+import { RouteStorage } from '@/lib/storage/storage.service'
 
 type Route = Database['public']['Tables']['routes']['Row']
 type RouteUpdate = Database['public']['Tables']['routes']['Update']
@@ -98,6 +99,15 @@ export class AdminService {
    * Delete route (admin only)
    */
   static async deleteRoute(id: string): Promise<void> {
+    // Delete thumbnail from storage
+    try {
+      await RouteStorage.deleteRouteThumbnail(id)
+    } catch (error) {
+      console.warn('Error deleting thumbnail:', error)
+      // Continue even if thumbnail deletion fails
+    }
+
+    // Delete route from database
     const { error } = await supabase
       .from('routes')
       .delete()
@@ -106,6 +116,31 @@ export class AdminService {
     if (error) {
       console.error('Error deleting route:', error)
       throw new Error('Failed to delete route')
+    }
+  }
+
+  /**
+   * Delete multiple routes (admin only)
+   */
+  static async deleteRoutesBulk(ids: string[]): Promise<void> {
+    if (ids.length === 0) {
+      throw new Error('No routes to delete')
+    }
+
+    // Delete thumbnails from storage
+    await Promise.allSettled(
+      ids.map(id => RouteStorage.deleteRouteThumbnail(id))
+    )
+
+    // Delete routes from database
+    const { error } = await supabase
+      .from('routes')
+      .delete()
+      .in('id', ids)
+
+    if (error) {
+      console.error('Error deleting routes:', error)
+      throw new Error('Failed to delete routes')
     }
   }
 

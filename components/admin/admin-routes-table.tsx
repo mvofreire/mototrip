@@ -25,12 +25,14 @@ import { formatDistanceToNow } from 'date-fns'
 import { ptBR, enUS, es } from 'date-fns/locale'
 import { useParams } from 'next/navigation'
 import { EditRouteDialog } from './edit-route-dialog'
+import { Checkbox } from '@/components/ui/checkbox'
 
 interface AdminRoutesTableProps {
   routes: AdminRouteWithUser[]
   onTogglePublished: (id: string, published: boolean) => Promise<void>
   onToggleFeatured: (id: string, featured: boolean) => Promise<void>
   onDelete: (id: string) => Promise<void>
+  onDeleteBulk: (ids: string[]) => Promise<void>
   onUpdate: (id: string, updates: any) => Promise<void>
   translations: any
 }
@@ -40,11 +42,14 @@ export function AdminRoutesTable({
   onTogglePublished,
   onToggleFeatured,
   onDelete,
+  onDeleteBulk,
   onUpdate,
   translations,
 }: AdminRoutesTableProps) {
   const params = useParams()
   const locale = params?.locale as string || 'en'
+  
+  const [selectedRoutes, setSelectedRoutes] = useState<Set<string>>(new Set())
   
   const [deleteDialog, setDeleteDialog] = useState<{
     open: boolean
@@ -55,6 +60,8 @@ export function AdminRoutesTable({
     routeId: null,
     routeTitle: '',
   })
+
+  const [bulkDeleteDialog, setBulkDeleteDialog] = useState(false)
 
   const [editDialog, setEditDialog] = useState<{
     open: boolean
@@ -105,6 +112,13 @@ export function AdminRoutesTable({
     }
   }
 
+  const handleBulkDelete = async () => {
+    const ids = Array.from(selectedRoutes)
+    await onDeleteBulk(ids)
+    setSelectedRoutes(new Set())
+    setBulkDeleteDialog(false)
+  }
+
   const handleEdit = async (updates: any) => {
     if (editDialog.route) {
       await onUpdate(editDialog.route.id, updates)
@@ -112,12 +126,59 @@ export function AdminRoutesTable({
     }
   }
 
+  const toggleSelectRoute = (id: string) => {
+    const newSelected = new Set(selectedRoutes)
+    if (newSelected.has(id)) {
+      newSelected.delete(id)
+    } else {
+      newSelected.add(id)
+    }
+    setSelectedRoutes(newSelected)
+  }
+
+  const toggleSelectAll = () => {
+    if (selectedRoutes.size === routes.length) {
+      setSelectedRoutes(new Set())
+    } else {
+      setSelectedRoutes(new Set(routes.map(r => r.id)))
+    }
+  }
+
+  const isAllSelected = routes.length > 0 && selectedRoutes.size === routes.length
+  const isSomeSelected = selectedRoutes.size > 0 && selectedRoutes.size < routes.length
+
   return (
     <>
+      {selectedRoutes.size > 0 && (
+        <div className="mb-4 flex items-center justify-between rounded-lg border bg-muted/50 p-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">
+              {selectedRoutes.size} {translations.selectedRoutes || 'rotas selecionadas'}
+            </span>
+          </div>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => setBulkDeleteDialog(true)}
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            {translations.deleteSelected || 'Deletar Selecionadas'}
+          </Button>
+        </div>
+      )}
+      
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-[50px]">
+                <Checkbox
+                  checked={isAllSelected}
+                  onCheckedChange={toggleSelectAll}
+                  aria-label="Select all"
+                  className={isSomeSelected ? "opacity-50" : ""}
+                />
+              </TableHead>
               <TableHead>{translations.title}</TableHead>
               <TableHead>{translations.user}</TableHead>
               <TableHead>{translations.category}</TableHead>
@@ -139,6 +200,13 @@ export function AdminRoutesTable({
             ) : (
               routes.map((route) => (
                 <TableRow key={route.id}>
+                  <TableCell>
+                    <Checkbox
+                      checked={selectedRoutes.has(route.id)}
+                      onCheckedChange={() => toggleSelectRoute(route.id)}
+                      aria-label={`Select ${route.title}`}
+                    />
+                  </TableCell>
                   <TableCell className="font-medium max-w-[200px] truncate">
                     {route.title}
                   </TableCell>
@@ -227,6 +295,30 @@ export function AdminRoutesTable({
           </TableBody>
         </Table>
       </div>
+
+      {/* Bulk Delete Confirmation Dialog */}
+      <Dialog open={bulkDeleteDialog} onOpenChange={setBulkDeleteDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{translations.bulkDeleteTitle || 'Deletar Rotas'}</DialogTitle>
+            <DialogDescription>
+              {translations.bulkDeleteDescription?.replace('{count}', selectedRoutes.size.toString()) || 
+                `Tem certeza que deseja deletar ${selectedRoutes.size} rotas? Esta ação não pode ser desfeita.`}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setBulkDeleteDialog(false)}
+            >
+              {translations.cancel}
+            </Button>
+            <Button variant="destructive" onClick={handleBulkDelete}>
+              {translations.delete}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialog.open} onOpenChange={(open) => !open && setDeleteDialog({ open: false, routeId: null, routeTitle: '' })}>

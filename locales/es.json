@@ -416,7 +416,10 @@
     "errorTogglePublished": "Error al cambiar estado de publicación",
     "errorToggleFeatured": "Error al cambiar estado destacado",
     "errorDelete": "Error al eliminar ruta",
+    "errorDeleteBulk": "Error al eliminar rutas seleccionadas",
     "errorUpdate": "Error al actualizar ruta",
+    "selectedRoutes": "rutas seleccionadas",
+    "deleteSelected": "Eliminar Seleccionadas",
     "table": {
       "title": "Título",
       "user": "Usuario",
@@ -447,6 +450,10 @@
       "description": "¿Estás seguro de que deseas eliminar esta ruta? Esta acción no se puede deshacer.",
       "cancel": "Cancelar",
       "delete": "Eliminar"
+    },
+    "bulkDeleteDialog": {
+      "title": "Eliminar Múltiples Rutas",
+      "description": "¿Estás seguro de que deseas eliminar {count} rutas? Esta acción no se puede deshacer."
     },
     "editDialog": {
       "title": "Editar Ruta",

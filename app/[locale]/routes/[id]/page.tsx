@@ -4,7 +4,6 @@ import { RouteHero } from '@/components/features/routes/route-hero'
 import { RouteStats } from '@/components/features/routes/route-stats'
 import { RouteMap } from '@/components/features/routes/route-map'
 import { StopsTimeline } from '@/components/features/routes/stops-timeline'
-import { RouteRatings } from '@/components/features/routes/route-ratings'
 import { CommentsList } from '@/components/features/comments'
 import { Metadata } from 'next'
 
@@ -48,7 +47,6 @@ export default async function RoutePage({ params }: RoutePageProps) {
       <RouteHero route={route} />
       
       <div className="container mx-auto py-6 md:py-8 lg:py-12 px-4 max-w-7xl">
-        <div className="grid gap-6 lg:gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)]">
           {/* Main Content */}
           <div className="space-y-6 md:space-y-8 min-w-0">
             {/* Stats */}
@@ -76,24 +74,12 @@ export default async function RoutePage({ params }: RoutePageProps) {
               </div>
             )}
 
-            {/* Ratings & Reviews
-            <div className="space-y-3">
-              <h2 className="text-xl md:text-2xl font-bold">Reviews</h2>
-              <RouteRatings route={route} />
-            </div> */}
-
             {/* Comments Section */}
             <div className="space-y-3">
               <h2 className="text-xl md:text-2xl font-bold">Comments</h2>
               <CommentsList routeId={route.id} locale={params.locale} />
             </div>
           </div>
-
-          {/* Sidebar */}
-          <aside className="space-y-6 min-w-0">
-            {/* This would contain additional info like weather, nearby routes, etc. */}
-          </aside>
-        </div>
       </div>
     </div>
   )

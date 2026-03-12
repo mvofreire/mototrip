@@ -99,13 +99,19 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
     const centerLat = (bounds.north + bounds.south) / 2
     const centerLng = (bounds.east + bounds.west) / 2
     
+    const visible = [
+    `${bounds.north},${bounds.east}`,
+    `${bounds.south},${bounds.west}`
+  ].join('|')
+
     // Generate Static Maps API URL
     const url = `https://maps.googleapis.com/maps/api/staticmap?` +
-      `center=${centerLat},${centerLng}&` +
-      `zoom=10&` +
-      `size=640x360&` +
+      // `center=${centerLat},${centerLng}&` +
+      `size=350x200&` +
       `scale=2&` +
       `maptype=roadmap&` +
+      `visible=${visible}&` +
+      // `zoom=8&` +
       `path=color:0xff0000ff|weight:3|${path}&` +
       `key=${apiKey}`
     

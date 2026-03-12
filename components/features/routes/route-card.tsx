@@ -1,47 +1,62 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import Image from 'next/image'
-import { useTranslations } from 'next-intl'
-import { RouteWithDetails } from '@/types'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { MapPin, Clock, Mountain, Star, Bookmark, Repeat, MoveHorizontal } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { CommentsCount } from '@/components/features/comments'
+import Link from "next/link";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { RouteWithDetails } from "@/types";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  MapPin,
+  Clock,
+  Mountain,
+  Star,
+  Bookmark,
+  Repeat,
+  MoveHorizontal,
+  GitCompareArrows as Loop,
+  WaypointsIcon as OutAndBack,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CommentsCount } from "@/components/features/comments";
 import {
   formatDistance,
   formatDuration,
   getDifficultyColor,
   getCategoryColor,
   formatRating,
-} from '@/lib/utils'
+} from "@/lib/utils";
 
 interface RouteCardProps {
-  route: RouteWithDetails
-  locale: string
-  variant?: 'grid' | 'list'
+  route: RouteWithDetails;
+  locale: string;
+  variant?: "grid" | "list";
 }
 
-export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
-  const t = useTranslations()
-  
+export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
+  const t = useTranslations();
+
   const categoryLabels = {
-    scenic: t('categories.scenic'),
-    mountain: t('categories.mountain'),
-    coastal: t('categories.coastal'),
-    weekend: t('categories.weekend'),
-    adventure: t('categories.adventure'),
-  }
+    scenic: t("categories.scenic"),
+    mountain: t("categories.mountain"),
+    coastal: t("categories.coastal"),
+    weekend: t("categories.weekend"),
+    adventure: t("categories.adventure"),
+  };
 
   const difficultyLabels = {
-    easy: t('difficulty.easy'),
-    moderate: t('difficulty.moderate'),
-    challenging: t('difficulty.challenging'),
-    expert: t('difficulty.expert'),
-  }
+    easy: t("difficulty.easy"),
+    moderate: t("difficulty.moderate"),
+    challenging: t("difficulty.challenging"),
+    expert: t("difficulty.expert"),
+  };
 
-  if (variant === 'list') {
+  if (variant === "list") {
     return (
       <Link href={`/${locale}/routes/${route.id}`}>
         <Card className="group overflow-hidden transition-all hover:shadow-lg">
@@ -49,7 +64,7 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
             {/* Image */}
             <div className="relative w-full md:w-64 h-48 md:h-auto overflow-hidden bg-sand-100 shrink-0">
               {route.thumbnail_url ? (
-                route.thumbnail_url.includes('maps.googleapis.com') ? (
+                route.thumbnail_url.includes("maps.googleapis.com") ? (
                   <img
                     src={route.thumbnail_url}
                     alt={route.title}
@@ -76,7 +91,7 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
               {route.featured && (
                 <div className="absolute top-3 left-3">
                   <Badge className="bg-sunshine-yellow-400 text-sunshine-yellow-900 border-0">
-                    {t('route.featured')}
+                    {t("route.featured")}
                   </Badge>
                 </div>
               )}
@@ -86,7 +101,7 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
                 variant="secondary"
                 className="absolute top-3 right-3 h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                 onClick={(e) => {
-                  e.preventDefault()
+                  e.preventDefault();
                 }}
               >
                 <Bookmark className="h-4 w-4" />
@@ -99,10 +114,16 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
                 <div className="flex-1 space-y-3">
                   {/* Category & Difficulty */}
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline" className={getCategoryColor(route.category)}>
+                    <Badge
+                      variant="outline"
+                      className={getCategoryColor(route.category)}
+                    >
                       {categoryLabels[route.category]}
                     </Badge>
-                    <Badge variant="outline" className={getDifficultyColor(route.difficulty)}>
+                    <Badge
+                      variant="outline"
+                      className={getDifficultyColor(route.difficulty)}
+                    >
                       {difficultyLabels[route.difficulty]}
                     </Badge>
                   </div>
@@ -131,23 +152,35 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-muted-foreground" />
                     <div className="flex flex-col">
-                      <span className="text-xs text-muted-foreground">Distance</span>
-                      <span className="text-sm font-medium">{formatDistance(route.distance_km)}</span>
+                      <span className="text-xs text-muted-foreground">
+                        Distance
+                      </span>
+                      <span className="text-sm font-medium">
+                        {formatDistance(route.distance_km)}
+                      </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-muted-foreground" />
                     <div className="flex flex-col">
-                      <span className="text-xs text-muted-foreground">Duration</span>
-                      <span className="text-sm font-medium">{formatDuration(route.duration_minutes)}</span>
+                      <span className="text-xs text-muted-foreground">
+                        Duration
+                      </span>
+                      <span className="text-sm font-medium">
+                        {formatDuration(route.duration_minutes)}
+                      </span>
                     </div>
                   </div>
                   {route.elevation_gain_m && (
                     <div className="flex items-center gap-2">
                       <Mountain className="h-4 w-4 text-muted-foreground" />
                       <div className="flex flex-col">
-                        <span className="text-xs text-muted-foreground">Elevation</span>
-                        <span className="text-sm font-medium">{route.elevation_gain_m}m</span>
+                        <span className="text-xs text-muted-foreground">
+                          Elevation
+                        </span>
+                        <span className="text-sm font-medium">
+                          {route.elevation_gain_m}m
+                        </span>
                       </div>
                     </div>
                   )}
@@ -155,7 +188,9 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
                     <div className="flex items-center gap-2">
                       <Star className="h-4 w-4 fill-sunshine-yellow-400 text-sunshine-yellow-400" />
                       <span className="text-sm font-medium">
-                        {route.average_rating ? formatRating(route.average_rating) : 'N/A'}
+                        {route.average_rating
+                          ? formatRating(route.average_rating)
+                          : "N/A"}
                       </span>
                       {route.rating_count && (
                         <span className="text-xs text-muted-foreground">
@@ -171,7 +206,7 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
           </div>
         </Card>
       </Link>
-    )
+    );
   }
 
   return (
@@ -180,7 +215,7 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
         <CardHeader className="p-0">
           <div className="relative aspect-[16/9] overflow-hidden bg-sand-100">
             {route.thumbnail_url ? (
-              route.thumbnail_url.includes('maps.googleapis.com') ? (
+              route.thumbnail_url.includes("maps.googleapis.com") ? (
                 <img
                   src={route.thumbnail_url}
                   alt={route.title}
@@ -209,7 +244,7 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
             {route.featured && (
               <div className="absolute top-3 left-3">
                 <Badge className="bg-sunshine-yellow-400 text-sunshine-yellow-900 border-0">
-                  {t('route.featured')}
+                  {t("route.featured")}
                 </Badge>
               </div>
             )}
@@ -220,7 +255,7 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
               variant="secondary"
               className="absolute top-3 right-3 h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
               onClick={(e) => {
-                e.preventDefault()
+                e.preventDefault();
                 // Handle save
               }}
             >
@@ -233,29 +268,31 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
           <div className="space-y-3">
             {/* Category & Difficulty */}
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className={getCategoryColor(route.category)}>
+              <Badge
+                variant="outline"
+                className={getCategoryColor(route.category)}
+              >
                 {categoryLabels[route.category]}
               </Badge>
-              <Badge variant="outline" className={getDifficultyColor(route.difficulty)}>
+              <Badge
+                variant="outline"
+                className={getDifficultyColor(route.difficulty)}
+              >
                 {difficultyLabels[route.difficulty]}
               </Badge>
               {route.route_type && (
-                <div className="flex items-center gap-1 text-muted-foreground" title={route.route_type === 'loop' ? 'Loop (Circular)' : 'Vai e Volta'}>
-                  {route.route_type === 'loop' ? (
-                    <Repeat className="h-4 w-4" />
-                  ) : (
-                    <MoveHorizontal className="h-4 w-4" />
-                  )}
-                </div>
-              )}
-              {route.route_type && (
-                <div className="flex items-center gap-1 text-muted-foreground" title={route.route_type === 'loop' ? 'Loop (Circular)' : 'Vai e Volta'}>
-                  {route.route_type === 'loop' ? (
-                    <Repeat className="h-4 w-4" />
-                  ) : (
-                    <MoveHorizontal className="h-4 w-4" />
-                  )}
-                </div>
+                <Badge
+                  variant="outline"
+                  className="text-muted-foreground border-muted-200"
+                >
+                  <div className="flex items-center gap-1 text-muted-foreground">
+                    {route.route_type === "loop" ? (
+                      <Loop className="h-4 w-4" />
+                    ) : (
+                      <OutAndBack className="h-4 w-4" />
+                    )}
+                  </div>
+                </Badge>
               )}
             </div>
 
@@ -273,21 +310,27 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-3 pt-2">
               <div className="flex flex-col">
-                <span className="text-xs text-muted-foreground">Distance</span>
-                <span className="text-sm font-medium">{formatDistance(route.distance_km)}</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xs text-muted-foreground">Duration</span>
-                <span className="text-sm font-medium">{formatDuration(route.duration_minutes)}</span>
-              </div>
-              <div className="flex flex-col">
                 <span className="text-xs text-muted-foreground">Rating</span>
                 <div className="flex items-center gap-1">
                   <Star className="h-3.5 w-3.5 fill-sunshine-yellow-400 text-sunshine-yellow-400" />
                   <span className="text-sm font-medium">
-                    {route.average_rating ? formatRating(route.average_rating) : 'N/A'}
+                    {route.average_rating
+                      ? formatRating(route.average_rating)
+                      : "N/A"}
                   </span>
                 </div>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs text-muted-foreground">Duration</span>
+                <span className="text-sm font-medium">
+                  {formatDuration(route.duration_minutes)}
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs text-muted-foreground">Distance</span>
+                <span className="text-sm font-medium">
+                  {formatDistance(route.distance_km)}
+                </span>
               </div>
             </div>
           </div>
@@ -296,9 +339,7 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
         <CardFooter className="p-4 pt-0">
           <div className="flex items-center justify-between w-full text-xs text-muted-foreground">
             <div className="flex items-center gap-3">
-              {route.rating_count && (
-                <span>{route.rating_count} reviews</span>
-              )}
+              {route.rating_count && <span>{route.rating_count} reviews</span>}
               <CommentsCount routeId={route.id} />
             </div>
             {route.elevation_gain_m && (
@@ -311,5 +352,5 @@ export function RouteCard({ route, locale, variant = 'grid' }: RouteCardProps) {
         </CardFooter>
       </Card>
     </Link>
-  )
+  );
 }

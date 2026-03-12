@@ -416,7 +416,10 @@
     "errorTogglePublished": "Fehler beim Umschalten des Veröffentlichungsstatus",
     "errorToggleFeatured": "Fehler beim Umschalten des Featured-Status",
     "errorDelete": "Fehler beim Löschen der Route",
+    "errorDeleteBulk": "Fehler beim Löschen der ausgewählten Routen",
     "errorUpdate": "Fehler beim Aktualisieren der Route",
+    "selectedRoutes": "Routen ausgewählt",
+    "deleteSelected": "Ausgewählte Löschen",
     "table": {
       "title": "Titel",
       "user": "Benutzer",
@@ -447,6 +450,10 @@
       "description": "Sind Sie sicher, dass Sie diese Route löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
       "cancel": "Abbrechen",
       "delete": "Löschen"
+    },
+    "bulkDeleteDialog": {
+      "title": "Mehrere Routen Löschen",
+      "description": "Sind Sie sicher, dass Sie {count} Routen löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
     },
     "editDialog": {
       "title": "Route Bearbeiten",

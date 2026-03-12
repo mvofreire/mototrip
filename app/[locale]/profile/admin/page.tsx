@@ -107,6 +107,16 @@ export default function AdminPage() {
     }
   }
 
+  const handleDeleteBulk = async (ids: string[]) => {
+    try {
+      await AdminService.deleteRoutesBulk(ids)
+      setRoutes((prev) => prev.filter((route) => !ids.includes(route.id)))
+    } catch (error) {
+      console.error('Error deleting routes:', error)
+      alert(t('errorDeleteBulk'))
+    }
+  }
+
   const handleUpdate = async (id: string, updates: any) => {
     try {
       await AdminService.updateRoute(id, updates)
@@ -161,6 +171,10 @@ export default function AdminPage() {
     deleteDescription: t('deleteDialog.description'),
     cancel: t('deleteDialog.cancel'),
     delete: t('deleteDialog.delete'),
+    selectedRoutes: t('selectedRoutes'),
+    deleteSelected: t('deleteSelected'),
+    bulkDeleteTitle: t('bulkDeleteDialog.title'),
+    bulkDeleteDescription: t('bulkDeleteDialog.description'),
     editTitle: t('editDialog.title'),
     editDescription: t('editDialog.description'),
     titleLabel: t('editDialog.titleLabel'),
@@ -207,6 +221,7 @@ export default function AdminPage() {
         onTogglePublished={handleTogglePublished}
         onToggleFeatured={handleToggleFeatured}
         onDelete={handleDelete}
+        onDeleteBulk={handleDeleteBulk}
         onUpdate={handleUpdate}
         translations={translations}
       />

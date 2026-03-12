@@ -416,7 +416,10 @@
     "errorTogglePublished": "Erro ao alterar status de publicação",
     "errorToggleFeatured": "Erro ao alterar status de destaque",
     "errorDelete": "Erro ao excluir rota",
+    "errorDeleteBulk": "Erro ao excluir rotas selecionadas",
     "errorUpdate": "Erro ao atualizar rota",
+    "selectedRoutes": "rotas selecionadas",
+    "deleteSelected": "Deletar Selecionadas",
     "table": {
       "title": "Título",
       "user": "Usuário",
@@ -447,6 +450,10 @@
       "description": "Tem certeza que deseja excluir esta rota? Esta ação não pode ser desfeita.",
       "cancel": "Cancelar",
       "delete": "Excluir"
+    },
+    "bulkDeleteDialog": {
+      "title": "Deletar Múltiplas Rotas",
+      "description": "Tem certeza que deseja deletar {count} rotas? Esta ação não pode ser desfeita."
     },
     "editDialog": {
       "title": "Editar Rota",

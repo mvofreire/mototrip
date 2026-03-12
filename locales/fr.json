@@ -416,7 +416,10 @@
     "errorTogglePublished": "Erreur lors du basculement du statut de publication",
     "errorToggleFeatured": "Erreur lors du basculement du statut en vedette",
     "errorDelete": "Erreur lors de la suppression de l'itinéraire",
+    "errorDeleteBulk": "Erreur lors de la suppression des itinéraires sélectionnés",
     "errorUpdate": "Erreur lors de la mise à jour de l'itinéraire",
+    "selectedRoutes": "itinéraires sélectionnés",
+    "deleteSelected": "Supprimer Sélectionnés",
     "table": {
       "title": "Titre",
       "user": "Utilisateur",
@@ -447,6 +450,10 @@
       "description": "Êtes-vous sûr de vouloir supprimer cet itinéraire? Cette action ne peut pas être annulée.",
       "cancel": "Annuler",
       "delete": "Supprimer"
+    },
+    "bulkDeleteDialog": {
+      "title": "Supprimer Plusieurs Itinéraires",
+      "description": "Êtes-vous sûr de vouloir supprimer {count} itinéraires? Cette action ne peut pas être annulée."
     },
     "editDialog": {
       "title": "Modifier l'Itinéraire",
