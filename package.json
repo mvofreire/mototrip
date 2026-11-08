@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=18.17.0",
-    "yarn": ">=4.0.0"
+    "node": ">=18.17.0"
   },
   "scripts": {
     "dev": "next dev",
@@ -35,7 +34,7 @@
     "clsx": "^2.1.0",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.312.0",
-    "next": "14.1.0",
+    "next": "14.2.35",
     "next-intl": "^3.9.0",
     "next-themes": "^0.4.6",
     "react": "^18.2.0",
@@ -52,13 +51,12 @@
     "axios": "^1.6.7",
     "dotenv": "^16.4.5",
     "eslint": "^8",
-    "eslint-config-next": "14.1.0",
+    "eslint-config-next": "14.2.35",
     "ignore-loader": "^0.1.2",
     "p-limit": "^5.0.0",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "tsx": "^4.7.1",
     "typescript": "^5"
-  },
-  "packageManager": "yarn@4.1.1+sha512.ec40d0639bb307441b945d9467139cbb88d14394baac760b52eca038b330d16542d66fef61574271534ace5a200518dabf3b53a85f1f9e4bfa37141b538a9590"
+  }
 }

@@ -1,6 +1,9 @@
 import { supabase } from '@/lib/supabase/client'
 import type { AuthUser, Profile } from '@/types/auth.types'
 
+// Readable profile columns (email is intentionally not granted to clients)
+const PROFILE_COLUMNS = 'id, full_name, avatar_url, role, created_at, updated_at'
+
 export const authService = {
   // Sign up with email and password
   async signUp(email: string, password: string, fullName: string) {
@@ -10,7 +13,6 @@ export const authService = {
       options: {
         data: {
           full_name: fullName,
-          role: 'contributor',
         },
       },
     })
@@ -44,14 +46,15 @@ export const authService = {
 
     const { data: profile } = await supabase
       .from('profiles')
-      .select('*')
+      .select(PROFILE_COLUMNS)
       .eq('id', user.id)
       .single()
 
     return {
       id: user.id,
       email: user.email!,
-      profile: profile as unknown as Profile,
+      // email is not readable from profiles (column privileges); take it from auth
+      profile: profile ? ({ ...(profile as object), email: user.email! } as Profile) : null,
     }
   },
 
@@ -74,12 +77,15 @@ export const authService = {
   },
 
   // Update profile
-  async updateProfile(userId: string, updates: Partial<Profile>) {
+  async updateProfile(
+    userId: string,
+    updates: Partial<Pick<Profile, 'full_name' | 'avatar_url'>>,
+  ) {
     const { data, error } = await (supabase as any)
       .from('profiles')
       .update(updates)
       .eq('id', userId)
-      .select()
+      .select(PROFILE_COLUMNS)
       .single()
 
     if (error) throw error

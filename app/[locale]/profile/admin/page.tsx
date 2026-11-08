@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 import { useAuth } from '@/hooks/use-auth'
 import { AdminService, AdminRouteWithUser } from '@/lib/services/admin.service'
 import { AdminRoutesTable } from '@/components/admin/admin-routes-table'
@@ -13,6 +14,7 @@ import { useTranslations } from 'next-intl'
 export default function AdminPage() {
   const { user, loading: authLoading } = useAuth()
   const router = useRouter()
+  const locale = useLocale()
   const t = useTranslations('admin')
   const [routes, setRoutes] = useState<AdminRouteWithUser[]>([])
   const [filteredRoutes, setFilteredRoutes] = useState<AdminRouteWithUser[]>([])
@@ -25,7 +27,7 @@ export default function AdminPage() {
       if (authLoading) return
 
       if (!user) {
-        router.push('/login')
+        router.push(`/${locale}/auth/login?redirect=${encodeURIComponent(`/${locale}/profile/admin`)}`)
         return
       }
 
@@ -34,7 +36,7 @@ export default function AdminPage() {
       setIsAdmin(adminStatus)
 
       if (!adminStatus) {
-        router.push('/profile')
+        router.push(`/${locale}/profile`)
         return
       }
 
@@ -43,7 +45,7 @@ export default function AdminPage() {
     }
 
     checkAdminAndLoadRoutes()
-  }, [user, authLoading, router])
+  }, [user, authLoading, router, locale])
 
   const loadRoutes = async () => {
     setLoading(true)

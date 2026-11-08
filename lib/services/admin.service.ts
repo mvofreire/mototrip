@@ -37,29 +37,33 @@ export class AdminService {
     const userIds = [...new Set(typedRoutes.map(r => r.user_id))]
 
     // Get profiles for these users
-    const { data: profiles, error: profilesError } = await supabase
-      .from('profiles')
-      .select('id, email, full_name')
-      .in('id', userIds)
+    const [{ data: profiles, error: profilesError }, { data: emails, error: emailsError }] =
+      await Promise.all([
+        supabase.from('profiles').select('id, full_name').in('id', userIds),
+        // Emails are only exposed to admins through this RPC
+        (supabase as any).rpc('admin_get_user_emails', { user_ids: userIds }),
+      ])
 
     if (profilesError) {
       console.error('Error fetching profiles:', profilesError)
     }
+    if (emailsError) {
+      console.error('Error fetching user emails:', emailsError)
+    }
 
-    // Create a map of profiles by id
-    const profileMap = new Map(
-      (profiles as any[])?.map(p => [p.id, p]) || []
+    const nameMap = new Map<string, string | null>(
+      ((profiles as any[]) || []).map((p) => [p.id, p.full_name])
+    )
+    const emailMap = new Map<string, string>(
+      ((emails as any[]) || []).map((e) => [e.id, e.email])
     )
 
     // Combine routes with profile info
-    return typedRoutes.map((route) => {
-      const profile = profileMap.get(route.user_id)
-      return {
-        ...route,
-        user_email: profile?.email,
-        user_name: profile?.full_name,
-      }
-    })
+    return typedRoutes.map((route) => ({
+      ...route,
+      user_email: emailMap.get(route.user_id),
+      user_name: nameMap.get(route.user_id) ?? undefined,
+    }))
   }
 
   /**
