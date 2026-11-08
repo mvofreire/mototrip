@@ -102,10 +102,7 @@ export default async function RoutePage({ params }: RoutePageProps) {
             )}
 
             {/* Comments Section */}
-            <div className="space-y-3">
-              <h2 className="text-xl md:text-2xl font-bold">{t('comments')}</h2>
-              <CommentsList routeId={route.id} locale={params.locale} />
-            </div>
+            <CommentsList routeId={route.id} locale={params.locale} />
           </div>
       </div>
     </div>

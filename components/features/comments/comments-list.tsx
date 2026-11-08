@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { MessageSquare } from 'lucide-react'
@@ -120,10 +121,10 @@ export function CommentsList({ routeId, locale }: CommentsListProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2">
-        <MessageSquare className="h-5 w-5" />
-        <h3 className="text-xl font-semibold">
+        <MessageSquare className="h-5 w-5 text-brand-500" />
+        <h2 className="text-xl md:text-2xl font-bold">
           {t('title')}
-        </h3>
+        </h2>
         <span className="text-sm text-muted-foreground">
           ({totalComments})
         </span>
@@ -141,9 +142,12 @@ export function CommentsList({ routeId, locale }: CommentsListProps) {
         </Card>
       ) : (
         <Card className="p-4 text-center">
-          <p className="text-muted-foreground">
+          <Link
+            href={`/${locale}/auth/login?redirect=${encodeURIComponent(`/${locale}/routes/${routeId}`)}`}
+            className="text-muted-foreground hover:text-primary hover:underline"
+          >
             {t('loginPrompt')}
-          </p>
+          </Link>
         </Card>
       )}
 

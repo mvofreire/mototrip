@@ -68,7 +68,7 @@ export function CommentForm({
           disabled={isSubmitting}
         />
         <div className="flex items-center justify-between text-sm">
-          <span className={remainingChars < 50 ? 'text-orange-600' : 'text-muted-foreground'}>
+          <span className={remainingChars < 50 ? 'text-brand-500' : 'text-muted-foreground'}>
             {t('form.charactersRemaining', { count: remainingChars })}
           </span>
         </div>
