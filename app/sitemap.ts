@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next'
+import { getSiteUrl } from '@/lib/site-url'
 import { locales } from '@/i18n'
 import { supabase } from '@/lib/supabase/client'
 
-const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://mototrip.pt').replace(/\/$/, '')
+const BASE_URL = getSiteUrl()
 
 const STATIC_PAGES = ['', '/explore', '/riders', '/community', '/about', '/guidelines', '/blog', '/terms', '/privacy']
 
