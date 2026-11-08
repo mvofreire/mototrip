@@ -21,6 +21,7 @@ export function RegisterForm({ locale }: RegisterFormProps) {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [confirmationSentTo, setConfirmationSentTo] = useState<string | null>(null)
   const { signUp } = useAuth()
   const router = useRouter()
 
@@ -41,13 +42,37 @@ export function RegisterForm({ locale }: RegisterFormProps) {
     setLoading(true)
 
     try {
-      await signUp(email, password, fullName)
-      router.push(`/${locale}`)
+      const { needsConfirmation } = await signUp(email, password, fullName)
+      if (needsConfirmation) {
+        setConfirmationSentTo(email)
+      } else {
+        router.push(`/${locale}`)
+      }
     } catch (err: any) {
       setError(err.message || 'Falha ao criar conta')
     } finally {
       setLoading(false)
     }
+  }
+
+  if (confirmationSentTo) {
+    return (
+      <div className="space-y-4 text-center">
+        <Alert>
+          <AlertDescription>
+            Enviamos um link de confirmação para <strong>{confirmationSentTo}</strong>.
+            Abra o email e clique no link para ativar sua conta.
+          </AlertDescription>
+        </Alert>
+        <p className="text-sm text-muted-foreground">
+          Não recebeu? Verifique a pasta de spam ou{' '}
+          <Link href={`/${locale}/auth/login`} className="text-primary hover:underline">
+            volte ao login
+          </Link>
+          .
+        </p>
+      </div>
+    )
   }
 
   return (

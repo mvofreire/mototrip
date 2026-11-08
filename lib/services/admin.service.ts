@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase/client'
 import type { Database } from '@/types/database.types'
 import { RouteStorage } from '@/lib/storage/storage.service'
+import { authRedirectUrl } from '@/lib/auth/redirects'
 
 type Route = Database['public']['Tables']['routes']['Row']
 type RouteUpdate = Database['public']['Tables']['routes']['Update']
@@ -10,7 +11,43 @@ export interface AdminRouteWithUser extends Route {
   user_name?: string
 }
 
+export interface AdminUser {
+  id: string
+  email: string
+  full_name: string | null
+  role: 'admin' | 'contributor'
+  created_at: string
+  email_confirmed_at: string | null
+  confirmation_sent_at: string | null
+  last_sign_in_at: string | null
+}
+
 export class AdminService {
+  /**
+   * List all users with their email-confirmation status (admin only)
+   */
+  static async listUsers(): Promise<AdminUser[]> {
+    const { data, error } = await (supabase as any).rpc('admin_list_users')
+    if (error) {
+      console.error('Error listing users:', error)
+      throw new Error(`Failed to list users: ${error.message}`)
+    }
+    return (data as AdminUser[]) ?? []
+  }
+
+  /**
+   * Re-send the signup confirmation email to an unconfirmed user.
+   * The link points to the site the admin is currently using.
+   */
+  static async resendConfirmation(email: string): Promise<void> {
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+      options: { emailRedirectTo: authRedirectUrl('') },
+    })
+    if (error) throw error
+  }
+
   /**
    * Get all routes (admin only)
    */

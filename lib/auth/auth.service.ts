@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase/client'
 import type { AuthUser, Profile } from '@/types/auth.types'
+import { authRedirectUrl } from '@/lib/auth/redirects'
 
 // Readable profile columns (email is intentionally not granted to clients)
 const PROFILE_COLUMNS = 'id, full_name, avatar_url, role, created_at, updated_at'
@@ -14,6 +15,8 @@ export const authService = {
         data: {
           full_name: fullName,
         },
+        // Where the confirmation link lands (otherwise Supabase's Site URL)
+        emailRedirectTo: authRedirectUrl(''),
       },
     })
 
@@ -61,7 +64,7 @@ export const authService = {
   // Reset password (request)
   async resetPassword(email: string) {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
+      redirectTo: authRedirectUrl('/auth/reset-password'),
     })
 
     if (error) throw error

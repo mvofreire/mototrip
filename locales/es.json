@@ -470,6 +470,36 @@
       "regionLabel": "Región",
       "save": "Guardar",
       "saving": "Guardando..."
+    },
+    "nav": {
+      "routes": "Rutas",
+      "users": "Usuarios"
+    },
+    "users": {
+      "description": "Gestiona los usuarios y reenvía enlaces de confirmación",
+      "searchPlaceholder": "Buscar por nombre o email...",
+      "onlyPending": "Pendientes ({count})",
+      "total": "{count} usuarios · {pending} sin confirmar",
+      "columns": {
+        "user": "Usuario",
+        "role": "Rol",
+        "status": "Estado",
+        "created": "Registro",
+        "lastSignIn": "Último acceso",
+        "actions": "Acciones"
+      },
+      "roles": {
+        "admin": "Admin",
+        "contributor": "Colaborador"
+      },
+      "confirmed": "Confirmado",
+      "pending": "Sin confirmar",
+      "lastSent": "Último envío {when}",
+      "never": "Nunca",
+      "resend": "Reenviar enlace",
+      "resent": "Enlace reenviado",
+      "resendError": "Error al reenviar el enlace",
+      "empty": "No se encontraron usuarios"
     }
   },
   "riders": {

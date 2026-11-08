@@ -470,6 +470,36 @@
       "regionLabel": "Région",
       "save": "Enregistrer",
       "saving": "Enregistrement..."
+    },
+    "nav": {
+      "routes": "Itinéraires",
+      "users": "Utilisateurs"
+    },
+    "users": {
+      "description": "Gérez les utilisateurs et renvoyez les liens de confirmation",
+      "searchPlaceholder": "Rechercher par nom ou email...",
+      "onlyPending": "En attente ({count})",
+      "total": "{count} utilisateurs · {pending} non confirmés",
+      "columns": {
+        "user": "Utilisateur",
+        "role": "Rôle",
+        "status": "Statut",
+        "created": "Inscription",
+        "lastSignIn": "Dernière connexion",
+        "actions": "Actions"
+      },
+      "roles": {
+        "admin": "Admin",
+        "contributor": "Contributeur"
+      },
+      "confirmed": "Confirmé",
+      "pending": "Non confirmé",
+      "lastSent": "Dernier envoi {when}",
+      "never": "Jamais",
+      "resend": "Renvoyer le lien",
+      "resent": "Lien renvoyé",
+      "resendError": "Échec de l'envoi du lien",
+      "empty": "Aucun utilisateur trouvé"
     }
   },
   "riders": {

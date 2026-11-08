@@ -470,6 +470,36 @@
       "regionLabel": "Region",
       "save": "Speichern",
       "saving": "Wird gespeichert..."
+    },
+    "nav": {
+      "routes": "Routen",
+      "users": "Benutzer"
+    },
+    "users": {
+      "description": "Benutzer verwalten und Bestätigungslinks erneut senden",
+      "searchPlaceholder": "Nach Name oder E-Mail suchen...",
+      "onlyPending": "Ausstehend ({count})",
+      "total": "{count} Benutzer · {pending} unbestätigt",
+      "columns": {
+        "user": "Benutzer",
+        "role": "Rolle",
+        "status": "Status",
+        "created": "Registriert",
+        "lastSignIn": "Letzte Anmeldung",
+        "actions": "Aktionen"
+      },
+      "roles": {
+        "admin": "Admin",
+        "contributor": "Mitwirkender"
+      },
+      "confirmed": "Bestätigt",
+      "pending": "Unbestätigt",
+      "lastSent": "Zuletzt gesendet {when}",
+      "never": "Nie",
+      "resend": "Link erneut senden",
+      "resent": "Link gesendet",
+      "resendError": "Link konnte nicht gesendet werden",
+      "empty": "Keine Benutzer gefunden"
     }
   },
   "riders": {

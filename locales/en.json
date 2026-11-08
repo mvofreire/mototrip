@@ -470,6 +470,36 @@
       "regionLabel": "Region",
       "save": "Save",
       "saving": "Saving..."
+    },
+    "nav": {
+      "routes": "Routes",
+      "users": "Users"
+    },
+    "users": {
+      "description": "Manage users and resend confirmation links",
+      "searchPlaceholder": "Search by name or email...",
+      "onlyPending": "Pending ({count})",
+      "total": "{count} users · {pending} unconfirmed",
+      "columns": {
+        "user": "User",
+        "role": "Role",
+        "status": "Status",
+        "created": "Signed up",
+        "lastSignIn": "Last sign-in",
+        "actions": "Actions"
+      },
+      "roles": {
+        "admin": "Admin",
+        "contributor": "Contributor"
+      },
+      "confirmed": "Confirmed",
+      "pending": "Unconfirmed",
+      "lastSent": "Last sent {when}",
+      "never": "Never",
+      "resend": "Resend link",
+      "resent": "Link resent",
+      "resendError": "Failed to resend link",
+      "empty": "No users found"
     }
   },
   "riders": {

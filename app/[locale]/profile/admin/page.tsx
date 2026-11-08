@@ -6,6 +6,7 @@ import { useLocale } from 'next-intl'
 import { useAuth } from '@/hooks/use-auth'
 import { AdminService, AdminRouteWithUser } from '@/lib/services/admin.service'
 import { AdminRoutesTable } from '@/components/admin/admin-routes-table'
+import { AdminNav } from '@/components/admin/admin-nav'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { RefreshCw, Search } from 'lucide-react'
@@ -197,6 +198,8 @@ export default function AdminPage() {
         <h1 className="text-3xl font-bold mb-2">{t('pageTitle')}</h1>
         <p className="text-muted-foreground">{t('pageDescription')}</p>
       </div>
+
+      <AdminNav />
 
       <div className="mb-6 flex items-center gap-4">
         <div className="relative flex-1 max-w-md">

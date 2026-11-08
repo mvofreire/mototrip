@@ -9,7 +9,8 @@ interface AuthContextType {
   user: AuthUser | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
-  signUp: (email: string, password: string, fullName: string) => Promise<void>
+  /** Resolves with needsConfirmation=true when the user must confirm by email */
+  signUp: (email: string, password: string, fullName: string) => Promise<{ needsConfirmation: boolean }>
   signOut: () => Promise<void>
   resetPassword: (email: string) => Promise<void>
 }
@@ -50,9 +51,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    await authService.signUp(email, password, fullName)
+    const data = await authService.signUp(email, password, fullName)
+    // With email confirmation enabled Supabase returns no session yet
+    if (!data.session) return { needsConfirmation: true }
     const user = await authService.getCurrentUser()
     setUser(user)
+    return { needsConfirmation: false }
   }
 
   const signOut = async () => {
