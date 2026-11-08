@@ -28,7 +28,9 @@
     "stats": {
       "routes": "Itinéraires",
       "riders": "Motards",
-      "reviews": "Avis"
+      "reviews": "Avis",
+      "km": "Kilomètres",
+      "regions": "Régions"
     },
     "clarification": {
       "title": "Nous ne sommes pas un GPS",
@@ -105,7 +107,26 @@
     "downloadGPX": "Télécharger GPX",
     "openInGoogleMaps": "Ouvrir dans Google Maps",
     "savedRoute": "Itinéraire enregistré",
-    "loginToSave": "Connectez-vous pour enregistrer des itinéraires"
+    "loginToSave": "Connectez-vous pour enregistrer des itinéraires",
+    "unknown": "Inconnue",
+    "notAvailable": "N/D",
+    "start": "Départ",
+    "end": "Arrivée",
+    "noCoordinates": "Cet itinéraire n'a pas de coordonnées",
+    "gpxFailed": "Échec de la génération du fichier GPX",
+    "share": "Partager",
+    "linkCopied": "Lien copié !",
+    "comments": "Commentaires",
+    "notFoundTitle": "Itinéraire Introuvable",
+    "notFoundDescription": "Cet itinéraire n'existe pas ou a été supprimé.",
+    "metaDescription": "Itinéraire moto {category} en {region}",
+    "photos": "Photos",
+    "addPhoto": "Ajouter une photo",
+    "uploading": "Envoi...",
+    "uploadFailed": "Échec de l'envoi de la photo",
+    "invalidFile": "Envoyez une image JPG, PNG ou WebP jusqu'à 5 Mo",
+    "removePhoto": "Supprimer la photo",
+    "coverHint": "La première photo sert de couverture à l'itinéraire"
   },
   "stopTypes": {
     "viewpoint": "Point de Vue",
@@ -511,7 +532,10 @@
       "description": "Ces motards ont partagé les itinéraires les plus incroyables et ont aidé à construire notre communauté.",
       "member": "Membre depuis 2024",
       "routes": "Itinéraires",
-      "rating": "Note"
+      "rating": "Note",
+      "memberSince": "Membre depuis {year}",
+      "km": "Kilomètres",
+      "empty": "Pas encore de contributeurs. Soyez le premier à proposer un itinéraire !"
     },
     "cta": {
       "title": "Devenir un Contributeur",

@@ -28,7 +28,9 @@
     "stats": {
       "routes": "Routen",
       "riders": "Fahrer",
-      "reviews": "Bewertungen"
+      "reviews": "Bewertungen",
+      "km": "Kilometer",
+      "regions": "Regionen"
     },
     "clarification": {
       "title": "Wir sind kein GPS",
@@ -105,7 +107,26 @@
     "downloadGPX": "GPX Herunterladen",
     "openInGoogleMaps": "In Google Maps Öffnen",
     "savedRoute": "Gespeichert",
-    "loginToSave": "Melde dich an, um Routen zu speichern"
+    "loginToSave": "Melde dich an, um Routen zu speichern",
+    "unknown": "Unbekannt",
+    "notAvailable": "k. A.",
+    "start": "Start",
+    "end": "Ziel",
+    "noCoordinates": "Diese Route hat keine Koordinaten",
+    "gpxFailed": "GPX-Datei konnte nicht erstellt werden",
+    "share": "Teilen",
+    "linkCopied": "Link kopiert!",
+    "comments": "Kommentare",
+    "notFoundTitle": "Route Nicht Gefunden",
+    "notFoundDescription": "Diese Route existiert nicht oder wurde entfernt.",
+    "metaDescription": "{category} Motorradroute in {region}",
+    "photos": "Fotos",
+    "addPhoto": "Foto hinzufügen",
+    "uploading": "Wird hochgeladen...",
+    "uploadFailed": "Foto-Upload fehlgeschlagen",
+    "invalidFile": "Lade ein JPG-, PNG- oder WebP-Bild bis 5 MB hoch",
+    "removePhoto": "Foto entfernen",
+    "coverHint": "Das erste Foto wird als Titelbild der Route verwendet"
   },
   "stopTypes": {
     "viewpoint": "Aussichtspunkt",
@@ -511,7 +532,10 @@
       "description": "Diese Fahrer haben die erstaunlichsten Routen geteilt und geholfen, unsere Community aufzubauen.",
       "member": "Mitglied seit 2024",
       "routes": "Routen",
-      "rating": "Bewertung"
+      "rating": "Bewertung",
+      "memberSince": "Mitglied seit {year}",
+      "km": "Kilometer",
+      "empty": "Noch keine Beitragenden. Reiche als Erster eine Route ein!"
     },
     "cta": {
       "title": "Werden Sie ein Mitwirkender",

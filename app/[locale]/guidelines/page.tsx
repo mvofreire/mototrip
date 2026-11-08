@@ -47,7 +47,7 @@ export default async function GuidelinesPage({
             <div className="grid gap-6 md:grid-cols-2">
               {/* Respect */}
               <div className="space-y-3 p-6 rounded-lg border bg-card">
-                <div className="h-12 w-12 rounded-lg bg-gradient-sunshine flex items-center justify-center">
+                <div className="h-12 w-12 rounded-lg bg-gradient-brand flex items-center justify-center">
                   <Heart className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold">{t('values.respect.title')}</h3>
@@ -58,7 +58,7 @@ export default async function GuidelinesPage({
 
               {/* Safety */}
               <div className="space-y-3 p-6 rounded-lg border bg-card">
-                <div className="h-12 w-12 rounded-lg bg-gradient-sunshine flex items-center justify-center">
+                <div className="h-12 w-12 rounded-lg bg-gradient-brand flex items-center justify-center">
                   <Shield className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold">{t('values.safety.title')}</h3>
@@ -69,7 +69,7 @@ export default async function GuidelinesPage({
 
               {/* Collaboration */}
               <div className="space-y-3 p-6 rounded-lg border bg-card">
-                <div className="h-12 w-12 rounded-lg bg-gradient-sunshine flex items-center justify-center">
+                <div className="h-12 w-12 rounded-lg bg-gradient-brand flex items-center justify-center">
                   <Users className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold">{t('values.collaboration.title')}</h3>
@@ -80,7 +80,7 @@ export default async function GuidelinesPage({
 
               {/* Quality */}
               <div className="space-y-3 p-6 rounded-lg border bg-card">
-                <div className="h-12 w-12 rounded-lg bg-gradient-sunshine flex items-center justify-center">
+                <div className="h-12 w-12 rounded-lg bg-gradient-brand flex items-center justify-center">
                   <AlertTriangle className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold">{t('values.quality.title')}</h3>
@@ -172,7 +172,7 @@ export default async function GuidelinesPage({
           </section>
 
           {/* Thank You */}
-          <section className="rounded-lg bg-gradient-sunshine p-8 text-center text-white">
+          <section className="rounded-lg bg-gradient-brand p-8 text-center text-white">
             <h2 className="text-3xl font-bold mb-4">{t('thankYou.title')}</h2>
             <p className="text-lg opacity-90">
               {t('thankYou.message')}

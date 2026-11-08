@@ -10,7 +10,7 @@ export default function NotFound() {
     <div className="container flex items-center justify-center min-h-[600px]">
       <div className="text-center space-y-6 max-w-md">
         <div className="flex justify-center">
-          <div className="h-24 w-24 rounded-full bg-gradient-sunshine flex items-center justify-center">
+          <div className="h-24 w-24 rounded-full bg-gradient-brand flex items-center justify-center">
             <MapPin className="h-12 w-12 text-white" />
           </div>
         </div>
@@ -22,7 +22,7 @@ export default function NotFound() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button asChild className="bg-gradient-sunshine hover:opacity-90">
+          <Button asChild className="bg-gradient-brand hover:opacity-90">
             <Link href="/">
               {t('backToHome')}
             </Link>

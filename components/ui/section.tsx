@@ -10,7 +10,7 @@ const sectionVariants = cva(
     variants: {
       variant: {
         hero: "overflow-hidden border-b bg-gradient-to-b from-muted/20 to-background",
-        clarification: "border-t bg-gradient-to-b from-sunshine-yellow-50/30 dark:from-muted/10 to-background",
+        clarification: "border-t bg-gradient-to-b from-muted/40 dark:from-muted/10 to-background",
         default: "border-t bg-muted/20",
         ghost: "",
       },
@@ -42,7 +42,7 @@ const Section = React.forwardRef<HTMLElement, SectionProps>(
         {...props}
       >
         {withRadialGradient && (
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(252,211,77,0.1),transparent_50%),radial-gradient(circle_at_70%_60%,rgba(251,146,60,0.1),transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(220,38,38,0.12),transparent_50%),radial-gradient(circle_at_70%_60%,rgba(100,116,139,0.12),transparent_50%)]" />
         )}
         {children}
       </section>

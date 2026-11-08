@@ -1,8 +1,9 @@
 import { RouteWithDetails } from '@/types'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Share2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { ShareRouteButton } from '@/components/features/routes/share-route-button'
 import { SaveRouteButton } from '@/components/features/routes/save-route-button'
+import { RouteCover } from '@/components/features/routes/route-cover'
 import { getDifficultyColor, getCategoryColor } from '@/lib/utils'
 
 interface RouteHeroProps {
@@ -10,40 +11,28 @@ interface RouteHeroProps {
 }
 
 export function RouteHero({ route }: RouteHeroProps) {
-  const categoryLabels = {
-    scenic: 'Scenic',
-    mountain: 'Mountain',
-    coastal: 'Coastal',
-    weekend: 'Weekend',
-    adventure: 'Adventure',
-  }
-
-  const difficultyLabels = {
-    easy: 'Easy',
-    moderate: 'Moderate',
-    challenging: 'Challenging',
-    expert: 'Expert',
-  }
+  const t = useTranslations()
 
   return (
     <div className="relative h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden bg-sand-100 border-b">
       {/* Placeholder hero image */}
-      <div className="absolute inset-0 bg-gradient-to-br from-sunshine-yellow-200 via-sunshine-orange-200 to-sunshine-pink-200" />
-      
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-br from-steel-300 via-steel-200 to-brand-100 dark:from-steel-900 dark:via-steel-800 dark:to-brand-950" />
+      <RouteCover route={route} />
 
-      <div className="container mx-auto max-w-7xl relative h-full flex flex-col justify-end pb-6 md:pb-8 lg:pb-12 px-4">
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-background via-background/30 to-transparent" />
+
+      <div className="container mx-auto max-w-7xl relative z-[2] h-full pointer-events-none [&_a]:pointer-events-auto [&_button]:pointer-events-auto flex flex-col justify-end pb-6 md:pb-8 lg:pb-12 px-4">
         <div className="space-y-3 md:space-y-4">
           <div className="flex flex-wrap gap-2">
             <Badge variant="outline" className={getCategoryColor(route.category)}>
-              {categoryLabels[route.category]}
+              {t(`categories.${route.category}`)}
             </Badge>
             <Badge variant="outline" className={getDifficultyColor(route.difficulty)}>
-              {difficultyLabels[route.difficulty]}
+              {t(`difficulty.${route.difficulty}`)}
             </Badge>
             {route.featured && (
-              <Badge className="bg-sunshine-yellow-400 text-sunshine-yellow-900 border-0">
-                Featured
+              <Badge className="bg-brand-600 text-white border-0 uppercase tracking-wide">
+                {t('route.featured')}
               </Badge>
             )}
           </div>
@@ -54,10 +43,7 @@ export function RouteHero({ route }: RouteHeroProps) {
 
           <div className="flex flex-wrap items-center gap-2 md:gap-4">
             <SaveRouteButton routeId={route.id} />
-            <Button variant="outline" className="text-sm md:text-base">
-              <Share2 className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
-              Share
-            </Button>
+            <ShareRouteButton title={route.title} />
           </div>
         </div>
       </div>

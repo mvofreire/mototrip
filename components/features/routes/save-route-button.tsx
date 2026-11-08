@@ -44,7 +44,7 @@ export function SaveRouteButton({ routeId, className }: SaveRouteButtonProps) {
       variant={isSaved ? "outline" : "default"}
       className={cn(
         "text-sm md:text-base",
-        !isSaved && "bg-gradient-sunshine hover:opacity-90",
+        !isSaved && "bg-gradient-brand hover:opacity-90",
         className,
       )}
     >

@@ -16,7 +16,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link href={`/${locale}`} className="flex items-center gap-2 font-bold text-xl">
-              <div className="h-8 w-8 rounded-md bg-gradient-sunshine flex items-center justify-center">
+              <div className="h-8 w-8 rounded-md bg-gradient-brand flex items-center justify-center">
                 <MapPin className="h-5 w-5 text-white" />
               </div>
               <span>MotoTrip</span>

@@ -36,7 +36,7 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
           <Link href={`/${locale}`} className="flex items-center gap-2 font-bold text-xl">
-            <div className="h-8 w-8 rounded-md bg-gradient-sunshine flex items-center justify-center">
+            <div className="h-8 w-8 rounded-md bg-gradient-brand flex items-center justify-center">
               <MapPin className="h-5 w-5 text-white" />
             </div>
             <span className="hidden sm:inline-block">{tCommon('mototrip')}</span>
@@ -87,7 +87,7 @@ export function Header() {
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-md bg-gradient-sunshine flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-md bg-gradient-brand flex items-center justify-center">
                     <MapPin className="h-5 w-5 text-white" />
                   </div>
                   {tCommon('mototrip')}
@@ -187,7 +187,7 @@ export function Header() {
                         </Button>
                       </Link>
                       <Link href={`/${locale}/auth/register`} onClick={() => setOpen(false)}>
-                        <Button className="w-full bg-gradient-sunshine hover:opacity-90">
+                        <Button className="w-full bg-gradient-brand hover:opacity-90">
                           {t('getStarted')}
                         </Button>
                       </Link>
@@ -241,7 +241,7 @@ export function Header() {
                   </Button>
                 </Link>
                 <Link href={`/${locale}/auth/register`}>
-                  <Button size="sm" className="bg-gradient-sunshine hover:opacity-90">
+                  <Button size="sm" className="bg-gradient-brand hover:opacity-90">
                     {t('getStarted')}
                   </Button>
                 </Link>

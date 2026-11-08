@@ -78,7 +78,7 @@ export default function OsmMap({
   center,
   zoom,
   polyline = [],
-  polylineColor = "#3b82f6",
+  polylineColor = "#e11d2e",
   markers = [],
   fitBounds = true,
   scrollWheelZoom = false,

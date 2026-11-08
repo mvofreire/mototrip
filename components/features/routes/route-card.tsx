@@ -81,16 +81,16 @@ export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
                 )
               ) : (
                 <>
-                  <div className="absolute inset-0 bg-gradient-to-br from-sunshine-yellow-100 to-sunshine-orange-100" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-steel-200 to-steel-400 dark:from-steel-800 dark:to-steel-950" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <MapPin className="h-12 w-12 text-sunshine-orange-300" />
+                    <MapPin className="h-12 w-12 text-steel-500" />
                   </div>
                 </>
               )}
 
               {route.featured && (
                 <div className="absolute top-3 left-3">
-                  <Badge className="bg-sunshine-yellow-400 text-sunshine-yellow-900 border-0">
+                  <Badge className="bg-brand-600 text-white border-0 uppercase tracking-wide">
                     {t("route.featured")}
                   </Badge>
                 </div>
@@ -171,7 +171,7 @@ export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
                       </span>
                     </div>
                   </div>
-                  {route.elevation_gain_m && (
+                  {!!route.elevation_gain_m && (
                     <div className="flex items-center gap-2">
                       <Mountain className="h-4 w-4 text-muted-foreground" />
                       <div className="flex flex-col">
@@ -186,11 +186,11 @@ export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
                   )}
                   <div className="flex items-center gap-4 ml-auto">
                     <div className="flex items-center gap-2">
-                      <Star className="h-4 w-4 fill-sunshine-yellow-400 text-sunshine-yellow-400" />
+                      <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                       <span className="text-sm font-medium">
                         {route.average_rating
                           ? formatRating(route.average_rating)
-                          : "N/A"}
+                          : t('route.notAvailable')}
                       </span>
                       {route.rating_count && (
                         <span className="text-xs text-muted-foreground">
@@ -233,9 +233,9 @@ export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
             ) : (
               <>
                 {/* Placeholder for route image */}
-                <div className="absolute inset-0 bg-gradient-to-br from-sunshine-yellow-100 to-sunshine-orange-100" />
+                <div className="absolute inset-0 bg-gradient-to-br from-steel-200 to-steel-400 dark:from-steel-800 dark:to-steel-950" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <MapPin className="h-16 w-16 text-sunshine-orange-300" />
+                  <MapPin className="h-16 w-16 text-steel-500" />
                 </div>
               </>
             )}
@@ -243,7 +243,7 @@ export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
             {/* Featured badge */}
             {route.featured && (
               <div className="absolute top-3 left-3">
-                <Badge className="bg-sunshine-yellow-400 text-sunshine-yellow-900 border-0">
+                <Badge className="bg-brand-600 text-white border-0 uppercase tracking-wide">
                   {t("route.featured")}
                 </Badge>
               </div>
@@ -310,24 +310,24 @@ export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-3 pt-2">
               <div className="flex flex-col">
-                <span className="text-xs text-muted-foreground">Rating</span>
+                <span className="text-xs text-muted-foreground">{t('route.rating')}</span>
                 <div className="flex items-center gap-1">
-                  <Star className="h-3.5 w-3.5 fill-sunshine-yellow-400 text-sunshine-yellow-400" />
+                  <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
                   <span className="text-sm font-medium">
                     {route.average_rating
                       ? formatRating(route.average_rating)
-                      : "N/A"}
+                      : t('route.notAvailable')}
                   </span>
                 </div>
               </div>
               <div className="flex flex-col">
-                <span className="text-xs text-muted-foreground">Duration</span>
+                <span className="text-xs text-muted-foreground">{t('route.duration')}</span>
                 <span className="text-sm font-medium">
                   {formatDuration(route.duration_minutes)}
                 </span>
               </div>
               <div className="flex flex-col">
-                <span className="text-xs text-muted-foreground">Distance</span>
+                <span className="text-xs text-muted-foreground">{t('route.distance')}</span>
                 <span className="text-sm font-medium">
                   {formatDistance(route.distance_km)}
                 </span>
@@ -342,10 +342,10 @@ export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
               {route.rating_count && <span>{route.rating_count} reviews</span>}
               <CommentsCount routeId={route.id} />
             </div>
-            {route.elevation_gain_m && (
+            {!!route.elevation_gain_m && (
               <div className="flex items-center gap-1">
                 <Mountain className="h-3.5 w-3.5" />
-                <span>{route.elevation_gain_m}m elevation</span>
+                <span>{route.elevation_gain_m}m {t('route.elevation').toLowerCase()}</span>
               </div>
             )}
           </div>

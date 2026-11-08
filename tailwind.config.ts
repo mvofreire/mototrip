@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        display: ['var(--font-display)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -25,58 +28,35 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         
-        // Sunshine Palette
-        sunshine: {
-          yellow: {
-            50: '#FFFBEB',
-            100: '#FEF3C7',
-            200: '#FDE68A',
-            300: '#FCD34D',
-            400: '#FBBF24',
-            500: '#F59E0B',
-            600: '#D97706',
-            700: '#B45309',
-            800: '#92400E',
-            900: '#78350F',
-          },
-          orange: {
-            50: '#FFF7ED',
-            100: '#FFEDD5',
-            200: '#FED7AA',
-            300: '#FDBA74',
-            400: '#FB923C',
-            500: '#F97316',
-            600: '#EA580C',
-            700: '#C2410C',
-            800: '#9A3412',
-            900: '#7C2D12',
-          },
-          pink: {
-            50: '#FDF2F8',
-            100: '#FCE7F3',
-            200: '#FBCFE8',
-            300: '#F9A8D4',
-            400: '#F472B6',
-            500: '#EC4899',
-            600: '#DB2777',
-            700: '#BE185D',
-            800: '#9D174D',
-            900: '#831843',
-          },
-          coral: {
-            50: '#FFF5F2',
-            100: '#FFE8E0',
-            200: '#FFD0BF',
-            300: '#FFB399',
-            400: '#FF9173',
-            500: '#FF6B4D',
-            600: '#F04E30',
-            700: '#C73E25',
-            800: '#9E311D',
-            900: '#7D2718',
-          },
+        // Racing red
+        brand: {
+          50: '#FFF1F2',
+          100: '#FFE0E3',
+          200: '#FFC5CB',
+          300: '#FF99A3',
+          400: '#FF5C6C',
+          500: '#F5293D',
+          600: '#D90F25',
+          700: '#B50A1E',
+          800: '#950D1E',
+          900: '#7C101F',
+          950: '#45030C',
         },
-        
+        // Cool steel neutrals
+        steel: {
+          50: '#F6F7F9',
+          100: '#ECEEF2',
+          200: '#D5D9E2',
+          300: '#B0B8C8',
+          400: '#8592AA',
+          500: '#667490',
+          600: '#515D77',
+          700: '#434C61',
+          800: '#2B313F',
+          900: '#1B1F29',
+          950: '#0F1218',
+        },
+
         // Neutral warm tones
         sand: {
           50: '#FAFAF9',

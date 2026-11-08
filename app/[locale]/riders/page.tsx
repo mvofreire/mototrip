@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import { Metadata } from 'next'
-import { Trophy, MapPin, Star } from 'lucide-react'
+import { Trophy, MapPin, Gauge } from 'lucide-react'
+import { RoutesService } from '@/lib/services/routes.service'
 
 export async function generateMetadata({
   params: { locale },
@@ -21,6 +22,14 @@ export default async function RidersPage({
   params: { locale: string }
 }) {
   const t = await getTranslations({ locale, namespace: 'riders' })
+
+  let contributors: Awaited<ReturnType<typeof RoutesService.getTopContributors>> = []
+  try {
+    contributors = await RoutesService.getTopContributors(6)
+  } catch (error) {
+    console.error('Error fetching contributors:', error)
+  }
+  const nf = new Intl.NumberFormat(locale)
 
   return (
     <div className="container py-12">
@@ -44,46 +53,54 @@ export default async function RidersPage({
               {t('topContributors.description')}
             </p>
 
-            {/* Placeholder for top contributors */}
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="p-6 rounded-lg border bg-card space-y-4">
-                  <div className="flex items-start justify-between">
+            {contributors.length === 0 ? (
+              <p className="rounded-lg border border-dashed p-8 text-center text-muted-foreground">
+                {t('topContributors.empty')}
+              </p>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {contributors.map((c, i) => (
+                  <div key={c.id} className="p-6 rounded-lg border bg-card space-y-4">
                     <div className="flex items-center gap-4">
-                      <div className="h-16 w-16 rounded-full bg-gradient-sunshine flex items-center justify-center text-white font-bold text-xl">
-                        #{i}
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-lg">Rider {i}</h3>
+                      {c.avatar_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={c.avatar_url} alt="" className="h-16 w-16 rounded-full object-cover" />
+                      ) : (
+                        <div className="h-16 w-16 rounded-full bg-gradient-brand flex items-center justify-center text-white font-bold text-xl">
+                          #{i + 1}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <h3 className="font-semibold text-lg truncate">{c.full_name || 'MotoTrip'}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {t('topContributors.member')}
+                          {t('topContributors.memberSince', { year: new Date(c.created_at).getFullYear() })}
                         </p>
                       </div>
                     </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 pt-4 border-t">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1 text-muted-foreground">
-                        <MapPin className="h-4 w-4" />
-                        <span className="text-sm">{t('topContributors.routes')}</span>
+                    <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1 text-muted-foreground">
+                          <MapPin className="h-4 w-4" />
+                          <span className="text-sm">{t('topContributors.routes')}</span>
+                        </div>
+                        <p className="text-2xl font-bold">{nf.format(c.routes)}</p>
                       </div>
-                      <p className="text-2xl font-bold">{15 - i * 2}</p>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1 text-muted-foreground">
-                        <Star className="h-4 w-4" />
-                        <span className="text-sm">{t('topContributors.rating')}</span>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1 text-muted-foreground">
+                          <Gauge className="h-4 w-4" />
+                          <span className="text-sm">{t('topContributors.km')}</span>
+                        </div>
+                        <p className="text-2xl font-bold">{nf.format(c.km)}</p>
                       </div>
-                      <p className="text-2xl font-bold">{(4.8 - i * 0.1).toFixed(1)}</p>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </section>
 
           {/* Become a Contributor */}
-          <section className="rounded-lg bg-gradient-sunshine p-8 text-center text-white">
+          <section className="rounded-lg bg-gradient-brand p-8 text-center text-white">
             <h2 className="text-3xl font-bold mb-4">{t('cta.title')}</h2>
             <p className="text-lg mb-6 opacity-90">
               {t('cta.description')}

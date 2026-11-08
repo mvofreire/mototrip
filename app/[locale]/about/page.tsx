@@ -48,7 +48,7 @@ export default async function AboutPage({
             <div className="grid gap-6 md:grid-cols-2">
               {/* Community */}
               <div className="space-y-3 p-6 rounded-lg border bg-card">
-                <div className="h-12 w-12 rounded-lg bg-gradient-sunshine flex items-center justify-center">
+                <div className="h-12 w-12 rounded-lg bg-gradient-brand flex items-center justify-center">
                   <Users className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold">{t('values.community.title')}</h3>
@@ -59,7 +59,7 @@ export default async function AboutPage({
 
               {/* Safety */}
               <div className="space-y-3 p-6 rounded-lg border bg-card">
-                <div className="h-12 w-12 rounded-lg bg-gradient-sunshine flex items-center justify-center">
+                <div className="h-12 w-12 rounded-lg bg-gradient-brand flex items-center justify-center">
                   <Heart className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold">{t('values.safety.title')}</h3>
@@ -70,7 +70,7 @@ export default async function AboutPage({
 
               {/* Adventure */}
               <div className="space-y-3 p-6 rounded-lg border bg-card">
-                <div className="h-12 w-12 rounded-lg bg-gradient-sunshine flex items-center justify-center">
+                <div className="h-12 w-12 rounded-lg bg-gradient-brand flex items-center justify-center">
                   <MapPin className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold">{t('values.adventure.title')}</h3>
@@ -81,7 +81,7 @@ export default async function AboutPage({
 
               {/* Global */}
               <div className="space-y-3 p-6 rounded-lg border bg-card">
-                <div className="h-12 w-12 rounded-lg bg-gradient-sunshine flex items-center justify-center">
+                <div className="h-12 w-12 rounded-lg bg-gradient-brand flex items-center justify-center">
                   <Globe className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold">{t('values.global.title')}</h3>
@@ -103,7 +103,7 @@ export default async function AboutPage({
           </section>
 
           {/* CTA Section */}
-          <section className="rounded-lg bg-gradient-sunshine p-8 text-center text-white">
+          <section className="rounded-lg bg-gradient-brand p-8 text-center text-white">
             <h2 className="text-3xl font-bold mb-4">{t('cta.title')}</h2>
             <p className="text-lg mb-6 opacity-90">
               {t('cta.description')}

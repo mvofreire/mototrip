@@ -105,6 +105,55 @@ export class RoutesService {
   }
 
   /**
+   * Real totals for the home page (published routes only)
+   */
+  static async getStats() {
+    const { data, error } = await supabase
+      .from("routes")
+      .select("distance_km, region")
+      .eq("published", true);
+
+    if (error) throw error;
+    const rows = (data ?? []) as { distance_km: number | null; region: string | null }[];
+    return {
+      routes: rows.length,
+      km: Math.round(rows.reduce((sum, r) => sum + (r.distance_km ?? 0), 0)),
+      regions: new Set(rows.map((r) => r.region).filter(Boolean)).size,
+    };
+  }
+
+  /**
+   * Route authors ranked by number of published routes
+   */
+  static async getTopContributors(limit = 6) {
+    const { data, error } = await supabase
+      .from("routes")
+      .select("user_id, distance_km")
+      .eq("published", true);
+
+    if (error) throw error;
+    const byUser = new Map<string, { routes: number; km: number }>();
+    for (const r of (data ?? []) as { user_id: string; distance_km: number | null }[]) {
+      const cur = byUser.get(r.user_id) ?? { routes: 0, km: 0 };
+      cur.routes += 1;
+      cur.km += r.distance_km ?? 0;
+      byUser.set(r.user_id, cur);
+    }
+
+    const ids = [...byUser.keys()];
+    if (ids.length === 0) return [];
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, full_name, avatar_url, created_at")
+      .in("id", ids);
+
+    return ((profiles ?? []) as { id: string; full_name: string | null; avatar_url: string | null; created_at: string }[])
+      .map((p) => ({ ...p, ...byUser.get(p.id)!, km: Math.round(byUser.get(p.id)!.km) }))
+      .sort((a, b) => b.routes - a.routes)
+      .slice(0, limit);
+  }
+
+  /**
    * Get featured routes
    */
   static async getFeaturedRoutes(limit = 3) {

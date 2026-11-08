@@ -4,8 +4,10 @@ import { RouteHero } from '@/components/features/routes/route-hero'
 import { RouteStats } from '@/components/features/routes/route-stats'
 import { RouteMap } from '@/components/features/routes/route-map'
 import { StopsTimeline } from '@/components/features/routes/stops-timeline'
+import { RoutePhotos } from '@/components/features/routes/route-photos'
 import { CommentsList } from '@/components/features/comments'
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 
 interface RoutePageProps {
   params: {
@@ -17,23 +19,45 @@ interface RoutePageProps {
 export async function generateMetadata({ params }: RoutePageProps): Promise<Metadata> {
   try {
     const route = await RoutesService.getRouteById(params.id)
-    
+    const t = await getTranslations({ locale: params.locale })
+    const description =
+      route.description ||
+      t('route.metaDescription', {
+        category: t(`categories.${route.category}`),
+        region: route.region || 'Portugal',
+      })
+    const cover =
+      [...(route.photos ?? [])].sort((a, b) => a.order_index - b.order_index)[0]?.url ||
+      route.thumbnail_url
+
     return {
       title: route.title,
-      description: route.description || `Discover this ${route.category} route in ${route.region}`,
+      description,
+      alternates: { canonical: `/${params.locale}/routes/${route.id}` },
       openGraph: {
+        type: 'article',
         title: route.title,
-        description: route.description || undefined,
+        description,
+        url: `/${params.locale}/routes/${route.id}`,
+        images: cover ? [{ url: cover, alt: route.title }] : undefined,
+      },
+      twitter: {
+        card: cover ? 'summary_large_image' : 'summary',
+        title: route.title,
+        description,
+        images: cover ? [cover] : undefined,
       },
     }
   } catch {
+    const t = await getTranslations({ locale: params.locale })
     return {
-      title: 'Route Not Found',
+      title: t('route.notFoundTitle'),
     }
   }
 }
 
 export default async function RoutePage({ params }: RoutePageProps) {
+  const t = await getTranslations({ locale: params.locale, namespace: 'route' })
   let route
   
   try {
@@ -55,28 +79,31 @@ export default async function RoutePage({ params }: RoutePageProps) {
             {/* Description */}
             {route.description && (
               <div className="space-y-3">
-                <h2 className="text-xl md:text-2xl font-bold">About This Route</h2>
+                <h2 className="text-xl md:text-2xl font-bold">{t('aboutRoute')}</h2>
                 <p className="text-muted-foreground leading-relaxed break-words">{route.description}</p>
               </div>
             )}
 
+            {/* Photos */}
+            <RoutePhotos route={route} />
+
             {/* Map */}
             <div className="space-y-3">
-              <h2 className="text-xl md:text-2xl font-bold">Route Map</h2>
+              <h2 className="text-xl md:text-2xl font-bold">{t('routeMap')}</h2>
               <RouteMap route={route} />
             </div>
 
             {/* Stops */}
             {route.stops && route.stops.length > 0 && (
               <div className="space-y-3">
-                <h2 className="text-xl md:text-2xl font-bold">Recommended Stops</h2>
+                <h2 className="text-xl md:text-2xl font-bold">{t('recommendedStops')}</h2>
                 <StopsTimeline stops={route.stops} />
               </div>
             )}
 
             {/* Comments Section */}
             <div className="space-y-3">
-              <h2 className="text-xl md:text-2xl font-bold">Comments</h2>
+              <h2 className="text-xl md:text-2xl font-bold">{t('comments')}</h2>
               <CommentsList routeId={route.id} locale={params.locale} />
             </div>
           </div>

@@ -28,7 +28,9 @@
     "stats": {
       "routes": "Rotas",
       "riders": "Motociclistas",
-      "reviews": "Avaliações"
+      "reviews": "Avaliações",
+      "km": "Quilômetros",
+      "regions": "Regiões"
     },
     "clarification": {
       "title": "Não Somos um GPS",
@@ -105,7 +107,26 @@
     "downloadGPX": "Baixar GPX",
     "openInGoogleMaps": "Abrir no Google Maps",
     "savedRoute": "Rota Salva",
-    "loginToSave": "Entre na sua conta para salvar rotas"
+    "loginToSave": "Entre na sua conta para salvar rotas",
+    "unknown": "Desconhecida",
+    "notAvailable": "N/D",
+    "start": "Início",
+    "end": "Fim",
+    "noCoordinates": "Esta rota não tem coordenadas",
+    "gpxFailed": "Falha ao gerar o arquivo GPX",
+    "share": "Compartilhar",
+    "linkCopied": "Link copiado!",
+    "comments": "Comentários",
+    "notFoundTitle": "Rota Não Encontrada",
+    "notFoundDescription": "Esta rota não existe ou foi removida.",
+    "metaDescription": "Rota de moto {category} em {region}",
+    "photos": "Fotos",
+    "addPhoto": "Adicionar foto",
+    "uploading": "Enviando...",
+    "uploadFailed": "Falha ao enviar a foto",
+    "invalidFile": "Envie uma imagem JPG, PNG ou WebP de até 5 MB",
+    "removePhoto": "Remover foto",
+    "coverHint": "A primeira foto é usada como capa da rota"
   },
   "stopTypes": {
     "viewpoint": "Mirante",
@@ -511,7 +532,10 @@
       "description": "Esses motociclistas compartilharam as rotas mais incríveis e ajudaram a construir nossa comunidade.",
       "member": "Membro desde 2024",
       "routes": "Rotas",
-      "rating": "Avaliação"
+      "rating": "Avaliação",
+      "memberSince": "Membro desde {year}",
+      "km": "Quilômetros",
+      "empty": "Ainda não há contribuidores. Seja o primeiro a enviar uma rota!"
     },
     "cta": {
       "title": "Torne-se um Contribuidor",

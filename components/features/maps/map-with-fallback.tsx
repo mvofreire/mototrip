@@ -55,13 +55,17 @@ interface MapWithFallbackProps {
 }
 
 /**
- * Renders Google Maps and swaps to an OpenStreetMap map when there is no API
- * key or Google reports an auth/billing error.
+ * Renders OpenStreetMap by default. When Google is enabled it renders Google
+ * Maps and swaps to OpenStreetMap if Google reports an auth/billing error.
  */
 export function MapWithFallback({ children, fallback }: MapWithFallbackProps) {
-  const hasKey = Boolean(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
+  // OpenStreetMap is the default (free, no billing). Set
+  // NEXT_PUBLIC_MAP_PROVIDER=google (with a billed API key) to use Google.
+  const useGoogle =
+    process.env.NEXT_PUBLIC_MAP_PROVIDER === "google" &&
+    Boolean(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
   const [failed, setFailed] = useState(
-    () => !hasKey || (typeof window !== "undefined" && !!window.__gmFailed),
+    () => !useGoogle || (typeof window !== "undefined" && !!window.__gmFailed),
   );
   const containerRef = useRef<HTMLDivElement>(null);
 

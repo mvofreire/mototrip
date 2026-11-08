@@ -53,7 +53,7 @@ export function ProfileForm() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-4">
-            <div className="h-20 w-20 rounded-full bg-gradient-sunshine flex items-center justify-center">
+            <div className="h-20 w-20 rounded-full bg-gradient-brand flex items-center justify-center">
               <User className="h-10 w-10 text-white" />
             </div>
             <div className="flex-1">

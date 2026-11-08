@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Barlow_Condensed, Inter } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -8,11 +8,19 @@ import { locales } from '@/i18n'
 import { Providers } from './providers'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
+import { Analytics } from '@vercel/analytics/react'
 
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
+})
+
+const display = Barlow_Condensed({
+  subsets: ['latin'],
+  weight: ['600', '700', '800'],
+  display: 'swap',
+  variable: '--font-display',
 })
 
 function getBaseUrl(): string {
@@ -52,14 +60,14 @@ export async function generateMetadata({
     creator: 'MotoTrip',
     openGraph: {
       type: 'website',
-      locale: locale === 'pt' ? 'pt_BR' : locale === 'es' ? 'es_ES' : 'en_US',
-      url: 'https://mototrip.com',
+      locale: ({ pt: 'pt_BR', es: 'es_ES', fr: 'fr_FR', de: 'de_DE' } as Record<string, string>)[locale] ?? 'en_US',
+      url: `/${locale}`,
       siteName: 'MotoTrip',
       title: 'MotoTrip - ' + t('title') + ' ' + t('titleHighlight'),
       description: t('subtitle'),
       images: [
         {
-          url: '/og-image.jpg',
+          url: '/og-image.png',
           width: 1200,
           height: 630,
           alt: 'MotoTrip',
@@ -70,7 +78,11 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: 'MotoTrip - ' + t('title') + ' ' + t('titleHighlight'),
       description: t('subtitle'),
-      images: ['/og-image.jpg'],
+      images: ['/og-image.png'],
+    },
+    alternates: {
+      canonical: `/${locale}`,
+      languages: Object.fromEntries(locales.map((l) => [l, `/${l}`])),
     },
     robots: {
       index: true,
@@ -98,7 +110,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${display.variable}`}>
         <NextIntlClientProvider messages={messages}>
           <Providers>
             <div className="flex min-h-screen flex-col">
@@ -108,6 +120,7 @@ export default async function LocaleLayout({
             </div>
           </Providers>
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   )

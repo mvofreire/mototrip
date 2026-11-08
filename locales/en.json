@@ -28,7 +28,9 @@
     "stats": {
       "routes": "Routes",
       "riders": "Riders",
-      "reviews": "Reviews"
+      "reviews": "Reviews",
+      "km": "Kilometres",
+      "regions": "Regions"
     },
     "clarification": {
       "title": "We're Not a GPS",
@@ -105,7 +107,26 @@
     "downloadGPX": "Download GPX",
     "openInGoogleMaps": "Open in Google Maps",
     "savedRoute": "Saved",
-    "loginToSave": "Log in to save routes"
+    "loginToSave": "Log in to save routes",
+    "unknown": "Unknown",
+    "notAvailable": "N/A",
+    "start": "Start",
+    "end": "End",
+    "noCoordinates": "This route has no coordinates",
+    "gpxFailed": "Failed to generate the GPX file",
+    "share": "Share",
+    "linkCopied": "Link copied!",
+    "comments": "Comments",
+    "notFoundTitle": "Route Not Found",
+    "notFoundDescription": "This route does not exist or has been removed.",
+    "metaDescription": "{category} motorcycle route in {region}",
+    "photos": "Photos",
+    "addPhoto": "Add photo",
+    "uploading": "Uploading...",
+    "uploadFailed": "Photo upload failed",
+    "invalidFile": "Upload a JPG, PNG or WebP image up to 5 MB",
+    "removePhoto": "Remove photo",
+    "coverHint": "The first photo is used as the route cover"
   },
   "stopTypes": {
     "viewpoint": "Viewpoint",
@@ -511,7 +532,10 @@
       "description": "These riders have shared the most amazing routes and helped build our community.",
       "member": "Member since 2024",
       "routes": "Routes",
-      "rating": "Rating"
+      "rating": "Rating",
+      "memberSince": "Member since {year}",
+      "km": "Kilometres",
+      "empty": "No contributors yet. Be the first to submit a route!"
     },
     "cta": {
       "title": "Become a Contributor",

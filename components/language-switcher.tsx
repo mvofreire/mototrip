@@ -35,7 +35,7 @@ export function LanguageSwitcher() {
               key={loc}
               onClick={() => switchLanguage(loc)}
               className={`w-full text-left px-3 py-2 text-sm rounded-md hover:bg-sand-100 transition-colors ${
-                locale === loc ? 'bg-sand-50 text-sunshine-600 font-medium' : 'text-sand-700'
+                locale === loc ? 'bg-sand-50 text-brand-600 font-medium' : 'text-sand-700'
               }`}
             >
               {localeNames[loc]}

@@ -120,7 +120,7 @@ export function RouteMap({ route }: RouteMapProps) {
       markers.push({
         id: "end",
         position: coordinates[coordinates.length - 1],
-        title: "End",
+        title: t("end"),
         html: "🏁",
         color: "#ef4444",
         size: 32,
@@ -130,9 +130,9 @@ export function RouteMap({ route }: RouteMapProps) {
       markers.push({
         id: "start",
         position: coordinates[0],
-        title: "Start",
+        title: t("start"),
         html: "▶",
-        color: "#f59e0b",
+        color: "#16a34a",
         size: 32,
       });
     }
@@ -142,7 +142,7 @@ export function RouteMap({ route }: RouteMapProps) {
   // Function to generate and download GPX from route coordinates
   const handleDownloadGPX = () => {
     if (coordinates.length === 0) {
-      alert("No route coordinates available");
+      alert(t("noCoordinates"));
       return;
     }
 
@@ -166,7 +166,7 @@ export function RouteMap({ route }: RouteMapProps) {
       document.body.removeChild(a);
     } catch (error) {
       console.error("Error generating GPX:", error);
-      alert("Failed to generate GPX file");
+      alert(t("gpxFailed"));
     }
   };
 
@@ -204,7 +204,7 @@ export function RouteMap({ route }: RouteMapProps) {
   // Function to open in Google Maps
   const handleOpenInGoogleMaps = () => {
     if (coordinates.length === 0) {
-      alert("No route coordinates available");
+      alert(t("noCoordinates"));
       return;
     }
 
@@ -263,7 +263,7 @@ export function RouteMap({ route }: RouteMapProps) {
               {coordinates.length > 1 && (
                 <AdvancedMarker
                   position={coordinates[coordinates.length - 1]}
-                  title="End"
+                  title={t("end")}
                   zIndex={10}
                 >
                   <div
@@ -291,7 +291,7 @@ export function RouteMap({ route }: RouteMapProps) {
               {coordinates.length > 0 && (
                 <AdvancedMarker
                   position={coordinates[0]}
-                  title="Start"
+                  title={t("start")}
                   zIndex={20}
                 >
                   <div className="p-2 bg-primary text-white m-auto rounded-full shadow-lg border-2">
