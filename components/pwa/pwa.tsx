@@ -109,13 +109,24 @@ export function Pwa() {
         <img src="/icon-192.png" alt="" className="h-12 w-12 shrink-0 rounded-lg" />
         <div className="space-y-1">
           <p className="font-semibold">{t('title')}</p>
-          <p className="text-sm text-muted-foreground">
-            {mode === 'ios'
-              ? t.rich('iosHint', {
-                  share: () => <Share className="inline h-4 w-4 align-text-bottom" aria-label="Compartilhar" />,
-                })
-              : t('description')}
-          </p>
+          {mode === 'ios' ? (
+            <ol className="list-decimal space-y-1.5 pl-4 text-sm text-muted-foreground">
+              {(['iosStep1', 'iosStep2'] as const).map((key) => (
+                <li key={key}>
+                  {t.rich(key, {
+                    share: () => (
+                      <span className="mx-0.5 inline-flex h-6 w-6 items-center justify-center rounded-md border bg-muted align-middle text-foreground">
+                        <Share className="h-3.5 w-3.5" aria-hidden="true" />
+                      </span>
+                    ),
+                    b: (chunks) => <strong className="font-semibold text-foreground">{chunks}</strong>,
+                  })}
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="text-sm text-muted-foreground">{t('description')}</p>
+          )}
         </div>
       </div>
       {mode === 'android' && (

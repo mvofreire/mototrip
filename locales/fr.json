@@ -657,6 +657,7 @@
     "description": "Ouvrez les itinéraires depuis votre écran d'accueil, comme une app.",
     "install": "Installer",
     "dismiss": "Plus tard",
-    "iosHint": "Touchez {share}, puis « Sur l'écran d'accueil »."
+    "iosStep1": "Touchez <share></share> <b>Partager</b> dans la barre du navigateur",
+    "iosStep2": "Faites défiler et choisissez <b>Sur l'écran d'accueil</b>"
   }
 }

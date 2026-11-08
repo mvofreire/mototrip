@@ -657,6 +657,7 @@
     "description": "Accede a las rutas desde tu pantalla de inicio, como una app.",
     "install": "Instalar",
     "dismiss": "Ahora no",
-    "iosHint": "Toca {share} y luego \"Añadir a pantalla de inicio\"."
+    "iosStep1": "Toca <share></share> <b>Compartir</b> en la barra del navegador",
+    "iosStep2": "Desplázate y elige <b>Añadir a pantalla de inicio</b>"
   }
 }

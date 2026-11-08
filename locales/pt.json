@@ -657,6 +657,7 @@
     "description": "Acesse as rotas direto da tela inicial, como um app.",
     "install": "Instalar",
     "dismiss": "Agora não",
-    "iosHint": "Toque em {share} e depois em \"Adicionar à Tela de Início\"."
+    "iosStep1": "Toque em <share></share> <b>Compartilhar</b>, na barra do navegador",
+    "iosStep2": "Role e escolha <b>Adicionar à Tela de Início</b>"
   }
 }

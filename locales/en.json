@@ -657,6 +657,7 @@
     "description": "Open routes straight from your home screen, like an app.",
     "install": "Install",
     "dismiss": "Not now",
-    "iosHint": "Tap {share}, then \"Add to Home Screen\"."
+    "iosStep1": "Tap <share></share> <b>Share</b> in the browser bar",
+    "iosStep2": "Scroll and choose <b>Add to Home Screen</b>"
   }
 }

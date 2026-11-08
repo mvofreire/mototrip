@@ -657,6 +657,7 @@
     "description": "Öffne Routen direkt vom Startbildschirm, wie eine App.",
     "install": "Installieren",
     "dismiss": "Nicht jetzt",
-    "iosHint": "Tippe auf {share} und dann auf „Zum Home-Bildschirm“."
+    "iosStep1": "Tippe in der Browserleiste auf <share></share> <b>Teilen</b>",
+    "iosStep2": "Scrolle und wähle <b>Zum Home-Bildschirm</b>"
   }
 }
