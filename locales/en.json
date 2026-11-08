@@ -103,7 +103,9 @@
     "reviewsTitle": "Reviews",
     "stop": "Stop {number}",
     "downloadGPX": "Download GPX",
-    "openInGoogleMaps": "Open in Google Maps"
+    "openInGoogleMaps": "Open in Google Maps",
+    "savedRoute": "Saved",
+    "loginToSave": "Log in to save routes"
   },
   "stopTypes": {
     "viewpoint": "Viewpoint",
@@ -589,5 +591,11 @@
       "loadFailed": "Failed to load comments",
       "loginRequired": "You need to be logged in to comment"
     }
+  },
+  "savedRoutes": {
+    "title": "Saved Routes",
+    "empty": "You haven't saved any routes yet.",
+    "explore": "Explore routes",
+    "error": "Could not load your saved routes."
   }
 }

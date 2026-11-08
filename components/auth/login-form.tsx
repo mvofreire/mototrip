@@ -10,6 +10,18 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 
+/**
+ * Where to go after login: the ?redirect= param when it is an internal path
+ * (prevents open redirects like ?redirect=//evil.com), otherwise home.
+ */
+function getSafeRedirect(locale: string) {
+  const target = new URLSearchParams(window.location.search).get('redirect')
+  if (target && target.startsWith('/') && !target.startsWith('//') && !target.includes('\\')) {
+    return target
+  }
+  return `/${locale}`
+}
+
 interface LoginFormProps {
   locale: string
 }
@@ -29,7 +41,7 @@ export function LoginForm({ locale }: LoginFormProps) {
 
     try {
       await signIn(email, password)
-      router.push(`/${locale}`)
+      router.push(getSafeRedirect(locale))
     } catch (err: any) {
       setError(err.message || 'Failed to sign in')
     } finally {

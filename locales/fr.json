@@ -103,7 +103,9 @@
     "reviewsTitle": "Avis",
     "stop": "Arrêt {number}",
     "downloadGPX": "Télécharger GPX",
-    "openInGoogleMaps": "Ouvrir dans Google Maps"
+    "openInGoogleMaps": "Ouvrir dans Google Maps",
+    "savedRoute": "Itinéraire enregistré",
+    "loginToSave": "Connectez-vous pour enregistrer des itinéraires"
   },
   "stopTypes": {
     "viewpoint": "Point de Vue",
@@ -589,5 +591,11 @@
       "loadFailed": "Échec du chargement des commentaires",
       "loginRequired": "Vous devez être connecté pour commenter"
     }
+  },
+  "savedRoutes": {
+    "title": "Itinéraires enregistrés",
+    "empty": "Vous n'avez encore enregistré aucun itinéraire.",
+    "explore": "Explorer les itinéraires",
+    "error": "Impossible de charger vos itinéraires enregistrés."
   }
 }

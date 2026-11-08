@@ -103,7 +103,9 @@
     "reviewsTitle": "Avaliações",
     "stop": "Parada {number}",
     "downloadGPX": "Baixar GPX",
-    "openInGoogleMaps": "Abrir no Google Maps"
+    "openInGoogleMaps": "Abrir no Google Maps",
+    "savedRoute": "Rota Salva",
+    "loginToSave": "Entre na sua conta para salvar rotas"
   },
   "stopTypes": {
     "viewpoint": "Mirante",
@@ -589,5 +591,11 @@
       "loadFailed": "Falha ao carregar comentários",
       "loginRequired": "Você precisa estar logado para comentar"
     }
+  },
+  "savedRoutes": {
+    "title": "Rotas Salvas",
+    "empty": "Ainda não salvou nenhuma rota.",
+    "explore": "Explorar rotas",
+    "error": "Não foi possível carregar as rotas salvas."
   }
 }

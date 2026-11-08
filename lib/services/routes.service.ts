@@ -127,17 +127,17 @@ export class RoutesService {
   }
 
   /**
-   * Save a route for a user
+   * Save a route for a user (no-op if it is already saved)
    */
   static async saveRoute(routeId: string, userId: string) {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("saved_routes")
-      .insert({ route_id: routeId, user_id: userId } as any)
-      .select()
-      .single();
+      .upsert({ route_id: routeId, user_id: userId } as any, {
+        onConflict: "user_id,route_id",
+        ignoreDuplicates: true,
+      });
 
     if (error) throw error;
-    return data;
   }
 
   /**
@@ -181,25 +181,43 @@ export class RoutesService {
   }
 
   /**
-   * Get user's saved routes
+   * IDs of the routes a user has saved
    */
-  static async getSavedRoutes(userId: string) {
+  static async getSavedRouteIds(userId: string): Promise<string[]> {
+    const { data, error } = await supabase
+      .from("saved_routes")
+      .select("route_id")
+      .eq("user_id", userId);
+
+    if (error) throw error;
+    return ((data as { route_id: string }[]) ?? []).map((r) => r.route_id);
+  }
+
+  /**
+   * Get user's saved routes, most recently saved first
+   */
+  static async getSavedRoutes(userId: string): Promise<RouteWithDetails[]> {
     const { data, error } = await supabase
       .from("saved_routes")
       .select(
         `
-        *,
+        created_at,
         route:routes(
           *,
           stops:route_stops(*),
-          photos:route_photos(*)
+          photos:route_photos(*),
+          ratings:route_ratings(*)
         )
       `,
       )
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
-    return data;
+    // A route can be hidden by RLS (e.g. unpublished) — skip those
+    return ((data as any[]) ?? [])
+      .map((row) => row.route as RouteWithDetails | null)
+      .filter((r): r is RouteWithDetails => r !== null);
   }
 
   static async createRoute(routeData: RouteInsert) {

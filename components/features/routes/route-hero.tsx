@@ -1,7 +1,8 @@
 import { RouteWithDetails } from '@/types'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Bookmark, Share2 } from 'lucide-react'
+import { Share2 } from 'lucide-react'
+import { SaveRouteButton } from '@/components/features/routes/save-route-button'
 import { getDifficultyColor, getCategoryColor } from '@/lib/utils'
 
 interface RouteHeroProps {
@@ -52,10 +53,7 @@ export function RouteHero({ route }: RouteHeroProps) {
           </h1>
 
           <div className="flex flex-wrap items-center gap-2 md:gap-4">
-            <Button className="bg-gradient-sunshine hover:opacity-90 text-sm md:text-base">
-              <Bookmark className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
-              Save Route
-            </Button>
+            <SaveRouteButton routeId={route.id} />
             <Button variant="outline" className="text-sm md:text-base">
               <Share2 className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
               Share

@@ -103,7 +103,9 @@
     "reviewsTitle": "Reseñas",
     "stop": "Parada {number}",
     "downloadGPX": "Descargar GPX",
-    "openInGoogleMaps": "Abrir en Google Maps"
+    "openInGoogleMaps": "Abrir en Google Maps",
+    "savedRoute": "Ruta Guardada",
+    "loginToSave": "Inicia sesión para guardar rutas"
   },
   "stopTypes": {
     "viewpoint": "Mirador",
@@ -589,5 +591,11 @@
       "loadFailed": "Error al cargar comentarios",
       "loginRequired": "Necesitas iniciar sesión para comentar"
     }
+  },
+  "savedRoutes": {
+    "title": "Rutas Guardadas",
+    "empty": "Todavía no has guardado ninguna ruta.",
+    "explore": "Explorar rutas",
+    "error": "No se pudieron cargar tus rutas guardadas."
   }
 }

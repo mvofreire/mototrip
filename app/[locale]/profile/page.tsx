@@ -1,5 +1,6 @@
 import { ProfileForm } from '@/components/profile/profile-form'
 import { ProtectedRoute } from '@/components/auth/protected-route'
+import { SavedRoutes } from '@/components/profile/saved-routes'
 
 export default function ProfilePage() {
   return (
@@ -13,6 +14,9 @@ export default function ProfilePage() {
             </p>
           </div>
           <ProfileForm />
+          <div className="mt-12">
+            <SavedRoutes />
+          </div>
         </div>
       </div>
     </ProtectedRoute>

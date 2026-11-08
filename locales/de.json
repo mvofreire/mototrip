@@ -103,7 +103,9 @@
     "reviewsTitle": "Bewertungen",
     "stop": "Stopp {number}",
     "downloadGPX": "GPX Herunterladen",
-    "openInGoogleMaps": "In Google Maps Öffnen"
+    "openInGoogleMaps": "In Google Maps Öffnen",
+    "savedRoute": "Gespeichert",
+    "loginToSave": "Melde dich an, um Routen zu speichern"
   },
   "stopTypes": {
     "viewpoint": "Aussichtspunkt",
@@ -589,5 +591,11 @@
       "loadFailed": "Kommentare konnten nicht geladen werden",
       "loginRequired": "Sie müssen angemeldet sein, um zu kommentieren"
     }
+  },
+  "savedRoutes": {
+    "title": "Gespeicherte Routen",
+    "empty": "Du hast noch keine Routen gespeichert.",
+    "explore": "Routen entdecken",
+    "error": "Deine gespeicherten Routen konnten nicht geladen werden."
   }
 }
