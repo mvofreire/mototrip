@@ -39,7 +39,7 @@ export function Header() {
             <div className="h-8 w-8 rounded-md bg-gradient-brand flex items-center justify-center">
               <MapPin className="h-5 w-5 text-white" />
             </div>
-            <span className="hidden sm:inline-block">{tCommon('mototrip')}</span>
+            <span className="inline-block">{tCommon('mototrip')}</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
