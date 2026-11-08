@@ -651,5 +651,12 @@
     "empty": "Vous n'avez encore enregistré aucun itinéraire.",
     "explore": "Explorer les itinéraires",
     "error": "Impossible de charger vos itinéraires enregistrés."
+  },
+  "pwa": {
+    "title": "Installer MotoTrip",
+    "description": "Ouvrez les itinéraires depuis votre écran d'accueil, comme une app.",
+    "install": "Installer",
+    "dismiss": "Plus tard",
+    "iosHint": "Touchez {share}, puis « Sur l'écran d'accueil »."
   }
 }

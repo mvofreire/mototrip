@@ -651,5 +651,12 @@
     "empty": "Todavía no has guardado ninguna ruta.",
     "explore": "Explorar rutas",
     "error": "No se pudieron cargar tus rutas guardadas."
+  },
+  "pwa": {
+    "title": "Instala MotoTrip",
+    "description": "Accede a las rutas desde tu pantalla de inicio, como una app.",
+    "install": "Instalar",
+    "dismiss": "Ahora no",
+    "iosHint": "Toca {share} y luego \"Añadir a pantalla de inicio\"."
   }
 }

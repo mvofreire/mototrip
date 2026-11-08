@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Barlow_Condensed, Inter } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
@@ -9,6 +9,7 @@ import { Providers } from './providers'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { Analytics } from '@vercel/analytics/react'
+import { Pwa } from '@/components/pwa/pwa'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -84,11 +85,26 @@ export async function generateMetadata({
       canonical: `/${locale}`,
       languages: Object.fromEntries(locales.map((l) => [l, `/${l}`])),
     },
+    applicationName: 'MotoTrip',
+    appleWebApp: {
+      capable: true,
+      title: 'MotoTrip',
+      statusBarStyle: 'black-translucent',
+    },
+    formatDetection: { telephone: false },
     robots: {
       index: true,
       follow: true,
     },
   }
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#0d0f14' },
+    { media: '(prefers-color-scheme: light)', color: '#f5f6f8' },
+  ],
+  viewportFit: 'cover',
 }
 
 export function generateStaticParams() {
@@ -118,6 +134,7 @@ export default async function LocaleLayout({
               <main className="flex-1">{children}</main>
               <Footer />
             </div>
+            <Pwa />
           </Providers>
         </NextIntlClientProvider>
         <Analytics />

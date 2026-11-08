@@ -651,5 +651,12 @@
     "empty": "Ainda não salvou nenhuma rota.",
     "explore": "Explorar rotas",
     "error": "Não foi possível carregar as rotas salvas."
+  },
+  "pwa": {
+    "title": "Instale o MotoTrip",
+    "description": "Acesse as rotas direto da tela inicial, como um app.",
+    "install": "Instalar",
+    "dismiss": "Agora não",
+    "iosHint": "Toque em {share} e depois em \"Adicionar à Tela de Início\"."
   }
 }

@@ -651,5 +651,12 @@
     "empty": "You haven't saved any routes yet.",
     "explore": "Explore routes",
     "error": "Could not load your saved routes."
+  },
+  "pwa": {
+    "title": "Install MotoTrip",
+    "description": "Open routes straight from your home screen, like an app.",
+    "install": "Install",
+    "dismiss": "Not now",
+    "iosHint": "Tap {share}, then \"Add to Home Screen\"."
   }
 }

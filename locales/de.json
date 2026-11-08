@@ -651,5 +651,12 @@
     "empty": "Du hast noch keine Routen gespeichert.",
     "explore": "Routen entdecken",
     "error": "Deine gespeicherten Routen konnten nicht geladen werden."
+  },
+  "pwa": {
+    "title": "MotoTrip installieren",
+    "description": "Öffne Routen direkt vom Startbildschirm, wie eine App.",
+    "install": "Installieren",
+    "dismiss": "Nicht jetzt",
+    "iosHint": "Tippe auf {share} und dann auf „Zum Home-Bildschirm“."
   }
 }
