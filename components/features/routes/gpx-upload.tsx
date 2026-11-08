@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Upload, X, FileText, MapPin, TrendingUp, Mountain } from 'lucide-react'
 import { APIProvider, Map, useMap } from '@vis.gl/react-google-maps'
+import { MapWithFallback } from '@/components/features/maps/map-with-fallback'
 import { useTranslations } from 'next-intl'
 
 interface GPXUploadProps {
@@ -174,6 +175,17 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
 
         {/* Map Preview */}
         <div className="h-[400px] rounded-lg overflow-hidden border">
+          <MapWithFallback
+            fallback={{
+              center: {
+                lat: (gpxData.bounds.north + gpxData.bounds.south) / 2,
+                lng: (gpxData.bounds.east + gpxData.bounds.west) / 2,
+              },
+              zoom: 10,
+              polyline: gpxData.points,
+              polylineColor: '#FF0000',
+            }}
+          >
           <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}>
             <Map
               defaultCenter={{
@@ -190,6 +202,7 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
               <RoutePolyline points={gpxData.points} />
             </Map>
           </APIProvider>
+          </MapWithFallback>
         </div>
       </Card>
     )

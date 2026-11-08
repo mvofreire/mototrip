@@ -14,6 +14,8 @@ import { useMemo, useEffect } from "react";
 import { Download, MapIcon, Navigation, Flag } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { escapeXml } from "@/lib/utils";
+import { MapWithFallback } from "@/components/features/maps/map-with-fallback";
+import type { OsmMarker } from "@/components/features/maps/osm-map";
 
 
 
@@ -103,6 +105,39 @@ export function RouteMap({ route }: RouteMapProps) {
 
     return { lat: avgLat, lng: avgLng };
   }, [coordinates]);
+
+  // Markers for the OpenStreetMap fallback
+  const osmMarkers = useMemo<OsmMarker[]>(() => {
+    const markers: OsmMarker[] = (route.stops ?? []).map((stop, index) => ({
+      id: `stop-${stop.id}`,
+      position: { lat: Number(stop.latitude), lng: Number(stop.longitude) },
+      title: stop.name,
+      html: String(index + 1),
+      color: "#ea4335",
+      size: 24,
+    }));
+    if (coordinates.length > 1) {
+      markers.push({
+        id: "end",
+        position: coordinates[coordinates.length - 1],
+        title: "End",
+        html: "🏁",
+        color: "#ef4444",
+        size: 32,
+      });
+    }
+    if (coordinates.length > 0) {
+      markers.push({
+        id: "start",
+        position: coordinates[0],
+        title: "Start",
+        html: "▶",
+        color: "#f59e0b",
+        size: 32,
+      });
+    }
+    return markers;
+  }, [route.stops, coordinates]);
 
   // Function to generate and download GPX from route coordinates
   const handleDownloadGPX = () => {
@@ -196,43 +231,19 @@ export function RouteMap({ route }: RouteMapProps) {
     window.open(url, "_blank");
   };
 
-  if (!apiKey) {
-    return (
-      <Card className="overflow-hidden">
-        <div className="aspect-video bg-destructive/10 flex items-center justify-center">
-          <div className="text-center space-y-3 p-8 max-w-md">
-            <div className="text-destructive text-4xl mb-2">⚠️</div>
-            <p className="text-sm font-semibold text-destructive">
-              Google Maps API Key não configurada
-            </p>
-            <div className="text-xs text-muted-foreground space-y-2">
-              <p>Adicione a variável de ambiente:</p>
-              <code className="block bg-muted p-2 rounded text-xs">
-                NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=sua-chave-aqui
-              </code>
-              <p className="pt-2">
-                no arquivo <strong>.env.local</strong>
-              </p>
-            </div>
-          </div>
-        </div>
-      </Card>
-    );
-  }
-
-  // Show API key info (only first/last chars for security)
-  const keyPreview = `${apiKey.slice(0, 8)}...${apiKey.slice(-4)}`;
-
   return (
     <div className="space-y-4">
       <Card className="overflow-hidden">
         <div className="aspect-video relative">
-          {/* Debug info overlay */}
-          <div className="absolute top-2 right-2 z-10 bg-black/70 text-white text-xs p-2 rounded">
-            Key: {keyPreview}
-          </div>
-
-          <APIProvider apiKey={apiKey}>
+          <MapWithFallback
+            fallback={{
+              center,
+              zoom: 10,
+              polyline: coordinates,
+              markers: osmMarkers,
+            }}
+          >
+          <APIProvider apiKey={apiKey ?? ""}>
             <Map
               defaultCenter={center}
               defaultZoom={10}
@@ -248,7 +259,6 @@ export function RouteMap({ route }: RouteMapProps) {
               className="w-full h-full"
             >
               <RoutePolyline coordinates={coordinates} />
-              as
               {/* Add end marker */}
               {coordinates.length > 1 && (
                 <AdvancedMarker
@@ -308,6 +318,7 @@ export function RouteMap({ route }: RouteMapProps) {
               ))}
             </Map>
           </APIProvider>
+          </MapWithFallback>
         </div>
       </Card>
 

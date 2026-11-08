@@ -6,6 +6,7 @@ import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps'
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
+import { MapWithFallback } from '@/components/features/maps/map-with-fallback'
 
 interface RoutesOverviewMapProps {
   routes: RouteWithDetails[]
@@ -13,7 +14,7 @@ interface RoutesOverviewMapProps {
 }
 
 export function RoutesOverviewMap({ routes, locale }: RoutesOverviewMapProps) {
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? ''
   const [selectedRoute, setSelectedRoute] = useState<string | null>(null)
 
   // Calculate center point from all routes
@@ -58,24 +59,23 @@ export function RoutesOverviewMap({ routes, locale }: RoutesOverviewMapProps) {
       })
   }, [routes])
 
-  if (!apiKey) {
-    return (
-      <Card className="overflow-hidden">
-        <div className="h-96 bg-sand-100 flex items-center justify-center">
-          <div className="text-center space-y-2 p-8">
-            <p className="text-sm font-medium text-destructive">Google Maps API Key Missing</p>
-            <p className="text-xs text-muted-foreground max-w-sm">
-              Add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to .env.local
-            </p>
-          </div>
-        </div>
-      </Card>
-    )
-  }
-
   return (
     <Card className="overflow-hidden">
       <div className="h-96">
+        <MapWithFallback
+          fallback={{
+            center,
+            zoom: 6,
+            scrollWheelZoom: true,
+            markers: routeMarkers.map((m) => ({
+              id: m.id,
+              position: m.position,
+              title: m.title,
+              html: '🏍️',
+              onClick: () => setSelectedRoute(m.id),
+            })),
+          }}
+        >
         <APIProvider apiKey={apiKey}>
           <Map
             defaultCenter={center}
@@ -117,6 +117,7 @@ export function RoutesOverviewMap({ routes, locale }: RoutesOverviewMapProps) {
             ))}
           </Map>
         </APIProvider>
+        </MapWithFallback>
       </div>
 
       {/* Info panel when route is selected */}
