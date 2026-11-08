@@ -1,3 +1,4 @@
+import type { User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase/client'
 import type { AuthUser, Profile } from '@/types/auth.types'
 import { authRedirectUrl } from '@/lib/auth/redirects'
@@ -41,12 +42,14 @@ export const authService = {
     if (error) throw error
   },
 
-  // Get current user
+  // Get current user (validates the session with the auth server)
   async getCurrentUser(): Promise<AuthUser | null> {
     const { data: { user } } = await supabase.auth.getUser()
-    
-    if (!user) return null
+    return user ? this.toAuthUser(user) : null
+  },
 
+  // Attach the profile row to an auth user
+  async toAuthUser(user: User): Promise<AuthUser> {
     const { data: profile } = await supabase
       .from('profiles')
       .select(PROFILE_COLUMNS)

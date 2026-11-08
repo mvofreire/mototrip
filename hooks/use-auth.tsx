@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { authService } from '@/lib/auth/auth.service'
 import type { AuthUser } from '@/types/auth.types'
 import { supabase } from '@/lib/supabase/client'
+import type { User } from '@supabase/supabase-js'
 
 interface AuthContextType {
   user: AuthUser | null
@@ -22,24 +23,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check active session
-    authService.getCurrentUser().then((user) => {
-      setUser(user)
-      setLoading(false)
-    })
+    let active = true
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
-        const user = await authService.getCurrentUser()
-        setUser(user)
-      } else {
-        setUser(null)
+    const load = async (authUser: User | null) => {
+      try {
+        const next = authUser ? await authService.toAuthUser(authUser) : null
+        if (active) setUser(next)
+      } catch (e) {
+        console.error('Failed to load user', e)
+        if (active) setUser(null)
+      } finally {
+        if (active) setLoading(false)
       }
-      setLoading(false)
+    }
+
+    // The callback runs while supabase-js holds its auth lock: awaiting any
+    // supabase call inside it deadlocks every later request (endless spinners).
+    // Keep it synchronous and do the async work after the lock is released.
+    // INITIAL_SESSION covers the first load, so no separate getUser() is needed.
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setTimeout(() => load(session?.user ?? null), 0)
     })
 
     return () => {
+      active = false
       subscription.unsubscribe()
     }
   }, [])
