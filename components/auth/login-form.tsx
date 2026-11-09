@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,9 @@ import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { safeRedirectPath } from '@/lib/auth/redirects'
 import { GoogleSignInButton } from '@/components/auth/google-sign-in-button'
+import { AccountBlockedNotice } from '@/components/auth/account-blocked-notice'
+import { isBannedError, takeAccountBlock } from '@/lib/auth/account-block'
+import type { AccountBlock } from '@/types/auth.types'
 
 /** Where to go after login: the ?redirect= param when it is an internal path. */
 function getSafeRedirect(locale: string) {
@@ -26,19 +29,29 @@ export function LoginForm({ locale }: LoginFormProps) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  // Set when a suspended/banned user was signed out or Supabase refused the login
+  const [block, setBlock] = useState<Partial<AccountBlock> | null>(null)
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('blocked')) {
+      setBlock(takeAccountBlock() ?? {})
+    }
+  }, [])
   const { signIn } = useAuth()
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setBlock(null)
     setLoading(true)
 
     try {
       await signIn(email, password)
       router.push(getSafeRedirect(locale))
     } catch (err: any) {
-      setError(err.message || 'Failed to sign in')
+      if (isBannedError(err)) setBlock({})
+      else setError(err.message || 'Failed to sign in')
     } finally {
       setLoading(false)
     }
@@ -46,13 +59,15 @@ export function LoginForm({ locale }: LoginFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {block && <AccountBlockedNotice block={block} />}
+
       {error && (
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
-      <GoogleSignInButton onError={setError} />
+      <GoogleSignInButton onError={(msg) => (isBannedError(msg) ? setBlock({}) : setError(msg))} />
 
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>

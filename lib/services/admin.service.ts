@@ -12,15 +12,39 @@ export interface AdminRouteWithUser extends Route {
   user_name?: string
 }
 
+export type AccountStatus = 'active' | 'suspended' | 'banned'
+
 export interface AdminUser {
   id: string
   email: string
   full_name: string | null
+  avatar_url: string | null
   role: UserRole
+  /** Auth provider used to sign up: 'email' | 'google' */
+  provider: string
   created_at: string
   email_confirmed_at: string | null
   confirmation_sent_at: string | null
   last_sign_in_at: string | null
+  /** Effective status (an expired suspension is 'active') */
+  account_status: AccountStatus
+  suspended_until: string | null
+  moderation_reason: string | null
+  moderated_at: string | null
+  /** Banned user's routes, comments, photos and ratings are hidden from the public */
+  content_hidden: boolean
+  routes_count: number
+  comments_count: number
+}
+
+export interface ModerationLogEntry {
+  id: number
+  action: 'suspend' | 'ban' | 'reactivate' | 'role_change' | 'hide_content' | 'show_content'
+  reason: string | null
+  suspended_until: string | null
+  details: { from?: string; to?: string; content_hidden?: boolean } | null
+  performed_by_name: string | null
+  created_at: string
 }
 
 export class AdminService {
@@ -46,6 +70,43 @@ export class AdminService {
       new_role: role,
     })
     if (error) throw new Error(error.message)
+  }
+
+  /**
+   * Suspend (until a date), ban, or reactivate a user (admin only). Blocks
+   * sign-in, revokes sessions and blocks writes (see migration 016).
+   */
+  static async moderateUser(
+    userId: string,
+    status: AccountStatus,
+    options: { until?: Date; reason?: string; hideContent?: boolean } = {},
+  ): Promise<void> {
+    const { error } = await (supabase as any).rpc('admin_moderate_user', {
+      target_user: userId,
+      new_status: status,
+      until: options.until?.toISOString() ?? null,
+      reason: options.reason ?? null,
+      hide_content: options.hideContent ?? false,
+    })
+    if (error) throw new Error(error.message)
+  }
+
+  /** Hide or show everything a banned user published (admin only) */
+  static async setContentHidden(userId: string, hidden: boolean): Promise<void> {
+    const { error } = await (supabase as any).rpc('admin_set_content_hidden', {
+      target_user: userId,
+      hidden,
+    })
+    if (error) throw new Error(error.message)
+  }
+
+  /** Moderation and role-change history of a user, newest first (admin only) */
+  static async getModerationLog(userId: string): Promise<ModerationLogEntry[]> {
+    const { data, error } = await (supabase as any).rpc('admin_user_moderation_log', {
+      target_user: userId,
+    })
+    if (error) throw new Error(error.message)
+    return ((data as ModerationLogEntry[]) ?? [])
   }
 
   /**

@@ -15,3 +15,10 @@ export interface AuthUser {
   email: string
   profile: Profile | null
 }
+
+/** Why a signed-in user was blocked (see migration 016) */
+export interface AccountBlock {
+  status: 'suspended' | 'banned'
+  until: string | null
+  reason: string | null
+}

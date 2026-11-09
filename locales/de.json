@@ -506,7 +506,7 @@
       "users": "Benutzer"
     },
     "users": {
-      "description": "Benutzer verwalten und Bestätigungslinks erneut senden",
+      "description": "Rollen, Status und Moderation der Nutzer verwalten",
       "searchPlaceholder": "Nach Name oder E-Mail suchen...",
       "onlyPending": "Ausstehend ({count})",
       "total": "{count} Benutzer · {pending} unbestätigt",
@@ -516,7 +516,8 @@
         "status": "Status",
         "created": "Registriert",
         "lastSignIn": "Letzte Anmeldung",
-        "actions": "Aktionen"
+        "actions": "Aktionen",
+        "activity": "Aktivität"
       },
       "roles": {
         "admin": "Admin",
@@ -531,7 +532,85 @@
       "resent": "Link gesendet",
       "resendError": "Link konnte nicht gesendet werden",
       "empty": "Keine Benutzer gefunden",
-      "roleError": "Rolle konnte nicht geändert werden"
+      "roleError": "Rolle konnte nicht geändert werden",
+      "showing": "{shown} von {total} Nutzern",
+      "you": "Du",
+      "endsIn": "Endet {when}",
+      "routesCount": "{count, plural, one {# Route} other {# Routen}}",
+      "commentsCount": "{count, plural, one {# Kommentar} other {# Kommentare}}",
+      "stats": {
+        "all": "Alle",
+        "active": "Aktiv",
+        "unconfirmed": "Unbestätigt",
+        "suspended": "Gesperrt",
+        "banned": "Verbannt"
+      },
+      "filters": {
+        "allStatuses": "Alle Status",
+        "allRoles": "Alle Rollen"
+      },
+      "status": {
+        "active": "Aktiv",
+        "suspended": "Gesperrt",
+        "banned": "Verbannt"
+      },
+      "actions": {
+        "suspend": "Sperren",
+        "changeSuspension": "Sperre ändern",
+        "ban": "Verbannen",
+        "reactivate": "Konto reaktivieren",
+        "copyEmail": "E-Mail kopieren",
+        "history": "Verlauf anzeigen",
+        "hideContent": "Inhalte ausblenden",
+        "showContent": "Inhalte einblenden"
+      },
+      "moderation": {
+        "suspendTitle": "{name} sperren",
+        "banTitle": "{name} verbannen",
+        "suspendDescription": "Der Nutzer wird abgemeldet und kann sich bis zum Ende der Sperre weder anmelden noch etwas veröffentlichen. Das Konto wird danach automatisch wieder freigegeben.",
+        "banDescription": "Der Nutzer wird abgemeldet und kann sich nicht mehr anmelden, bis ein Admin das Konto reaktiviert.",
+        "banWarning": "Verbannung nur bei schweren oder wiederholten Verstößen.",
+        "duration": "Dauer",
+        "days": "{count, plural, one {# Tag} other {# Tage}}",
+        "custom": "Benutzerdefiniert",
+        "until": "Gesperrt bis {when}",
+        "untilInvalid": "Wähle ein Datum in der Zukunft",
+        "reason": "Grund",
+        "reasonPlaceholder": "z. B. Spam in Kommentaren, gefälschte Routen...",
+        "reasonHint": "Der Nutzer sieht diesen Grund beim Anmeldeversuch.",
+        "cancel": "Abbrechen",
+        "error": "Aktion konnte nicht ausgeführt werden",
+        "hideContent": "Alles ausblenden, was der Nutzer veröffentlicht hat",
+        "hideContentHint": "{routes, plural, one {# Route} other {# Routen}} und {comments, plural, one {# Kommentar} other {# Kommentare}} sowie Fotos und Bewertungen verschwinden von der Seite. Nichts wird gelöscht: Eine Reaktivierung stellt alles wieder her."
+      },
+      "reactivateDialog": {
+        "title": "{name} reaktivieren?",
+        "description": "Der Nutzer kann sich sofort wieder anmelden und veröffentlichen."
+      },
+      "notice": {
+        "suspended": "{name} wurde gesperrt",
+        "banned": "{name} wurde verbannt",
+        "reactivated": "{name} wurde reaktiviert",
+        "role": "{name} ist jetzt {role}",
+        "resent": "Bestätigungslink erneut an {email} gesendet",
+        "copied": "E-Mail kopiert",
+        "contentHidden": "Inhalte von {name} ausgeblendet",
+        "contentShown": "Inhalte von {name} wieder sichtbar"
+      },
+      "history": {
+        "title": "Moderationsverlauf",
+        "empty": "Keine Aktionen erfasst",
+        "suspend": "Gesperrt",
+        "ban": "Verbannt",
+        "reactivate": "Reaktiviert",
+        "role_change": "Rolle geändert: {from} → {to}",
+        "until": "Bis {when}",
+        "by": "von {name}",
+        "hide_content": "Inhalte ausgeblendet",
+        "show_content": "Inhalte wieder sichtbar",
+        "withHiddenContent": "Mit ausgeblendeten Inhalten"
+      },
+      "contentHidden": "Inhalte ausgeblendet"
     },
     "review": {
       "approve": "Freigeben",
@@ -756,5 +835,13 @@
     "signingIn": "Anmeldung läuft...",
     "callbackFailed": "Die Anmeldung konnte nicht abgeschlossen werden. Bitte versuche es erneut.",
     "backToLogin": "Zurück zur Anmeldung"
+  },
+  "accountBlocked": {
+    "suspendedTitle": "Dein Konto ist gesperrt",
+    "bannedTitle": "Dein Konto wurde verbannt",
+    "genericTitle": "Dein Konto ist blockiert",
+    "suspendedUntil": "Die Sperre endet am {until}.",
+    "reason": "Grund: {reason}",
+    "contact": "Wenn du denkst, dass das ein Fehler ist, kontaktiere das MotoTrip-Team."
   }
 }

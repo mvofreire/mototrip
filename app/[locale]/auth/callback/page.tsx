@@ -9,6 +9,8 @@ import { useAuth } from '@/hooks/use-auth'
 import { safeRedirectPath } from '@/lib/auth/redirects'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Card, CardContent } from '@/components/ui/card'
+import { AccountBlockedNotice } from '@/components/auth/account-blocked-notice'
+import { isBannedError } from '@/lib/auth/account-block'
 
 /**
  * Landing page after Google sign-in. supabase-js reads the session from the
@@ -52,9 +54,13 @@ export default function AuthCallbackPage({ params }: { params: { locale: string 
         <CardContent className="pt-6 space-y-4 text-center">
           {error ? (
             <>
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
+              {isBannedError(error) ? (
+                <AccountBlockedNotice block={{}} />
+              ) : (
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
               <Link href={`/${params.locale}/auth/login`} className="text-sm text-primary hover:underline">
                 {t('backToLogin')}
               </Link>
