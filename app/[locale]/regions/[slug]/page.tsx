@@ -111,7 +111,7 @@ export default async function RegionPage({ params }: Props) {
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 md:py-12">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
 
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-1 text-sm text-muted-foreground">

@@ -2,6 +2,7 @@ import { permanentRedirect } from 'next/navigation'
 import { RoutesService } from '@/lib/services/routes.service'
 import { locales } from '@/i18n'
 import { isUuid, routePath } from '@/lib/route-url'
+import { routeStructuredData } from '@/lib/route-structured-data'
 import { RouteDetail } from '@/components/features/routes/route-detail'
 import { PrivateRouteDetail } from '@/components/features/routes/private-route-detail'
 import { Metadata } from 'next'
@@ -72,5 +73,22 @@ export default async function RoutePage({ params }: RoutePageProps) {
     permanentRedirect(routePath(params.locale, route))
   }
 
-  return <RouteDetail route={route} locale={params.locale} />
+  const t = await getTranslations({ locale: params.locale })
+  const jsonLd = routeStructuredData(route, params.locale, {
+    destinations: t('regions.allDestinations'),
+    distance: t('route.distance'),
+    duration: t('route.duration'),
+    elevation: t('route.elevation'),
+  })
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        // Escape "<" so route text can't close the script tag
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+      />
+      <RouteDetail route={route} locale={params.locale} />
+    </>
+  )
 }
