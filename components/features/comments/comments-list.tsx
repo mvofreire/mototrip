@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { MessageSquare } from 'lucide-react'
@@ -26,6 +27,7 @@ interface CommentsListProps {
 export function CommentsList({ routeId, locale, routeAuthorId, hideForm = false }: CommentsListProps) {
   const t = useTranslations('comments')
   const { user } = useAuth()
+  const pathname = usePathname()
   const canModerate = isStaff(user) || (!!user && user.id === routeAuthorId)
   
   const [comments, setComments] = useState<RouteCommentWithUser[]>([])
@@ -148,7 +150,7 @@ export function CommentsList({ routeId, locale, routeAuthorId, hideForm = false 
       ) : (
         <Card className="p-4 text-center">
           <Link
-            href={`/${locale}/auth/login?redirect=${encodeURIComponent(`/${locale}/routes/${routeId}`)}`}
+            href={`/${locale}/auth/login?redirect=${encodeURIComponent(pathname || `/${locale}/routes/${routeId}`)}`}
             className="text-muted-foreground hover:text-primary hover:underline"
           >
             {t('loginPrompt')}

@@ -37,6 +37,7 @@ export type Database = {
           id: string
           user_id: string
           title: string
+          slug: string
           description: string | null
           difficulty: 'easy' | 'moderate' | 'challenging' | 'expert'
           distance_km: number
@@ -64,6 +65,7 @@ export type Database = {
           id?: string
           user_id: string
           title: string
+          slug?: string
           description?: string | null
           difficulty: 'easy' | 'moderate' | 'challenging' | 'expert'
           distance_km: number
@@ -91,6 +93,7 @@ export type Database = {
           id?: string
           user_id?: string
           title?: string
+          slug?: string
           description?: string | null
           difficulty?: 'easy' | 'moderate' | 'challenging' | 'expert'
           distance_km?: number

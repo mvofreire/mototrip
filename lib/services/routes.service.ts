@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase/client";
+import { isUuid } from "@/lib/route-url";
 import {
   RouteWithDetails,
   RouteFilters,
@@ -85,9 +86,22 @@ export class RoutesService {
   }
 
   /**
+   * Get a single route by its slug or (legacy URLs) its id
+   */
+  static async getRouteByIdOrSlug(idOrSlug: string) {
+    return isUuid(idOrSlug)
+      ? RoutesService.getRouteById(idOrSlug)
+      : RoutesService.getRouteBy("slug", idOrSlug);
+  }
+
+  /**
    * Get a single route by ID
    */
   static async getRouteById(id: string) {
+    return RoutesService.getRouteBy("id", id);
+  }
+
+  private static async getRouteBy(column: "id" | "slug", value: string) {
     const { data, error } = await supabase
       .from("routes")
       .select(
@@ -98,7 +112,7 @@ export class RoutesService {
         ratings:route_ratings(*)
       `,
       )
-      .eq("id", id)
+      .eq(column, value)
       .single();
 
     if (error) throw error;

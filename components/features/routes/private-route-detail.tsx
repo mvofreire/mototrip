@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/use-auth'
 import { RoutesService } from '@/lib/services/routes.service'
 import type { RouteWithDetails } from '@/types'
 import { RouteDetail } from './route-detail'
+import { routePath } from '@/lib/route-url'
 
 /**
  * Routes that aren't public (pending/rejected) are invisible to the server
@@ -26,11 +27,17 @@ export function PrivateRouteDetail({ id, locale }: { id: string; locale: string 
       setDone(true)
       return
     }
-    RoutesService.getRouteById(id)
-      .then(setRoute)
+    RoutesService.getRouteByIdOrSlug(id)
+      .then((r) => {
+        setRoute(r)
+        // Show the readable URL for old /routes/<uuid> links
+        if (r.slug && window.location.pathname.endsWith(`/routes/${id}`)) {
+          window.history.replaceState(null, '', routePath(locale, r))
+        }
+      })
       .catch(() => setRoute(null))
       .finally(() => setDone(true))
-  }, [id, user, loading])
+  }, [id, locale, user, loading])
 
   if (!done) {
     return (

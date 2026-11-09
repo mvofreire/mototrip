@@ -30,6 +30,7 @@ import { de, enUS, es, fr, ptBR } from 'date-fns/locale'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RouteStatusBadge } from '@/components/features/routes/route-status-badge'
 import { getCategoryColor, getDifficultyColor } from '@/lib/utils'
+import { routePath } from '@/lib/route-url'
 
 const dateLocales = { pt: ptBR, en: enUS, es, fr, de } as const
 
@@ -151,7 +152,7 @@ export function AdminRoutesTable({
                   )}
                   <TableCell className="max-w-[260px]">
                     <Link
-                      href={`/${locale}/routes/${route.id}`}
+                      href={routePath(locale, route)}
                       target="_blank"
                       className="inline-flex items-center gap-1 font-medium hover:underline"
                     >

@@ -3,6 +3,7 @@ import { getSiteUrl } from '@/lib/site-url'
 import { locales } from '@/i18n'
 import { supabase } from '@/lib/supabase/client'
 import { REGIONS } from '@/lib/regions'
+import { routePath } from '@/lib/route-url'
 
 const BASE_URL = getSiteUrl()
 
@@ -25,19 +26,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const { data } = await supabase
     .from('routes')
-    .select('id, updated_at')
+    .select('id, slug, updated_at')
     .eq('published', true)
 
-  const routes: MetadataRoute.Sitemap = ((data ?? []) as { id: string; updated_at: string | null }[]).flatMap(
+  const routes: MetadataRoute.Sitemap = ((data ?? []) as { id: string; slug: string | null; updated_at: string | null }[]).flatMap(
     (route) =>
       locales.map((locale) => ({
-        url: `${BASE_URL}/${locale}/routes/${route.id}`,
+        url: `${BASE_URL}${routePath(locale, route)}`,
         lastModified: route.updated_at ? new Date(route.updated_at) : undefined,
         changeFrequency: 'weekly' as const,
         priority: 0.8,
         alternates: {
           languages: Object.fromEntries(
-            locales.map((l) => [l, `${BASE_URL}/${l}/routes/${route.id}`]),
+            locales.map((l) => [l, `${BASE_URL}${routePath(l, route)}`]),
           ),
         },
       })),

@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CommentsCount } from "@/components/features/comments";
+import { routePath } from "@/lib/route-url";
 import { RouteThumbnail } from "@/components/features/routes/route-thumbnail";
 import {
   formatDistance,
@@ -58,7 +59,7 @@ export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
 
   if (variant === "list") {
     return (
-      <Link href={`/${locale}/routes/${route.id}`}>
+      <Link href={routePath(locale, route)}>
         <Card className="group overflow-hidden transition-all hover:shadow-lg">
           <div className="flex flex-col md:flex-row">
             {/* Image */}
@@ -187,7 +188,7 @@ export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
   }
 
   return (
-    <Link href={`/${locale}/routes/${route.id}`}>
+    <Link href={routePath(locale, route)}>
       <Card className="group overflow-hidden transition-all hover:shadow-lg">
         <CardHeader className="p-0">
           <div className="relative aspect-[16/9] overflow-hidden bg-sand-100">

@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Map } from '@/components/features/maps/map'
+import { routePath } from '@/lib/route-url'
 
 interface RoutesOverviewMapProps {
   routes: RouteWithDetails[]
@@ -84,7 +85,7 @@ export function RoutesOverviewMap({ routes, locale }: RoutesOverviewMapProps) {
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 space-y-2">
                 <Link 
-                  href={`/${locale}/routes/${route.id}`}
+                  href={routePath(locale, route)}
                   className="text-sm font-semibold hover:underline"
                 >
                   {route.title}

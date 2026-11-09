@@ -1,4 +1,7 @@
+import { permanentRedirect } from 'next/navigation'
 import { RoutesService } from '@/lib/services/routes.service'
+import { locales } from '@/i18n'
+import { isUuid, routePath } from '@/lib/route-url'
 import { RouteDetail } from '@/components/features/routes/route-detail'
 import { PrivateRouteDetail } from '@/components/features/routes/private-route-detail'
 import { Metadata } from 'next'
@@ -13,7 +16,7 @@ interface RoutePageProps {
 
 export async function generateMetadata({ params }: RoutePageProps): Promise<Metadata> {
   try {
-    const route = await RoutesService.getRouteById(params.id)
+    const route = await RoutesService.getRouteByIdOrSlug(params.id)
     const t = await getTranslations({ locale: params.locale })
     const description =
       route.description ||
@@ -28,12 +31,15 @@ export async function generateMetadata({ params }: RoutePageProps): Promise<Meta
     return {
       title: route.title,
       description,
-      alternates: { canonical: `/${params.locale}/routes/${route.id}` },
+      alternates: {
+        canonical: routePath(params.locale, route),
+        languages: Object.fromEntries(locales.map((l) => [l, routePath(l, route)])),
+      },
       openGraph: {
         type: 'article',
         title: route.title,
         description,
-        url: `/${params.locale}/routes/${route.id}`,
+        url: routePath(params.locale, route),
         images: cover ? [{ url: cover, alt: route.title }] : undefined,
       },
       twitter: {
@@ -55,10 +61,15 @@ export async function generateMetadata({ params }: RoutePageProps): Promise<Meta
 export default async function RoutePage({ params }: RoutePageProps) {
   let route
   try {
-    route = await RoutesService.getRouteById(params.id)
+    route = await RoutesService.getRouteByIdOrSlug(params.id)
   } catch {
     // Not public (or doesn't exist): its author/staff may still see it
     return <PrivateRouteDetail id={params.id} locale={params.locale} />
+  }
+
+  // Old /routes/<uuid> links move permanently to the readable URL
+  if (isUuid(params.id) && route.slug) {
+    permanentRedirect(routePath(params.locale, route))
   }
 
   return <RouteDetail route={route} locale={params.locale} />
