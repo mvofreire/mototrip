@@ -26,7 +26,11 @@ function FacebookIcon({ className }: { className?: string }) {
  * "Share this route" block: WhatsApp, Facebook and copy link. Each link is
  * tagged with utm_source so analytics shows which channel brings visits.
  */
-export function ShareRoutePanel({ route }: { route: { id: string; slug?: string | null; title: string } }) {
+export function ShareRoutePanel({
+  route,
+}: {
+  route: { id: string; slug?: string | null; title: string; updated_at?: string | null }
+}) {
   const t = useTranslations('route')
   const tStory = useTranslations('story')
   const locale = useLocale()
@@ -38,7 +42,9 @@ export function ShareRoutePanel({ route }: { route: { id: string; slug?: string 
     if (!route.slug) return
     setStory('busy')
     try {
-      const res = await fetch(`/api/story/${route.slug}?locale=${locale}`)
+      // The version in the URL busts caches whenever the route is edited
+      const version = route.updated_at ? `&v=${encodeURIComponent(route.updated_at)}` : ''
+      const res = await fetch(`/api/story/${route.slug}?locale=${locale}${version}`)
       if (!res.ok) throw new Error(String(res.status))
       const blob = await res.blob()
       const file = new File([blob], `${route.slug}-mototrip.png`, { type: 'image/png' })
