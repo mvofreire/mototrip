@@ -43,7 +43,7 @@ export function Header() {
             <span className="inline-block">{tCommon('mototrip')}</span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-6 whitespace-nowrap">
+          <nav className="hidden xl:flex items-center gap-6 whitespace-nowrap">
             <Link
               href={`/${locale}/explore`}
               className={`text-sm font-medium transition-colors ${
@@ -84,6 +84,16 @@ export function Header() {
             >
               {t('community')}
             </Link>
+            <Link
+              href={`/${locale}/blog`}
+              className={`text-sm font-medium transition-colors ${
+                isActive('/blog')
+                  ? 'text-foreground font-semibold'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {t('blog')}
+            </Link>
           </nav>
         </div>
 
@@ -91,7 +101,7 @@ export function Header() {
           {/* Mobile Menu */}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden">
+              <Button variant="ghost" size="icon" className="xl:hidden">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
@@ -151,6 +161,17 @@ export function Header() {
                     }`}
                   >
                     {t('community')}
+                  </Link>
+                  <Link
+                    href={`/${locale}/blog`}
+                    onClick={() => setOpen(false)}
+                    className={`text-lg font-medium transition-colors py-2 ${
+                      isActive('/blog')
+                        ? 'text-foreground font-semibold'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {t('blog')}
                   </Link>
                 </nav>
 
@@ -221,7 +242,7 @@ export function Header() {
           </Sheet>
 
           {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center gap-2">
+          <div className="hidden xl:flex items-center gap-2">
             <ThemeToggle />
             <LanguageSwitcher />
             {loading ? (
