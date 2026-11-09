@@ -746,5 +746,13 @@
     "indexDescription": "Choisissez un pays ou une région et découvrez des itinéraires moto avec carte, arrêts et GPX gratuit.",
     "viewAll": "Voir tous les itinéraires : {name}",
     "footerTitle": "Destinations"
+  },
+  "oauth": {
+    "continueWithGoogle": "Continuer avec Google",
+    "or": "ou",
+    "failed": "Impossible de se connecter avec Google",
+    "signingIn": "Connexion...",
+    "callbackFailed": "Impossible de terminer la connexion. Veuillez réessayer.",
+    "backToLogin": "Retour à la connexion"
   }
 }

@@ -36,6 +36,26 @@ export const authService = {
     return data
   },
 
+  // Sign in (or sign up) with Google. Leaves the page; the session is picked up
+  // on /auth/callback, which then sends the user to `redirect`.
+  async signInWithGoogle(redirect?: string | null) {
+    const callback = authRedirectUrl('/auth/callback')
+    const redirectTo = redirect
+      ? `${callback}?redirect=${encodeURIComponent(redirect)}`
+      : callback
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo,
+        // Let people with several Google accounts pick one
+        queryParams: { prompt: 'select_account' },
+      },
+    })
+
+    if (error) throw error
+  },
+
   // Sign out
   async signOut() {
     const { error } = await supabase.auth.signOut()

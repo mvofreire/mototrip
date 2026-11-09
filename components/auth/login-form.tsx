@@ -9,17 +9,12 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { safeRedirectPath } from '@/lib/auth/redirects'
+import { GoogleSignInButton } from '@/components/auth/google-sign-in-button'
 
-/**
- * Where to go after login: the ?redirect= param when it is an internal path
- * (prevents open redirects like ?redirect=//evil.com), otherwise home.
- */
+/** Where to go after login: the ?redirect= param when it is an internal path. */
 function getSafeRedirect(locale: string) {
-  const target = new URLSearchParams(window.location.search).get('redirect')
-  if (target && target.startsWith('/') && !target.startsWith('//') && !target.includes('\\')) {
-    return target
-  }
-  return `/${locale}`
+  return safeRedirectPath(new URLSearchParams(window.location.search).get('redirect'), locale)
 }
 
 interface LoginFormProps {
@@ -56,6 +51,8 @@ export function LoginForm({ locale }: LoginFormProps) {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
+
+      <GoogleSignInButton onError={setError} />
 
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>

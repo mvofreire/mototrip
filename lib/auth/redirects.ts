@@ -15,6 +15,17 @@ export function currentLocale(): string {
  * Supabase only honours it if the URL is listed under
  * Authentication → URL Configuration → Redirect URLs.
  */
+/**
+ * An internal path that is safe to navigate to after sign-in, or the locale
+ * home. Rejects open redirects such as //evil.com or /\evil.com.
+ */
+export function safeRedirectPath(target: string | null | undefined, locale: string): string {
+  if (target && target.startsWith('/') && !target.startsWith('//') && !target.includes('\\')) {
+    return target
+  }
+  return `/${locale}`
+}
+
 export function authRedirectUrl(path: string, locale = currentLocale()): string {
   const origin =
     typeof window !== 'undefined'

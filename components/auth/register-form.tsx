@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { GoogleSignInButton } from '@/components/auth/google-sign-in-button'
 
 interface RegisterFormProps {
   locale: string
@@ -82,6 +83,8 @@ export function RegisterForm({ locale }: RegisterFormProps) {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
+
+      <GoogleSignInButton onError={setError} />
 
       <div className="space-y-2">
         <Label htmlFor="fullName">Nome Completo</Label>

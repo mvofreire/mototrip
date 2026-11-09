@@ -746,5 +746,13 @@
     "indexDescription": "Wähle ein Land oder eine Region und sieh dir Motorradrouten mit Karte, Stopps und kostenlosem GPX an.",
     "viewAll": "Alle Routen ansehen: {name}",
     "footerTitle": "Reiseziele"
+  },
+  "oauth": {
+    "continueWithGoogle": "Weiter mit Google",
+    "or": "oder",
+    "failed": "Anmeldung mit Google fehlgeschlagen",
+    "signingIn": "Anmeldung läuft...",
+    "callbackFailed": "Die Anmeldung konnte nicht abgeschlossen werden. Bitte versuche es erneut.",
+    "backToLogin": "Zurück zur Anmeldung"
   }
 }

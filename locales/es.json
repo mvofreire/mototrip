@@ -746,5 +746,13 @@
     "indexDescription": "Elige un país o región y mira las rutas en moto con mapa, paradas y GPX gratis.",
     "viewAll": "Ver todas las rutas: {name}",
     "footerTitle": "Destinos"
+  },
+  "oauth": {
+    "continueWithGoogle": "Continuar con Google",
+    "or": "o",
+    "failed": "No se pudo iniciar sesión con Google",
+    "signingIn": "Iniciando sesión...",
+    "callbackFailed": "No se pudo completar el inicio de sesión. Inténtalo de nuevo.",
+    "backToLogin": "Volver al inicio de sesión"
   }
 }
