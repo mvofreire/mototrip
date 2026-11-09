@@ -13,7 +13,12 @@ import { CommentsList } from '@/components/features/comments'
 import { ShareRoutePanel } from '@/components/features/routes/share-route-panel'
 
 /** Body of the route page (shared by the public and the private view) */
-export function RouteDetail({ route, locale }: { route: RouteWithDetails; locale: string }) {
+export function RouteDetail({ route: unsorted, locale }: { route: RouteWithDetails; locale: string }) {
+  // Stops come from the database in no particular order
+  const route = {
+    ...unsorted,
+    stops: unsorted.stops ? [...unsorted.stops].sort((a, b) => a.order_index - b.order_index) : unsorted.stops,
+  }
   const t = useTranslations('route')
   const tRegions = useTranslations('regions')
   const destination = regionForRoute(route)

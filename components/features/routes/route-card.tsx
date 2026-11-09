@@ -24,6 +24,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { CommentsCount } from "@/components/features/comments";
 import { routePath } from "@/lib/route-url";
+import { localizeRoute } from "@/lib/localize";
 import { RouteThumbnail } from "@/components/features/routes/route-thumbnail";
 import {
   formatDistance,
@@ -39,8 +40,9 @@ interface RouteCardProps {
   variant?: "grid" | "list";
 }
 
-export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
+export function RouteCard({ route: original, locale, variant = "grid" }: RouteCardProps) {
   const t = useTranslations();
+  const route = localizeRoute(original, locale);
 
   const categoryLabels = {
     scenic: t("categories.scenic"),

@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { formatDuration } from '@/lib/utils'
 import { regionForRoute, textFor } from '@/lib/regions'
 import { getSiteUrl } from '@/lib/site-url'
+import { localizeRoute } from '@/lib/localize'
 import pt from '@/locales/pt.json'
 import en from '@/locales/en.json'
 import es from '@/locales/es.json'
@@ -50,7 +51,7 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
   // Only public routes (RLS hides the rest from the anon key)
   const { data: route } = await supabase
     .from('routes')
-    .select('title, slug, distance_km, duration_minutes, elevation_gain_m, region, country, polyline_coordinates, route_stops(latitude, longitude, order_index)')
+    .select('title, description, translations, slug, distance_km, duration_minutes, elevation_gain_m, region, country, polyline_coordinates, route_stops(latitude, longitude, order_index)')
     .eq('slug', params.slug)
     .eq('published', true)
     .maybeSingle()
@@ -79,7 +80,8 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
     : []
 
   // "Nacional 2 | Chaves > Faro" → big name + smaller "Chaves > Faro"
-  const [name, ...rest] = route.title.split('|').map((s: string) => s.trim())
+  const title = localizeRoute({ ...route, stops: null }, locale).title
+  const [name, ...rest] = title.split('|').map((s: string) => s.trim())
   const subtitle = rest.join(' · ')
   const region = regionForRoute(route)
   const place = region ? textFor(region.name, locale) : route.region ?? ''

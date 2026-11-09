@@ -8,6 +8,7 @@ import { RoutesService } from '@/lib/services/routes.service'
 import { REGIONS, getRegion, routeInRegion, textFor } from '@/lib/regions'
 import { getSiteUrl } from '@/lib/site-url'
 import { routePath } from '@/lib/route-url'
+import { localizeRoute } from '@/lib/localize'
 import { RouteCard } from '@/components/features/routes/route-card'
 import { RoutesOverviewMap } from '@/components/features/routes/routes-overview-map'
 import { Button } from '@/components/ui/button'
@@ -104,7 +105,7 @@ export default async function RegionPage({ params }: Props) {
         '@type': 'ListItem',
         position: i + 1,
         url: `${base}${routePath(locale, r)}`,
-        name: r.title,
+        name: localizeRoute(r, locale).title,
       })),
     },
   ]

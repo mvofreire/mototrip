@@ -7,6 +7,7 @@ import { RoutesService } from '@/lib/services/routes.service'
 import { REGIONS, regionForRoute, textFor, type Region } from '@/lib/regions'
 import { getSiteUrl } from '@/lib/site-url'
 import { routePath } from '@/lib/route-url'
+import { localizeRoute } from '@/lib/localize'
 import { formatDuration, getDifficultyColor } from '@/lib/utils'
 import { RoutesOverviewMap } from '@/components/features/routes/routes-overview-map'
 import type { RouteWithDetails } from '@/types'
@@ -36,7 +37,9 @@ const byFeaturedThenTitle = (a: RouteWithDetails, b: RouteWithDetails) =>
 export default async function RegionsIndexPage({ params: { locale } }: Props) {
   const t = await getTranslations({ locale, namespace: 'regions' })
   const tAll = await getTranslations({ locale })
-  const routes = (((await RoutesService.getRoutes()) as RouteWithDetails[]) ?? []).sort(byFeaturedThenTitle)
+  const routes = (((await RoutesService.getRoutes()) as RouteWithDetails[]) ?? [])
+    .map((r) => localizeRoute(r, locale))
+    .sort(byFeaturedThenTitle)
 
   // Each route goes to its most specific destination page; routes whose region
   // has no page of its own are listed under the country, so none is left out.

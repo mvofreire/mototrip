@@ -3,6 +3,7 @@ import { RoutesService } from '@/lib/services/routes.service'
 import { locales } from '@/i18n'
 import { isUuid, routePath } from '@/lib/route-url'
 import { routeStructuredData } from '@/lib/route-structured-data'
+import { localizeRoute } from '@/lib/localize'
 import { RouteDetail } from '@/components/features/routes/route-detail'
 import { PrivateRouteDetail } from '@/components/features/routes/private-route-detail'
 import { Metadata } from 'next'
@@ -17,7 +18,7 @@ interface RoutePageProps {
 
 export async function generateMetadata({ params }: RoutePageProps): Promise<Metadata> {
   try {
-    const route = await RoutesService.getRouteByIdOrSlug(params.id)
+    const route = localizeRoute(await RoutesService.getRouteByIdOrSlug(params.id), params.locale)
     const t = await getTranslations({ locale: params.locale })
     const description =
       route.description ||
@@ -73,6 +74,7 @@ export default async function RoutePage({ params }: RoutePageProps) {
     permanentRedirect(routePath(params.locale, route))
   }
 
+  route = localizeRoute(route, params.locale)
   const t = await getTranslations({ locale: params.locale })
   const jsonLd = routeStructuredData(route, params.locale, {
     destinations: t('regions.allDestinations'),

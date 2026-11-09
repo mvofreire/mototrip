@@ -7,13 +7,15 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Map } from '@/components/features/maps/map'
 import { routePath } from '@/lib/route-url'
+import { localizeRoute } from '@/lib/localize'
 
 interface RoutesOverviewMapProps {
   routes: RouteWithDetails[]
   locale: string
 }
 
-export function RoutesOverviewMap({ routes, locale }: RoutesOverviewMapProps) {
+export function RoutesOverviewMap({ routes: original, locale }: RoutesOverviewMapProps) {
+  const routes = useMemo(() => original.map((r) => localizeRoute(r, locale)), [original, locale])
   const [selectedRoute, setSelectedRoute] = useState<string | null>(null)
 
   // Calculate center point from all routes

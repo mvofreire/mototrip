@@ -10,6 +10,7 @@ import { RoutesService } from '@/lib/services/routes.service'
 import type { RouteWithDetails } from '@/types'
 import { RouteDetail } from './route-detail'
 import { routePath } from '@/lib/route-url'
+import { localizeRoute } from '@/lib/localize'
 
 /**
  * Routes that aren't public (pending/rejected) are invisible to the server
@@ -47,7 +48,7 @@ export function PrivateRouteDetail({ id, locale }: { id: string; locale: string 
     )
   }
 
-  if (route) return <RouteDetail route={route} locale={locale} />
+  if (route) return <RouteDetail route={localizeRoute(route, locale)} locale={locale} />
 
   return (
     <div className="container flex items-center justify-center min-h-[600px]">

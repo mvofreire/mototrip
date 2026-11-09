@@ -38,6 +38,7 @@ export type Database = {
           user_id: string
           title: string
           slug: string
+          translations: Record<string, Record<string, string>>
           description: string | null
           difficulty: 'easy' | 'moderate' | 'challenging' | 'expert'
           distance_km: number
@@ -66,6 +67,7 @@ export type Database = {
           user_id: string
           title: string
           slug?: string
+          translations?: Record<string, Record<string, string>>
           description?: string | null
           difficulty: 'easy' | 'moderate' | 'challenging' | 'expert'
           distance_km: number
@@ -94,6 +96,7 @@ export type Database = {
           user_id?: string
           title?: string
           slug?: string
+          translations?: Record<string, Record<string, string>>
           description?: string | null
           difficulty?: 'easy' | 'moderate' | 'challenging' | 'expert'
           distance_km?: number
@@ -128,6 +131,7 @@ export type Database = {
           latitude: number
           longitude: number
           order_index: number
+          translations: Record<string, Record<string, string>>
           created_at: string
         }
         Insert: {
