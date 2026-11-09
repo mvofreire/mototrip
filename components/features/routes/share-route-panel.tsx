@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Check, Link2 } from 'lucide-react'
+import { Check, Instagram, Link2, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { copyText, facebookLink, shareUrl, whatsappLink } from '@/lib/share'
 
@@ -28,8 +28,42 @@ function FacebookIcon({ className }: { className?: string }) {
  */
 export function ShareRoutePanel({ route }: { route: { id: string; slug?: string | null; title: string } }) {
   const t = useTranslations('route')
+  const tStory = useTranslations('story')
   const locale = useLocale()
   const [copied, setCopied] = useState(false)
+  const [story, setStory] = useState<'idle' | 'busy' | 'error'>('idle')
+
+  // Vertical image for Instagram stories: share sheet on phones, download elsewhere
+  const onStory = async () => {
+    if (!route.slug) return
+    setStory('busy')
+    try {
+      const res = await fetch(`/api/story/${route.slug}?locale=${locale}`)
+      if (!res.ok) throw new Error(String(res.status))
+      const blob = await res.blob()
+      const file = new File([blob], `${route.slug}-mototrip.png`, { type: 'image/png' })
+      if (navigator.canShare?.({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: route.title })
+        } catch (e) {
+          if ((e as Error).name !== 'AbortError') throw e
+        }
+      } else {
+        const href = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = href
+        a.download = file.name
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        URL.revokeObjectURL(href)
+      }
+      setStory('idle')
+    } catch (e) {
+      console.error('Story image failed:', e)
+      setStory('error')
+    }
+  }
 
   const text = (source: 'whatsapp') =>
     `${t('shareText', { title: route.title })} ${shareUrl(locale, route, source)}`
@@ -57,11 +91,22 @@ export function ShareRoutePanel({ route }: { route: { id: string; slug?: string 
             Facebook
           </a>
         </Button>
+        {route.slug && (
+          <Button
+            className="flex-1 bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af] text-white hover:opacity-90 sm:flex-initial"
+            onClick={onStory}
+            disabled={story === 'busy'}
+          >
+            {story === 'busy' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Instagram className="mr-2 h-4 w-4" />}
+            {story === 'busy' ? tStory('preparing') : tStory('button')}
+          </Button>
+        )}
         <Button variant="outline" className="flex-1 sm:flex-initial" onClick={onCopy}>
           {copied ? <Check className="mr-2 h-4 w-4 text-green-600" /> : <Link2 className="mr-2 h-4 w-4" />}
           {copied ? t('linkCopied') : t('copyLink')}
         </Button>
       </div>
+      {story === 'error' && <p className="mt-3 text-sm text-destructive">{tStory('failed')}</p>}
     </section>
   )
 }

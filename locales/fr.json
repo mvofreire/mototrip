@@ -847,5 +847,15 @@
     "suspendedUntil": "La suspension se termine le {until}.",
     "reason": "Motif : {reason}",
     "contact": "Si vous pensez qu’il s’agit d’une erreur, contactez l’équipe MotoTrip."
+  },
+  "story": {
+    "eyebrow": "Itinéraire moto",
+    "distance": "distance",
+    "duration": "durée",
+    "elevation": "de dénivelé",
+    "cta": "Carte, arrêts et GPX gratuit sur",
+    "button": "Image pour les stories",
+    "preparing": "Préparation...",
+    "failed": "Impossible de créer l'image"
   }
 }

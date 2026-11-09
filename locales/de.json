@@ -847,5 +847,15 @@
     "suspendedUntil": "Die Sperre endet am {until}.",
     "reason": "Grund: {reason}",
     "contact": "Wenn du denkst, dass das ein Fehler ist, kontaktiere das MotoTrip-Team."
+  },
+  "story": {
+    "eyebrow": "Motorradroute",
+    "distance": "Distanz",
+    "duration": "Dauer",
+    "elevation": "Höhenmeter",
+    "cta": "Karte, Stopps und kostenloses GPX auf",
+    "button": "Bild für Stories",
+    "preparing": "Wird vorbereitet...",
+    "failed": "Bild konnte nicht erstellt werden"
   }
 }
