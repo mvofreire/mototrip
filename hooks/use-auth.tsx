@@ -5,6 +5,7 @@ import { authService } from '@/lib/auth/auth.service'
 import type { AuthUser } from '@/types/auth.types'
 import { supabase } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
+import { rememberAccountBlock } from '@/lib/auth/account-block'
 
 interface AuthContextType {
   user: AuthUser | null
@@ -27,6 +28,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const load = async (authUser: User | null) => {
       try {
+        // Suspended/banned users may still hold a valid access token for a
+        // while: sign them out and let the login page explain why.
+        if (authUser) {
+          const block = await authService.getAccountBlock()
+          if (block) {
+            rememberAccountBlock(block)
+            await supabase.auth.signOut({ scope: 'local' })
+            const locale = window.location.pathname.split('/')[1] || 'pt'
+            window.location.replace(`/${locale}/auth/login?blocked=1`)
+            return
+          }
+        }
         const next = authUser ? await authService.toAuthUser(authUser) : null
         if (active) setUser(next)
       } catch (e) {

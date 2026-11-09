@@ -1,6 +1,6 @@
 import type { User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase/client'
-import type { AuthUser, Profile } from '@/types/auth.types'
+import type { AccountBlock, AuthUser, Profile } from '@/types/auth.types'
 import { authRedirectUrl } from '@/lib/auth/redirects'
 
 // Readable profile columns (email is intentionally not granted to clients)
@@ -82,6 +82,15 @@ export const authService = {
       // email is not readable from profiles (column privileges); take it from auth
       profile: profile ? ({ ...(profile as object), email: user.email! } as Profile) : null,
     }
+  },
+
+  // Suspension / ban of the signed-in user (null when active or signed out)
+  async getAccountBlock(): Promise<AccountBlock | null> {
+    const { data, error } = await (supabase as any).rpc('my_account_status')
+    if (error) return null
+    const row = (data as any[])?.[0]
+    if (!row || row.status === 'active') return null
+    return { status: row.status, until: row.suspended_until ?? null, reason: row.reason ?? null }
   },
 
   // Reset password (request)

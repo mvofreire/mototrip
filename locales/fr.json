@@ -506,7 +506,7 @@
       "users": "Utilisateurs"
     },
     "users": {
-      "description": "Gérez les utilisateurs et renvoyez les liens de confirmation",
+      "description": "Gérez les rôles, le statut et la modération des utilisateurs",
       "searchPlaceholder": "Rechercher par nom ou email...",
       "onlyPending": "En attente ({count})",
       "total": "{count} utilisateurs · {pending} non confirmés",
@@ -516,7 +516,8 @@
         "status": "Statut",
         "created": "Inscription",
         "lastSignIn": "Dernière connexion",
-        "actions": "Actions"
+        "actions": "Actions",
+        "activity": "Activité"
       },
       "roles": {
         "admin": "Admin",
@@ -531,7 +532,85 @@
       "resent": "Lien renvoyé",
       "resendError": "Échec de l'envoi du lien",
       "empty": "Aucun utilisateur trouvé",
-      "roleError": "Impossible de changer le rôle"
+      "roleError": "Impossible de changer le rôle",
+      "showing": "{shown} sur {total} utilisateurs",
+      "you": "Vous",
+      "endsIn": "Se termine {when}",
+      "routesCount": "{count, plural, one {# itinéraire} other {# itinéraires}}",
+      "commentsCount": "{count, plural, one {# commentaire} other {# commentaires}}",
+      "stats": {
+        "all": "Tous",
+        "active": "Actifs",
+        "unconfirmed": "Non confirmés",
+        "suspended": "Suspendus",
+        "banned": "Bannis"
+      },
+      "filters": {
+        "allStatuses": "Tous les statuts",
+        "allRoles": "Tous les rôles"
+      },
+      "status": {
+        "active": "Actif",
+        "suspended": "Suspendu",
+        "banned": "Banni"
+      },
+      "actions": {
+        "suspend": "Suspendre",
+        "changeSuspension": "Modifier la suspension",
+        "ban": "Bannir",
+        "reactivate": "Réactiver le compte",
+        "copyEmail": "Copier l’email",
+        "history": "Voir l’historique",
+        "hideContent": "Masquer le contenu",
+        "showContent": "Afficher le contenu"
+      },
+      "moderation": {
+        "suspendTitle": "Suspendre {name}",
+        "banTitle": "Bannir {name}",
+        "suspendDescription": "L’utilisateur est déconnecté et ne peut ni se connecter ni publier jusqu’à la fin de la suspension. Le compte revient tout seul à l’échéance.",
+        "banDescription": "L’utilisateur est déconnecté et ne peut plus se connecter tant qu’un admin n’a pas réactivé le compte.",
+        "banWarning": "Réservez le bannissement aux infractions graves ou répétées.",
+        "duration": "Durée",
+        "days": "{count, plural, one {# jour} other {# jours}}",
+        "custom": "Personnalisé",
+        "until": "Suspendu jusqu’au {when}",
+        "untilInvalid": "Choisissez une date future",
+        "reason": "Motif",
+        "reasonPlaceholder": "Ex. : spam dans les commentaires, faux itinéraires...",
+        "reasonHint": "L’utilisateur verra ce motif en essayant de se connecter.",
+        "cancel": "Annuler",
+        "error": "Impossible d’appliquer l’action",
+        "hideContent": "Masquer tout ce que l’utilisateur a publié",
+        "hideContentHint": "{routes, plural, one {# itinéraire} other {# itinéraires}} et {comments, plural, one {# commentaire} other {# commentaires}}, ainsi que photos et notes, disparaissent du site. Rien n’est supprimé : réactiver le compte rétablit tout."
+      },
+      "reactivateDialog": {
+        "title": "Réactiver {name} ?",
+        "description": "L’utilisateur pourra se connecter et publier de nouveau immédiatement."
+      },
+      "notice": {
+        "suspended": "{name} a été suspendu",
+        "banned": "{name} a été banni",
+        "reactivated": "{name} a été réactivé",
+        "role": "{name} est maintenant {role}",
+        "resent": "Lien de confirmation renvoyé à {email}",
+        "copied": "Email copié",
+        "contentHidden": "Contenu de {name} masqué",
+        "contentShown": "Contenu de {name} de nouveau visible"
+      },
+      "history": {
+        "title": "Historique de modération",
+        "empty": "Aucune action enregistrée",
+        "suspend": "Suspendu",
+        "ban": "Banni",
+        "reactivate": "Réactivé",
+        "role_change": "Rôle modifié : {from} → {to}",
+        "until": "Jusqu’au {when}",
+        "by": "par {name}",
+        "hide_content": "Contenu masqué",
+        "show_content": "Contenu de nouveau visible",
+        "withHiddenContent": "Avec contenu masqué"
+      },
+      "contentHidden": "Contenu masqué"
     },
     "review": {
       "approve": "Approuver",
@@ -756,5 +835,13 @@
     "signingIn": "Connexion...",
     "callbackFailed": "Impossible de terminer la connexion. Veuillez réessayer.",
     "backToLogin": "Retour à la connexion"
+  },
+  "accountBlocked": {
+    "suspendedTitle": "Votre compte est suspendu",
+    "bannedTitle": "Votre compte a été banni",
+    "genericTitle": "Votre compte est bloqué",
+    "suspendedUntil": "La suspension se termine le {until}.",
+    "reason": "Motif : {reason}",
+    "contact": "Si vous pensez qu’il s’agit d’une erreur, contactez l’équipe MotoTrip."
   }
 }

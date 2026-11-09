@@ -506,7 +506,7 @@
       "users": "Users"
     },
     "users": {
-      "description": "Manage users and resend confirmation links",
+      "description": "Manage user roles, status and moderation",
       "searchPlaceholder": "Search by name or email...",
       "onlyPending": "Pending ({count})",
       "total": "{count} users · {pending} unconfirmed",
@@ -516,7 +516,8 @@
         "status": "Status",
         "created": "Signed up",
         "lastSignIn": "Last sign-in",
-        "actions": "Actions"
+        "actions": "Actions",
+        "activity": "Activity"
       },
       "roles": {
         "admin": "Admin",
@@ -531,7 +532,85 @@
       "resent": "Link resent",
       "resendError": "Failed to resend link",
       "empty": "No users found",
-      "roleError": "Could not change the role"
+      "roleError": "Could not change the role",
+      "showing": "Showing {shown} of {total} users",
+      "you": "You",
+      "endsIn": "Ends {when}",
+      "routesCount": "{count, plural, one {# route} other {# routes}}",
+      "commentsCount": "{count, plural, one {# comment} other {# comments}}",
+      "stats": {
+        "all": "All",
+        "active": "Active",
+        "unconfirmed": "Unconfirmed",
+        "suspended": "Suspended",
+        "banned": "Banned"
+      },
+      "filters": {
+        "allStatuses": "All statuses",
+        "allRoles": "All roles"
+      },
+      "status": {
+        "active": "Active",
+        "suspended": "Suspended",
+        "banned": "Banned"
+      },
+      "actions": {
+        "suspend": "Suspend",
+        "changeSuspension": "Change suspension",
+        "ban": "Ban",
+        "reactivate": "Reactivate account",
+        "copyEmail": "Copy email",
+        "history": "View history",
+        "hideContent": "Hide content",
+        "showContent": "Show content"
+      },
+      "moderation": {
+        "suspendTitle": "Suspend {name}",
+        "banTitle": "Ban {name}",
+        "suspendDescription": "The user is signed out and cannot sign in or post until the suspension ends. The account comes back by itself when it expires.",
+        "banDescription": "The user is signed out and can no longer sign in until an admin reactivates the account.",
+        "banWarning": "Use bans for serious or repeated violations.",
+        "duration": "Duration",
+        "days": "{count, plural, one {# day} other {# days}}",
+        "custom": "Custom",
+        "until": "Suspended until {when}",
+        "untilInvalid": "Pick a date in the future",
+        "reason": "Reason",
+        "reasonPlaceholder": "E.g. spam in comments, fake routes...",
+        "reasonHint": "The user will see this reason when trying to sign in.",
+        "cancel": "Cancel",
+        "error": "Could not apply the action",
+        "hideContent": "Hide everything this user published",
+        "hideContentHint": "{routes, plural, one {# route} other {# routes}} and {comments, plural, one {# comment} other {# comments}}, plus photos and ratings, disappear from the site. Nothing is deleted: reactivating the account brings it all back."
+      },
+      "reactivateDialog": {
+        "title": "Reactivate {name}?",
+        "description": "The user can sign in and post again right away."
+      },
+      "notice": {
+        "suspended": "{name} was suspended",
+        "banned": "{name} was banned",
+        "reactivated": "{name} was reactivated",
+        "role": "{name} is now {role}",
+        "resent": "Confirmation link resent to {email}",
+        "copied": "Email copied",
+        "contentHidden": "{name}'s content is hidden",
+        "contentShown": "{name}'s content is visible again"
+      },
+      "history": {
+        "title": "Moderation history",
+        "empty": "No actions recorded",
+        "suspend": "Suspended",
+        "ban": "Banned",
+        "reactivate": "Reactivated",
+        "role_change": "Role changed: {from} → {to}",
+        "until": "Until {when}",
+        "by": "by {name}",
+        "hide_content": "Content hidden",
+        "show_content": "Content visible again",
+        "withHiddenContent": "With content hidden"
+      },
+      "contentHidden": "Content hidden"
     },
     "review": {
       "approve": "Approve",
@@ -756,5 +835,13 @@
     "signingIn": "Signing in...",
     "callbackFailed": "Could not complete sign-in. Please try again.",
     "backToLogin": "Back to sign in"
+  },
+  "accountBlocked": {
+    "suspendedTitle": "Your account is suspended",
+    "bannedTitle": "Your account has been banned",
+    "genericTitle": "Your account is blocked",
+    "suspendedUntil": "The suspension ends on {until}.",
+    "reason": "Reason: {reason}",
+    "contact": "If you think this is a mistake, contact the MotoTrip team."
   }
 }
