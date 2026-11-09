@@ -1,7 +1,8 @@
 'use client'
 
 import Link from "next/link"
-import { MapPin, Github, Twitter, Instagram } from "lucide-react"
+import { MapPin, Instagram } from "lucide-react"
+import { INSTAGRAM } from "@/lib/social"
 import { Separator } from "@/components/ui/separator"
 import { useLocale, useTranslations } from 'next-intl'
 
@@ -24,17 +25,16 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">
               {t('tagline')}
             </p>
-            <div className="flex gap-4">
-              <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Twitter className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Instagram className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Github className="h-5 w-5" />
-              </Link>
-            </div>
+            <a
+              href={INSTAGRAM.url}
+              target="_blank"
+              rel="noopener noreferrer me"
+              aria-label={t('followInstagram')}
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Instagram className="h-5 w-5" />
+              <span>@{INSTAGRAM.handle}</span>
+            </a>
           </div>
 
           {/* Routes */}

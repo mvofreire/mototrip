@@ -10,6 +10,7 @@ import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { Analytics } from '@vercel/analytics/react'
 import { Pwa } from '@/components/pwa/pwa'
+import { SOCIAL_PROFILES } from '@/lib/social'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -124,9 +125,23 @@ export default async function LocaleLayout({
   // Providing all messages to the client
   const messages = await getMessages()
 
+  // Lets search engines tie the site to its official profiles
+  const organization = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'MotoTrip',
+    url: getBaseUrl(),
+    logo: `${getBaseUrl()}/icon-512.png`,
+    sameAs: SOCIAL_PROFILES,
+  }
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={`${inter.className} ${display.variable}`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }}
+        />
         <NextIntlClientProvider messages={messages}>
           <Providers>
             <div className="flex min-h-screen flex-col">

@@ -160,7 +160,8 @@
     "privacyPolicy": "Política de Privacidade",
     "termsOfService": "Termos de Serviço",
     "copyright": "© 2026 MotoTrip. Todos os direitos reservados.",
-    "builtForRiders": "Feito para motociclistas, por motociclistas 🏍️"
+    "builtForRiders": "Feito para motociclistas, por motociclistas 🏍️",
+    "followInstagram": "Siga o MotoTrip no Instagram"
   },
   "notFound": {
     "title": "404",
@@ -290,6 +291,10 @@
       "title": "Junte-se à Nossa Comunidade",
       "description": "Faça parte de uma comunidade global de motociclistas apaixonados",
       "button": "Enviar Sua Primeira Rota"
+    },
+    "instagram": {
+      "title": "Siga o MotoTrip no Instagram",
+      "description": "Novas rotas, fotos da estrada e destaques da comunidade. Marque @mototrip.pt nas suas viagens."
     }
   },
   "privacy": {
