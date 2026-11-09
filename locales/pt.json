@@ -145,7 +145,8 @@
   "ratings": {
     "scenic": "Cenário",
     "roadQuality": "Qualidade da Estrada",
-    "funFactor": "Fator Diversão"
+    "funFactor": "Fator Diversão",
+    "editorialTitle": "Avaliação MotoTrip"
   },
   "footer": {
     "tagline": "Descubra e compartilhe as melhores rotas de motocicleta ao redor do mundo.",
@@ -857,5 +858,23 @@
     "button": "Imagem para stories",
     "preparing": "Preparando...",
     "failed": "Não foi possível gerar a imagem"
+  },
+  "reviews": {
+    "title": "Quem já fez esta rota",
+    "riddenBy": "{count, plural, one {# pessoa já fez} other {# pessoas já fizeram}} esta rota",
+    "empty": "Ainda ninguém avaliou. Já fez esta rota? Conte como foi.",
+    "iRodeIt": "Já fiz esta rota",
+    "youRodeIt": "Você já fez esta rota",
+    "edit": "Editar avaliação",
+    "loginToRate": "Entre para avaliar",
+    "formTitle": "Como foi a rota?",
+    "commentPlaceholder": "Comentário (opcional): estado da estrada, melhor época, dicas…",
+    "scoresRequired": "Dê uma nota de 1 a 5 para cada item.",
+    "saveFailed": "Não foi possível salvar. Tente novamente.",
+    "confirmRemove": "Remover esta avaliação?",
+    "remove": "Remover",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "anonymous": "Motociclista"
   }
 }

@@ -145,7 +145,8 @@
   "ratings": {
     "scenic": "Panoramique",
     "roadQuality": "Qualité de la Route",
-    "funFactor": "Facteur Plaisir"
+    "funFactor": "Facteur Plaisir",
+    "editorialTitle": "Note MotoTrip"
   },
   "footer": {
     "tagline": "Découvrez et partagez les meilleurs itinéraires moto du monde.",
@@ -857,5 +858,23 @@
     "button": "Image pour les stories",
     "preparing": "Préparation...",
     "failed": "Impossible de créer l'image"
+  },
+  "reviews": {
+    "title": "Ceux qui ont fait cet itinéraire",
+    "riddenBy": "{count, plural, one {# motard a fait} other {# motards ont fait}} cet itinéraire",
+    "empty": "Pas encore d'avis. Vous avez fait cet itinéraire ? Racontez-nous.",
+    "iRodeIt": "J'ai fait cet itinéraire",
+    "youRodeIt": "Vous avez fait cet itinéraire",
+    "edit": "Modifier l'avis",
+    "loginToRate": "Connectez-vous pour noter",
+    "formTitle": "Comment était l'itinéraire ?",
+    "commentPlaceholder": "Commentaire (facultatif) : état de la route, meilleure saison, conseils…",
+    "scoresRequired": "Donnez une note de 1 à 5 à chaque critère.",
+    "saveFailed": "Impossible d'enregistrer. Réessayez.",
+    "confirmRemove": "Supprimer cet avis ?",
+    "remove": "Supprimer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "anonymous": "Motard"
   }
 }

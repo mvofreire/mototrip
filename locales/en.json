@@ -145,7 +145,8 @@
   "ratings": {
     "scenic": "Scenic",
     "roadQuality": "Road Quality",
-    "funFactor": "Fun Factor"
+    "funFactor": "Fun Factor",
+    "editorialTitle": "MotoTrip rating"
   },
   "footer": {
     "tagline": "Discover and share the best motorcycle riding routes around the world.",
@@ -857,5 +858,23 @@
     "button": "Image for stories",
     "preparing": "Preparing...",
     "failed": "Could not create the image"
+  },
+  "reviews": {
+    "title": "Riders who did this route",
+    "riddenBy": "{count, plural, one {# rider has} other {# riders have}} done this route",
+    "empty": "No reviews yet. Have you ridden this route? Tell us how it was.",
+    "iRodeIt": "I rode this route",
+    "youRodeIt": "You rode this route",
+    "edit": "Edit review",
+    "loginToRate": "Sign in to rate",
+    "formTitle": "How was the route?",
+    "commentPlaceholder": "Comment (optional): road condition, best season, tips…",
+    "scoresRequired": "Give each item a score from 1 to 5.",
+    "saveFailed": "Could not save. Please try again.",
+    "confirmRemove": "Remove this review?",
+    "remove": "Remove",
+    "cancel": "Cancel",
+    "save": "Save",
+    "anonymous": "Rider"
   }
 }

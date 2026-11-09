@@ -39,6 +39,11 @@ export type Database = {
           title: string
           slug: string
           translations: Record<string, Record<string, string>>
+          rating_count: number
+          rating_average: number | null
+          rating_scenic: number | null
+          rating_road: number | null
+          rating_fun: number | null
           description: string | null
           difficulty: 'easy' | 'moderate' | 'challenging' | 'expert'
           distance_km: number

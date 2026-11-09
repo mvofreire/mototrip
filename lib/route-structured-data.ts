@@ -32,14 +32,8 @@ export function routeStructuredData(route: RouteWithDetails, locale: string, lab
   const stops = [...(route.stops ?? [])].sort((a, b) => a.order_index - b.order_index)
   const coords = (route.polyline_coordinates?.coordinates ?? []) as [number, number][]
 
-  const ratings = route.ratings ?? []
-  const avg =
-    ratings.length > 0
-      ? ratings.reduce(
-          (s, r) => s + (Number(r.scenic_rating) + Number(r.road_quality_rating) + Number(r.fun_factor_rating)) / 3,
-          0,
-        ) / ratings.length
-      : null
+  const ratingCount = Number(route.rating_count ?? 0)
+  const avg = ratingCount > 0 && route.rating_average != null ? Number(route.rating_average) : null
 
   const trip: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -105,9 +99,9 @@ export function routeStructuredData(route: RouteWithDetails, locale: string, lab
           aggregateRating: {
             '@type': 'AggregateRating',
             ratingValue: Math.round(avg * 10) / 10,
-            bestRating: 10,
-            worstRating: 0,
-            ratingCount: ratings.length,
+            bestRating: 5,
+            worstRating: 1,
+            ratingCount,
           },
         }
       : {}),

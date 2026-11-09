@@ -145,7 +145,8 @@
   "ratings": {
     "scenic": "Malerisch",
     "roadQuality": "Straßenqualität",
-    "funFactor": "Spaßfaktor"
+    "funFactor": "Spaßfaktor",
+    "editorialTitle": "MotoTrip-Bewertung"
   },
   "footer": {
     "tagline": "Entdecken und teilen Sie die besten Motorradrouten der Welt.",
@@ -857,5 +858,23 @@
     "button": "Bild für Stories",
     "preparing": "Wird vorbereitet...",
     "failed": "Bild konnte nicht erstellt werden"
+  },
+  "reviews": {
+    "title": "Wer diese Route gefahren ist",
+    "riddenBy": "{count, plural, one {# Fahrer ist} other {# Fahrer sind}} diese Route gefahren",
+    "empty": "Noch keine Bewertungen. Bist du diese Route gefahren? Erzähl, wie es war.",
+    "iRodeIt": "Ich bin diese Route gefahren",
+    "youRodeIt": "Du bist diese Route gefahren",
+    "edit": "Bewertung bearbeiten",
+    "loginToRate": "Zum Bewerten anmelden",
+    "formTitle": "Wie war die Route?",
+    "commentPlaceholder": "Kommentar (optional): Straßenzustand, beste Jahreszeit, Tipps…",
+    "scoresRequired": "Gib jedem Punkt eine Note von 1 bis 5.",
+    "saveFailed": "Speichern fehlgeschlagen. Bitte erneut versuchen.",
+    "confirmRemove": "Diese Bewertung entfernen?",
+    "remove": "Entfernen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "anonymous": "Fahrer"
   }
 }

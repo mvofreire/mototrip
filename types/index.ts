@@ -47,8 +47,6 @@ export interface RouteWithDetails extends Route {
   photos?: RoutePhoto[]
   ratings?: RouteRating[]
   saved_by_current_user?: boolean
-  rating_count?: number
-  average_rating?: number
 }
 
 export interface UserProfile extends User {

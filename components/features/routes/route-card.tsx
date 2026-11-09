@@ -168,11 +168,11 @@ export function RouteCard({ route: original, locale, variant = "grid" }: RouteCa
                     <div className="flex items-center gap-2">
                       <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                       <span className="text-sm font-medium">
-                        {route.average_rating
-                          ? formatRating(route.average_rating)
+                        {route.rating_average != null
+                          ? formatRating(Number(route.rating_average))
                           : t('route.notAvailable')}
                       </span>
-                      {route.rating_count && (
+                      {route.rating_count > 0 && (
                         <span className="text-xs text-muted-foreground">
                           ({route.rating_count})
                         </span>
@@ -270,8 +270,8 @@ export function RouteCard({ route: original, locale, variant = "grid" }: RouteCa
                 <div className="flex items-center gap-1">
                   <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
                   <span className="text-sm font-medium">
-                    {route.average_rating
-                      ? formatRating(route.average_rating)
+                    {route.rating_average != null
+                      ? formatRating(Number(route.rating_average))
                       : t('route.notAvailable')}
                   </span>
                 </div>
@@ -295,7 +295,7 @@ export function RouteCard({ route: original, locale, variant = "grid" }: RouteCa
         <CardFooter className="p-4 pt-0">
           <div className="flex items-center justify-between w-full text-xs text-muted-foreground">
             <div className="flex items-center gap-3">
-              {route.rating_count && <span>{route.rating_count} reviews</span>}
+              {route.rating_count > 0 && <span>{t('route.reviews', { count: route.rating_count })}</span>}
               <CommentsCount routeId={route.id} />
             </div>
             {!!route.elevation_gain_m && (

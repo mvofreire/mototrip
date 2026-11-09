@@ -11,6 +11,7 @@ import { RoutePhotos } from '@/components/features/routes/route-photos'
 import { RouteReviewBanner } from '@/components/features/routes/route-review-banner'
 import { CommentsList } from '@/components/features/comments'
 import { ShareRoutePanel } from '@/components/features/routes/share-route-panel'
+import { RouteReviews } from '@/components/features/routes/route-reviews'
 
 /** Body of the route page (shared by the public and the private view) */
 export function RouteDetail({ route: unsorted, locale }: { route: RouteWithDetails; locale: string }) {
@@ -67,6 +68,9 @@ export function RouteDetail({ route: unsorted, locale }: { route: RouteWithDetai
               <StopsTimeline stops={route.stops} />
             </div>
           )}
+
+          {/* "I rode this route" + reviews (published routes only) */}
+          {route.published && <RouteReviews route={route} />}
 
           {/* Comments are only open on published routes */}
           {route.published && (

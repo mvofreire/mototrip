@@ -48,6 +48,8 @@ export function RouteStats({ route }: RouteStatsProps) {
     },
   ]
 
+  const hasEditorial = ratings.some((r) => Number(r.value) > 0)
+
   return (
     <div className="space-y-4 md:space-y-6">
       {/* Primary Stats */}
@@ -69,41 +71,35 @@ export function RouteStats({ route }: RouteStatsProps) {
         ))}
       </div>
 
-      {/* Ratings */}
-      <Card className="overflow-hidden">
-        <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
-          <div className="space-y-3 md:space-y-4">
-            <div className="flex items-center gap-2 flex-wrap">
-              <Star className="h-5 w-5 shrink-0 fill-amber-400 text-amber-400" />
-              <span className="text-xl md:text-2xl font-bold">
-                {route.average_rating ? formatRating(route.average_rating) : t('route.notAvailable')}
-              </span>
-              {!!route.rating_count && (
-                <span className="text-sm text-muted-foreground">
-                  ({t('route.reviews', { count: route.rating_count })})
-                </span>
-              )}
-            </div>
-
-            <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
-              {ratings.map((rating, index) => (
-                <div key={index} className="space-y-1">
-                  <div className="flex items-center justify-between text-sm gap-2">
-                    <span className="text-muted-foreground truncate">{rating.label}</span>
-                    <span className="font-semibold shrink-0">{formatRating(rating.value)}</span>
+      {/* Editorial scores (0–10, set by the MotoTrip team) */}
+      {hasEditorial && (
+        <Card className="overflow-hidden">
+          <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
+            <div className="space-y-3 md:space-y-4">
+              <div className="flex items-center gap-2">
+                <Star className="h-5 w-5 shrink-0 fill-amber-400 text-amber-400" />
+                <span className="font-semibold">{t('ratings.editorialTitle')}</span>
+              </div>
+              <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
+                {ratings.map((rating, index) => (
+                  <div key={index} className="space-y-1">
+                    <div className="flex items-center justify-between text-sm gap-2">
+                      <span className="text-muted-foreground truncate">{rating.label}</span>
+                      <span className="font-semibold shrink-0">{formatRating(Number(rating.value))}</span>
+                    </div>
+                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-brand transition-all"
+                        style={{ width: `${(Number(rating.value) / 10) * 100}%` }}
+                      />
+                    </div>
                   </div>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-brand transition-all"
-                      style={{ width: `${(rating.value / 10) * 100}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }
