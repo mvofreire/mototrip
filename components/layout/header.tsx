@@ -55,6 +55,16 @@ export function Header() {
               {t('exploreRoutes')}
             </Link>
             <Link
+              href={`/${locale}/regions`}
+              className={`text-sm font-medium transition-colors ${
+                isActive('/regions')
+                  ? 'text-foreground font-semibold'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {t('destinations')}
+            </Link>
+            <Link
               href={`/${locale}/submit`}
               className={`text-sm font-medium transition-colors ${
                 isActive('/submit')
@@ -108,6 +118,17 @@ export function Header() {
                     }`}
                   >
                     {t('exploreRoutes')}
+                  </Link>
+                  <Link
+                    href={`/${locale}/regions`}
+                    onClick={() => setOpen(false)}
+                    className={`text-lg font-medium transition-colors py-2 ${
+                      isActive('/regions')
+                        ? 'text-foreground font-semibold'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {t('destinations')}
                   </Link>
                   <Link
                     href={`/${locale}/submit`}

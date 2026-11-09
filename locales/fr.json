@@ -12,6 +12,7 @@
   },
   "nav": {
     "exploreRoutes": "Explorer les Itinéraires",
+    "destinations": "Destinations",
     "submitRoute": "Soumettre un Itinéraire",
     "community": "Communauté",
     "signIn": "Se Connecter",
@@ -728,5 +729,22 @@
     "submit": "Proposer un itinéraire",
     "empty": "Vous n'avez encore proposé aucun itinéraire.",
     "error": "Impossible de charger vos itinéraires."
+  },
+  "regions": {
+    "eyebrow": "Itinéraires moto",
+    "heading": "Itinéraires moto : {name}",
+    "metaTitle": "{name} : itinéraires moto avec GPX gratuit",
+    "routeCount": "{count, plural, =0 {Aucun itinéraire} one {# itinéraire} other {# itinéraires}}",
+    "totalKm": "{km} km de route",
+    "routesHeading": "Tous les itinéraires : {name}",
+    "empty": "Pas encore d'itinéraire ici ({name}). Vous en connaissez un bon ? Partagez-le avec la communauté.",
+    "ctaTitle": "Vous connaissez un bel itinéraire : {name} ?",
+    "ctaDescription": "Envoyez le GPX, ajoutez les arrêts et aidez d'autres motards à découvrir la route.",
+    "otherDestinations": "Autres destinations",
+    "allDestinations": "Destinations",
+    "indexTitle": "Itinéraires moto par destination",
+    "indexDescription": "Choisissez un pays ou une région et découvrez des itinéraires moto avec carte, arrêts et GPX gratuit.",
+    "viewAll": "Voir tous les itinéraires : {name}",
+    "footerTitle": "Destinations"
   }
 }

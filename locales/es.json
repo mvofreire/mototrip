@@ -12,6 +12,7 @@
   },
   "nav": {
     "exploreRoutes": "Explorar Rutas",
+    "destinations": "Destinos",
     "submitRoute": "Enviar Ruta",
     "community": "Comunidad",
     "signIn": "Iniciar Sesión",
@@ -728,5 +729,22 @@
     "submit": "Enviar ruta",
     "empty": "Aún no has enviado ninguna ruta.",
     "error": "Error al cargar tus rutas."
+  },
+  "regions": {
+    "eyebrow": "Rutas en moto",
+    "heading": "Rutas en moto: {name}",
+    "metaTitle": "{name}: rutas en moto con GPX gratis",
+    "routeCount": "{count, plural, =0 {Ninguna ruta} one {# ruta} other {# rutas}}",
+    "totalKm": "{km} km de carretera",
+    "routesHeading": "Todas las rutas: {name}",
+    "empty": "Aún no hay rutas aquí ({name}). ¿Conoces una buena? Compártela con la comunidad.",
+    "ctaTitle": "¿Conoces una buena ruta: {name}?",
+    "ctaDescription": "Sube el GPX, añade las paradas y ayuda a otros moteros a descubrir la carretera.",
+    "otherDestinations": "Otros destinos",
+    "allDestinations": "Destinos",
+    "indexTitle": "Rutas en moto por destino",
+    "indexDescription": "Elige un país o región y mira las rutas en moto con mapa, paradas y GPX gratis.",
+    "viewAll": "Ver todas las rutas: {name}",
+    "footerTitle": "Destinos"
   }
 }

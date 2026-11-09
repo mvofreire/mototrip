@@ -3,17 +3,19 @@
 import Link from "next/link"
 import { MapPin, Instagram } from "lucide-react"
 import { INSTAGRAM } from "@/lib/social"
+import { REGIONS, textFor } from "@/lib/regions"
 import { Separator } from "@/components/ui/separator"
 import { useLocale, useTranslations } from 'next-intl'
 
 export function Footer() {
   const locale = useLocale()
   const t = useTranslations('footer')
+  const tRegions = useTranslations('regions')
 
   return (
     <footer className="border-t bg-muted/30">
       <div className="container py-12 md:py-16">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-5">
           {/* Brand */}
           <div className="space-y-4">
             <Link href={`/${locale}`} className="flex items-center gap-2 font-bold text-xl">
@@ -61,6 +63,24 @@ export function Footer() {
                   {t('adventureTrails')}
                 </Link>
               </li>
+            </ul>
+          </div>
+
+          {/* Destinations */}
+          <div>
+            <h3 className="font-semibold mb-4">
+              <Link href={`/${locale}/regions`} className="hover:text-primary transition-colors">
+                {tRegions('footerTitle')}
+              </Link>
+            </h3>
+            <ul className="space-y-3 text-sm">
+              {REGIONS.filter((r) => ['portugal', 'norte', 'algarve', 'espanha', 'picos-de-europa', 'pireneus'].includes(r.slug)).map((r) => (
+                <li key={r.slug}>
+                  <Link href={`/${locale}/regions/${r.slug}`} className="text-muted-foreground hover:text-foreground transition-colors">
+                    {textFor(r.name, locale)}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

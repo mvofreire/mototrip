@@ -1,4 +1,7 @@
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { MapPin } from 'lucide-react'
+import { regionForRoute, textFor } from '@/lib/regions'
 import type { RouteWithDetails } from '@/types'
 import { RouteHero } from '@/components/features/routes/route-hero'
 import { RouteStats } from '@/components/features/routes/route-stats'
@@ -11,6 +14,8 @@ import { CommentsList } from '@/components/features/comments'
 /** Body of the route page (shared by the public and the private view) */
 export function RouteDetail({ route, locale }: { route: RouteWithDetails; locale: string }) {
   const t = useTranslations('route')
+  const tRegions = useTranslations('regions')
+  const destination = regionForRoute(route)
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -22,6 +27,16 @@ export function RouteDetail({ route, locale }: { route: RouteWithDetails; locale
           <RouteReviewBanner route={route} />
 
           <RouteStats route={route} />
+
+          {destination && (
+            <Link
+              href={`/${locale}/regions/${destination.slug}`}
+              className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+            >
+              <MapPin className="h-4 w-4" />
+              {tRegions('viewAll', { name: textFor(destination.name, locale) })}
+            </Link>
+          )}
 
           {route.description && (
             <div className="space-y-3">

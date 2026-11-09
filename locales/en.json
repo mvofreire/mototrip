@@ -12,6 +12,7 @@
   },
   "nav": {
     "exploreRoutes": "Explore Routes",
+    "destinations": "Destinations",
     "submitRoute": "Submit Route",
     "community": "Community",
     "signIn": "Sign In",
@@ -728,5 +729,22 @@
     "submit": "Submit a route",
     "empty": "You have not submitted any routes yet.",
     "error": "Could not load your routes."
+  },
+  "regions": {
+    "eyebrow": "Motorcycle routes",
+    "heading": "Motorcycle routes: {name}",
+    "metaTitle": "{name}: motorcycle routes with free GPX",
+    "routeCount": "{count, plural, =0 {No routes} one {# route} other {# routes}}",
+    "totalKm": "{km} km of road",
+    "routesHeading": "All routes: {name}",
+    "empty": "No routes here yet ({name}). Know a good one? Share it with the community.",
+    "ctaTitle": "Know a great route: {name}?",
+    "ctaDescription": "Upload the GPX, add the stops and help other riders discover the road.",
+    "otherDestinations": "Other destinations",
+    "allDestinations": "Destinations",
+    "indexTitle": "Motorcycle routes by destination",
+    "indexDescription": "Pick a country or region and see motorcycle routes with map, stops and free GPX.",
+    "viewAll": "See all routes: {name}",
+    "footerTitle": "Destinations"
   }
 }
