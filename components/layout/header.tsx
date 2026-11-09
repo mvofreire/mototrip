@@ -43,7 +43,7 @@ export function Header() {
             <span className="inline-block">{tCommon('mototrip')}</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-6 whitespace-nowrap">
             <Link
               href={`/${locale}/explore`}
               className={`text-sm font-medium transition-colors ${
@@ -91,7 +91,7 @@ export function Header() {
           {/* Mobile Menu */}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
+              <Button variant="ghost" size="icon" className="lg:hidden">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
@@ -221,7 +221,7 @@ export function Header() {
           </Sheet>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden lg:flex items-center gap-2">
             <ThemeToggle />
             <LanguageSwitcher />
             {loading ? (

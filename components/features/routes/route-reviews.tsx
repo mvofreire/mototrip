@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { CheckCircle2, Loader2, Pencil, Star, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -64,6 +65,7 @@ export function RouteReviews({ route }: { route: { id: string; user_id: string }
   const tr = useTranslations('reviews')
   const locale = useLocale()
   const { user } = useAuth()
+  const pathname = usePathname()
   const [reviews, setReviews] = useState<RouteReview[] | null>(null)
   const [editing, setEditing] = useState(false)
   const [scores, setScores] = useState<Scores>({ scenic: 0, road: 0, fun: 0 })
@@ -158,7 +160,7 @@ export function RouteReviews({ route }: { route: { id: string; user_id: string }
         {/* Call to action */}
         {!user ? (
           <Button asChild variant="outline">
-            <Link href={`/${locale}/auth/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : `/${locale}`)}`}>
+            <Link href={`/${locale}/auth/login?redirect=${encodeURIComponent(pathname || `/${locale}`)}`}>
               <CheckCircle2 className="mr-2 h-4 w-4" />
               {tr('loginToRate')}
             </Link>

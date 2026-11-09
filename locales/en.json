@@ -256,9 +256,12 @@
   },
   "blog": {
     "title": "Blog",
-    "subtitle": "Stories, tips, and inspiration from the road",
+    "subtitle": "Motorcycle guides and itineraries: the best roads, travel tips and inspiration.",
     "comingSoon": "Coming Soon",
-    "comingSoonDesc": "We're working on bringing you amazing stories from riders around the world. Check back soon!"
+    "comingSoonDesc": "We're working on bringing you amazing stories from riders around the world. Check back soon!",
+    "readMore": "Read the guide",
+    "back": "Back to the blog",
+    "englishOnly": "This guide is available in English."
   },
   "about": {
     "title": "About Us",

@@ -256,9 +256,12 @@
   },
   "blog": {
     "title": "Blog",
-    "subtitle": "Histórias, dicas e inspiração da estrada",
+    "subtitle": "Guias e roteiros de moto: as melhores estradas, dicas de viagem e inspiração.",
     "comingSoon": "Em Breve",
-    "comingSoonDesc": "Estamos trabalhando para trazer histórias incríveis de motociclistas ao redor do mundo. Volte em breve!"
+    "comingSoonDesc": "Estamos trabalhando para trazer histórias incríveis de motociclistas ao redor do mundo. Volte em breve!",
+    "readMore": "Ler o guia",
+    "back": "Voltar ao blog",
+    "englishOnly": "Este guia está disponível em inglês."
   },
   "about": {
     "title": "Sobre Nós",

@@ -3,11 +3,12 @@ import { getSiteUrl } from '@/lib/site-url'
 import { locales } from '@/i18n'
 import { supabase } from '@/lib/supabase/client'
 import { REGIONS } from '@/lib/regions'
+import { POSTS } from '@/lib/blog/posts'
 import { routePath } from '@/lib/route-url'
 
 const BASE_URL = getSiteUrl()
 
-const STATIC_PAGES = ['', '/explore', '/regions', ...REGIONS.map((r) => `/regions/${r.slug}`), '/riders', '/community', '/about', '/guidelines', '/blog', '/terms', '/privacy']
+const STATIC_PAGES = ['', '/explore', '/regions', ...REGIONS.map((r) => `/regions/${r.slug}`), '/riders', '/community', '/about', '/guidelines', '/blog', ...POSTS.map((p) => `/blog/${p.slug}`), '/terms', '/privacy']
 
 // Rebuild hourly so new routes show up
 export const revalidate = 3600
