@@ -745,7 +745,9 @@
     "indexTitle": "Motorradrouten nach Reiseziel",
     "indexDescription": "Wähle ein Land oder eine Region und sieh dir Motorradrouten mit Karte, Stopps und kostenlosem GPX an.",
     "viewAll": "Alle Routen ansehen: {name}",
-    "footerTitle": "Reiseziele"
+    "footerTitle": "Reiseziele",
+    "otherRegions": "Weitere Regionen",
+    "indexCtaTitle": "Kennst du eine Route, die hier noch fehlt?"
   },
   "oauth": {
     "continueWithGoogle": "Weiter mit Google",

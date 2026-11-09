@@ -745,7 +745,9 @@
     "indexTitle": "Rutas en moto por destino",
     "indexDescription": "Elige un país o región y mira las rutas en moto con mapa, paradas y GPX gratis.",
     "viewAll": "Ver todas las rutas: {name}",
-    "footerTitle": "Destinos"
+    "footerTitle": "Destinos",
+    "otherRegions": "Otras regiones",
+    "indexCtaTitle": "¿Conoces una ruta que aún no está aquí?"
   },
   "oauth": {
     "continueWithGoogle": "Continuar con Google",

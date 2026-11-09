@@ -745,7 +745,9 @@
     "indexTitle": "Itinéraires moto par destination",
     "indexDescription": "Choisissez un pays ou une région et découvrez des itinéraires moto avec carte, arrêts et GPX gratuit.",
     "viewAll": "Voir tous les itinéraires : {name}",
-    "footerTitle": "Destinations"
+    "footerTitle": "Destinations",
+    "otherRegions": "Autres régions",
+    "indexCtaTitle": "Vous connaissez un itinéraire qui n'est pas encore ici ?"
   },
   "oauth": {
     "continueWithGoogle": "Continuer avec Google",

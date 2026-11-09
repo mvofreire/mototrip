@@ -745,7 +745,9 @@
     "indexTitle": "Motorcycle routes by destination",
     "indexDescription": "Pick a country or region and see motorcycle routes with map, stops and free GPX.",
     "viewAll": "See all routes: {name}",
-    "footerTitle": "Destinations"
+    "footerTitle": "Destinations",
+    "otherRegions": "Other regions",
+    "indexCtaTitle": "Know a route that isn't here yet?"
   },
   "oauth": {
     "continueWithGoogle": "Continue with Google",
