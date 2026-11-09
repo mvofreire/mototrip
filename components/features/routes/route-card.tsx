@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { RouteWithDetails } from "@/types";
 import {
@@ -24,6 +23,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CommentsCount } from "@/components/features/comments";
+import { RouteThumbnail } from "@/components/features/routes/route-thumbnail";
 import {
   formatDistance,
   formatDuration,
@@ -63,30 +63,7 @@ export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
           <div className="flex flex-col md:flex-row">
             {/* Image */}
             <div className="relative w-full md:w-64 h-48 md:h-auto overflow-hidden bg-sand-100 shrink-0">
-              {route.thumbnail_url ? (
-                route.thumbnail_url.includes("maps.googleapis.com") ? (
-                  <img
-                    src={route.thumbnail_url}
-                    alt={route.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                ) : (
-                  <Image
-                    src={route.thumbnail_url}
-                    alt={route.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 256px"
-                  />
-                )
-              ) : (
-                <>
-                  <div className="absolute inset-0 bg-gradient-to-br from-steel-200 to-steel-400 dark:from-steel-800 dark:to-steel-950" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <MapPin className="h-12 w-12 text-steel-500" />
-                  </div>
-                </>
-              )}
+              <RouteThumbnail route={route} />
 
               {route.featured && (
                 <div className="absolute top-3 left-3">
@@ -214,31 +191,7 @@ export function RouteCard({ route, locale, variant = "grid" }: RouteCardProps) {
       <Card className="group overflow-hidden transition-all hover:shadow-lg">
         <CardHeader className="p-0">
           <div className="relative aspect-[16/9] overflow-hidden bg-sand-100">
-            {route.thumbnail_url ? (
-              route.thumbnail_url.includes("maps.googleapis.com") ? (
-                <img
-                  src={route.thumbnail_url}
-                  alt={route.title}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              ) : (
-                <Image
-                  src={route.thumbnail_url}
-                  alt={route.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-              )
-            ) : (
-              <>
-                {/* Placeholder for route image */}
-                <div className="absolute inset-0 bg-gradient-to-br from-steel-200 to-steel-400 dark:from-steel-800 dark:to-steel-950" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <MapPin className="h-16 w-16 text-steel-500" />
-                </div>
-              </>
-            )}
+            <RouteThumbnail route={route} />
 
             {/* Featured badge */}
             {route.featured && (

@@ -1,11 +1,6 @@
-import { notFound } from 'next/navigation'
 import { RoutesService } from '@/lib/services/routes.service'
-import { RouteHero } from '@/components/features/routes/route-hero'
-import { RouteStats } from '@/components/features/routes/route-stats'
-import { RouteMap } from '@/components/features/routes/route-map'
-import { StopsTimeline } from '@/components/features/routes/stops-timeline'
-import { RoutePhotos } from '@/components/features/routes/route-photos'
-import { CommentsList } from '@/components/features/comments'
+import { RouteDetail } from '@/components/features/routes/route-detail'
+import { PrivateRouteDetail } from '@/components/features/routes/private-route-detail'
 import { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 
@@ -49,62 +44,22 @@ export async function generateMetadata({ params }: RoutePageProps): Promise<Meta
       },
     }
   } catch {
-    const t = await getTranslations({ locale: params.locale })
+    // Missing, or not public yet (its author/staff still see it client-side)
     return {
-      title: t('route.notFoundTitle'),
+      title: 'MotoTrip',
+      robots: { index: false },
     }
   }
 }
 
 export default async function RoutePage({ params }: RoutePageProps) {
-  const t = await getTranslations({ locale: params.locale, namespace: 'route' })
   let route
-  
   try {
     route = await RoutesService.getRouteById(params.id)
-  } catch (error) {
-    notFound()
+  } catch {
+    // Not public (or doesn't exist): its author/staff may still see it
+    return <PrivateRouteDetail id={params.id} locale={params.locale} />
   }
 
-  return (
-    <div className="flex flex-col min-h-screen">
-      <RouteHero route={route} />
-      
-      <div className="container mx-auto py-6 md:py-8 lg:py-12 px-4 max-w-7xl">
-          {/* Main Content */}
-          <div className="space-y-6 md:space-y-8 min-w-0">
-            {/* Stats */}
-            <RouteStats route={route} />
-
-            {/* Description */}
-            {route.description && (
-              <div className="space-y-3">
-                <h2 className="text-xl md:text-2xl font-bold">{t('aboutRoute')}</h2>
-                <p className="text-muted-foreground leading-relaxed break-words">{route.description}</p>
-              </div>
-            )}
-
-            {/* Photos */}
-            <RoutePhotos route={route} />
-
-            {/* Map */}
-            <div className="space-y-3">
-              <h2 className="text-xl md:text-2xl font-bold">{t('routeMap')}</h2>
-              <RouteMap route={route} />
-            </div>
-
-            {/* Stops */}
-            {route.stops && route.stops.length > 0 && (
-              <div className="space-y-3">
-                <h2 className="text-xl md:text-2xl font-bold">{t('recommendedStops')}</h2>
-                <StopsTimeline stops={route.stops} />
-              </div>
-            )}
-
-            {/* Comments Section */}
-            <CommentsList routeId={route.id} locale={params.locale} />
-          </div>
-      </div>
-    </div>
-  )
+  return <RouteDetail route={route} locale={params.locale} />
 }

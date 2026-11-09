@@ -15,6 +15,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { useState } from 'react'
+import { isStaff } from '@/lib/auth/roles'
 import { useAuth } from '@/hooks/use-auth'
 
 export function Header() {
@@ -25,7 +26,7 @@ export function Header() {
   const [open, setOpen] = useState(false)
   const { user, loading, signOut } = useAuth()
 
-  const isAdmin = user?.profile?.role === 'admin'
+  const isAdmin = isStaff(user)
 
   const isActive = (path: string) => {
     return pathname === `/${locale}${path}` || pathname.startsWith(`/${locale}${path}/`)

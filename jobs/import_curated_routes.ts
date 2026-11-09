@@ -1,5 +1,5 @@
 /**
- * Import curated routes (jobs/data/curated_routes_pt.ts) into Supabase.
+ * Import curated routes (jobs/data/curated_routes_<pt|es>.ts) into Supabase.
  *
  * For every route it:
  *  - computes the real road geometry, distance and duration with OSRM,
@@ -10,16 +10,18 @@
  * Usage:
  *   npx tsx jobs/import_curated_routes.ts --dry [--out=/tmp/thumbs] [--only=Arrábida]
  *   npx tsx jobs/import_curated_routes.ts
+ *   npx tsx jobs/import_curated_routes.ts --dataset=es [--dry ...]   (Spain; default is pt)
  */
 
 import { createClient } from '@supabase/supabase-js';
 import * as turf from '@turf/turf';
 import * as dotenv from 'dotenv';
-import StaticMaps from 'staticmaps';
+import { renderRouteThumbnail } from './lib/route_thumbnail';
 import { mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { CURATED_ROUTES_PT, type CuratedRoute } from './data/curated_routes_pt';
+import { CURATED_ROUTES_ES } from './data/curated_routes_es';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: join(__dirname, '../.env.local') });
@@ -28,10 +30,20 @@ const args = process.argv.slice(2);
 const DRY_RUN = args.includes('--dry');
 const ONLY = args.find((a) => a.startsWith('--only='))?.slice(7);
 const OUT_DIR = args.find((a) => a.startsWith('--out='))?.slice(6);
+const DATASET = (args.find((a) => a.startsWith('--dataset='))?.slice(10) ?? 'pt').toLowerCase();
+
+const DATASETS: Record<string, { country: string; routes: CuratedRoute[] }> = {
+  pt: { country: 'PT', routes: CURATED_ROUTES_PT },
+  es: { country: 'ES', routes: CURATED_ROUTES_ES },
+};
+if (!DATASETS[DATASET]) {
+  console.error(`Unknown --dataset=${DATASET} (expected: ${Object.keys(DATASETS).join(', ')})`);
+  process.exit(1);
+}
 
 // Admin/system profile that owns curated content
 const SYSTEM_USER_ID = 'c8e0d98d-6270-45cd-be0b-2e9ca8c97135';
-const COUNTRY = 'PT';
+const COUNTRY = DATASETS[DATASET].country;
 const THUMB_BUCKET = 'route_map';
 const USER_AGENT = 'MotoTrip-route-import/1.0 (+https://mototrip.pt)';
 // Motorcycle touring is slower than OSRM's car profile
@@ -116,27 +128,6 @@ async function elevationGain(coordinates: Array<[number, number]>): Promise<numb
   }
 }
 
-async function renderThumbnail(route: CuratedRoute, coordinates: Array<[number, number]>) {
-  const map = new StaticMaps({
-    width: 700,
-    height: 400,
-    paddingX: 40,
-    paddingY: 40,
-    tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    tileRequestHeader: { 'User-Agent': USER_AGENT },
-    tileRequestLimit: 2,
-  });
-  map.addLine({ coords: coordinates, color: '#3b82f6E6', width: 5 });
-  const start = coordinates[0];
-  const end = coordinates[coordinates.length - 1];
-  if (route.route_type === 'out_and_back') {
-    map.addCircle({ coord: end, radius: 220, fill: '#ef4444', color: '#ffffff', width: 3 });
-  }
-  map.addCircle({ coord: start, radius: 220, fill: '#f59e0b', color: '#ffffff', width: 3 });
-  await map.render();
-  return map.image.buffer('image/png') as Promise<Buffer>;
-}
-
 function slug(s: string) {
   return s
     .normalize('NFD')
@@ -184,7 +175,7 @@ async function importRoute(route: CuratedRoute) {
     console.log(`    wp${i}: ${s.name || '(unnamed)'} (${s.distanceM} m)${s.distanceM > 300 ? '  ⚠ far snap' : ''}`),
   );
 
-  const thumb = await renderThumbnail(route, routed.coordinates);
+  const thumb = await renderRouteThumbnail(routed.coordinates);
   if (OUT_DIR) {
     mkdirSync(OUT_DIR, { recursive: true });
     writeFileSync(join(OUT_DIR, `${slug(route.title)}.png`), thumb);
@@ -249,8 +240,8 @@ async function importRoute(route: CuratedRoute) {
 }
 
 async function main() {
-  const routes = CURATED_ROUTES_PT.filter((r) => !ONLY || r.title.includes(ONLY));
-  console.log(`${DRY_RUN ? '[DRY RUN] ' : ''}${routes.length} curated routes`);
+  const routes = DATASETS[DATASET].routes.filter((r) => !ONLY || r.title.includes(ONLY));
+  console.log(`${DRY_RUN ? '[DRY RUN] ' : ''}${routes.length} curated routes (${COUNTRY})`);
 
   const results: Record<string, number> = {};
   for (const route of routes) {

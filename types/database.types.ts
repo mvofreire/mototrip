@@ -1,3 +1,5 @@
+export type RouteStatus = 'pending' | 'approved' | 'rejected'
+
 export type Database = {
   public: {
     Tables: {
@@ -51,6 +53,10 @@ export type Database = {
           fun_factor_score: number
           featured: boolean
           published: boolean
+          status: RouteStatus
+          review_note: string | null
+          reviewed_by: string | null
+          reviewed_at: string | null
           created_at: string
           updated_at: string
         }
@@ -74,6 +80,10 @@ export type Database = {
           fun_factor_score?: number
           featured?: boolean
           published?: boolean
+          status?: RouteStatus
+          review_note?: string | null
+          reviewed_by?: string | null
+          reviewed_at?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -97,6 +107,10 @@ export type Database = {
           fun_factor_score?: number
           featured?: boolean
           published?: boolean
+          status?: RouteStatus
+          review_note?: string | null
+          reviewed_by?: string | null
+          reviewed_at?: string | null
           created_at?: string
           updated_at?: string
         }

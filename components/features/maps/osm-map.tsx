@@ -10,6 +10,7 @@ import {
   TileLayer,
   Tooltip,
   useMap,
+  useMapEvents,
 } from "react-leaflet";
 
 export type LatLng = { lat: number; lng: number };
@@ -35,6 +36,8 @@ export interface OsmMapProps {
   fitBounds?: boolean;
   scrollWheelZoom?: boolean;
   className?: string;
+  /** Called with the clicked position */
+  onMapClick?: (position: LatLng) => void;
 }
 
 function pinIcon({ html, color = "#f59e0b", size = 28 }: OsmMarker) {
@@ -73,7 +76,14 @@ function FitBounds({ points }: { points: LatLng[] }) {
   return null;
 }
 
-/** OpenStreetMap map used when Google Maps is unavailable. */
+function ClickHandler({ onClick }: { onClick: (p: LatLng) => void }) {
+  useMapEvents({
+    click: (e) => onClick({ lat: e.latlng.lat, lng: e.latlng.lng }),
+  });
+  return null;
+}
+
+/** Interactive OpenStreetMap map (Leaflet). */
 export default function OsmMap({
   center,
   zoom,
@@ -83,6 +93,7 @@ export default function OsmMap({
   fitBounds = true,
   scrollWheelZoom = false,
   className = "w-full h-full",
+  onMapClick,
 }: OsmMapProps) {
   const boundsPoints = useMemo(
     () => (polyline.length > 0 ? polyline : markers.map((m) => m.position)),
@@ -118,6 +129,7 @@ export default function OsmMap({
         </Marker>
       ))}
       {fitBounds && <FitBounds points={boundsPoints} />}
+      {onMapClick && <ClickHandler onClick={onMapClick} />}
     </MapContainer>
   );
 }

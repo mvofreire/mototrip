@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase/client'
 import type { Database } from '@/types/database.types'
 import { RouteStorage } from '@/lib/storage/storage.service'
 import { authRedirectUrl } from '@/lib/auth/redirects'
+import type { UserRole } from '@/types/auth.types'
 
 type Route = Database['public']['Tables']['routes']['Row']
 type RouteUpdate = Database['public']['Tables']['routes']['Update']
@@ -15,7 +16,7 @@ export interface AdminUser {
   id: string
   email: string
   full_name: string | null
-  role: 'admin' | 'contributor'
+  role: UserRole
   created_at: string
   email_confirmed_at: string | null
   confirmation_sent_at: string | null
@@ -36,6 +37,18 @@ export class AdminService {
   }
 
   /**
+   * Switch a user between contributor and curator (admin only; enforced by
+   * the admin_set_user_role function)
+   */
+  static async setUserRole(userId: string, role: 'contributor' | 'curator'): Promise<void> {
+    const { error } = await (supabase as any).rpc('admin_set_user_role', {
+      target_user: userId,
+      new_role: role,
+    })
+    if (error) throw new Error(error.message)
+  }
+
+  /**
    * Re-send the signup confirmation email to an unconfirmed user.
    * The link points to the site the admin is currently using.
    */
@@ -51,7 +64,7 @@ export class AdminService {
   /**
    * Get all routes (admin only)
    */
-  static async getAllRoutes(): Promise<AdminRouteWithUser[]> {
+  static async getAllRoutes({ withEmails = false } = {}): Promise<AdminRouteWithUser[]> {
     // Get all routes
     const { data: routes, error: routesError } = await supabase
       .from('routes')
@@ -78,7 +91,9 @@ export class AdminService {
       await Promise.all([
         supabase.from('profiles').select('id, full_name').in('id', userIds),
         // Emails are only exposed to admins through this RPC
-        (supabase as any).rpc('admin_get_user_emails', { user_ids: userIds }),
+        withEmails
+          ? (supabase as any).rpc('admin_get_user_emails', { user_ids: userIds })
+          : Promise.resolve({ data: [], error: null }),
       ])
 
     if (profilesError) {
@@ -104,7 +119,7 @@ export class AdminService {
   }
 
   /**
-   * Update route (admin only)
+   * Update route (admins and curators)
    */
   static async updateRoute(id: string, updates: RouteUpdate): Promise<Route> {
     const { data, error } = await (supabase as any)
@@ -123,14 +138,21 @@ export class AdminService {
   }
 
   /**
-   * Toggle route published status (admin only)
+   * Approve a route (admins and curators). It becomes visible to everyone.
    */
-  static async togglePublished(id: string, published: boolean): Promise<Route> {
-    return this.updateRoute(id, { published })
+  static async approveRoute(id: string): Promise<Route> {
+    return this.updateRoute(id, { status: 'approved', review_note: null })
   }
 
   /**
-   * Toggle route featured status (admin only)
+   * Reject a route with a reason the author can see (admins and curators)
+   */
+  static async rejectRoute(id: string, note: string): Promise<Route> {
+    return this.updateRoute(id, { status: 'rejected', review_note: note })
+  }
+
+  /**
+   * Toggle route featured status (admins and curators)
    */
   static async toggleFeatured(id: string, featured: boolean): Promise<Route> {
     return this.updateRoute(id, { featured })
@@ -186,12 +208,11 @@ export class AdminService {
   }
 
   /**
-   * Check if user is admin
+   * Current user's role, read fresh from the database
    */
-  static async isAdmin(): Promise<boolean> {
+  static async getRole(): Promise<UserRole | null> {
     const { data: { user } } = await supabase.auth.getUser()
-    
-    if (!user) return false
+    if (!user) return null
 
     const { data, error } = await supabase
       .from('profiles')
@@ -199,8 +220,14 @@ export class AdminService {
       .eq('id', user.id)
       .single()
 
-    if (error || !data) return false
+    if (error || !data) return null
+    return (data as any).role as UserRole
+  }
 
-    return (data as any).role === 'admin'
+  /**
+   * Check if user is admin
+   */
+  static async isAdmin(): Promise<boolean> {
+    return (await this.getRole()) === 'admin'
   }
 }

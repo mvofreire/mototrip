@@ -126,7 +126,8 @@
     "uploadFailed": "Échec de l'envoi de la photo",
     "invalidFile": "Envoyez une image JPG, PNG ou WebP jusqu'à 5 Mo",
     "removePhoto": "Supprimer la photo",
-    "coverHint": "La première photo sert de couverture à l'itinéraire"
+    "coverHint": "La première photo sert de couverture à l'itinéraire",
+    "photosSendToReview": "Ajouter des photos renvoie l'itinéraire en révision."
   },
   "stopTypes": {
     "viewpoint": "Point de Vue",
@@ -231,7 +232,8 @@
     "loginRequired": "Vous devez être connecté pour soumettre un itinéraire",
     "errorMessage": "Erreur lors de la soumission de l'itinéraire",
     "noteTitle": "Note:",
-    "noteMessage": "Les itinéraires soumis seront examinés avant d'être publiés. Vous pouvez les modifier à tout moment depuis votre profil."
+    "noteMessage": "Les itinéraires soumis seront examinés avant d'être publiés. Vous pouvez les modifier à tout moment depuis votre profil.",
+    "successPendingMessage": "Votre itinéraire a été envoyé en révision et sera visible une fois approuvé."
   },
   "community": {
     "title": "Communauté",
@@ -432,7 +434,7 @@
   },
   "admin": {
     "pageTitle": "Tableau de Bord Admin",
-    "pageDescription": "Gérer tous les itinéraires de la plateforme",
+    "pageDescription": "Révisez, approuvez et gérez les itinéraires de la plateforme",
     "searchPlaceholder": "Rechercher par titre, utilisateur, région...",
     "refresh": "Actualiser",
     "totalRoutes": "{count} itinéraires au total",
@@ -453,7 +455,8 @@
       "featured": "En Vedette",
       "created": "Créé",
       "actions": "Actions",
-      "noRoutes": "Aucun itinéraire trouvé"
+      "noRoutes": "Aucun itinéraire trouvé",
+      "updated": "Mis à jour"
     },
     "categories": {
       "scenic": "Panoramique",
@@ -511,7 +514,8 @@
       },
       "roles": {
         "admin": "Admin",
-        "contributor": "Contributeur"
+        "contributor": "Contributeur",
+        "curator": "Curateur"
       },
       "confirmed": "Confirmé",
       "pending": "Non confirmé",
@@ -520,7 +524,18 @@
       "resend": "Renvoyer le lien",
       "resent": "Lien renvoyé",
       "resendError": "Échec de l'envoi du lien",
-      "empty": "Aucun utilisateur trouvé"
+      "empty": "Aucun utilisateur trouvé",
+      "roleError": "Impossible de changer le rôle"
+    },
+    "review": {
+      "approve": "Approuver",
+      "reject": "Refuser",
+      "edit": "Modifier",
+      "all": "Tous",
+      "rejectTitle": "Refuser l'itinéraire",
+      "rejectDescription": "L'auteur verra le motif et pourra corriger et renvoyer l'itinéraire.",
+      "reasonLabel": "Motif du refus",
+      "reasonPlaceholder": "Ex. : la trace GPX ne correspond pas à la description..."
     }
   },
   "riders": {
@@ -659,5 +674,54 @@
     "dismiss": "Plus tard",
     "iosStep1": "Touchez <share></share> <b>Partager</b> dans la barre du navigateur",
     "iosStep2": "Faites défiler et choisissez <b>Sur l'écran d'accueil</b>"
+  },
+  "routeStatus": {
+    "pending": "En révision",
+    "approved": "Approuvée",
+    "rejected": "Refusée",
+    "pendingTitle": "Itinéraire en révision",
+    "pendingDescription": "Seuls vous et l'équipe de curation voyez cet itinéraire. Il sera visible par tous une fois approuvé.",
+    "rejectedTitle": "Itinéraire refusé",
+    "rejectedDescription": "Corrigez l'itinéraire et enregistrez-le pour le renvoyer en révision.",
+    "approvedOwnerHint": "Cet itinéraire est public. Si vous le modifiez, il repasse en révision.",
+    "reason": "Motif",
+    "edit": "Modifier l'itinéraire"
+  },
+  "editRoute": {
+    "title": "Modifier l'itinéraire",
+    "backToRoute": "Retour à l'itinéraire",
+    "notFound": "Itinéraire introuvable.",
+    "forbidden": "Vous n'êtes pas autorisé à modifier cet itinéraire.",
+    "saved": "Modifications enregistrées.",
+    "savedToReview": "Modifications enregistrées. L'itinéraire est de nouveau en révision.",
+    "save": "Enregistrer",
+    "replaceGpx": "Remplacer le GPX",
+    "replaceGpxHint": "Envoyez un nouveau fichier GPX pour remplacer la trace actuelle. La distance et le dénivelé sont recalculés et la carte est mise à jour.",
+    "reviewWarning": "En enregistrant, l'itinéraire repasse en révision et n'est plus public jusqu'à sa nouvelle approbation.",
+    "stops": {
+      "title": "Arrêts",
+      "description": "Ajoutez des points d'intérêt le long de l'itinéraire. Cliquez sur la carte pour placer chaque arrêt.",
+      "add": "Ajouter un arrêt",
+      "empty": "Aucun arrêt pour l'instant.",
+      "name": "Nom de l'arrêt",
+      "type": "Type",
+      "notes": "Description (facultatif)",
+      "setOnMap": "Placer sur la carte",
+      "clickMap": "Cliquez sur la carte pour placer l'arrêt",
+      "moveUp": "Monter",
+      "moveDown": "Descendre",
+      "remove": "Supprimer l'arrêt",
+      "save": "Enregistrer les arrêts",
+      "saved": "Arrêts enregistrés.",
+      "saveFailed": "Impossible d'enregistrer les arrêts.",
+      "incomplete": "Nommez chaque arrêt et placez-le sur la carte.",
+      "untitled": "Arrêt sans nom"
+    }
+  },
+  "myRoutes": {
+    "title": "Mes itinéraires",
+    "submit": "Proposer un itinéraire",
+    "empty": "Vous n'avez encore proposé aucun itinéraire.",
+    "error": "Impossible de charger vos itinéraires."
   }
 }

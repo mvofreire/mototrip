@@ -126,7 +126,8 @@
     "uploadFailed": "Error al subir la foto",
     "invalidFile": "Sube una imagen JPG, PNG o WebP de hasta 5 MB",
     "removePhoto": "Eliminar foto",
-    "coverHint": "La primera foto se usa como portada de la ruta"
+    "coverHint": "La primera foto se usa como portada de la ruta",
+    "photosSendToReview": "Añadir fotos envía la ruta de nuevo a revisión."
   },
   "stopTypes": {
     "viewpoint": "Mirador",
@@ -231,7 +232,8 @@
     "loginRequired": "Necesitas estar conectado para enviar una ruta",
     "errorMessage": "Error al enviar la ruta",
     "noteTitle": "Nota:",
-    "noteMessage": "Las rutas enviadas serán revisadas antes de ser publicadas. Puedes editarlas en cualquier momento desde tu perfil."
+    "noteMessage": "Las rutas enviadas serán revisadas antes de ser publicadas. Puedes editarlas en cualquier momento desde tu perfil.",
+    "successPendingMessage": "Tu ruta se ha enviado a revisión y será visible cuando se apruebe."
   },
   "community": {
     "title": "Comunidad",
@@ -432,7 +434,7 @@
   },
   "admin": {
     "pageTitle": "Panel de Administración",
-    "pageDescription": "Gestiona todas las rutas de la plataforma",
+    "pageDescription": "Revisa, aprueba y gestiona las rutas de la plataforma",
     "searchPlaceholder": "Buscar por título, usuario, región...",
     "refresh": "Actualizar",
     "totalRoutes": "{count} rutas en total",
@@ -453,7 +455,8 @@
       "featured": "Destacada",
       "created": "Creado",
       "actions": "Acciones",
-      "noRoutes": "No se encontraron rutas"
+      "noRoutes": "No se encontraron rutas",
+      "updated": "Actualizada"
     },
     "categories": {
       "scenic": "Escénica",
@@ -511,7 +514,8 @@
       },
       "roles": {
         "admin": "Admin",
-        "contributor": "Colaborador"
+        "contributor": "Colaborador",
+        "curator": "Curador"
       },
       "confirmed": "Confirmado",
       "pending": "Sin confirmar",
@@ -520,7 +524,18 @@
       "resend": "Reenviar enlace",
       "resent": "Enlace reenviado",
       "resendError": "Error al reenviar el enlace",
-      "empty": "No se encontraron usuarios"
+      "empty": "No se encontraron usuarios",
+      "roleError": "Error al cambiar el rol"
+    },
+    "review": {
+      "approve": "Aprobar",
+      "reject": "Rechazar",
+      "edit": "Editar",
+      "all": "Todas",
+      "rejectTitle": "Rechazar ruta",
+      "rejectDescription": "El autor verá el motivo y podrá corregir y reenviar la ruta.",
+      "reasonLabel": "Motivo del rechazo",
+      "reasonPlaceholder": "Ej.: el trazado del GPX no coincide con la descripción..."
     }
   },
   "riders": {
@@ -659,5 +674,54 @@
     "dismiss": "Ahora no",
     "iosStep1": "Toca <share></share> <b>Compartir</b> en la barra del navegador",
     "iosStep2": "Desplázate y elige <b>Añadir a pantalla de inicio</b>"
+  },
+  "routeStatus": {
+    "pending": "En revisión",
+    "approved": "Aprobada",
+    "rejected": "Rechazada",
+    "pendingTitle": "Ruta en revisión",
+    "pendingDescription": "Solo tú y el equipo de curación veis esta ruta. Será visible para todos cuando se apruebe.",
+    "rejectedTitle": "Ruta rechazada",
+    "rejectedDescription": "Corrige la ruta y guárdala para enviarla de nuevo a revisión.",
+    "approvedOwnerHint": "Esta ruta es pública. Si la editas, vuelve a revisión.",
+    "reason": "Motivo",
+    "edit": "Editar ruta"
+  },
+  "editRoute": {
+    "title": "Editar ruta",
+    "backToRoute": "Volver a la ruta",
+    "notFound": "Ruta no encontrada.",
+    "forbidden": "No tienes permiso para editar esta ruta.",
+    "saved": "Cambios guardados.",
+    "savedToReview": "Cambios guardados. La ruta ha vuelto a revisión.",
+    "save": "Guardar cambios",
+    "replaceGpx": "Sustituir GPX",
+    "replaceGpxHint": "Sube un nuevo archivo GPX para sustituir el trazado actual. La distancia y la elevación se recalculan y el mapa se actualiza.",
+    "reviewWarning": "Al guardar, la ruta vuelve a revisión y deja de ser pública hasta que se apruebe de nuevo.",
+    "stops": {
+      "title": "Paradas",
+      "description": "Añade puntos de interés a lo largo de la ruta. Haz clic en el mapa para situar cada parada.",
+      "add": "Añadir parada",
+      "empty": "Aún no hay paradas.",
+      "name": "Nombre de la parada",
+      "type": "Tipo",
+      "notes": "Descripción (opcional)",
+      "setOnMap": "Marcar en el mapa",
+      "clickMap": "Haz clic en el mapa para situar la parada",
+      "moveUp": "Subir",
+      "moveDown": "Bajar",
+      "remove": "Eliminar parada",
+      "save": "Guardar paradas",
+      "saved": "Paradas guardadas.",
+      "saveFailed": "Error al guardar las paradas.",
+      "incomplete": "Pon nombre a todas las paradas y márcalas en el mapa.",
+      "untitled": "Parada sin nombre"
+    }
+  },
+  "myRoutes": {
+    "title": "Mis rutas",
+    "submit": "Enviar ruta",
+    "empty": "Aún no has enviado ninguna ruta.",
+    "error": "Error al cargar tus rutas."
   }
 }

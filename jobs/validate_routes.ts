@@ -23,6 +23,7 @@ import * as dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import type { Database } from '../types/database.types';
+import { renderRouteThumbnail } from './lib/route_thumbnail';
 
 // Load environment variables
 const __filename = fileURLToPath(import.meta.url);
@@ -326,37 +327,17 @@ function generateDescription(
 }
 
 /**
- * Generate thumbnail URL using Google Static Maps API
+ * Render an OpenStreetMap thumbnail of the route, upload it and return its URL
  */
-function generateThumbnailUrl(coordinates: any[]): string {
-  if (!coordinates || coordinates.length === 0) {
-    return '/images/route-placeholder.svg';
-  }
-
-  // Get center point
-  const midIndex = Math.floor(coordinates.length / 2);
-  const [lon, lat] = coordinates[midIndex];
-
-  // Create path parameter from coordinates (sample every Nth point to avoid URL length limits)
-  const step = Math.max(1, Math.floor(coordinates.length / 50)); // Max 50 points
-  const pathPoints = coordinates
-    .filter((_, index) => index % step === 0)
-    .map(([lng, lt]) => `${lt},${lng}`)
-    .join('|');
-
-  const zoom = 10;
-  const width = 600;
-  const height = 400;
-  
-  // Check if Google Maps API key is available
-  const googleMapsKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-  if (googleMapsKey) {
-    // Use Google Static Maps API with path
-    return `https://maps.googleapis.com/maps/api/staticmap?size=${width}x${height}&path=color:0x0000ff|weight:3|${pathPoints}&key=${googleMapsKey}`;
-  }
-  
-  // Fallback to placeholder if no API key
-  return '/images/route-placeholder.svg';
+async function generateThumbnailUrl(routeId: string, coordinates: any[]): Promise<string | null> {
+  if (!coordinates || coordinates.length < 2) return null;
+  const png = await renderRouteThumbnail(coordinates);
+  const path = `thumbnail-${routeId}.png`;
+  const { error } = await supabase.storage
+    .from('route_map')
+    .upload(path, png, { contentType: 'image/png', upsert: true, cacheControl: '3600' });
+  if (error) throw new Error(`thumbnail upload: ${error.message}`);
+  return supabase.storage.from('route_map').getPublicUrl(path).data.publicUrl;
 }
 
 // ================================================================================
@@ -472,8 +453,8 @@ async function enrichRoute(route: RouteData): Promise<RouteEnrichment | null> {
 
     // Generate thumbnail
     if (missing.includes('thumbnail_url')) {
-      enrichment.thumbnail_url = generateThumbnailUrl(coordinates);
-      console.log(`  ✓ Generated thumbnail URL`);
+      enrichment.thumbnail_url = await generateThumbnailUrl(route.id, coordinates);
+      console.log(`  ✓ Generated thumbnail`);
     }
 
     // Set road quality score to a reasonable default if not set

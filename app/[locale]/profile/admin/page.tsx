@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useAuth } from '@/hooks/use-auth'
 import { AdminService, AdminRouteWithUser } from '@/lib/services/admin.service'
 import { AdminRoutesTable } from '@/components/admin/admin-routes-table'
@@ -10,90 +10,107 @@ import { AdminNav } from '@/components/admin/admin-nav'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { RefreshCw, Search } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import type { UserRole } from '@/types/auth.types'
+import type { RouteStatus } from '@/types/database.types'
+import { cn } from '@/lib/utils'
+
+type StatusFilter = RouteStatus | 'all'
+const FILTERS: StatusFilter[] = ['pending', 'rejected', 'approved', 'all']
 
 export default function AdminPage() {
   const { user, loading: authLoading } = useAuth()
   const router = useRouter()
   const locale = useLocale()
   const t = useTranslations('admin')
+  const tStatus = useTranslations('routeStatus')
+  const [role, setRole] = useState<UserRole | null>(null)
   const [routes, setRoutes] = useState<AdminRouteWithUser[]>([])
-  const [filteredRoutes, setFilteredRoutes] = useState<AdminRouteWithUser[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('pending')
 
-  useEffect(() => {
-    const checkAdminAndLoadRoutes = async () => {
-      if (authLoading) return
+  const isAdmin = role === 'admin'
+  const isStaff = role === 'admin' || role === 'curator'
 
-      if (!user) {
-        router.push(`/${locale}/auth/login?redirect=${encodeURIComponent(`/${locale}/profile/admin`)}`)
-        return
-      }
-
-      // Check if user is admin
-      const adminStatus = await AdminService.isAdmin()
-      setIsAdmin(adminStatus)
-
-      if (!adminStatus) {
-        router.push(`/${locale}/profile`)
-        return
-      }
-
-      // Load routes
-      await loadRoutes()
-    }
-
-    checkAdminAndLoadRoutes()
-  }, [user, authLoading, router, locale])
-
-  const loadRoutes = async () => {
+  const loadRoutes = useCallback(async (asAdmin: boolean) => {
     setLoading(true)
     try {
-      const data = await AdminService.getAllRoutes()
-      setRoutes(data)
-      setFilteredRoutes(data)
+      setRoutes(await AdminService.getAllRoutes({ withEmails: asAdmin }))
     } catch (error) {
       console.error('Error loading routes:', error)
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
-    if (searchTerm) {
-      const filtered = routes.filter(
-        (route) =>
-          route.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          route.user_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          route.user_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          route.region?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-      setFilteredRoutes(filtered)
-    } else {
-      setFilteredRoutes(routes)
+    const init = async () => {
+      if (authLoading) return
+      if (!user) {
+        router.push(`/${locale}/auth/login?redirect=${encodeURIComponent(`/${locale}/profile/admin`)}`)
+        return
+      }
+      const r = await AdminService.getRole()
+      setRole(r)
+      if (r !== 'admin' && r !== 'curator') {
+        router.push(`/${locale}/profile`)
+        return
+      }
+      await loadRoutes(r === 'admin')
     }
-  }, [searchTerm, routes])
+    init()
+  }, [user, authLoading, router, locale, loadRoutes])
 
-  const handleTogglePublished = async (id: string, published: boolean) => {
-    try {
-      await AdminService.togglePublished(id, published)
-      setRoutes((prev) =>
-        prev.map((route) => (route.id === id ? { ...route, published } : route))
+  const counts = useMemo(() => {
+    const c: Record<StatusFilter, number> = { pending: 0, approved: 0, rejected: 0, all: routes.length }
+    routes.forEach((r) => c[r.status]++)
+    return c
+  }, [routes])
+
+  const filteredRoutes = useMemo(() => {
+    const q = searchTerm.trim().toLowerCase()
+    return routes
+      .filter((r) => statusFilter === 'all' || r.status === statusFilter)
+      .filter(
+        (r) =>
+          !q ||
+          r.title.toLowerCase().includes(q) ||
+          r.user_email?.toLowerCase().includes(q) ||
+          r.user_name?.toLowerCase().includes(q) ||
+          r.region?.toLowerCase().includes(q),
       )
+      // Oldest pending first, otherwise most recently updated first
+      .sort((a, b) =>
+        statusFilter === 'pending'
+          ? a.updated_at.localeCompare(b.updated_at)
+          : b.updated_at.localeCompare(a.updated_at),
+      )
+  }, [routes, searchTerm, statusFilter])
+
+  const patch = (id: string, updated: Partial<AdminRouteWithUser>) =>
+    setRoutes((prev) => prev.map((r) => (r.id === id ? { ...r, ...updated } : r)))
+
+  const handleApprove = async (id: string) => {
+    try {
+      patch(id, await AdminService.approveRoute(id))
     } catch (error) {
-      console.error('Error toggling published status:', error)
-      alert(t('errorTogglePublished'))
+      console.error('Error approving route:', error)
+      alert(t('errorUpdate'))
+    }
+  }
+
+  const handleReject = async (id: string, note: string) => {
+    try {
+      patch(id, await AdminService.rejectRoute(id, note))
+    } catch (error) {
+      console.error('Error rejecting route:', error)
+      alert(t('errorUpdate'))
     }
   }
 
   const handleToggleFeatured = async (id: string, featured: boolean) => {
     try {
-      await AdminService.toggleFeatured(id, featured)
-      setRoutes((prev) =>
-        prev.map((route) => (route.id === id ? { ...route, featured } : route))
-      )
+      patch(id, await AdminService.toggleFeatured(id, featured))
     } catch (error) {
       console.error('Error toggling featured status:', error)
       alert(t('errorToggleFeatured'))
@@ -120,19 +137,7 @@ export default function AdminPage() {
     }
   }
 
-  const handleUpdate = async (id: string, updates: any) => {
-    try {
-      await AdminService.updateRoute(id, updates)
-      setRoutes((prev) =>
-        prev.map((route) => (route.id === id ? { ...route, ...updates } : route))
-      )
-    } catch (error) {
-      console.error('Error updating route:', error)
-      alert(t('errorUpdate'))
-    }
-  }
-
-  if (authLoading || loading) {
+  if (authLoading || (loading && !isStaff)) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
@@ -142,55 +147,7 @@ export default function AdminPage() {
     )
   }
 
-  if (!isAdmin) {
-    return null
-  }
-
-  const translations = {
-    title: t('table.title'),
-    user: t('table.user'),
-    category: t('table.category'),
-    difficulty: t('table.difficulty'),
-    distance: t('table.distance'),
-    status: t('table.status'),
-    featured: t('table.featured'),
-    created: t('table.created'),
-    actions: t('table.actions'),
-    noRoutes: t('table.noRoutes'),
-    categories: {
-      scenic: t('categories.scenic'),
-      mountain: t('categories.mountain'),
-      coastal: t('categories.coastal'),
-      weekend: t('categories.weekend'),
-      adventure: t('categories.adventure'),
-    },
-    difficulties: {
-      easy: t('difficulties.easy'),
-      moderate: t('difficulties.moderate'),
-      challenging: t('difficulties.challenging'),
-      expert: t('difficulties.expert'),
-    },
-    deleteTitle: t('deleteDialog.title'),
-    deleteDescription: t('deleteDialog.description'),
-    cancel: t('deleteDialog.cancel'),
-    delete: t('deleteDialog.delete'),
-    selectedRoutes: t('selectedRoutes'),
-    deleteSelected: t('deleteSelected'),
-    bulkDeleteTitle: t('bulkDeleteDialog.title'),
-    bulkDeleteDescription: t('bulkDeleteDialog.description'),
-    editTitle: t('editDialog.title'),
-    editDescription: t('editDialog.description'),
-    titleLabel: t('editDialog.titleLabel'),
-    descriptionLabel: t('editDialog.descriptionLabel'),
-    difficultyLabel: t('editDialog.difficultyLabel'),
-    categoryLabel: t('editDialog.categoryLabel'),
-    distanceLabel: t('editDialog.distanceLabel'),
-    durationLabel: t('editDialog.durationLabel'),
-    elevationLabel: t('editDialog.elevationLabel'),
-    regionLabel: t('editDialog.regionLabel'),
-    save: t('editDialog.save'),
-    saving: t('editDialog.saving'),
-  }
+  if (!isStaff) return null
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -201,8 +158,22 @@ export default function AdminPage() {
 
       <AdminNav />
 
-      <div className="mb-6 flex items-center gap-4">
-        <div className="relative flex-1 max-w-md">
+      <div className="mb-4 flex flex-wrap gap-2">
+        {FILTERS.map((f) => (
+          <Button
+            key={f}
+            size="sm"
+            variant={statusFilter === f ? 'default' : 'outline'}
+            onClick={() => setStatusFilter(f)}
+            className={cn(f === 'pending' && counts.pending > 0 && statusFilter !== f && 'border-amber-400')}
+          >
+            {f === 'all' ? t('review.all') : tStatus(f)} ({counts[f]})
+          </Button>
+        ))}
+      </div>
+
+      <div className="mb-6 flex flex-wrap items-center gap-4">
+        <div className="relative flex-1 min-w-[200px] max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder={t('searchPlaceholder')}
@@ -211,8 +182,8 @@ export default function AdminPage() {
             className="pl-10"
           />
         </div>
-        <Button onClick={loadRoutes} variant="outline">
-          <RefreshCw className="h-4 w-4 mr-2" />
+        <Button onClick={() => loadRoutes(isAdmin)} variant="outline" disabled={loading}>
+          <RefreshCw className={cn('h-4 w-4 mr-2', loading && 'animate-spin')} />
           {t('refresh')}
         </Button>
       </div>
@@ -223,12 +194,12 @@ export default function AdminPage() {
 
       <AdminRoutesTable
         routes={filteredRoutes}
-        onTogglePublished={handleTogglePublished}
+        canDelete={isAdmin}
+        onApprove={handleApprove}
+        onReject={handleReject}
         onToggleFeatured={handleToggleFeatured}
         onDelete={handleDelete}
         onDeleteBulk={handleDeleteBulk}
-        onUpdate={handleUpdate}
-        translations={translations}
       />
     </div>
   )

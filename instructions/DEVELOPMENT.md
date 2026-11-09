@@ -19,7 +19,7 @@ Plataforma web para descoberta e compartilhamento de rotas de motocicleta. Foco 
 ### Inspiração de Produto
 - **AllTrails** - Sistema de descoberta e filtros
 - **Komoot** - Planejamento de rotas
-- **Google Maps** - Mapas e navegação
+- **OpenStreetMap + Leaflet** - Mapas
 - **Strava** - Aspecto comunitário
 
 ---
@@ -214,7 +214,7 @@ full: 9999px
   storage: "Supabase Storage",
   
   // Maps
-  maps: "Google Maps API / Mapbox",
+  maps: "OpenStreetMap + Leaflet",
   
   // Deployment
   hosting: "Vercel",
@@ -866,7 +866,6 @@ Todas as tabelas têm RLS habilitado. Políticas implementadas:
 # ✅ Públicas (NEXT_PUBLIC_)
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=...
 
 # ❌ Privadas (NUNCA expor ao cliente)
 SUPABASE_SERVICE_ROLE_KEY=...
@@ -941,7 +940,6 @@ __tests__/
 - [ ] Variáveis de ambiente configuradas na Vercel
 - [ ] Schema SQL executado no Supabase production
 - [ ] RLS policies testadas
-- [ ] Google Maps API key configurada
 - [ ] Analytics configurado (Vercel Analytics)
 - [ ] Custom domain configurado (se houver)
 - [ ] OG images geradas
@@ -973,7 +971,7 @@ hotfix/*    → correções urgentes
 - [Radix UI](https://www.radix-ui.com)
 
 ### Mapas
-- [Google Maps Platform](https://developers.google.com/maps)
+- [Leaflet](https://leafletjs.com)
 - [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js)
 
 ---

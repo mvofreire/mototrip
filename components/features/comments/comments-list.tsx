@@ -12,15 +12,21 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { useAuth } from '@/hooks/use-auth'
+import { isStaff } from '@/lib/auth/roles'
 
 interface CommentsListProps {
   routeId: string
   locale: string
+  /** The route's author can remove any comment on their route */
+  routeAuthorId?: string
+  /** Hide the "new comment" form (e.g. on the edit page) */
+  hideForm?: boolean
 }
 
-export function CommentsList({ routeId, locale }: CommentsListProps) {
+export function CommentsList({ routeId, locale, routeAuthorId, hideForm = false }: CommentsListProps) {
   const t = useTranslations('comments')
   const { user } = useAuth()
+  const canModerate = isStaff(user) || (!!user && user.id === routeAuthorId)
   
   const [comments, setComments] = useState<RouteCommentWithUser[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -96,8 +102,7 @@ export function CommentsList({ routeId, locale }: CommentsListProps) {
       throw new Error(t('errors.loginRequired'))
     }
 
-    const isAdmin = user.profile?.role === 'admin'
-    await commentsService.deleteComment(commentId, user.id, isAdmin)
+    await commentsService.deleteComment(commentId, user.id, canModerate)
     
     // Remove comment from list
     const newComments = comments.filter(c => c.id !== commentId)
@@ -133,7 +138,7 @@ export function CommentsList({ routeId, locale }: CommentsListProps) {
       <Separator />
 
       {/* Comment Form (only for logged-in users) */}
-      {user ? (
+      {hideForm ? null : user ? (
         <Card className="p-4">
           <CommentForm
             onSubmit={handleCreateComment}
@@ -179,7 +184,7 @@ export function CommentsList({ routeId, locale }: CommentsListProps) {
               key={comment.id}
               comment={comment}
               currentUserId={user?.id}
-              isAdmin={user?.profile?.role === 'admin'}
+              isAdmin={canModerate}
               locale={locale}
               onUpdate={handleUpdateComment}
               onDelete={handleDeleteComment}

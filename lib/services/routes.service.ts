@@ -6,6 +6,7 @@ import {
   RouteInsert,
   RouteUpdate,
   Route,
+  RouteStop,
 } from "@/types";
 
 export class RoutesService {
@@ -267,6 +268,65 @@ export class RoutesService {
     return ((data as any[]) ?? [])
       .map((row) => row.route as RouteWithDetails | null)
       .filter((r): r is RouteWithDetails => r !== null);
+  }
+
+  /**
+   * Routes created by a user, any status (RLS shows authors their own routes)
+   */
+  static async getUserRoutes(userId: string): Promise<RouteWithDetails[]> {
+    const { data, error } = await supabase
+      .from("routes")
+      .select(
+        `
+        *,
+        stops:route_stops(*),
+        photos:route_photos(*),
+        ratings:route_ratings(*)
+      `,
+      )
+      .eq("user_id", userId)
+      .order("updated_at", { ascending: false });
+
+    if (error) throw error;
+    return (data as RouteWithDetails[]) ?? [];
+  }
+
+  /**
+   * Replace the stops of a route with the given list (in order)
+   */
+  static async saveStops(
+    routeId: string,
+    stops: Array<Pick<RouteStop, "name" | "description" | "type" | "latitude" | "longitude"> & { id?: string }>,
+  ): Promise<RouteStop[]> {
+    const keepIds = stops.map((s) => s.id).filter((id): id is string => !!id);
+
+    let del = supabase.from("route_stops").delete().eq("route_id", routeId);
+    if (keepIds.length) del = del.not("id", "in", `(${keepIds.join(",")})`);
+    const { error: delError } = await del;
+    if (delError) throw delError;
+
+    if (stops.length === 0) return [];
+
+    const row = (s: (typeof stops)[number], i: number) => ({
+      route_id: routeId,
+      name: s.name,
+      description: s.description || null,
+      type: s.type,
+      latitude: s.latitude,
+      longitude: s.longitude,
+      order_index: i,
+    });
+
+    const saved: RouteStop[] = [];
+    for (const [i, s] of stops.entries()) {
+      const query = s.id
+        ? supabase.from("route_stops").update(row(s, i) as never).eq("id", s.id)
+        : supabase.from("route_stops").insert(row(s, i) as never);
+      const { data, error } = await query.select().single();
+      if (error) throw error;
+      saved.push(data as RouteStop);
+    }
+    return saved;
   }
 
   static async createRoute(routeData: RouteInsert) {

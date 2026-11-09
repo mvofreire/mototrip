@@ -7,7 +7,7 @@ A production-grade web platform for discovering and sharing motorcycle riding ro
 ## 🌟 Features
 
 - **Route Discovery**: Search and filter motorcycle routes by category, difficulty, distance, and more
-- **Interactive Maps**: Visualize routes with integrated mapping (Google Maps/Mapbox)
+- **Interactive Maps**: Visualize routes with OpenStreetMap (Leaflet)
 - **Community Ratings**: Rate routes on scenery, road quality, and fun factor
 - **Recommended Stops**: Discover viewpoints, cafés, and landmarks along each route
 - **User Profiles**: Track contributed and saved routes
@@ -30,7 +30,7 @@ MotoTrip features a modern, clean interface with a "sunshine" color palette evok
 - **State Management**: TanStack Query
 - **Database**: Supabase (PostgreSQL)
 - **Auth**: Supabase Auth
-- **Maps**: Google Maps API / Mapbox
+- **Maps**: OpenStreetMap + Leaflet (react-leaflet)
 - **I18n**: next-intl (English, Portuguese, Spanish)
 - **Deployment**: Vercel
 
@@ -77,7 +77,6 @@ Antes de começar, certifique-se de ter instalado:
 - **npm** 9+ (incluido com Node.js)
 - **Git** para clonar o repositório
 - Uma conta no **Supabase** ([Criar conta gratuita](https://supabase.com))
-- _(Opcional)_ Chave de API do **Google Maps** ou **Mapbox**
 
 > **✅ Compatibilidade:** Testado com Node.js 18, 20, 22 e 23.
 
@@ -168,9 +167,6 @@ Abra o arquivo `.env.local` e adicione:
 # Supabase (OBRIGATÓRIO)
 NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_chave_anon_aqui
-
-# Google Maps (OPCIONAL - para mapas interativos)
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=sua_chave_google_maps
 ```
 
 **⚠️ Importante:**
@@ -314,7 +310,6 @@ npm run dev
 5. Configure as variáveis de ambiente:
    - Adicione `NEXT_PUBLIC_SUPABASE_URL`
    - Adicione `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - Adicione `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (se tiver)
 6. Clique em "Deploy"
 
 **✅ Deploy Automático:** A Vercel detecta automaticamente Next.js e usa npm. Cada push na branch `main` fará deploy automaticamente!
@@ -374,20 +369,14 @@ The platform is built with performance in mind:
 
 **Target Lighthouse Scores**: 95+ across all metrics
 
-## 🗺️ Implementing Maps
+## 🗺️ Maps
 
-The map component is currently a placeholder. To integrate Google Maps:
+All maps use **OpenStreetMap** tiles rendered with **Leaflet** (`react-leaflet`) — no API key or billing needed.
 
-1. **Install the package**
-   ```bash
-   npm install @vis.gl/react-google-maps
-   ```
-
-2. **Update the RouteMap component** in `components/features/routes/route-map.tsx`
-
-3. **Add your API key** to environment variables
-
-See the [Google Maps documentation](https://developers.google.com/maps) for details.
+- `components/features/maps/map.tsx` — interactive map (route page, explore overview, GPX preview)
+- `components/features/routes/route-cover-map.tsx` — styled, non-interactive map used for the route page cover and the route card thumbnails
+- `lib/map-thumbnail.ts` / `jobs/lib/route_thumbnail.ts` — static PNG of the route (social preview image), in the browser and in Node
+- `npx tsx jobs/regenerate_thumbnails.ts` — re-renders the stored PNG of every route
 
 ## 🤝 Contributing
 
