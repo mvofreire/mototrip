@@ -19,7 +19,7 @@ Implementação completa do upload de arquivos GPX com previsualização em mapa
 2. **`components/features/routes/gpx-upload.tsx`** - Componente de upload
    - Interface de drag-and-drop para arquivos GPX
    - Validação de arquivo (formato e tamanho)
-   - Previsualização interativa no mapa usando Google Maps
+   - Previsualização interativa no mapa usando OpenStreetMap (Leaflet)
    - Exibição de estatísticas da rota (distância, elevação, etc.)
    - Design responsivo e feedback visual
 
@@ -54,7 +54,7 @@ Implementação completa do upload de arquivos GPX com previsualização em mapa
 - ✅ Mensagens de erro amigáveis
 
 ### 3. Previsualização no Mapa
-- ✅ Renderização da rota no Google Maps
+- ✅ Renderização da rota no OpenStreetMap
 - ✅ Ajuste automático de zoom para mostrar rota completa
 - ✅ Polyline estilizada (vermelho, semi-transparente)
 - ✅ Controles de mapa interativos
@@ -121,9 +121,9 @@ const geoJSON = gpxPointsToGeoJSON(gpxData.points)
 
 ## Dependências
 
-- `@vis.gl/react-google-maps` - Componentes React para Google Maps
+- `react-leaflet` - Componentes React para Leaflet
 - `DOMParser` (nativo) - Parsing de XML
-- Google Maps API - Renderização do mapa
+- OpenStreetMap - Tiles do mapa
 
 ## Notas Técnicas
 

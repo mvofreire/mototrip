@@ -5,15 +5,21 @@ import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { Map, Users } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/hooks/use-auth'
+import { isAdmin } from '@/lib/auth/roles'
 
 export function AdminNav() {
   const t = useTranslations('admin.nav')
   const locale = useLocale()
   const pathname = usePathname()
+  const { user } = useAuth()
 
   const items = [
     { href: `/${locale}/profile/admin`, label: t('routes'), icon: Map },
-    { href: `/${locale}/profile/admin/users`, label: t('users'), icon: Users },
+    // Managing users and roles is admin-only
+    ...(isAdmin(user)
+      ? [{ href: `/${locale}/profile/admin/users`, label: t('users'), icon: Users }]
+      : []),
   ]
 
   return (

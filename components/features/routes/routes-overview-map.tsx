@@ -2,11 +2,10 @@
 
 import { RouteWithDetails } from '@/types'
 import { Card } from '@/components/ui/card'
-import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps'
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
-import { MapWithFallback } from '@/components/features/maps/map-with-fallback'
+import { Map } from '@/components/features/maps/map'
 
 interface RoutesOverviewMapProps {
   routes: RouteWithDetails[]
@@ -14,7 +13,6 @@ interface RoutesOverviewMapProps {
 }
 
 export function RoutesOverviewMap({ routes, locale }: RoutesOverviewMapProps) {
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? ''
   const [selectedRoute, setSelectedRoute] = useState<string | null>(null)
 
   // Calculate center point from all routes
@@ -62,62 +60,18 @@ export function RoutesOverviewMap({ routes, locale }: RoutesOverviewMapProps) {
   return (
     <Card className="overflow-hidden">
       <div className="h-96">
-        <MapWithFallback
-          fallback={{
-            center,
-            zoom: 6,
-            scrollWheelZoom: true,
-            markers: routeMarkers.map((m) => ({
-              id: m.id,
-              position: m.position,
-              title: m.title,
-              html: '🏍️',
-              onClick: () => setSelectedRoute(m.id),
-            })),
-          }}
-        >
-        <APIProvider apiKey={apiKey}>
-          <Map
-            defaultCenter={center}
-            defaultZoom={6}
-            mapId={process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || 'DEMO_MAP_ID'}
-            gestureHandling="greedy"
-            disableDefaultUI={false}
-            mapTypeControl={false}
-            streetViewControl={false}
-            fullscreenControl={true}
-            zoomControl={true}
-            className="w-full h-full"
-          >
-            {routeMarkers.map((marker) => (
-              <AdvancedMarker
-                key={marker.id}
-                position={marker.position}
-                title={marker.title}
-                onClick={() => setSelectedRoute(marker.id)}
-              >
-                <div style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  background: '#f59e0b',
-                  border: '3px solid #d97706',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  fontSize: '12px',
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
-                  cursor: 'pointer'
-                }}>
-                  🏍️
-                </div>
-              </AdvancedMarker>
-            ))}
-          </Map>
-        </APIProvider>
-        </MapWithFallback>
+        <Map
+          center={center}
+          zoom={6}
+          scrollWheelZoom
+          markers={routeMarkers.map((m) => ({
+            id: m.id,
+            position: m.position,
+            title: m.title,
+            html: '🏍️',
+            onClick: () => setSelectedRoute(m.id),
+          }))}
+        />
       </div>
 
       {/* Info panel when route is selected */}

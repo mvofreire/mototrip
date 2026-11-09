@@ -126,7 +126,8 @@
     "uploadFailed": "Falha ao enviar a foto",
     "invalidFile": "Envie uma imagem JPG, PNG ou WebP de até 5 MB",
     "removePhoto": "Remover foto",
-    "coverHint": "A primeira foto é usada como capa da rota"
+    "coverHint": "A primeira foto é usada como capa da rota",
+    "photosSendToReview": "Adicionar fotos envia a rota de volta para revisão."
   },
   "stopTypes": {
     "viewpoint": "Mirante",
@@ -231,7 +232,8 @@
     "loginRequired": "Você precisa estar logado para submeter uma rota",
     "errorMessage": "Erro ao submeter rota",
     "noteTitle": "Nota:",
-    "noteMessage": "As rotas submetidas serão revisadas antes de serem publicadas. Você pode editá-las a qualquer momento no seu perfil."
+    "noteMessage": "As rotas submetidas serão revisadas antes de serem publicadas. Você pode editá-las a qualquer momento no seu perfil.",
+    "successPendingMessage": "Sua rota foi enviada para revisão e ficará visível assim que for aprovada."
   },
   "community": {
     "title": "Comunidade",
@@ -432,7 +434,7 @@
   },
   "admin": {
     "pageTitle": "Painel de Administração",
-    "pageDescription": "Gerencie todas as rotas da plataforma",
+    "pageDescription": "Revise, aprove e gerencie as rotas da plataforma",
     "searchPlaceholder": "Buscar por título, usuário, região...",
     "refresh": "Atualizar",
     "totalRoutes": "{count} rotas no total",
@@ -453,7 +455,8 @@
       "featured": "Destaque",
       "created": "Criado",
       "actions": "Ações",
-      "noRoutes": "Nenhuma rota encontrada"
+      "noRoutes": "Nenhuma rota encontrada",
+      "updated": "Atualizada"
     },
     "categories": {
       "scenic": "Cênica",
@@ -511,7 +514,8 @@
       },
       "roles": {
         "admin": "Admin",
-        "contributor": "Contribuidor"
+        "contributor": "Contribuidor",
+        "curator": "Curador"
       },
       "confirmed": "Confirmado",
       "pending": "Pendente",
@@ -520,7 +524,18 @@
       "resend": "Reenviar link",
       "resent": "Link reenviado",
       "resendError": "Erro ao reenviar o link",
-      "empty": "Nenhum usuário encontrado"
+      "empty": "Nenhum usuário encontrado",
+      "roleError": "Erro ao alterar a função"
+    },
+    "review": {
+      "approve": "Aprovar",
+      "reject": "Rejeitar",
+      "edit": "Editar",
+      "all": "Todas",
+      "rejectTitle": "Rejeitar rota",
+      "rejectDescription": "O autor verá o motivo e poderá corrigir e reenviar a rota.",
+      "reasonLabel": "Motivo da rejeição",
+      "reasonPlaceholder": "Ex.: o traçado do GPX não corresponde à descrição..."
     }
   },
   "riders": {
@@ -659,5 +674,54 @@
     "dismiss": "Agora não",
     "iosStep1": "Toque em <share></share> <b>Compartilhar</b>, na barra do navegador",
     "iosStep2": "Role e escolha <b>Adicionar à Tela de Início</b>"
+  },
+  "routeStatus": {
+    "pending": "Em revisão",
+    "approved": "Aprovada",
+    "rejected": "Rejeitada",
+    "pendingTitle": "Rota em revisão",
+    "pendingDescription": "Só você e a equipe de curadoria veem esta rota. Ela fica visível para todos assim que for aprovada.",
+    "rejectedTitle": "Rota rejeitada",
+    "rejectedDescription": "Corrija a rota e salve para enviá-la de novo para revisão.",
+    "approvedOwnerHint": "Esta rota é pública. Se você a editar, ela volta para revisão.",
+    "reason": "Motivo",
+    "edit": "Editar rota"
+  },
+  "editRoute": {
+    "title": "Editar rota",
+    "backToRoute": "Voltar para a rota",
+    "notFound": "Rota não encontrada.",
+    "forbidden": "Você não tem permissão para editar esta rota.",
+    "saved": "Alterações salvas.",
+    "savedToReview": "Alterações salvas. A rota voltou para revisão.",
+    "save": "Salvar alterações",
+    "replaceGpx": "Substituir GPX",
+    "replaceGpxHint": "Envie um novo arquivo GPX para substituir o traçado atual. A distância e a elevação são recalculadas e o mapa é atualizado.",
+    "reviewWarning": "Ao salvar, a rota volta para revisão e deixa de ser pública até ser aprovada novamente.",
+    "stops": {
+      "title": "Paradas",
+      "description": "Adicione pontos de interesse ao longo da rota. Clique no mapa para posicionar cada parada.",
+      "add": "Adicionar parada",
+      "empty": "Nenhuma parada ainda.",
+      "name": "Nome da parada",
+      "type": "Tipo",
+      "notes": "Descrição (opcional)",
+      "setOnMap": "Marcar no mapa",
+      "clickMap": "Clique no mapa para posicionar a parada",
+      "moveUp": "Mover para cima",
+      "moveDown": "Mover para baixo",
+      "remove": "Remover parada",
+      "save": "Salvar paradas",
+      "saved": "Paradas salvas.",
+      "saveFailed": "Erro ao salvar as paradas.",
+      "incomplete": "Preencha o nome e marque no mapa todas as paradas.",
+      "untitled": "Parada sem nome"
+    }
+  },
+  "myRoutes": {
+    "title": "Minhas rotas",
+    "submit": "Enviar rota",
+    "empty": "Você ainda não enviou nenhuma rota.",
+    "error": "Erro ao carregar suas rotas."
   }
 }

@@ -3,20 +3,11 @@
 import { RouteWithDetails } from "@/types";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  APIProvider,
-  Map,
-  AdvancedMarker,
-  Marker,
-  useMap,
-} from "@vis.gl/react-google-maps";
-import { useMemo, useEffect } from "react";
-import { Download, MapIcon, Navigation, Flag } from "lucide-react";
+import { useMemo } from "react";
+import { Download, MapIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { escapeXml } from "@/lib/utils";
-import { MapWithFallback } from "@/components/features/maps/map-with-fallback";
-import type { OsmMarker } from "@/components/features/maps/osm-map";
-
+import { Map, type OsmMarker } from "@/components/features/maps/map";
 
 
 type Coordinate = {
@@ -29,52 +20,8 @@ interface RouteMapProps {
   route: RouteWithDetails;
 }
 
-// Component to draw the route polyline
-function RoutePolyline({
-  coordinates,
-}: {
-  coordinates: Array<{ lat: number; lng: number }>;
-}) {
-  const map = useMap();
-
-  useEffect(() => {
-    if (!map || coordinates.length < 2) return;
-
-    const polyline = new google.maps.Polyline({
-      path: coordinates,
-      geodesic: true,
-      strokeColor: "#3b82f6",
-      strokeOpacity: 0.8,
-      strokeWeight: 4,
-    });
-
-    polyline.setMap(map);
-
-    // Calculate bounds to fit the entire route
-    const bounds = new google.maps.LatLngBounds();
-    coordinates.forEach((coord) => {
-      bounds.extend(coord);
-    });
-
-    // Fit map to show the entire route with some padding
-    map.fitBounds(bounds, {
-      top: 50,
-      bottom: 50,
-      left: 50,
-      right: 50,
-    });
-
-    return () => {
-      polyline.setMap(null);
-    };
-  }, [map, coordinates]);
-
-  return null;
-}
-
 export function RouteMap({ route }: RouteMapProps) {
   const t = useTranslations("route");
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
   // Extract coordinates from polyline
   const coordinates = useMemo(() => {
@@ -106,7 +53,7 @@ export function RouteMap({ route }: RouteMapProps) {
     return { lat: avgLat, lng: avgLng };
   }, [coordinates]);
 
-  // Markers for the OpenStreetMap fallback
+  // Start, end and stop markers
   const osmMarkers = useMemo<OsmMarker[]>(() => {
     const markers: OsmMarker[] = (route.stops ?? []).map((stop, index) => ({
       id: `stop-${stop.id}`,
@@ -137,7 +84,7 @@ export function RouteMap({ route }: RouteMapProps) {
       });
     }
     return markers;
-  }, [route.stops, coordinates]);
+  }, [route.stops, coordinates, t]);
 
   // Function to generate and download GPX from route coordinates
   const handleDownloadGPX = () => {
@@ -235,90 +182,12 @@ export function RouteMap({ route }: RouteMapProps) {
     <div className="space-y-4">
       <Card className="overflow-hidden">
         <div className="aspect-video relative">
-          <MapWithFallback
-            fallback={{
-              center,
-              zoom: 10,
-              polyline: coordinates,
-              markers: osmMarkers,
-            }}
-          >
-          <APIProvider apiKey={apiKey ?? ""}>
-            <Map
-              defaultCenter={center}
-              defaultZoom={10}
-              mapId={
-                process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || "DEMO_MAP_ID"
-              }
-              gestureHandling="cooperative"
-              disableDefaultUI={false}
-              mapTypeControl={false}
-              streetViewControl={false}
-              fullscreenControl={true}
-              zoomControl={true}
-              className="w-full h-full"
-            >
-              <RoutePolyline coordinates={coordinates} />
-              {/* Add end marker */}
-              {coordinates.length > 1 && (
-                <AdvancedMarker
-                  position={coordinates[coordinates.length - 1]}
-                  title={t("end")}
-                  zIndex={10}
-                >
-                  <div
-                    style={{
-                      width: "36px",
-                      height: "36px",
-                      borderRadius: "50%",
-                      background: "#ef4444",
-                      border: "3px solid #dc2626",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "white",
-                      fontWeight: "bold",
-                      fontSize: "14px",
-                      boxShadow: "0 4px 8px rgba(0,0,0,0.4)",
-                      transform: "translate(12px, 0)", // Offset to the right
-                    }}
-                  >
-                    <Flag />
-                  </div>
-                </AdvancedMarker>
-              )}
-              {/* Add start marker */}
-              {coordinates.length > 0 && (
-                <AdvancedMarker
-                  position={coordinates[0]}
-                  title={t("start")}
-                  zIndex={20}
-                >
-                  <div className="p-2 bg-primary text-white m-auto rounded-full shadow-lg border-2">
-                    <Navigation />
-                  </div>
-                </AdvancedMarker>
-              )}
-              {/* Add markers for stops */}
-              {route.stops?.map((stop, index) => (
-                <Marker
-                  key={stop.id}
-                  position={{
-                    lat: Number(stop.latitude),
-                    lng: Number(stop.longitude),
-                  }}
-                  title={stop.name}
-                  label={{
-                    text: String(index + 1),
-                    color: "white",
-                    fontSize: "12px",
-                    fontWeight: "bold",
-                  }}
-                />
-              ))}
-            </Map>
-          </APIProvider>
-          </MapWithFallback>
+          <Map
+            center={center}
+            zoom={10}
+            polyline={coordinates}
+            markers={osmMarkers}
+          />
         </div>
       </Card>
 

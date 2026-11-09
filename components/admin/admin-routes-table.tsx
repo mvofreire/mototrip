@@ -1,9 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
+import { useLocale, useTranslations } from 'next-intl'
 import { AdminRouteWithUser } from '@/lib/services/admin.service'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Table,
   TableBody,
@@ -20,237 +24,177 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Eye, EyeOff, Edit, Trash2, Star } from 'lucide-react'
+import { Check, ExternalLink, Pencil, Star, Trash2, X } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
-import { ptBR, enUS, es } from 'date-fns/locale'
-import { useParams } from 'next/navigation'
-import { EditRouteDialog } from './edit-route-dialog'
+import { de, enUS, es, fr, ptBR } from 'date-fns/locale'
 import { Checkbox } from '@/components/ui/checkbox'
+import { RouteStatusBadge } from '@/components/features/routes/route-status-badge'
+import { getCategoryColor, getDifficultyColor } from '@/lib/utils'
+
+const dateLocales = { pt: ptBR, en: enUS, es, fr, de } as const
 
 interface AdminRoutesTableProps {
   routes: AdminRouteWithUser[]
-  onTogglePublished: (id: string, published: boolean) => Promise<void>
+  /** Only admins can delete routes */
+  canDelete: boolean
+  onApprove: (id: string) => Promise<void>
+  onReject: (id: string, note: string) => Promise<void>
   onToggleFeatured: (id: string, featured: boolean) => Promise<void>
   onDelete: (id: string) => Promise<void>
   onDeleteBulk: (ids: string[]) => Promise<void>
-  onUpdate: (id: string, updates: any) => Promise<void>
-  translations: any
 }
 
 export function AdminRoutesTable({
   routes,
-  onTogglePublished,
+  canDelete,
+  onApprove,
+  onReject,
   onToggleFeatured,
   onDelete,
   onDeleteBulk,
-  onUpdate,
-  translations,
 }: AdminRoutesTableProps) {
-  const params = useParams()
-  const locale = params?.locale as string || 'en'
-  
-  const [selectedRoutes, setSelectedRoutes] = useState<Set<string>>(new Set())
-  
-  const [deleteDialog, setDeleteDialog] = useState<{
-    open: boolean
-    routeId: string | null
-    routeTitle: string
-  }>({
-    open: false,
-    routeId: null,
-    routeTitle: '',
-  })
+  const t = useTranslations('admin')
+  const tAll = useTranslations()
+  const locale = useLocale()
+  const dateLocale = dateLocales[locale as keyof typeof dateLocales] ?? enUS
 
-  const [bulkDeleteDialog, setBulkDeleteDialog] = useState(false)
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [busy, setBusy] = useState<string | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<AdminRouteWithUser | null>(null)
+  const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false)
+  const [rejectTarget, setRejectTarget] = useState<AdminRouteWithUser | null>(null)
+  const [rejectNote, setRejectNote] = useState('')
 
-  const [editDialog, setEditDialog] = useState<{
-    open: boolean
-    route: AdminRouteWithUser | null
-  }>({
-    open: false,
-    route: null,
-  })
-
-  const dateLocale = locale === 'pt' ? ptBR : locale === 'es' ? es : enUS
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'easy':
-        return 'bg-green-500/10 text-green-500'
-      case 'moderate':
-        return 'bg-yellow-500/10 text-yellow-500'
-      case 'challenging':
-        return 'bg-orange-500/10 text-orange-500'
-      case 'expert':
-        return 'bg-red-500/10 text-red-500'
-      default:
-        return 'bg-gray-500/10 text-gray-500'
+  const run = async (id: string, fn: () => Promise<void>) => {
+    setBusy(id)
+    try {
+      await fn()
+    } finally {
+      setBusy(null)
     }
   }
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'scenic':
-        return 'bg-blue-500/10 text-blue-500'
-      case 'mountain':
-        return 'bg-purple-500/10 text-purple-500'
-      case 'coastal':
-        return 'bg-cyan-500/10 text-cyan-500'
-      case 'weekend':
-        return 'bg-pink-500/10 text-pink-500'
-      case 'adventure':
-        return 'bg-amber-500/10 text-amber-500'
-      default:
-        return 'bg-gray-500/10 text-gray-500'
-    }
+  const toggleSelect = (id: string) => {
+    const next = new Set(selected)
+    if (next.has(id)) next.delete(id)
+    else next.add(id)
+    setSelected(next)
   }
 
-  const handleDelete = async () => {
-    if (deleteDialog.routeId) {
-      await onDelete(deleteDialog.routeId)
-      setDeleteDialog({ open: false, routeId: null, routeTitle: '' })
-    }
-  }
+  const allSelected = routes.length > 0 && selected.size === routes.length
 
-  const handleBulkDelete = async () => {
-    const ids = Array.from(selectedRoutes)
-    await onDeleteBulk(ids)
-    setSelectedRoutes(new Set())
-    setBulkDeleteDialog(false)
+  const handleReject = async () => {
+    if (!rejectTarget || !rejectNote.trim()) return
+    const target = rejectTarget
+    await run(target.id, () => onReject(target.id, rejectNote.trim()))
+    setRejectTarget(null)
+    setRejectNote('')
   }
-
-  const handleEdit = async (updates: any) => {
-    if (editDialog.route) {
-      await onUpdate(editDialog.route.id, updates)
-      setEditDialog({ open: false, route: null })
-    }
-  }
-
-  const toggleSelectRoute = (id: string) => {
-    const newSelected = new Set(selectedRoutes)
-    if (newSelected.has(id)) {
-      newSelected.delete(id)
-    } else {
-      newSelected.add(id)
-    }
-    setSelectedRoutes(newSelected)
-  }
-
-  const toggleSelectAll = () => {
-    if (selectedRoutes.size === routes.length) {
-      setSelectedRoutes(new Set())
-    } else {
-      setSelectedRoutes(new Set(routes.map(r => r.id)))
-    }
-  }
-
-  const isAllSelected = routes.length > 0 && selectedRoutes.size === routes.length
-  const isSomeSelected = selectedRoutes.size > 0 && selectedRoutes.size < routes.length
 
   return (
     <>
-      {selectedRoutes.size > 0 && (
+      {canDelete && selected.size > 0 && (
         <div className="mb-4 flex items-center justify-between rounded-lg border bg-muted/50 p-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">
-              {selectedRoutes.size} {translations.selectedRoutes || 'rotas selecionadas'}
-            </span>
-          </div>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setBulkDeleteDialog(true)}
-          >
+          <span className="text-sm font-medium">
+            {selected.size} {t('selectedRoutes')}
+          </span>
+          <Button variant="destructive" size="sm" onClick={() => setBulkDeleteOpen(true)}>
             <Trash2 className="mr-2 h-4 w-4" />
-            {translations.deleteSelected || 'Deletar Selecionadas'}
+            {t('deleteSelected')}
           </Button>
         </div>
       )}
-      
-      <div className="rounded-md border">
+
+      <div className="overflow-x-auto rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[50px]">
-                <Checkbox
-                  checked={isAllSelected}
-                  onCheckedChange={toggleSelectAll}
-                  aria-label="Select all"
-                  className={isSomeSelected ? "opacity-50" : ""}
-                />
-              </TableHead>
-              <TableHead>{translations.title}</TableHead>
-              <TableHead>{translations.user}</TableHead>
-              <TableHead>{translations.category}</TableHead>
-              <TableHead>{translations.difficulty}</TableHead>
-              <TableHead className="text-right">{translations.distance}</TableHead>
-              <TableHead className="text-center">{translations.status}</TableHead>
-              <TableHead className="text-center">{translations.featured}</TableHead>
-              <TableHead>{translations.created}</TableHead>
-              <TableHead className="text-right">{translations.actions}</TableHead>
+              {canDelete && (
+                <TableHead className="w-[50px]">
+                  <Checkbox
+                    checked={allSelected}
+                    onCheckedChange={() =>
+                      setSelected(allSelected ? new Set() : new Set(routes.map((r) => r.id)))
+                    }
+                    aria-label="Select all"
+                  />
+                </TableHead>
+              )}
+              <TableHead>{t('table.title')}</TableHead>
+              <TableHead>{t('table.user')}</TableHead>
+              <TableHead>{t('table.category')}</TableHead>
+              <TableHead className="text-right">{t('table.distance')}</TableHead>
+              <TableHead>{t('table.status')}</TableHead>
+              <TableHead className="text-center">{t('table.featured')}</TableHead>
+              <TableHead>{t('table.updated')}</TableHead>
+              <TableHead className="text-right">{t('table.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {routes.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={9} className="text-center text-muted-foreground">
-                  {translations.noRoutes}
+                <TableCell colSpan={9} className="py-8 text-center text-muted-foreground">
+                  {t('table.noRoutes')}
                 </TableCell>
               </TableRow>
             ) : (
               routes.map((route) => (
                 <TableRow key={route.id}>
-                  <TableCell>
-                    <Checkbox
-                      checked={selectedRoutes.has(route.id)}
-                      onCheckedChange={() => toggleSelectRoute(route.id)}
-                      aria-label={`Select ${route.title}`}
-                    />
-                  </TableCell>
-                  <TableCell className="font-medium max-w-[200px] truncate">
-                    {route.title}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium">
-                        {route.user_name || 'Unknown'}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {route.user_email}
-                      </span>
+                  {canDelete && (
+                    <TableCell>
+                      <Checkbox
+                        checked={selected.has(route.id)}
+                        onCheckedChange={() => toggleSelect(route.id)}
+                        aria-label={`Select ${route.title}`}
+                      />
+                    </TableCell>
+                  )}
+                  <TableCell className="max-w-[260px]">
+                    <Link
+                      href={`/${locale}/routes/${route.id}`}
+                      target="_blank"
+                      className="inline-flex items-center gap-1 font-medium hover:underline"
+                    >
+                      <span className="truncate">{route.title}</span>
+                      <ExternalLink className="h-3 w-3 shrink-0 text-muted-foreground" />
+                    </Link>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      <Badge className={getDifficultyColor(route.difficulty)} variant="outline">
+                        {tAll(`difficulty.${route.difficulty}`)}
+                      </Badge>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge className={getCategoryColor(route.category)}>
-                      {translations.categories[route.category]}
-                    </Badge>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">{route.user_name || '—'}</span>
+                      {route.user_email && (
+                        <span className="text-xs text-muted-foreground">{route.user_email}</span>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>
-                    <Badge className={getDifficultyColor(route.difficulty)}>
-                      {translations.difficulties[route.difficulty]}
+                    <Badge className={getCategoryColor(route.category)} variant="outline">
+                      {tAll(`categories.${route.category}`)}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right">
-                    {route.distance_km.toFixed(1)} km
+                  <TableCell className="whitespace-nowrap text-right">
+                    {Number(route.distance_km).toFixed(1)} km
+                  </TableCell>
+                  <TableCell className="max-w-[220px]">
+                    <RouteStatusBadge status={route.status} />
+                    {route.status === 'rejected' && route.review_note && (
+                      <p className="mt-1 line-clamp-2 text-xs text-muted-foreground" title={route.review_note}>
+                        {route.review_note}
+                      </p>
+                    )}
                   </TableCell>
                   <TableCell className="text-center">
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => onTogglePublished(route.id, !route.published)}
-                    >
-                      {route.published ? (
-                        <Eye className="h-4 w-4 text-green-500" />
-                      ) : (
-                        <EyeOff className="h-4 w-4 text-gray-500" />
-                      )}
-                    </Button>
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => onToggleFeatured(route.id, !route.featured)}
+                      disabled={busy === route.id}
+                      aria-label={t('table.featured')}
+                      onClick={() => run(route.id, () => onToggleFeatured(route.id, !route.featured))}
                     >
                       <Star
                         className={`h-4 w-4 ${
@@ -259,34 +203,57 @@ export function AdminRoutesTable({
                       />
                     </Button>
                   </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {formatDistanceToNow(new Date(route.created_at), {
+                  <TableCell className="whitespace-nowrap text-sm text-muted-foreground">
+                    {formatDistanceToNow(new Date(route.updated_at ?? route.created_at), {
                       addSuffix: true,
                       locale: dateLocale,
                     })}
                   </TableCell>
                   <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setEditDialog({ open: true, route })}
-                      >
-                        <Edit className="h-4 w-4" />
+                    <div className="flex justify-end gap-1">
+                      {route.status !== 'approved' && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          title={t('review.approve')}
+                          aria-label={t('review.approve')}
+                          disabled={busy === route.id}
+                          onClick={() => run(route.id, () => onApprove(route.id))}
+                        >
+                          <Check className="h-4 w-4 text-green-600" />
+                        </Button>
+                      )}
+                      {route.status !== 'rejected' && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          title={t('review.reject')}
+                          aria-label={t('review.reject')}
+                          disabled={busy === route.id}
+                          onClick={() => {
+                            setRejectNote('')
+                            setRejectTarget(route)
+                          }}
+                        >
+                          <X className="h-4 w-4 text-amber-600" />
+                        </Button>
+                      )}
+                      <Button variant="ghost" size="sm" asChild title={t('review.edit')}>
+                        <Link href={`/${locale}/routes/${route.id}/edit`} aria-label={t('review.edit')}>
+                          <Pencil className="h-4 w-4" />
+                        </Link>
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() =>
-                          setDeleteDialog({
-                            open: true,
-                            routeId: route.id,
-                            routeTitle: route.title,
-                          })
-                        }
-                      >
-                        <Trash2 className="h-4 w-4 text-red-500" />
-                      </Button>
+                      {canDelete && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          title={t('deleteDialog.delete')}
+                          aria-label={t('deleteDialog.delete')}
+                          onClick={() => setDeleteTarget(route)}
+                        >
+                          <Trash2 className="h-4 w-4 text-red-500" />
+                        </Button>
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>
@@ -296,65 +263,93 @@ export function AdminRoutesTable({
         </Table>
       </div>
 
-      {/* Bulk Delete Confirmation Dialog */}
-      <Dialog open={bulkDeleteDialog} onOpenChange={setBulkDeleteDialog}>
+      {/* Reject */}
+      <Dialog open={!!rejectTarget} onOpenChange={(open) => !open && setRejectTarget(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{translations.bulkDeleteTitle || 'Deletar Rotas'}</DialogTitle>
+            <DialogTitle>{t('review.rejectTitle')}</DialogTitle>
             <DialogDescription>
-              {translations.bulkDeleteDescription?.replace('{count}', selectedRoutes.size.toString()) || 
-                `Tem certeza que deseja deletar ${selectedRoutes.size} rotas? Esta ação não pode ser desfeita.`}
+              {t('review.rejectDescription')}
+              <strong className="mt-2 block text-foreground">{rejectTarget?.title}</strong>
             </DialogDescription>
           </DialogHeader>
+          <div className="space-y-2">
+            <Label htmlFor="reject-note">{t('review.reasonLabel')}</Label>
+            <Textarea
+              id="reject-note"
+              rows={4}
+              value={rejectNote}
+              onChange={(e) => setRejectNote(e.target.value)}
+              placeholder={t('review.reasonPlaceholder')}
+            />
+          </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setBulkDeleteDialog(false)}
-            >
-              {translations.cancel}
+            <Button variant="outline" onClick={() => setRejectTarget(null)}>
+              {t('deleteDialog.cancel')}
             </Button>
-            <Button variant="destructive" onClick={handleBulkDelete}>
-              {translations.delete}
+            <Button
+              onClick={handleReject}
+              disabled={!rejectNote.trim() || busy === rejectTarget?.id}
+            >
+              {t('review.reject')}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteDialog.open} onOpenChange={(open) => !open && setDeleteDialog({ open: false, routeId: null, routeTitle: '' })}>
+      {/* Bulk delete */}
+      <Dialog open={bulkDeleteOpen} onOpenChange={setBulkDeleteOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{translations.deleteTitle}</DialogTitle>
+            <DialogTitle>{t('bulkDeleteDialog.title')}</DialogTitle>
             <DialogDescription>
-              {translations.deleteDescription}
-              <br />
-              <strong className="mt-2 block text-foreground">{deleteDialog.routeTitle}</strong>
+              {t('bulkDeleteDialog.description', { count: selected.size })}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setDeleteDialog({ open: false, routeId: null, routeTitle: '' })}
-            >
-              {translations.cancel}
+            <Button variant="outline" onClick={() => setBulkDeleteOpen(false)}>
+              {t('deleteDialog.cancel')}
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
-              {translations.delete}
+            <Button
+              variant="destructive"
+              onClick={async () => {
+                await onDeleteBulk(Array.from(selected))
+                setSelected(new Set())
+                setBulkDeleteOpen(false)
+              }}
+            >
+              {t('deleteDialog.delete')}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Edit Dialog */}
-      {editDialog.route && (
-        <EditRouteDialog
-          open={editDialog.open}
-          route={editDialog.route}
-          onClose={() => setEditDialog({ open: false, route: null })}
-          onSave={handleEdit}
-          translations={translations}
-        />
-      )}
+      {/* Delete */}
+      <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('deleteDialog.title')}</DialogTitle>
+            <DialogDescription>
+              {t('deleteDialog.description')}
+              <strong className="mt-2 block text-foreground">{deleteTarget?.title}</strong>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteTarget(null)}>
+              {t('deleteDialog.cancel')}
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={async () => {
+                if (deleteTarget) await onDelete(deleteTarget.id)
+                setDeleteTarget(null)
+              }}
+            >
+              {t('deleteDialog.delete')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

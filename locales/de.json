@@ -126,7 +126,8 @@
     "uploadFailed": "Foto-Upload fehlgeschlagen",
     "invalidFile": "Lade ein JPG-, PNG- oder WebP-Bild bis 5 MB hoch",
     "removePhoto": "Foto entfernen",
-    "coverHint": "Das erste Foto wird als Titelbild der Route verwendet"
+    "coverHint": "Das erste Foto wird als Titelbild der Route verwendet",
+    "photosSendToReview": "Wenn du Fotos hinzufügst, wird die Route erneut geprüft."
   },
   "stopTypes": {
     "viewpoint": "Aussichtspunkt",
@@ -231,7 +232,8 @@
     "loginRequired": "Sie müssen angemeldet sein, um eine Route einzureichen",
     "errorMessage": "Fehler beim Einreichen der Route",
     "noteTitle": "Hinweis:",
-    "noteMessage": "Eingereichte Routen werden überprüft, bevor sie veröffentlicht werden. Sie können sie jederzeit in Ihrem Profil bearbeiten."
+    "noteMessage": "Eingereichte Routen werden überprüft, bevor sie veröffentlicht werden. Sie können sie jederzeit in Ihrem Profil bearbeiten.",
+    "successPendingMessage": "Deine Route wurde zur Prüfung eingereicht und ist nach der Freigabe sichtbar."
   },
   "community": {
     "title": "Gemeinschaft",
@@ -432,7 +434,7 @@
   },
   "admin": {
     "pageTitle": "Admin-Dashboard",
-    "pageDescription": "Alle Plattform-Routen verwalten",
+    "pageDescription": "Routen der Plattform prüfen, freigeben und verwalten",
     "searchPlaceholder": "Nach Titel, Benutzer, Region suchen...",
     "refresh": "Aktualisieren",
     "totalRoutes": "{count} Routen insgesamt",
@@ -453,7 +455,8 @@
       "featured": "Featured",
       "created": "Erstellt",
       "actions": "Aktionen",
-      "noRoutes": "Keine Routen gefunden"
+      "noRoutes": "Keine Routen gefunden",
+      "updated": "Aktualisiert"
     },
     "categories": {
       "scenic": "Malerisch",
@@ -511,7 +514,8 @@
       },
       "roles": {
         "admin": "Admin",
-        "contributor": "Mitwirkender"
+        "contributor": "Mitwirkender",
+        "curator": "Kurator"
       },
       "confirmed": "Bestätigt",
       "pending": "Unbestätigt",
@@ -520,7 +524,18 @@
       "resend": "Link erneut senden",
       "resent": "Link gesendet",
       "resendError": "Link konnte nicht gesendet werden",
-      "empty": "Keine Benutzer gefunden"
+      "empty": "Keine Benutzer gefunden",
+      "roleError": "Rolle konnte nicht geändert werden"
+    },
+    "review": {
+      "approve": "Freigeben",
+      "reject": "Ablehnen",
+      "edit": "Bearbeiten",
+      "all": "Alle",
+      "rejectTitle": "Route ablehnen",
+      "rejectDescription": "Der Autor sieht den Grund und kann die Route korrigieren und erneut einreichen.",
+      "reasonLabel": "Grund der Ablehnung",
+      "reasonPlaceholder": "Z. B. der GPX-Track passt nicht zur Beschreibung..."
     }
   },
   "riders": {
@@ -659,5 +674,54 @@
     "dismiss": "Nicht jetzt",
     "iosStep1": "Tippe in der Browserleiste auf <share></share> <b>Teilen</b>",
     "iosStep2": "Scrolle und wähle <b>Zum Home-Bildschirm</b>"
+  },
+  "routeStatus": {
+    "pending": "In Prüfung",
+    "approved": "Freigegeben",
+    "rejected": "Abgelehnt",
+    "pendingTitle": "Route wird geprüft",
+    "pendingDescription": "Nur du und das Kuratoren-Team sehen diese Route. Nach der Freigabe ist sie für alle sichtbar.",
+    "rejectedTitle": "Route abgelehnt",
+    "rejectedDescription": "Korrigiere die Route und speichere sie, um sie erneut zur Prüfung zu senden.",
+    "approvedOwnerHint": "Diese Route ist öffentlich. Wenn du sie bearbeitest, wird sie erneut geprüft.",
+    "reason": "Grund",
+    "edit": "Route bearbeiten"
+  },
+  "editRoute": {
+    "title": "Route bearbeiten",
+    "backToRoute": "Zurück zur Route",
+    "notFound": "Route nicht gefunden.",
+    "forbidden": "Du darfst diese Route nicht bearbeiten.",
+    "saved": "Änderungen gespeichert.",
+    "savedToReview": "Änderungen gespeichert. Die Route wird erneut geprüft.",
+    "save": "Änderungen speichern",
+    "replaceGpx": "GPX ersetzen",
+    "replaceGpxHint": "Lade eine neue GPX-Datei hoch, um den aktuellen Track zu ersetzen. Distanz und Höhenmeter werden neu berechnet und die Karte aktualisiert.",
+    "reviewWarning": "Beim Speichern wird die Route erneut geprüft und ist bis zur Freigabe nicht mehr öffentlich.",
+    "stops": {
+      "title": "Stopps",
+      "description": "Füge Sehenswürdigkeiten entlang der Route hinzu. Klicke auf die Karte, um jeden Stopp zu platzieren.",
+      "add": "Stopp hinzufügen",
+      "empty": "Noch keine Stopps.",
+      "name": "Name des Stopps",
+      "type": "Typ",
+      "notes": "Beschreibung (optional)",
+      "setOnMap": "Auf Karte setzen",
+      "clickMap": "Klicke auf die Karte, um den Stopp zu platzieren",
+      "moveUp": "Nach oben",
+      "moveDown": "Nach unten",
+      "remove": "Stopp entfernen",
+      "save": "Stopps speichern",
+      "saved": "Stopps gespeichert.",
+      "saveFailed": "Stopps konnten nicht gespeichert werden.",
+      "incomplete": "Gib jedem Stopp einen Namen und setze ihn auf die Karte.",
+      "untitled": "Unbenannter Stopp"
+    }
+  },
+  "myRoutes": {
+    "title": "Meine Routen",
+    "submit": "Route einreichen",
+    "empty": "Du hast noch keine Route eingereicht.",
+    "error": "Deine Routen konnten nicht geladen werden."
   }
 }

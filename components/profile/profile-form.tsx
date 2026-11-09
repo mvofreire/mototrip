@@ -11,6 +11,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Loader2, User, Mail, Calendar, Shield } from 'lucide-react'
 
+
+const ROLE_LABELS = {
+  admin: 'Administrador',
+  curator: 'Curador',
+  contributor: 'Contribuidor',
+} as const
+
 export function ProfileForm() {
   const { user } = useAuth()
   const [fullName, setFullName] = useState(user?.profile?.full_name || '')
@@ -63,9 +70,9 @@ export function ProfileForm() {
                 {user.email}
               </CardDescription>
               <div className="flex items-center gap-2 mt-2">
-                <Badge variant={profile?.role === 'admin' ? 'default' : 'secondary'}>
+                <Badge variant={profile?.role === 'contributor' ? 'secondary' : 'default'}>
                   <Shield className="h-3 w-3 mr-1" />
-                  {profile?.role === 'admin' ? 'Administrador' : 'Contribuidor'}
+                  {ROLE_LABELS[profile?.role ?? 'contributor']}
                 </Badge>
                 {profile?.created_at && (
                   <span className="text-xs text-muted-foreground flex items-center gap-1">
@@ -132,7 +139,7 @@ export function ProfileForm() {
               <Input
                 id="role"
                 type="text"
-                value={profile?.role === 'admin' ? 'Administrador' : 'Contribuidor'}
+                value={ROLE_LABELS[profile?.role ?? 'contributor']}
                 disabled
                 className="bg-muted"
               />

@@ -38,42 +38,12 @@ export const GpxStorage = {
 
 export const RouteStorage = {
   bucket: "route_map",
-  async createRouteThumbnail(googleStaticImageUrl: string, routeId: string) {
-    // get image from google static maps url
-    const response = await fetch(googleStaticImageUrl);
-    const blob = await response.blob();
-    const file = new File([blob], `${routeId}.png`, { type: "image/png" });
-
-    // create route thumbnail (350x200)
-    const thumbnailCanvas = document.createElement("canvas");
-    thumbnailCanvas.width = 350;
-    thumbnailCanvas.height = 200;
-    const ctx = thumbnailCanvas.getContext("2d");
-    if (!ctx) throw new Error("Could not create canvas context");
-
-    const img = new Image();
-    img.src = URL.createObjectURL(file);
-    await new Promise((resolve) => {
-      img.onload = () => {
-        ctx.drawImage(img, 0, 0, thumbnailCanvas.width, thumbnailCanvas.height);
-        resolve(null);
-      };
-    });
-
-    const thumbnailBlob = await new Promise<Blob>((resolve) =>
-      thumbnailCanvas.toBlob((blob) => resolve(blob!), "image/png"),
-    );
-    const thumbnailFile = new File(
-      [thumbnailBlob],
-      `thumbnail-${routeId}.png`,
-      {
-        type: "image/png",
-      },
-    );
-
-    await uploadFile(this.bucket, thumbnailFile, `thumbnail-${routeId}.png`);
-    const thumbnailUrl = getPublicUrl(this.bucket, `thumbnail-${routeId}.png`);
-    return thumbnailUrl;
+  /** Uploads a rendered route map PNG (see lib/map-thumbnail.ts). */
+  async uploadRouteThumbnail(image: Blob, routeId: string) {
+    const path = `thumbnail-${routeId}.png`;
+    const file = new File([image], path, { type: "image/png" });
+    await uploadFile(this.bucket, file, path);
+    return getPublicUrl(this.bucket, path);
   },
 
   getRouteThumbnailUrl(routeId: string) {

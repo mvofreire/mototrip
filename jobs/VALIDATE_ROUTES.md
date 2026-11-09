@@ -168,7 +168,7 @@ O script trabalha com o schema definido em `/supabase/schema.sql`:
 
 ## Melhorias Futuras
 
-1. **Integração com Google Maps**: Para thumbnails de melhor qualidade
+1. **Thumbnails**: gerados com tiles do OpenStreetMap (`jobs/lib/route_thumbnail.ts`)
 2. **Machine Learning**: Para scores mais precisos
 3. **Análise de Estrada**: Usar Overpass API para qualidade de estrada
 4. **Pontos de Interesse**: Integrar POIs ao longo da rota

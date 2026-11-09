@@ -1,16 +1,15 @@
 'use client'
 
-import { useState, useCallback, useRef, useEffect } from 'react'
-import { parseGPXFile, gpxPointsToGeoJSON, type GPXData } from '@/lib/gpx-parser'
+import { useState, useCallback, useRef } from 'react'
+import { parseGPXFile, type GPXData } from '@/lib/gpx-parser'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Upload, X, FileText, MapPin, TrendingUp, Mountain } from 'lucide-react'
-import { APIProvider, Map, useMap } from '@vis.gl/react-google-maps'
-import { MapWithFallback } from '@/components/features/maps/map-with-fallback'
+import { Map } from '@/components/features/maps/map'
 import { useTranslations } from 'next-intl'
 
 interface GPXUploadProps {
-  onGPXParsed: (gpxData: GPXData, file: File, thumbnailDataUrl?: string) => void
+  onGPXParsed: (gpxData: GPXData, file: File) => void
   locale: string
 }
 
@@ -36,11 +35,7 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
       const parsedData = await parseGPXFile(selectedFile)
       setFile(selectedFile)
       setGpxData(parsedData)
-      
-      // Generate thumbnail URL using Google Maps Static API
-      const thumbnailUrl = generateMapThumbnail(parsedData.points, parsedData.bounds)
-      
-      onGPXParsed(parsedData, selectedFile, thumbnailUrl)
+      onGPXParsed(parsedData, selectedFile)
     } catch (err) {
       console.error('Error parsing GPX:', err)
       setError(err instanceof Error ? err.message : 'Erro ao processar arquivo GPX')
@@ -85,38 +80,6 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
 
   const formatElevation = (m: number) => {
     return Math.round(m)
-  }
-
-  const generateMapThumbnail = (points: { lat: number; lng: number }[], bounds: any): string => {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
-    
-    // Sample points to keep URL length reasonable (max 100 points)
-    const sampledPoints = points.filter((_, i) => i % Math.ceil(points.length / 100) === 0)
-    
-    // Create path parameter for polyline
-    const path = sampledPoints.map(p => `${p.lat},${p.lng}`).join('|')
-    
-    // Calculate center and zoom to fit bounds
-    const centerLat = (bounds.north + bounds.south) / 2
-    const centerLng = (bounds.east + bounds.west) / 2
-    
-    const visible = [
-    `${bounds.north},${bounds.east}`,
-    `${bounds.south},${bounds.west}`
-  ].join('|')
-
-    // Generate Static Maps API URL
-    const url = `https://maps.googleapis.com/maps/api/staticmap?` +
-      // `center=${centerLat},${centerLng}&` +
-      `size=350x200&` +
-      `scale=2&` +
-      `maptype=roadmap&` +
-      `visible=${visible}&` +
-      // `zoom=8&` +
-      `path=color:0xff0000ff|weight:3|${path}&` +
-      `key=${apiKey}`
-    
-    return url
   }
 
   if (gpxData && file) {
@@ -175,34 +138,16 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
 
         {/* Map Preview */}
         <div className="h-[400px] rounded-lg overflow-hidden border">
-          <MapWithFallback
-            fallback={{
-              center: {
-                lat: (gpxData.bounds.north + gpxData.bounds.south) / 2,
-                lng: (gpxData.bounds.east + gpxData.bounds.west) / 2,
-              },
-              zoom: 10,
-              polyline: gpxData.points,
-              polylineColor: '#FF0000',
+          <Map
+            center={{
+              lat: (gpxData.bounds.north + gpxData.bounds.south) / 2,
+              lng: (gpxData.bounds.east + gpxData.bounds.west) / 2,
             }}
-          >
-          <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}>
-            <Map
-              defaultCenter={{
-                lat: (gpxData.bounds.north + gpxData.bounds.south) / 2,
-                lng: (gpxData.bounds.east + gpxData.bounds.west) / 2,
-              }}
-              defaultZoom={10}
-              mapId={process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || 'DEMO_MAP_ID'}
-              gestureHandling="greedy"
-              disableDefaultUI={false}
-              mapTypeControl={false}
-              streetViewControl={false}
-            >
-              <RoutePolyline points={gpxData.points} />
-            </Map>
-          </APIProvider>
-          </MapWithFallback>
+            zoom={10}
+            scrollWheelZoom
+            polyline={gpxData.points}
+            polylineColor="#FF0000"
+          />
         </div>
       </Card>
     )
@@ -280,35 +225,4 @@ export function GPXUpload({ onGPXParsed, locale }: GPXUploadProps) {
       </div>
     </Card>
   )
-}
-
-// Component to render the polyline on the map
-function RoutePolyline({ points }: { points: { lat: number; lng: number }[] }) {
-  const map = useMap()
-
-  // Draw polyline when map is ready
-  useEffect(() => {
-    if (!map) return
-
-    const polyline = new google.maps.Polyline({
-      path: points,
-      geodesic: true,
-      strokeColor: '#FF0000',
-      strokeOpacity: 0.8,
-      strokeWeight: 3,
-    })
-
-    polyline.setMap(map)
-
-    // Fit bounds to show entire route
-    const bounds = new google.maps.LatLngBounds()
-    points.forEach(point => bounds.extend(point))
-    map.fitBounds(bounds)
-
-    return () => {
-      polyline.setMap(null)
-    }
-  }, [map, points])
-
-  return null
 }

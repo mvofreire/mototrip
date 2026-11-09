@@ -20,6 +20,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 const dateLocales = { pt, en: enUS, es, fr, de } as const
 
@@ -39,6 +46,22 @@ export default function AdminUsersPage() {
   const [search, setSearch] = useState('')
   const [onlyPending, setOnlyPending] = useState(false)
   const [resend, setResend] = useState<Record<string, ResendState>>({})
+  const [roleSaving, setRoleSaving] = useState<string | null>(null)
+  const [roleError, setRoleError] = useState<{ id: string; message: string } | null>(null)
+
+  const handleRoleChange = async (u: AdminUser, role: 'contributor' | 'curator') => {
+    if (role === u.role) return
+    setRoleSaving(u.id)
+    setRoleError(null)
+    try {
+      await AdminService.setUserRole(u.id, role)
+      setUsers((prev) => prev.map((x) => (x.id === u.id ? { ...x, role } : x)))
+    } catch (e) {
+      setRoleError({ id: u.id, message: (e as Error).message || tu('roleError') })
+    } finally {
+      setRoleSaving(null)
+    }
+  }
 
   const loadUsers = useCallback(async () => {
     setLoading(true)
@@ -187,9 +210,30 @@ export default function AdminUsersPage() {
                         <div className="text-sm text-muted-foreground">{u.email}</div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={u.role === 'admin' ? 'default' : 'secondary'}>
-                          {tu(`roles.${u.role}`)}
-                        </Badge>
+                        {u.role === 'admin' ? (
+                          <Badge>{tu('roles.admin')}</Badge>
+                        ) : (
+                          <div className="space-y-1">
+                            <Select
+                              value={u.role}
+                              disabled={roleSaving === u.id}
+                              onValueChange={(v) => handleRoleChange(u, v as 'contributor' | 'curator')}
+                            >
+                              <SelectTrigger className="h-8 w-[150px]" aria-label={tu('columns.role')}>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="contributor">{tu('roles.contributor')}</SelectItem>
+                                <SelectItem value="curator">{tu('roles.curator')}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {roleError?.id === u.id && (
+                              <div className="max-w-[220px] text-xs text-destructive">
+                                {roleError.message}
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </TableCell>
                       <TableCell>
                         {confirmed ? (

@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { ImagePlus, Loader2, Trash2 } from 'lucide-react'
+import { canEditRoute, isStaff } from '@/lib/auth/roles'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,7 +18,14 @@ import type { RouteWithDetails } from '@/types'
  * Photo gallery of a route. The route's author and admins can add and
  * remove photos; the first photo becomes the cover of the route page.
  */
-export function RoutePhotos({ route }: { route: RouteWithDetails }) {
+export function RoutePhotos({
+  route,
+  onChange,
+}: {
+  route: RouteWithDetails
+  /** Called after an upload/removal; defaults to refreshing the page */
+  onChange?: () => void | Promise<void>
+}) {
   const t = useTranslations('route')
   const { user } = useAuth()
   const router = useRouter()
@@ -26,8 +34,10 @@ export function RoutePhotos({ route }: { route: RouteWithDetails }) {
   const [error, setError] = useState<string | null>(null)
 
   const photos = [...(route.photos ?? [])].sort((a, b) => a.order_index - b.order_index)
-  const canEdit =
-    !!user && (user.id === route.user_id || user.profile?.role === 'admin')
+  const canEdit = canEditRoute(user, route)
+  // Authors' new photos go through review again
+  const sendsToReview = canEdit && !isStaff(user) && route.status === 'approved'
+  const changed = () => (onChange ? onChange() : router.refresh())
 
   if (photos.length === 0 && !canEdit) return null
 
@@ -40,7 +50,7 @@ export function RoutePhotos({ route }: { route: RouteWithDetails }) {
       for (const file of Array.from(files)) {
         await PhotosService.upload(route.id, user.id, file, order++)
       }
-      router.refresh()
+      await changed()
     } catch (e) {
       setError(e instanceof InvalidPhotoError ? t('invalidFile') : t('uploadFailed'))
     } finally {
@@ -56,7 +66,7 @@ export function RoutePhotos({ route }: { route: RouteWithDetails }) {
     setBusy(photoId)
     try {
       await PhotosService.remove(photo)
-      router.refresh()
+      await changed()
     } catch {
       setError(t('uploadFailed'))
     } finally {
@@ -97,6 +107,9 @@ export function RoutePhotos({ route }: { route: RouteWithDetails }) {
 
       {error && <p className="text-sm text-destructive">{error}</p>}
       {canEdit && <p className="text-xs text-muted-foreground">{t('coverHint')}</p>}
+      {sendsToReview && (
+        <p className="text-xs text-amber-600 dark:text-amber-500">{t('photosSendToReview')}</p>
+      )}
 
       {photos.length > 0 && (
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3">

@@ -126,7 +126,8 @@
     "uploadFailed": "Photo upload failed",
     "invalidFile": "Upload a JPG, PNG or WebP image up to 5 MB",
     "removePhoto": "Remove photo",
-    "coverHint": "The first photo is used as the route cover"
+    "coverHint": "The first photo is used as the route cover",
+    "photosSendToReview": "Adding photos sends the route back to review."
   },
   "stopTypes": {
     "viewpoint": "Viewpoint",
@@ -231,7 +232,8 @@
     "loginRequired": "You need to be logged in to submit a route",
     "errorMessage": "Error submitting route",
     "noteTitle": "Note:",
-    "noteMessage": "Submitted routes will be reviewed before being published. You can edit them at any time from your profile."
+    "noteMessage": "Submitted routes will be reviewed before being published. You can edit them at any time from your profile.",
+    "successPendingMessage": "Your route was sent for review and will be visible once approved."
   },
   "community": {
     "title": "Community",
@@ -432,7 +434,7 @@
   },
   "admin": {
     "pageTitle": "Admin Dashboard",
-    "pageDescription": "Manage all platform routes",
+    "pageDescription": "Review, approve and manage the platform routes",
     "searchPlaceholder": "Search by title, user, region...",
     "refresh": "Refresh",
     "totalRoutes": "{count} routes total",
@@ -453,7 +455,8 @@
       "featured": "Featured",
       "created": "Created",
       "actions": "Actions",
-      "noRoutes": "No routes found"
+      "noRoutes": "No routes found",
+      "updated": "Updated"
     },
     "categories": {
       "scenic": "Scenic",
@@ -511,7 +514,8 @@
       },
       "roles": {
         "admin": "Admin",
-        "contributor": "Contributor"
+        "contributor": "Contributor",
+        "curator": "Curator"
       },
       "confirmed": "Confirmed",
       "pending": "Unconfirmed",
@@ -520,7 +524,18 @@
       "resend": "Resend link",
       "resent": "Link resent",
       "resendError": "Failed to resend link",
-      "empty": "No users found"
+      "empty": "No users found",
+      "roleError": "Could not change the role"
+    },
+    "review": {
+      "approve": "Approve",
+      "reject": "Reject",
+      "edit": "Edit",
+      "all": "All",
+      "rejectTitle": "Reject route",
+      "rejectDescription": "The author will see the reason and can fix and resubmit the route.",
+      "reasonLabel": "Reason for rejection",
+      "reasonPlaceholder": "E.g. the GPX track does not match the description..."
     }
   },
   "riders": {
@@ -659,5 +674,54 @@
     "dismiss": "Not now",
     "iosStep1": "Tap <share></share> <b>Share</b> in the browser bar",
     "iosStep2": "Scroll and choose <b>Add to Home Screen</b>"
+  },
+  "routeStatus": {
+    "pending": "In review",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "pendingTitle": "Route in review",
+    "pendingDescription": "Only you and the curation team can see this route. It becomes visible to everyone once approved.",
+    "rejectedTitle": "Route rejected",
+    "rejectedDescription": "Fix the route and save it to send it back for review.",
+    "approvedOwnerHint": "This route is public. If you edit it, it goes back to review.",
+    "reason": "Reason",
+    "edit": "Edit route"
+  },
+  "editRoute": {
+    "title": "Edit route",
+    "backToRoute": "Back to the route",
+    "notFound": "Route not found.",
+    "forbidden": "You are not allowed to edit this route.",
+    "saved": "Changes saved.",
+    "savedToReview": "Changes saved. The route is back in review.",
+    "save": "Save changes",
+    "replaceGpx": "Replace GPX",
+    "replaceGpxHint": "Upload a new GPX file to replace the current track. Distance and elevation are recalculated and the map is updated.",
+    "reviewWarning": "When you save, the route goes back to review and stops being public until it is approved again.",
+    "stops": {
+      "title": "Stops",
+      "description": "Add points of interest along the route. Click on the map to place each stop.",
+      "add": "Add stop",
+      "empty": "No stops yet.",
+      "name": "Stop name",
+      "type": "Type",
+      "notes": "Description (optional)",
+      "setOnMap": "Place on map",
+      "clickMap": "Click on the map to place the stop",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "remove": "Remove stop",
+      "save": "Save stops",
+      "saved": "Stops saved.",
+      "saveFailed": "Could not save the stops.",
+      "incomplete": "Give every stop a name and place it on the map.",
+      "untitled": "Unnamed stop"
+    }
+  },
+  "myRoutes": {
+    "title": "My routes",
+    "submit": "Submit a route",
+    "empty": "You have not submitted any routes yet.",
+    "error": "Could not load your routes."
   }
 }

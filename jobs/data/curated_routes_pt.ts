@@ -25,7 +25,9 @@ export interface CuratedStop {
 export interface CuratedRoute {
   title: string;
   description: string;
-  region: 'Norte' | 'Centro' | 'Lisboa' | 'Alentejo' | 'Algarve';
+  region:
+    | 'Norte' | 'Centro' | 'Lisboa' | 'Alentejo' | 'Algarve' // PT
+    | 'Picos de Europa' | 'Pirenéus' | 'Andaluzia' | 'Galiza' | 'Costa Brava'; // ES
   category: 'scenic' | 'mountain' | 'coastal' | 'weekend' | 'adventure';
   difficulty: 'easy' | 'moderate' | 'challenging' | 'expert';
   route_type: 'loop' | 'out_and_back';

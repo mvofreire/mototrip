@@ -9,22 +9,39 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { useTranslations } from "next-intl";
-import { Loader2, MapPin } from "lucide-react";
+import { Loader2, MapPin, Save } from "lucide-react";
 import type { Database } from "@/types/database.types";
+import type { RouteWithDetails } from "@/types";
+import { useAuth } from "@/hooks/use-auth";
+import { isStaff } from "@/lib/auth/roles";
 import { GPXUpload } from "./gpx-upload";
 import { gpxPointsToGeoJSON, type GPXData } from "@/lib/gpx-parser";
 import { useRoutesCreateMutation, useRoutesUpdateMutation } from "@/hooks/use-routes";
 import { RouteStorage } from "@/lib/storage/storage.service";
+import { renderRouteThumbnail } from "@/lib/map-thumbnail";
 
 type RouteInsert = Database["public"]["Tables"]["routes"]["Insert"];
 
 interface SubmitRouteFormProps {
   locale: string;
+  /** Edit mode: the route being edited */
+  route?: RouteWithDetails;
+  /** Edit mode: called with the saved route */
+  onSaved?: (route: RouteWithDetails) => void;
 }
 
-export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
+/** Slider upper bound that never cuts off the current value */
+const sliderMax = (base: number, value: number, step: number) =>
+  Math.max(base, Math.ceil(value / step) * step);
+
+export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps) {
   const t = useTranslations("submit");
+  const tEdit = useTranslations("editRoute");
   const router = useRouter();
+  const { user: authUser } = useAuth();
+  const isEdit = !!route;
+  // Authors' edits send an approved/rejected route back to review
+  const sendsToReview = isEdit && !isStaff(authUser) && route.status !== "pending";
   const createRouteMutation = useRoutesCreateMutation();
   const updateRouteMutation = useRoutesUpdateMutation();
 
@@ -34,30 +51,26 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
 
   // Form state
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    difficulty: "moderate" as RouteInsert["difficulty"],
-    distance_km: 100,
-    duration_minutes: 120,
-    elevation_gain_m: 500,
-    region: "",
-    country: "",
-    route_type: "" as "loop" | "out_and_back" | "",
-    category: "scenic" as RouteInsert["category"],
+    title: route?.title ?? "",
+    description: route?.description ?? "",
+    difficulty: (route?.difficulty ?? "moderate") as RouteInsert["difficulty"],
+    distance_km: route ? Math.round(Number(route.distance_km)) : 100,
+    duration_minutes: route?.duration_minutes ?? 120,
+    elevation_gain_m: route?.elevation_gain_m ?? 500,
+    region: route?.region ?? "",
+    country: route?.country ?? "",
+    route_type: (route?.route_type ?? "") as "loop" | "out_and_back" | "",
+    category: (route?.category ?? "scenic") as RouteInsert["category"],
   });
 
   const [gpxData, setGpxData] = useState<GPXData | null>(null);
   const [gpxFile, setGpxFile] = useState<File | null>(null);
-  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+  // Remounts the GPX picker after a replaced track is saved
+  const [gpxKey, setGpxKey] = useState(0);
 
-  const handleGPXParsed = (
-    parsedData: GPXData,
-    file: File,
-    thumbnail?: string,
-  ) => {
+  const handleGPXParsed = (parsedData: GPXData, file: File) => {
     setGpxData(parsedData);
     setGpxFile(file);
-    setThumbnailUrl(thumbnail || null);
 
     // Auto-populate form fields from GPX data
     setFormData((prev) => ({
@@ -84,6 +97,11 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
         return;
       }
 
+      if (route) {
+        await saveEdit(route);
+        return;
+      }
+
       // Validate GPX file
       if (!gpxData) {
         setError(t("gpxRequired"));
@@ -105,29 +123,32 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
         region: formData.region || null,
         country: formData.country || null,
         route_type: formData.route_type || null,
-        thumbnail_url: thumbnailUrl,
+        thumbnail_url: null,
         category: formData.category,
         scenic_score: 0,
         road_quality_score: 0,
         fun_factor_score: 0,
-        published: true,
       };
 
       const result = await createRouteMutation.mutateAsync(routeData);
-      const publicThumbnail = await RouteStorage.createRouteThumbnail(thumbnailUrl!, result.id);
-      // update route with thumbnail url
-      await updateRouteMutation.mutateAsync({
-        id: result.id,
-        routeData: {
-          thumbnail_url: publicThumbnail,
-        }
-      });
+      // Static OpenStreetMap image of the route (used for social previews).
+      // A failure here must not fail the submission.
+      try {
+        const image = await renderRouteThumbnail(gpxData.points);
+        const publicThumbnail = await RouteStorage.uploadRouteThumbnail(image, result.id);
+        await updateRouteMutation.mutateAsync({
+          id: result.id,
+          routeData: { thumbnail_url: publicThumbnail },
+        });
+      } catch (thumbError) {
+        console.warn("Could not create route thumbnail:", thumbError);
+      }
       setSuccess(true);
 
-      // Redirect to explore page after 2 seconds
+      // New routes wait for review: show them in "My routes"
       setTimeout(() => {
-        router.push(`/${locale}/explore`);
-      }, 2000);
+        router.push(`/${locale}/profile#my-routes`);
+      }, 2500);
     } catch (err) {
       console.error("Error submitting route:", err);
       setError(err instanceof Error ? err.message : t("errorMessage"));
@@ -136,13 +157,55 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
     }
   };
 
+  const saveEdit = async (current: RouteWithDetails) => {
+    const updates: Database["public"]["Tables"]["routes"]["Update"] = {
+      title: formData.title,
+      description: formData.description || null,
+      difficulty: formData.difficulty,
+      distance_km: formData.distance_km,
+      duration_minutes: formData.duration_minutes,
+      elevation_gain_m: formData.elevation_gain_m,
+      region: formData.region || null,
+      country: formData.country || null,
+      route_type: formData.route_type || null,
+      category: formData.category,
+    };
+    if (gpxData) {
+      updates.polyline_coordinates = gpxPointsToGeoJSON(gpxData.points);
+    }
+
+    let saved = await updateRouteMutation.mutateAsync({
+      id: current.id,
+      routeData: updates,
+    });
+
+    if (gpxData) {
+      try {
+        const image = await renderRouteThumbnail(gpxData.points);
+        const url = await RouteStorage.uploadRouteThumbnail(image, current.id);
+        // Bust caches: the file name doesn't change
+        saved = await updateRouteMutation.mutateAsync({
+          id: current.id,
+          routeData: { thumbnail_url: `${url}?v=${Date.now()}` },
+        });
+      } catch (thumbError) {
+        console.warn("Could not update route thumbnail:", thumbError);
+      }
+      setGpxData(null);
+      setGpxFile(null);
+      setGpxKey((k) => k + 1);
+    }
+
+    onSaved?.({ ...current, ...saved });
+  };
+
   if (success) {
     return (
       <Card className="p-12 text-center">
         <div className="space-y-4">
           <div className="text-6xl">✅</div>
           <h3 className="text-2xl font-bold">{t("successTitle")}</h3>
-          <p className="text-muted-foreground">{t("successMessage")}</p>
+          <p className="text-muted-foreground">{t("successPendingMessage")}</p>
         </div>
       </Card>
     );
@@ -307,7 +370,7 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
           <Slider
             id="distance"
             min={10}
-            max={500}
+            max={sliderMax(500, formData.distance_km, 50)}
             step={5}
             value={[formData.distance_km]}
             onValueChange={([value]) =>
@@ -333,7 +396,7 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
           <Slider
             id="duration"
             min={30}
-            max={720}
+            max={sliderMax(720, formData.duration_minutes, 60)}
             step={15}
             value={[formData.duration_minutes]}
             onValueChange={([value]) =>
@@ -353,7 +416,7 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
           <Slider
             id="elevation"
             min={0}
-            max={3000}
+            max={sliderMax(3000, formData.elevation_gain_m, 500)}
             step={50}
             value={[formData.elevation_gain_m]}
             onValueChange={([value]) =>
@@ -365,14 +428,25 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
 
       {/* GPX File Upload */}
       <Card className="p-6 space-y-4">
-        <h2 className="text-xl font-semibold">{t("gpxFile")}</h2>
-        <GPXUpload onGPXParsed={handleGPXParsed} locale={locale} />
+        <h2 className="text-xl font-semibold">
+          {isEdit ? tEdit("replaceGpx") : t("gpxFile")}
+        </h2>
+        {isEdit && (
+          <p className="text-sm text-muted-foreground">{tEdit("replaceGpxHint")}</p>
+        )}
+        <GPXUpload key={gpxKey} onGPXParsed={handleGPXParsed} locale={locale} />
       </Card>
 
       {/* Error Message */}
       {error && (
         <Card className="p-4 bg-destructive/10 border-destructive">
           <p className="text-sm text-destructive">{error}</p>
+        </Card>
+      )}
+
+      {sendsToReview && (
+        <Card className="p-4 border-amber-300 bg-amber-50 dark:bg-amber-950/30">
+          <p className="text-sm text-amber-800 dark:text-amber-300">{tEdit("reviewWarning")}</p>
         </Card>
       )}
 
@@ -392,6 +466,11 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               {t("submitting")}
             </>
+          ) : isEdit ? (
+            <>
+              <Save className="mr-2 h-4 w-4" />
+              {tEdit("save")}
+            </>
           ) : (
             <>
               <MapPin className="mr-2 h-4 w-4" />
@@ -402,7 +481,7 @@ export function SubmitRouteForm({ locale }: SubmitRouteFormProps) {
       </div>
 
       {/* Info */}
-      <Card className="p-4 bg-muted">
+      <Card className={isEdit ? "hidden" : "p-4 bg-muted"}>
         <p className="text-xs text-muted-foreground">
           <strong>{t("noteTitle")}</strong> {t("noteMessage")}
         </p>
