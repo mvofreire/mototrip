@@ -128,7 +128,11 @@
     "invalidFile": "Lade ein JPG-, PNG- oder WebP-Bild bis 5 MB hoch",
     "removePhoto": "Foto entfernen",
     "coverHint": "Das erste Foto wird als Titelbild der Route verwendet",
-    "photosSendToReview": "Wenn du Fotos hinzufügst, wird die Route erneut geprüft."
+    "photosSendToReview": "Wenn du Fotos hinzufügst, wird die Route erneut geprüft.",
+    "shareTitle": "Teile diese Route",
+    "shareDescription": "Schick sie an deine Tourgruppe oder poste sie für deine Freunde.",
+    "shareText": "{title}: Motorradroute mit Karte, Stopps und kostenlosem GPX auf MotoTrip.",
+    "copyLink": "Link kopieren"
   },
   "stopTypes": {
     "viewpoint": "Aussichtspunkt",

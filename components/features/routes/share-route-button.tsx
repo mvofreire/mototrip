@@ -1,51 +1,32 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Check, Share2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
-async function copyText(text: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(text)
-    return true
-  } catch {
-    // Older browsers / blocked clipboard API: legacy copy via a hidden field
-    const el = document.createElement('textarea')
-    el.value = text
-    el.setAttribute('readonly', '')
-    el.style.position = 'fixed'
-    el.style.opacity = '0'
-    document.body.appendChild(el)
-    el.select()
-    let ok = false
-    try {
-      ok = document.execCommand('copy')
-    } catch {
-      ok = false
-    }
-    el.remove()
-    return ok
-  }
-}
+import { copyText, shareUrl } from '@/lib/share'
 
 /** Native share sheet on phones; copies the link elsewhere. */
-export function ShareRouteButton({ title }: { title: string }) {
+export function ShareRouteButton({ route }: { route: { id: string; slug?: string | null; title: string } }) {
   const t = useTranslations('route')
+  const locale = useLocale()
   const [copied, setCopied] = useState(false)
 
   const handleShare = async () => {
-    const url = window.location.href
     if (navigator.share) {
       try {
-        await navigator.share({ title, url })
+        await navigator.share({
+          title: route.title,
+          text: t('shareText', { title: route.title }),
+          url: shareUrl(locale, route, 'native'),
+        })
         return
       } catch (e) {
         // User closed the share sheet: nothing to do
         if ((e as Error).name === 'AbortError') return
       }
     }
-    if (!(await copyText(url))) return
+    if (!(await copyText(shareUrl(locale, route, 'copy')))) return
     setCopied(true)
     window.setTimeout(() => setCopied(false), 2000)
   }

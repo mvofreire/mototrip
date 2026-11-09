@@ -34,7 +34,7 @@ export function StopsTimeline({ stops }: StopsTimelineProps) {
                     </p>
                   </div>
                   <span className="text-xs text-muted-foreground whitespace-nowrap">
-                    {t('route.stop', { number: stop.order_index })}
+                    {t('route.stop', { number: stop.order_index + 1 })}
                   </span>
                 </div>
                 {stop.description && (

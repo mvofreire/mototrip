@@ -43,7 +43,7 @@ export function RouteHero({ route }: RouteHeroProps) {
 
           <div className="flex flex-wrap items-center gap-2 md:gap-4">
             <SaveRouteButton routeId={route.id} />
-            <ShareRouteButton title={route.title} />
+            <ShareRouteButton route={route} />
           </div>
         </div>
       </div>

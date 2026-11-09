@@ -10,6 +10,7 @@ import { StopsTimeline } from '@/components/features/routes/stops-timeline'
 import { RoutePhotos } from '@/components/features/routes/route-photos'
 import { RouteReviewBanner } from '@/components/features/routes/route-review-banner'
 import { CommentsList } from '@/components/features/comments'
+import { ShareRoutePanel } from '@/components/features/routes/share-route-panel'
 
 /** Body of the route page (shared by the public and the private view) */
 export function RouteDetail({ route, locale }: { route: RouteWithDetails; locale: string }) {
@@ -51,6 +52,9 @@ export function RouteDetail({ route, locale }: { route: RouteWithDetails; locale
             <h2 className="text-xl md:text-2xl font-bold">{t('routeMap')}</h2>
             <RouteMap route={route} />
           </div>
+
+          {/* Sharing only makes sense once the route is public */}
+          {route.published && <ShareRoutePanel route={route} />}
 
           {route.stops && route.stops.length > 0 && (
             <div className="space-y-3">

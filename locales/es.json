@@ -128,7 +128,11 @@
     "invalidFile": "Sube una imagen JPG, PNG o WebP de hasta 5 MB",
     "removePhoto": "Eliminar foto",
     "coverHint": "La primera foto se usa como portada de la ruta",
-    "photosSendToReview": "Añadir fotos envía la ruta de nuevo a revisión."
+    "photosSendToReview": "Añadir fotos envía la ruta de nuevo a revisión.",
+    "shareTitle": "Comparte esta ruta",
+    "shareDescription": "Envíala al grupo de la salida o publícala para tus amigos.",
+    "shareText": "{title}: ruta en moto con mapa, paradas y GPX gratis en MotoTrip.",
+    "copyLink": "Copiar enlace"
   },
   "stopTypes": {
     "viewpoint": "Mirador",

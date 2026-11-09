@@ -128,7 +128,11 @@
     "invalidFile": "Envoyez une image JPG, PNG ou WebP jusqu'à 5 Mo",
     "removePhoto": "Supprimer la photo",
     "coverHint": "La première photo sert de couverture à l'itinéraire",
-    "photosSendToReview": "Ajouter des photos renvoie l'itinéraire en révision."
+    "photosSendToReview": "Ajouter des photos renvoie l'itinéraire en révision.",
+    "shareTitle": "Partagez cet itinéraire",
+    "shareDescription": "Envoyez-le à votre groupe de balade ou publiez-le pour vos amis.",
+    "shareText": "{title} : itinéraire moto avec carte, arrêts et GPX gratuit sur MotoTrip.",
+    "copyLink": "Copier le lien"
   },
   "stopTypes": {
     "viewpoint": "Point de Vue",
