@@ -251,28 +251,44 @@ export function Header() {
               </Button>
             ) : user ? (
               <>
+                {/* Between lg and xl these show only their icon so the full menu fits */}
                 <Link href={`/${locale}/profile`}>
-                  <Button variant="ghost" size="sm">
-                    <User className="h-4 w-4 mr-2" />
-                    {user.profile?.full_name || user.email}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    title={user.profile?.full_name || user.email}
+                    aria-label={user.profile?.full_name || user.email}
+                  >
+                    <User className="h-4 w-4 xl:mr-2" />
+                    <span className="hidden max-w-[160px] truncate xl:inline">
+                      {user.profile?.full_name || user.email}
+                    </span>
                   </Button>
                 </Link>
                 {isAdmin && (
                   <Link href={`/${locale}/profile/admin`}>
-                    <Button variant="ghost" size="sm" className="text-amber-600 hover:text-amber-700">
-                      <Shield className="h-4 w-4 mr-2" />
-                      {t('admin')}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-amber-600 hover:text-amber-700"
+                      title={t('admin')}
+                      aria-label={t('admin')}
+                    >
+                      <Shield className="h-4 w-4 xl:mr-2" />
+                      <span className="hidden xl:inline">{t('admin')}</span>
                     </Button>
                   </Link>
                 )}
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   size="sm"
                   onClick={signOut}
                   className="text-destructive hover:text-destructive"
+                  title={t('signOut')}
+                  aria-label={t('signOut')}
                 >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  {t('signOut')}
+                  <LogOut className="h-4 w-4 xl:mr-2" />
+                  <span className="hidden xl:inline">{t('signOut')}</span>
                 </Button>
               </>
             ) : (
