@@ -17,7 +17,10 @@
     "community": "Gemeinschaft",
     "signIn": "Anmelden",
     "getStarted": "Loslegen",
-    "blog": "Blog"
+    "blog": "Blog",
+    "signOut": "Abmelden",
+    "admin": "Admin",
+    "openMenu": "Menü öffnen"
   },
   "home": {
     "hero": {
@@ -262,7 +265,7 @@
     "comingSoonDesc": "Wir arbeiten daran, Ihnen erstaunliche Geschichten von Fahrern aus der ganzen Welt zu bringen. Schauen Sie bald wieder vorbei!",
     "readMore": "Guide lesen",
     "back": "Zurück zum Blog",
-    "englishOnly": "Dieser Guide ist auf Englisch verfügbar."
+    "availableIn": "Dieser Guide ist auf {language} verfügbar."
   },
   "about": {
     "title": "Über Uns",
@@ -512,7 +515,8 @@
     },
     "nav": {
       "routes": "Routen",
-      "users": "Benutzer"
+      "users": "Benutzer",
+      "blog": "Blog"
     },
     "users": {
       "description": "Rollen, Status und Moderation der Nutzer verwalten",
@@ -630,6 +634,90 @@
       "rejectDescription": "Der Autor sieht den Grund und kann die Route korrigieren und erneut einreichen.",
       "reasonLabel": "Grund der Ablehnung",
       "reasonPlaceholder": "Z. B. der GPX-Track passt nicht zur Beschreibung..."
+    },
+    "blog": {
+      "title": "Blogbeiträge",
+      "newPost": "Neuer Beitrag",
+      "search": "Nach Titel oder Slug suchen...",
+      "empty": "Keine Beiträge gefunden",
+      "all": "Alle",
+      "status": {
+        "draft": "Entwurf",
+        "published": "Veröffentlicht",
+        "archived": "Deaktiviert"
+      },
+      "columns": {
+        "title": "Titel",
+        "status": "Status",
+        "languages": "Sprachen",
+        "date": "Veröffentlicht",
+        "updated": "Aktualisiert",
+        "actions": "Aktionen"
+      },
+      "edit": "Bearbeiten",
+      "view": "Auf der Seite ansehen",
+      "publish": "Veröffentlichen",
+      "deactivate": "Deaktivieren",
+      "reactivate": "Reaktivieren",
+      "delete": "Löschen",
+      "cancel": "Abbrechen",
+      "deleteTitle": "Diesen Beitrag löschen?",
+      "deleteDescription": "Der Beitrag „{title}“ wird in allen Sprachen endgültig gelöscht. Das kann nicht rückgängig gemacht werden. Um ihn nur von der Seite zu nehmen, nutze Deaktivieren.",
+      "back": "Zurück zu den Beiträgen",
+      "newTitle": "Neuer Beitrag",
+      "editTitle": "Beitrag bearbeiten",
+      "slug": "Slug (URL)",
+      "slugHelp": "Adresse des Beitrags: /blog/{slug}. Nach der ersten Veröffentlichung fest.",
+      "slugLocked": "Bereits veröffentlicht: Der Slug kann nicht mehr geändert werden.",
+      "slugInvalid": "Nur Kleinbuchstaben, Zahlen und Bindestriche verwenden.",
+      "slugTaken": "Es gibt bereits einen Beitrag mit diesem Slug.",
+      "cover": "Titelbild-Route",
+      "coverHelp": "Die Karte dieser Route ist das Titelbild.",
+      "chooseRoute": "Route wählen",
+      "changeRoute": "Ändern",
+      "removeCover": "Entfernen",
+      "date": "Veröffentlichungsdatum",
+      "dateHelp": "Leer: Datum der Veröffentlichung.",
+      "languages": "Sprachen",
+      "addLanguage": "Sprache hinzufügen",
+      "removeLanguage": "Sprache entfernen",
+      "removeLanguageConfirm": "{language} aus diesem Beitrag entfernen? Der Text wird beim Speichern gelöscht.",
+      "fieldTitle": "Titel",
+      "fieldDescription": "Beschreibung (SEO)",
+      "fieldBody": "Text",
+      "bodyPlaceholder": "In Markdown schreiben. Mit dem Button Route eine Routenkarte einfügen.",
+      "preview": "Vorschau",
+      "write": "Schreiben",
+      "emptyPreview": "Hier erscheint die Vorschau.",
+      "toolbar": {
+        "bold": "Fett",
+        "italic": "Kursiv",
+        "heading": "Überschrift",
+        "subheading": "Zwischenüberschrift",
+        "list": "Liste",
+        "numbered": "Nummerierte Liste",
+        "link": "Link",
+        "quote": "Zitat",
+        "tip": "Tipp",
+        "route": "Route"
+      },
+      "tipPlaceholder": "Tipptext",
+      "textPlaceholder": "Text",
+      "pickerTitle": "Route einfügen",
+      "pickerCoverTitle": "Titelbild-Route",
+      "pickerSearch": "Nach Name, Region oder Slug suchen...",
+      "pickerEmpty": "Keine veröffentlichten Routen gefunden",
+      "saveDraft": "Entwurf speichern",
+      "save": "Speichern",
+      "saving": "Speichert...",
+      "saved": "Gespeichert",
+      "needsPortuguese": "Zum Veröffentlichen Titel und Text auf Portugiesisch ausfüllen.",
+      "missingRoutes": "Routen nicht gefunden oder nicht veröffentlicht: {slugs}. Sie erscheinen nicht auf der Seite.",
+      "missingRouteCard": "Route nicht gefunden oder nicht veröffentlicht: {slug}",
+      "unsaved": "Es gibt ungespeicherte Änderungen. Trotzdem verlassen?",
+      "errorSave": "Fehler beim Speichern: {message}",
+      "errorLoad": "Beitrag nicht gefunden.",
+      "errorAction": "Fehler beim Aktualisieren des Beitrags."
     }
   },
   "riders": {

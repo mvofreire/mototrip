@@ -17,7 +17,10 @@
     "community": "Comunidade",
     "signIn": "Entrar",
     "getStarted": "Começar",
-    "blog": "Blog"
+    "blog": "Blog",
+    "signOut": "Sair",
+    "admin": "Admin",
+    "openMenu": "Abrir menu"
   },
   "home": {
     "hero": {
@@ -262,7 +265,7 @@
     "comingSoonDesc": "Estamos trabalhando para trazer histórias incríveis de motociclistas ao redor do mundo. Volte em breve!",
     "readMore": "Ler o guia",
     "back": "Voltar ao blog",
-    "englishOnly": "Este guia está disponível em inglês."
+    "availableIn": "Este guia está disponível em {language}."
   },
   "about": {
     "title": "Sobre Nós",
@@ -512,7 +515,8 @@
     },
     "nav": {
       "routes": "Rotas",
-      "users": "Usuários"
+      "users": "Usuários",
+      "blog": "Blog"
     },
     "users": {
       "description": "Gerencie funções, status e moderação dos usuários",
@@ -630,6 +634,90 @@
       "rejectDescription": "O autor verá o motivo e poderá corrigir e reenviar a rota.",
       "reasonLabel": "Motivo da rejeição",
       "reasonPlaceholder": "Ex.: o traçado do GPX não corresponde à descrição..."
+    },
+    "blog": {
+      "title": "Posts do blog",
+      "newPost": "Novo post",
+      "search": "Buscar por título ou slug...",
+      "empty": "Nenhum post encontrado",
+      "all": "Todos",
+      "status": {
+        "draft": "Rascunho",
+        "published": "Publicado",
+        "archived": "Desativado"
+      },
+      "columns": {
+        "title": "Título",
+        "status": "Status",
+        "languages": "Idiomas",
+        "date": "Publicado em",
+        "updated": "Atualizado",
+        "actions": "Ações"
+      },
+      "edit": "Editar",
+      "view": "Ver no site",
+      "publish": "Publicar",
+      "deactivate": "Desativar",
+      "reactivate": "Reativar",
+      "delete": "Apagar",
+      "cancel": "Cancelar",
+      "deleteTitle": "Apagar este post?",
+      "deleteDescription": "O post \"{title}\" será apagado de vez, em todos os idiomas. Esta ação não pode ser desfeita. Para só tirá-lo do site, use Desativar.",
+      "back": "Voltar aos posts",
+      "newTitle": "Novo post",
+      "editTitle": "Editar post",
+      "slug": "Slug (URL)",
+      "slugHelp": "Endereço do post: /blog/{slug}. Fica fixo depois da primeira publicação.",
+      "slugLocked": "Post já publicado: o slug não pode mudar.",
+      "slugInvalid": "Use só letras minúsculas, números e hífens.",
+      "slugTaken": "Já existe um post com este slug.",
+      "cover": "Rota da capa",
+      "coverHelp": "O mapa desta rota é a imagem de capa.",
+      "chooseRoute": "Escolher rota",
+      "changeRoute": "Trocar",
+      "removeCover": "Remover",
+      "date": "Data de publicação",
+      "dateHelp": "Vazio: usa a data em que for publicado.",
+      "languages": "Idiomas",
+      "addLanguage": "Adicionar idioma",
+      "removeLanguage": "Remover idioma",
+      "removeLanguageConfirm": "Remover o {language} deste post? O texto deste idioma será apagado ao salvar.",
+      "fieldTitle": "Título",
+      "fieldDescription": "Descrição (SEO)",
+      "fieldBody": "Texto",
+      "bodyPlaceholder": "Escreva em Markdown. Use o botão Rota para inserir o card de uma rota.",
+      "preview": "Pré-visualização",
+      "write": "Escrever",
+      "emptyPreview": "A pré-visualização aparece aqui.",
+      "toolbar": {
+        "bold": "Negrito",
+        "italic": "Itálico",
+        "heading": "Título",
+        "subheading": "Subtítulo",
+        "list": "Lista",
+        "numbered": "Lista numerada",
+        "link": "Link",
+        "quote": "Citação",
+        "tip": "Dica",
+        "route": "Rota"
+      },
+      "tipPlaceholder": "Texto da dica",
+      "textPlaceholder": "texto",
+      "pickerTitle": "Inserir rota",
+      "pickerCoverTitle": "Rota da capa",
+      "pickerSearch": "Buscar por nome, região ou slug...",
+      "pickerEmpty": "Nenhuma rota publicada encontrada",
+      "saveDraft": "Salvar rascunho",
+      "save": "Salvar",
+      "saving": "Salvando...",
+      "saved": "Salvo",
+      "needsPortuguese": "Para publicar, preencha o título e o texto em português.",
+      "missingRoutes": "Rotas não encontradas ou não publicadas: {slugs}. Elas não aparecem no site.",
+      "missingRouteCard": "Rota não encontrada ou não publicada: {slug}",
+      "unsaved": "Há alterações não salvas. Sair mesmo assim?",
+      "errorSave": "Erro ao salvar o post: {message}",
+      "errorLoad": "Post não encontrado.",
+      "errorAction": "Erro ao atualizar o post."
     }
   },
   "riders": {

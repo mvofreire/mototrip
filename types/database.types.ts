@@ -1,4 +1,5 @@
 export type RouteStatus = 'pending' | 'approved' | 'rejected'
+export type BlogPostStatus = 'draft' | 'published' | 'archived'
 
 export type Database = {
   public: {
@@ -270,6 +271,54 @@ export type Database = {
           content?: string
           created_at?: string
           updated_at?: string
+        }
+      }
+      blog_posts: {
+        Row: {
+          id: string
+          slug: string
+          status: BlogPostStatus
+          cover_route_id: string | null
+          published_at: string | null
+          author_id: string | null
+          updated_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          status?: BlogPostStatus
+          cover_route_id?: string | null
+          published_at?: string | null
+        }
+        Update: {
+          slug?: string
+          status?: BlogPostStatus
+          cover_route_id?: string | null
+          published_at?: string | null
+        }
+      }
+      blog_post_translations: {
+        Row: {
+          post_id: string
+          locale: string
+          title: string
+          description: string
+          body_md: string
+          updated_at: string
+        }
+        Insert: {
+          post_id: string
+          locale: string
+          title: string
+          description?: string
+          body_md?: string
+        }
+        Update: {
+          title?: string
+          description?: string
+          body_md?: string
         }
       }
     }

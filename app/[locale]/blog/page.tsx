@@ -3,9 +3,7 @@ import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { ArrowRight } from 'lucide-react'
 import { locales } from '@/i18n'
-import { POSTS, blogLocale } from '@/lib/blog/posts'
-import { RoutesService } from '@/lib/services/routes.service'
-import type { RouteWithDetails } from '@/types'
+import { getPublishedPosts, pickTranslation } from '@/lib/blog/posts'
 
 export const revalidate = 3600
 
@@ -23,12 +21,9 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default async function BlogPage({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'blog' })
-  const lang = blogLocale(locale)
-  // Cover image = map of the post's main route
-  const routes = ((await RoutesService.getRoutes().catch(() => [])) as RouteWithDetails[]) ?? []
-  const cover = (slug: string) => routes.find((r) => r.slug === slug)?.thumbnail_url
-  const posts = [...POSTS].sort((a, b) => b.date.localeCompare(a.date))
-  const date = (iso: string) => new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(iso))
+  // Newest first; the cover image is the map of the post's main route
+  const posts = await getPublishedPosts().catch(() => [])
+  const date = (iso: string | null) => (iso ? new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(iso)) : '')
 
   return (
     <div className="container py-12">
@@ -40,8 +35,9 @@ export default async function BlogPage({ params: { locale } }: { params: { local
 
         <div className="grid gap-8 md:grid-cols-2">
           {posts.map((post, i) => {
-            const c = post.content[lang]
-            const img = cover(post.coverRoute)
+            const c = pickTranslation(post, locale)
+            if (!c) return null
+            const img = post.cover?.thumbnail_url
             return (
               <Link
                 key={post.slug}
@@ -53,7 +49,7 @@ export default async function BlogPage({ params: { locale } }: { params: { local
                   <img src={img} alt="" className={`w-full object-cover ${i === 0 ? 'aspect-[21/9]' : 'aspect-[16/9]'}`} loading="lazy" />
                 )}
                 <div className="space-y-2 p-6">
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">{date(post.date)}</p>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">{date(post.published_at)}</p>
                   <h2 className={`font-bold leading-tight group-hover:text-primary ${i === 0 ? 'text-3xl' : 'text-2xl'}`}>{c.title}</h2>
                   <p className="text-muted-foreground">{c.description}</p>
                   <span className="inline-flex items-center gap-1 text-sm font-medium text-primary">

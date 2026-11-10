@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { Map, Users } from 'lucide-react'
+import { FileText, Map, Users } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { isAdmin } from '@/lib/auth/roles'
@@ -16,6 +16,7 @@ export function AdminNav() {
 
   const items = [
     { href: `/${locale}/profile/admin`, label: t('routes'), icon: Map },
+    { href: `/${locale}/profile/admin/blog`, label: t('blog'), icon: FileText },
     // Managing users and roles is admin-only
     ...(isAdmin(user)
       ? [{ href: `/${locale}/profile/admin/users`, label: t('users'), icon: Users }]
@@ -25,7 +26,8 @@ export function AdminNav() {
   return (
     <nav className="mb-6 flex gap-1 border-b">
       {items.map(({ href, label, icon: Icon }) => {
-        const active = pathname === href
+        // Blog stays active on its editor pages
+        const active = pathname === href || (href.endsWith('/blog') && pathname.startsWith(`${href}/`))
         return (
           <Link
             key={href}

@@ -17,7 +17,10 @@
     "community": "Communauté",
     "signIn": "Se Connecter",
     "getStarted": "Commencer",
-    "blog": "Blog"
+    "blog": "Blog",
+    "signOut": "Se Déconnecter",
+    "admin": "Admin",
+    "openMenu": "Ouvrir le menu"
   },
   "home": {
     "hero": {
@@ -262,7 +265,7 @@
     "comingSoonDesc": "Nous travaillons pour vous apporter des histoires incroyables de motards du monde entier. Revenez bientôt!",
     "readMore": "Lire le guide",
     "back": "Retour au blog",
-    "englishOnly": "Ce guide est disponible en anglais."
+    "availableIn": "Ce guide est disponible en {language}."
   },
   "about": {
     "title": "À Propos",
@@ -512,7 +515,8 @@
     },
     "nav": {
       "routes": "Itinéraires",
-      "users": "Utilisateurs"
+      "users": "Utilisateurs",
+      "blog": "Blog"
     },
     "users": {
       "description": "Gérez les rôles, le statut et la modération des utilisateurs",
@@ -630,6 +634,90 @@
       "rejectDescription": "L'auteur verra le motif et pourra corriger et renvoyer l'itinéraire.",
       "reasonLabel": "Motif du refus",
       "reasonPlaceholder": "Ex. : la trace GPX ne correspond pas à la description..."
+    },
+    "blog": {
+      "title": "Articles du blog",
+      "newPost": "Nouvel article",
+      "search": "Rechercher par titre ou slug...",
+      "empty": "Aucun article trouvé",
+      "all": "Tous",
+      "status": {
+        "draft": "Brouillon",
+        "published": "Publié",
+        "archived": "Désactivé"
+      },
+      "columns": {
+        "title": "Titre",
+        "status": "Statut",
+        "languages": "Langues",
+        "date": "Publié le",
+        "updated": "Mis à jour",
+        "actions": "Actions"
+      },
+      "edit": "Modifier",
+      "view": "Voir sur le site",
+      "publish": "Publier",
+      "deactivate": "Désactiver",
+      "reactivate": "Réactiver",
+      "delete": "Supprimer",
+      "cancel": "Annuler",
+      "deleteTitle": "Supprimer cet article ?",
+      "deleteDescription": "L'article « {title} » sera supprimé définitivement, dans toutes les langues. Cette action est irréversible. Pour simplement le retirer du site, utilisez Désactiver.",
+      "back": "Retour aux articles",
+      "newTitle": "Nouvel article",
+      "editTitle": "Modifier l'article",
+      "slug": "Slug (URL)",
+      "slugHelp": "Adresse de l'article : /blog/{slug}. Il est figé après la première publication.",
+      "slugLocked": "Article déjà publié : le slug ne peut plus changer.",
+      "slugInvalid": "Utilisez uniquement des minuscules, des chiffres et des tirets.",
+      "slugTaken": "Un article avec ce slug existe déjà.",
+      "cover": "Itinéraire de couverture",
+      "coverHelp": "La carte de cet itinéraire sert d'image de couverture.",
+      "chooseRoute": "Choisir un itinéraire",
+      "changeRoute": "Changer",
+      "removeCover": "Retirer",
+      "date": "Date de publication",
+      "dateHelp": "Vide : utilise la date de publication.",
+      "languages": "Langues",
+      "addLanguage": "Ajouter une langue",
+      "removeLanguage": "Retirer la langue",
+      "removeLanguageConfirm": "Retirer le {language} de cet article ? Son texte sera supprimé à l'enregistrement.",
+      "fieldTitle": "Titre",
+      "fieldDescription": "Description (SEO)",
+      "fieldBody": "Texte",
+      "bodyPlaceholder": "Écrivez en Markdown. Utilisez le bouton Itinéraire pour insérer la carte d'un itinéraire.",
+      "preview": "Aperçu",
+      "write": "Écrire",
+      "emptyPreview": "L'aperçu s'affiche ici.",
+      "toolbar": {
+        "bold": "Gras",
+        "italic": "Italique",
+        "heading": "Titre",
+        "subheading": "Sous-titre",
+        "list": "Liste",
+        "numbered": "Liste numérotée",
+        "link": "Lien",
+        "quote": "Citation",
+        "tip": "Astuce",
+        "route": "Itinéraire"
+      },
+      "tipPlaceholder": "Texte de l'astuce",
+      "textPlaceholder": "texte",
+      "pickerTitle": "Insérer un itinéraire",
+      "pickerCoverTitle": "Itinéraire de couverture",
+      "pickerSearch": "Rechercher par nom, région ou slug...",
+      "pickerEmpty": "Aucun itinéraire publié trouvé",
+      "saveDraft": "Enregistrer le brouillon",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "saved": "Enregistré",
+      "needsPortuguese": "Pour publier, remplissez le titre et le texte en portugais.",
+      "missingRoutes": "Itinéraires introuvables ou non publiés : {slugs}. Ils n'apparaîtront pas sur le site.",
+      "missingRouteCard": "Itinéraire introuvable ou non publié : {slug}",
+      "unsaved": "Des modifications ne sont pas enregistrées. Quitter quand même ?",
+      "errorSave": "Erreur lors de l'enregistrement : {message}",
+      "errorLoad": "Article introuvable.",
+      "errorAction": "Erreur lors de la mise à jour de l'article."
     }
   },
   "riders": {

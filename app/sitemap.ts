@@ -3,12 +3,11 @@ import { getSiteUrl } from '@/lib/site-url'
 import { locales } from '@/i18n'
 import { supabase } from '@/lib/supabase/client'
 import { REGIONS } from '@/lib/regions'
-import { POSTS } from '@/lib/blog/posts'
 import { routePath } from '@/lib/route-url'
 
 const BASE_URL = getSiteUrl()
 
-const STATIC_PAGES = ['', '/explore', '/regions', ...REGIONS.map((r) => `/regions/${r.slug}`), '/riders', '/community', '/about', '/guidelines', '/blog', ...POSTS.map((p) => `/blog/${p.slug}`), '/terms', '/privacy']
+const STATIC_PAGES = ['', '/explore', '/regions', ...REGIONS.map((r) => `/regions/${r.slug}`), '/riders', '/community', '/about', '/guidelines', '/blog', '/terms', '/privacy']
 
 // Rebuild hourly so new routes show up
 export const revalidate = 3600
@@ -45,5 +44,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       })),
   )
 
-  return [...pages, ...routes]
+  const { data: postRows } = await supabase
+    .from('blog_posts')
+    .select('slug, updated_at')
+    .eq('status', 'published')
+
+  const posts: MetadataRoute.Sitemap = ((postRows ?? []) as { slug: string; updated_at: string }[]).flatMap((post) =>
+    locales.map((locale) => ({
+      url: `${BASE_URL}/${locale}/blog/${post.slug}`,
+      lastModified: new Date(post.updated_at),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+      alternates: {
+        languages: Object.fromEntries(locales.map((l) => [l, `${BASE_URL}/${l}/blog/${post.slug}`])),
+      },
+    })),
+  )
+
+  return [...pages, ...routes, ...posts]
 }

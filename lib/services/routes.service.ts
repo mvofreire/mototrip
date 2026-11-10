@@ -86,6 +86,27 @@ export class RoutesService {
   }
 
   /**
+   * Published routes with these slugs (blog route cards)
+   */
+  static async getRoutesBySlugs(slugs: string[]) {
+    const { data, error } = await supabase
+      .from("routes")
+      .select(
+        `
+        *,
+        stops:route_stops(*),
+        photos:route_photos(*),
+        ratings:route_ratings(*)
+      `,
+      )
+      .eq("published", true)
+      .in("slug", slugs);
+
+    if (error) throw error;
+    return data as RouteWithDetails[];
+  }
+
+  /**
    * Get a single route by its slug or (legacy URLs) its id
    */
   static async getRouteByIdOrSlug(idOrSlug: string) {

@@ -2,32 +2,26 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import { ArrowLeft, Lightbulb } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { locales } from '@/i18n'
-import { POSTS, blogLocale, getPost, postRouteSlugs } from '@/lib/blog/posts'
-import { RoutesService } from '@/lib/services/routes.service'
+import { getPublishedPost, getPublishedPosts, pickTranslation, routesBySlug } from '@/lib/blog/posts'
+import { BlogMarkdown, routeSlugsIn } from '@/lib/blog/markdown'
 import { getSiteUrl } from '@/lib/site-url'
-import { RouteCard } from '@/components/features/routes/route-card'
-import type { RouteWithDetails } from '@/types'
 
 export const revalidate = 3600
 
 type Props = { params: { locale: string; slug: string } }
 
-export function generateStaticParams() {
-  return locales.flatMap((locale) => POSTS.map((p) => ({ locale, slug: p.slug })))
-}
-
-async function routesBySlug() {
-  const routes = ((await RoutesService.getRoutes().catch(() => [])) as RouteWithDetails[]) ?? []
-  return new Map(routes.map((r) => [r.slug, r]))
+export async function generateStaticParams() {
+  const posts = await getPublishedPosts().catch(() => [])
+  return locales.flatMap((locale) => posts.map((p) => ({ locale, slug: p.slug })))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = getPost(params.slug)
-  if (!post) return {}
-  const c = post.content[blogLocale(params.locale)]
-  const cover = (await routesBySlug()).get(post.coverRoute)?.thumbnail_url
+  const post = await getPublishedPost(params.slug).catch(() => null)
+  const c = post && pickTranslation(post, params.locale)
+  if (!post || !c) return {}
+  const cover = post.cover?.thumbnail_url
   return {
     title: c.title,
     description: c.description,
@@ -40,22 +34,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: c.title,
       description: c.description,
       url: `/${params.locale}/blog/${post.slug}`,
-      publishedTime: post.date,
+      publishedTime: post.published_at ?? undefined,
+      modifiedTime: post.updated_at,
       images: cover ? [{ url: cover, alt: c.title }] : undefined,
     },
   }
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const post = getPost(params.slug)
-  if (!post) notFound()
+  const post = await getPublishedPost(params.slug).catch(() => null)
+  const c = post && pickTranslation(post, params.locale)
+  if (!post || !c) notFound()
   const { locale } = params
-  const lang = blogLocale(locale)
-  const c = post.content[lang]
   const t = await getTranslations({ locale, namespace: 'blog' })
-  const routes = await routesBySlug()
-  const cover = routes.get(post.coverRoute)?.thumbnail_url
-  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(post.date))
+  const slugs = routeSlugsIn(c.body_md)
+  const routes = await routesBySlug(slugs)
+  const cover = post.cover?.thumbnail_url
+  const date = post.published_at
+    ? new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(post.published_at))
+    : null
+  const language = new Intl.DisplayNames([locale], { type: 'language' }).of(c.locale) ?? c.locale
 
   const base = getSiteUrl()
   const jsonLd = {
@@ -63,16 +61,17 @@ export default async function BlogPostPage({ params }: Props) {
     '@type': 'BlogPosting',
     headline: c.title,
     description: c.description,
-    inLanguage: lang,
-    datePublished: post.date,
+    inLanguage: c.locale,
+    datePublished: post.published_at,
+    dateModified: post.updated_at,
     image: cover ? [cover] : undefined,
     url: `${base}/${locale}/blog/${post.slug}`,
     author: { '@type': 'Organization', name: 'MotoTrip', url: base },
     publisher: { '@type': 'Organization', name: 'MotoTrip', logo: { '@type': 'ImageObject', url: `${base}/icon-512.png` } },
-    mentions: postRouteSlugs(post, lang)
+    mentions: slugs
       .map((s) => routes.get(s))
-      .filter((r): r is RouteWithDetails => !!r)
-      .map((r) => ({ '@type': 'TouristTrip', name: r.title, url: `${base}/${locale}/routes/${r.slug}` })),
+      .filter((r) => !!r)
+      .map((r) => ({ '@type': 'TouristTrip', name: r!.title, url: `${base}/${locale}/routes/${r!.slug}` })),
   }
 
   return (
@@ -85,10 +84,10 @@ export default async function BlogPostPage({ params }: Props) {
         </Link>
 
         <header className="mb-8 space-y-3">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">{date}</p>
+          {date && <p className="text-xs uppercase tracking-wider text-muted-foreground">{date}</p>}
           <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-5xl">{c.title}</h1>
           <p className="text-lg text-muted-foreground">{c.description}</p>
-          {lang !== locale && <p className="text-sm text-muted-foreground">{t('englishOnly')}</p>}
+          {c.locale !== locale && <p className="text-sm text-muted-foreground">{t('availableIn', { language })}</p>}
         </header>
 
         {cover && (
@@ -96,31 +95,7 @@ export default async function BlogPostPage({ params }: Props) {
           <img src={cover} alt="" className="mb-10 w-full rounded-lg border object-cover" />
         )}
 
-        <div className="space-y-6 text-[1.05rem] leading-relaxed">
-          {c.blocks.map((b, i) => {
-            if ('h2' in b) return <h2 key={i} className="pt-4 text-2xl font-bold md:text-3xl">{b.h2}</h2>
-            if ('p' in b) return <p key={i}>{b.p}</p>
-            if ('list' in b)
-              return (
-                <ul key={i} className="list-disc space-y-2 pl-6">
-                  {b.list.map((item, j) => <li key={j}>{item}</li>)}
-                </ul>
-              )
-            if ('tip' in b)
-              return (
-                <div key={i} className="flex gap-3 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm dark:border-amber-900 dark:bg-amber-950/30">
-                  <Lightbulb className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
-                  <p>{b.tip}</p>
-                </div>
-              )
-            const route = routes.get(b.route)
-            return route ? (
-              <div key={i} className="mx-auto max-w-md">
-                <RouteCard route={route} locale={locale} />
-              </div>
-            ) : null
-          })}
-        </div>
+        <BlogMarkdown markdown={c.body_md} locale={locale} routes={routes} />
       </div>
     </article>
   )

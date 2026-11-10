@@ -17,7 +17,10 @@
     "community": "Community",
     "signIn": "Sign In",
     "getStarted": "Get Started",
-    "blog": "Blog"
+    "blog": "Blog",
+    "signOut": "Sign Out",
+    "admin": "Admin",
+    "openMenu": "Open menu"
   },
   "home": {
     "hero": {
@@ -262,7 +265,7 @@
     "comingSoonDesc": "We're working on bringing you amazing stories from riders around the world. Check back soon!",
     "readMore": "Read the guide",
     "back": "Back to the blog",
-    "englishOnly": "This guide is available in English."
+    "availableIn": "This guide is available in {language}."
   },
   "about": {
     "title": "About Us",
@@ -512,7 +515,8 @@
     },
     "nav": {
       "routes": "Routes",
-      "users": "Users"
+      "users": "Users",
+      "blog": "Blog"
     },
     "users": {
       "description": "Manage user roles, status and moderation",
@@ -630,6 +634,90 @@
       "rejectDescription": "The author will see the reason and can fix and resubmit the route.",
       "reasonLabel": "Reason for rejection",
       "reasonPlaceholder": "E.g. the GPX track does not match the description..."
+    },
+    "blog": {
+      "title": "Blog posts",
+      "newPost": "New post",
+      "search": "Search by title or slug...",
+      "empty": "No posts found",
+      "all": "All",
+      "status": {
+        "draft": "Draft",
+        "published": "Published",
+        "archived": "Deactivated"
+      },
+      "columns": {
+        "title": "Title",
+        "status": "Status",
+        "languages": "Languages",
+        "date": "Published",
+        "updated": "Updated",
+        "actions": "Actions"
+      },
+      "edit": "Edit",
+      "view": "View on site",
+      "publish": "Publish",
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "deleteTitle": "Delete this post?",
+      "deleteDescription": "The post \"{title}\" will be deleted for good, in every language. This cannot be undone. To just take it off the site, use Deactivate.",
+      "back": "Back to posts",
+      "newTitle": "New post",
+      "editTitle": "Edit post",
+      "slug": "Slug (URL)",
+      "slugHelp": "Post address: /blog/{slug}. It is fixed after the first publish.",
+      "slugLocked": "Already published: the slug cannot change.",
+      "slugInvalid": "Use only lowercase letters, numbers and hyphens.",
+      "slugTaken": "A post with this slug already exists.",
+      "cover": "Cover route",
+      "coverHelp": "This route's map is the cover image.",
+      "chooseRoute": "Choose route",
+      "changeRoute": "Change",
+      "removeCover": "Remove",
+      "date": "Publish date",
+      "dateHelp": "Empty: uses the date it gets published.",
+      "languages": "Languages",
+      "addLanguage": "Add language",
+      "removeLanguage": "Remove language",
+      "removeLanguageConfirm": "Remove {language} from this post? Its text will be deleted when you save.",
+      "fieldTitle": "Title",
+      "fieldDescription": "Description (SEO)",
+      "fieldBody": "Text",
+      "bodyPlaceholder": "Write in Markdown. Use the Route button to insert a route card.",
+      "preview": "Preview",
+      "write": "Write",
+      "emptyPreview": "The preview shows here.",
+      "toolbar": {
+        "bold": "Bold",
+        "italic": "Italic",
+        "heading": "Heading",
+        "subheading": "Subheading",
+        "list": "List",
+        "numbered": "Numbered list",
+        "link": "Link",
+        "quote": "Quote",
+        "tip": "Tip",
+        "route": "Route"
+      },
+      "tipPlaceholder": "Tip text",
+      "textPlaceholder": "text",
+      "pickerTitle": "Insert route",
+      "pickerCoverTitle": "Cover route",
+      "pickerSearch": "Search by name, region or slug...",
+      "pickerEmpty": "No published routes found",
+      "saveDraft": "Save draft",
+      "save": "Save",
+      "saving": "Saving...",
+      "saved": "Saved",
+      "needsPortuguese": "To publish, fill in the Portuguese title and text.",
+      "missingRoutes": "Routes not found or not published: {slugs}. They will not show on the site.",
+      "missingRouteCard": "Route not found or not published: {slug}",
+      "unsaved": "You have unsaved changes. Leave anyway?",
+      "errorSave": "Error saving the post: {message}",
+      "errorLoad": "Post not found.",
+      "errorAction": "Error updating the post."
     }
   },
   "riders": {
