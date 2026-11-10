@@ -10,13 +10,15 @@ import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { useTranslations } from "next-intl";
 import { COUNTRIES, countryName } from "@/lib/countries";
-import { Loader2, MapPin, Save } from "lucide-react";
+import { Loader2, MapPin, Save, Trash2 } from "lucide-react";
 import type { Database } from "@/types/database.types";
 import type { RouteWithDetails } from "@/types";
 import { useAuth } from "@/hooks/use-auth";
 import { isStaff } from "@/lib/auth/roles";
 import { GPXUpload } from "./gpx-upload";
-import { gpxPointsToGeoJSON, type GPXData } from "@/lib/gpx-parser";
+import { gpxPointsToGeoJSON, type GPXData, type GPXWaypoint } from "@/lib/gpx-parser";
+import { RoutesService } from "@/lib/services/routes.service";
+import type { StopType } from "@/types";
 import { useRoutesCreateMutation, useRoutesUpdateMutation } from "@/hooks/use-routes";
 import { RouteStorage } from "@/lib/storage/storage.service";
 import { renderRouteThumbnail } from "@/lib/map-thumbnail";
@@ -65,6 +67,9 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
   });
 
   const [gpxData, setGpxData] = useState<GPXData | null>(null);
+  // New routes: points of interest from the GPX become the route's stops
+  const [gpxStops, setGpxStops] = useState<GPXWaypoint[]>([]);
+  const tTypes = useTranslations("stopTypes");
   const [gpxFile, setGpxFile] = useState<File | null>(null);
   // Remounts the GPX picker after a replaced track is saved
   const [gpxKey, setGpxKey] = useState(0);
@@ -72,6 +77,7 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
   const handleGPXParsed = (parsedData: GPXData, file: File) => {
     setGpxData(parsedData);
     setGpxFile(file);
+    setGpxStops(parsedData.waypoints ?? []);
 
     // Auto-populate form fields from GPX data
     setFormData((prev) => ({
@@ -143,6 +149,24 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
         });
       } catch (thumbError) {
         console.warn("Could not create route thumbnail:", thumbError);
+      }
+      // Stops from the GPX. A failure here must not fail the submission:
+      // the author can still add them in the route editor.
+      if (gpxStops.length) {
+        try {
+          await RoutesService.saveStops(
+            result.id,
+            gpxStops.map((w) => ({
+              name: w.name.slice(0, 120),
+              description: w.description || null,
+              type: w.type as StopType,
+              latitude: w.lat,
+              longitude: w.lng,
+            })),
+          );
+        } catch (stopsError) {
+          console.warn("Could not save the GPX stops:", stopsError);
+        }
       }
       setSuccess(true);
 
@@ -440,6 +464,64 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
         )}
         <GPXUpload key={gpxKey} onGPXParsed={handleGPXParsed} locale={locale} />
       </Card>
+
+      {/* Stops found in the GPX (new routes only) */}
+      {!isEdit && gpxStops.length > 0 && (
+        <Card className="p-6 space-y-4">
+          <div>
+            <h2 className="text-xl font-semibold">{t("gpxStops.title", { count: gpxStops.length })}</h2>
+            <p className="text-sm text-muted-foreground">{t("gpxStops.description")}</p>
+          </div>
+          <ol className="space-y-3">
+            {gpxStops.map((stop, i) => (
+              <li key={`${stop.lat},${stop.lng},${i}`} className="flex gap-3 rounded-md border p-3">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                  {i + 1}
+                </span>
+                <div className="min-w-0 flex-1 space-y-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-medium">{stop.name}</span>
+                    <select
+                      aria-label={t("gpxStops.type")}
+                      className="h-8 rounded-md border border-input bg-background px-2 text-xs"
+                      value={stop.type}
+                      onChange={(e) =>
+                        setGpxStops((prev) =>
+                          prev.map((s, j) => (j === i ? { ...s, type: e.target.value as GPXWaypoint["type"] } : s)),
+                        )
+                      }
+                    >
+                      {(["viewpoint", "cafe", "gas_station", "restaurant", "landmark", "accommodation"] as const).map((type) => (
+                        <option key={type} value={type}>
+                          {tTypes(type)}
+                        </option>
+                      ))}
+                    </select>
+                    {stop.distanceFromRouteKm > 2 && (
+                      <span className="text-xs text-amber-600">
+                        {t("gpxStops.farFromRoute", { km: stop.distanceFromRouteKm })}
+                      </span>
+                    )}
+                  </div>
+                  {stop.description && <p className="text-sm text-muted-foreground">{stop.description}</p>}
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 shrink-0"
+                  title={t("gpxStops.remove")}
+                  aria-label={t("gpxStops.remove")}
+                  onClick={() => setGpxStops((prev) => prev.filter((_, j) => j !== i))}
+                >
+                  <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+              </li>
+            ))}
+          </ol>
+          <p className="text-xs text-muted-foreground">{t("gpxStops.editLater")}</p>
+        </Card>
+      )}
 
       {/* Error Message */}
       {error && (

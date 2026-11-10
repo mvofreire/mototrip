@@ -244,7 +244,15 @@
     "errorMessage": "Erreur lors de la soumission de l'itinéraire",
     "noteTitle": "Note:",
     "noteMessage": "Les itinéraires soumis seront examinés avant d'être publiés. Vous pouvez les modifier à tout moment depuis votre profil.",
-    "successPendingMessage": "Votre itinéraire a été envoyé en révision et sera visible une fois approuvé."
+    "successPendingMessage": "Votre itinéraire a été envoyé en révision et sera visible une fois approuvé.",
+    "gpxStops": {
+      "title": "{count, plural, one {# arrêt trouvé dans le GPX} other {# arrêts trouvés dans le GPX}}",
+      "description": "Les points d'intérêt du fichier deviennent les arrêts de l'itinéraire, dans l'ordre du parcours. Vérifiez le type de chacun et retirez ceux que vous ne voulez pas.",
+      "type": "Type d'arrêt",
+      "farFromRoute": "à {km, number} km de l'itinéraire",
+      "remove": "Retirer l'arrêt",
+      "editLater": "Après l'envoi, vous pourrez ajuster les arrêts sur la carte dans Modifier l'itinéraire."
+    }
   },
   "community": {
     "title": "Communauté",

@@ -244,7 +244,15 @@
     "errorMessage": "Erro ao submeter rota",
     "noteTitle": "Nota:",
     "noteMessage": "As rotas submetidas serão revisadas antes de serem publicadas. Você pode editá-las a qualquer momento no seu perfil.",
-    "successPendingMessage": "Sua rota foi enviada para revisão e ficará visível assim que for aprovada."
+    "successPendingMessage": "Sua rota foi enviada para revisão e ficará visível assim que for aprovada.",
+    "gpxStops": {
+      "title": "{count, plural, one {# parada encontrada no GPX} other {# paradas encontradas no GPX}}",
+      "description": "Os pontos de interesse do arquivo viram as paradas da rota, na ordem do percurso. Confira o tipo de cada uma e remova as que não quiser.",
+      "type": "Tipo da parada",
+      "farFromRoute": "a {km, number} km da rota",
+      "remove": "Remover parada",
+      "editLater": "Depois de enviar, pode ajustar as paradas no mapa em Editar rota."
+    }
   },
   "community": {
     "title": "Comunidade",

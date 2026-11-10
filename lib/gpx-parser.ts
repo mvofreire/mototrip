@@ -10,8 +10,24 @@ export interface GPXPoint {
   time?: Date
 }
 
+export type GPXStopType = 'viewpoint' | 'cafe' | 'gas_station' | 'restaurant' | 'landmark' | 'accommodation'
+
+/** A point of interest (<wpt>) from the GPX, e.g. a stop marked in gpx.studio */
+export interface GPXWaypoint {
+  name: string
+  description: string
+  lat: number
+  lng: number
+  /** Stop type guessed from the waypoint's symbol and name */
+  type: GPXStopType
+  /** Distance to the nearest point of the track, in km */
+  distanceFromRouteKm: number
+}
+
 export interface GPXData {
   points: GPXPoint[]
+  /** Points of interest, ordered along the track */
+  waypoints: GPXWaypoint[]
   bounds: {
     north: number
     south: number
@@ -90,11 +106,14 @@ export async function parseGPXFile(file: File): Promise<GPXData> {
   // Calculate total distance
   const totalDistance = calculateTotalDistance(gpxPoints)
 
+  const waypoints = parseWaypoints(xmlDoc, gpxPoints)
+
   // Calculate elevation gain and loss
   const { gain, loss } = calculateElevationChange(gpxPoints)
 
   return {
     points: gpxPoints,
+    waypoints,
     bounds: {
       north: maxLat,
       south: minLat,
@@ -107,6 +126,62 @@ export async function parseGPXFile(file: File): Promise<GPXData> {
     minElevation: hasElevation ? minElevation : undefined,
     maxElevation: hasElevation ? maxElevation : undefined,
   }
+}
+
+const childText = (el: Element, tag: string) =>
+  Array.from(el.children).find((c) => c.localName === tag)?.textContent?.trim() ?? ''
+
+/**
+ * Stop type from a waypoint's <sym>/<type> (gpx.studio, Garmin, OsmAnd use
+ * names like "Fuel Station", "Restaurant", "Scenic Area") and its name.
+ */
+export function guessStopType(symbol: string, name: string): GPXStopType {
+  const s = `${symbol} ${name}`.toLowerCase()
+  if (/fuel|gas station|petrol|gasolin|combust|bomba|tankstelle|carburant|essence/.test(s)) return 'gas_station'
+  if (/caf[eé]|coffee|bar\b|pastelaria|bakery|padaria/.test(s)) return 'cafe'
+  if (/restaurant|restaurante|food|dining|almo[cç]o|jantar|lunch|dinner/.test(s)) return 'restaurant'
+  if (/hotel|lodging|accommodation|campsite|camping|hut|hostel|alojamento|dormida|pousada|motel/.test(s)) return 'accommodation'
+  if (/scenic|viewpoint|vista|summit|binocular|miradouro|mirador|mirante|belv[eé]d[eè]re|aussicht|overlook/.test(s)) return 'viewpoint'
+  return 'landmark'
+}
+
+/** <wpt> elements, ordered by their position along the track */
+function parseWaypoints(xmlDoc: Document, track: GPXPoint[]): GPXWaypoint[] {
+  const found = Array.from(xmlDoc.querySelectorAll('wpt'))
+    .map((el) => {
+      const lat = parseFloat(el.getAttribute('lat') || '')
+      const lng = parseFloat(el.getAttribute('lon') || '')
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null
+      const name = childText(el, 'name')
+      const description = childText(el, 'desc') || childText(el, 'cmt')
+      const symbol = childText(el, 'sym') || childText(el, 'type')
+
+      // Nearest track point: its index orders the stops along the route
+      let nearest = 0
+      let best = Infinity
+      track.forEach((p, i) => {
+        const d = haversineDistance(lat, lng, p.lat, p.lng)
+        if (d < best) {
+          best = d
+          nearest = i
+        }
+      })
+
+      return {
+        waypoint: {
+          name: name || description.slice(0, 60),
+          description,
+          lat,
+          lng,
+          type: guessStopType(symbol, name),
+          distanceFromRouteKm: Math.round(best * 10) / 10,
+        },
+        order: nearest,
+      }
+    })
+    .filter((w): w is { waypoint: GPXWaypoint; order: number } => !!w && !!w.waypoint.name)
+
+  return found.sort((a, b) => a.order - b.order).map((w) => w.waypoint)
 }
 
 /**

@@ -244,7 +244,15 @@
     "errorMessage": "Error al enviar la ruta",
     "noteTitle": "Nota:",
     "noteMessage": "Las rutas enviadas serán revisadas antes de ser publicadas. Puedes editarlas en cualquier momento desde tu perfil.",
-    "successPendingMessage": "Tu ruta se ha enviado a revisión y será visible cuando se apruebe."
+    "successPendingMessage": "Tu ruta se ha enviado a revisión y será visible cuando se apruebe.",
+    "gpxStops": {
+      "title": "{count, plural, one {# parada encontrada en el GPX} other {# paradas encontradas en el GPX}}",
+      "description": "Los puntos de interés del archivo se convierten en las paradas de la ruta, en el orden del recorrido. Revisa el tipo de cada una y quita las que no quieras.",
+      "type": "Tipo de parada",
+      "farFromRoute": "a {km, number} km de la ruta",
+      "remove": "Quitar parada",
+      "editLater": "Después de enviarla, puedes ajustar las paradas en el mapa en Editar ruta."
+    }
   },
   "community": {
     "title": "Comunidad",

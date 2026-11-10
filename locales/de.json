@@ -244,7 +244,15 @@
     "errorMessage": "Fehler beim Einreichen der Route",
     "noteTitle": "Hinweis:",
     "noteMessage": "Eingereichte Routen werden überprüft, bevor sie veröffentlicht werden. Sie können sie jederzeit in Ihrem Profil bearbeiten.",
-    "successPendingMessage": "Deine Route wurde zur Prüfung eingereicht und ist nach der Freigabe sichtbar."
+    "successPendingMessage": "Deine Route wurde zur Prüfung eingereicht und ist nach der Freigabe sichtbar.",
+    "gpxStops": {
+      "title": "{count, plural, one {# Stopp im GPX gefunden} other {# Stopps im GPX gefunden}}",
+      "description": "Die Points of Interest der Datei werden zu den Stopps der Route, in Streckenreihenfolge. Prüfe jeweils den Typ und entferne, was du nicht willst.",
+      "type": "Stopp-Typ",
+      "farFromRoute": "{km, number} km von der Route",
+      "remove": "Stopp entfernen",
+      "editLater": "Nach dem Einreichen kannst du die Stopps unter Route bearbeiten auf der Karte anpassen."
+    }
   },
   "community": {
     "title": "Gemeinschaft",

@@ -244,7 +244,15 @@
     "errorMessage": "Error submitting route",
     "noteTitle": "Note:",
     "noteMessage": "Submitted routes will be reviewed before being published. You can edit them at any time from your profile.",
-    "successPendingMessage": "Your route was sent for review and will be visible once approved."
+    "successPendingMessage": "Your route was sent for review and will be visible once approved.",
+    "gpxStops": {
+      "title": "{count, plural, one {# stop found in the GPX} other {# stops found in the GPX}}",
+      "description": "The file's points of interest become the route's stops, in route order. Check each one's type and remove any you don't want.",
+      "type": "Stop type",
+      "farFromRoute": "{km, number} km from the route",
+      "remove": "Remove stop",
+      "editLater": "After submitting, you can adjust the stops on the map in Edit route."
+    }
   },
   "community": {
     "title": "Community",
