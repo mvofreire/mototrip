@@ -80,7 +80,9 @@
     "difficulty": "Difficulty",
     "distance": "Distance (km)",
     "duration": "Duration (hours)",
-    "minimumRating": "Minimum Rating"
+    "minimumRating": "Minimum Rating",
+    "routeTypeLoop": "Loop",
+    "routeTypeOutAndBack": "Out and Back"
   },
   "categories": {
     "scenic": "Scenic",

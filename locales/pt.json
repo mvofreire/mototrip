@@ -80,7 +80,9 @@
     "difficulty": "Dificuldade",
     "distance": "Distância (km)",
     "duration": "Duração (horas)",
-    "minimumRating": "Avaliação Mínima"
+    "minimumRating": "Avaliação Mínima",
+    "routeTypeLoop": "Loop (Circular)",
+    "routeTypeOutAndBack": "Vai e Volta"
   },
   "categories": {
     "scenic": "Cênica",

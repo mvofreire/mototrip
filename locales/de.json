@@ -80,7 +80,9 @@
     "difficulty": "Schwierigkeit",
     "distance": "Entfernung (km)",
     "duration": "Dauer (Stunden)",
-    "minimumRating": "Mindestbewertung"
+    "minimumRating": "Mindestbewertung",
+    "routeTypeLoop": "Rundfahrt",
+    "routeTypeOutAndBack": "Hin und Zurück"
   },
   "categories": {
     "scenic": "Malerisch",

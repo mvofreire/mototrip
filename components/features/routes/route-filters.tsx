@@ -9,6 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Slider } from '@/components/ui/slider'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
+import { GitCompareArrows as Loop, WaypointsIcon as OutAndBack } from 'lucide-react'
 import { RouteFilters as RouteFiltersType } from '@/types'
 
 interface RouteFiltersProps {
@@ -38,11 +39,12 @@ export function RouteFilters({ filters, onFiltersChange }: RouteFiltersProps) {
   ]
 
   const locale = useLocale()
-  const countries = COUNTRIES.map((c) => ({ value: c.code, label: `${c.flag} ${countryName(c, locale)}` }))
+  const countries = COUNTRIES.map((c) => ({ value: c.code, label: countryName(c, locale) }))
 
   const routeTypes = [
-    { value: 'loop', label: '🔄 ' + tCountries('routeTypeLoop') },
-    { value: 'out_and_back', label: '⇄ ' + tCountries('routeTypeOutAndBack') },
+    // Same icons as the route cards
+    { value: 'loop', label: t('routeTypeLoop'), icon: Loop },
+    { value: 'out_and_back', label: t('routeTypeOutAndBack'), icon: OutAndBack },
   ]
 
   const handleCategoryChange = (category: string, checked: boolean) => {
@@ -185,8 +187,9 @@ export function RouteFilters({ filters, onFiltersChange }: RouteFiltersProps) {
                 />
                 <label
                   htmlFor={`route-type-${routeType.value}`}
-                  className="text-sm cursor-pointer"
+                  className="flex items-center gap-1.5 text-sm cursor-pointer"
                 >
+                  <routeType.icon className="h-4 w-4 text-muted-foreground" />
                   {routeType.label}
                 </label>
               </div>

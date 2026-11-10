@@ -74,8 +74,10 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   
-  /* Garantir que botões primary sempre tenham background visível */
-  button[class*="bg-primary"]:not([class*="bg-gradient"]) {
+  /* Garantir que botões primary sempre tenham background visível.
+     Checkboxes ficam de fora: a classe deles só pinta quando marcados
+     (data-[state=checked]:bg-primary). */
+  button[class*="bg-primary"]:not([class*="bg-gradient"]):not([role="checkbox"]) {
     background-color: hsl(var(--primary)) !important;
   }
 }
