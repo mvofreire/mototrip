@@ -43,7 +43,7 @@ export function Header() {
             <span className="inline-block">{tCommon('mototrip')}</span>
           </Link>
 
-          <nav className="hidden xl:flex items-center gap-6 whitespace-nowrap">
+          <nav className="hidden lg:flex items-center gap-6 whitespace-nowrap">
             <Link
               href={`/${locale}/explore`}
               className={`text-sm font-medium transition-colors ${
@@ -64,7 +64,7 @@ export function Header() {
             >
               {t('destinations')}
             </Link>
-            <Link
+            {/* <Link
               href={`/${locale}/submit`}
               className={`text-sm font-medium transition-colors ${
                 isActive('/submit')
@@ -73,7 +73,7 @@ export function Header() {
               }`}
             >
               {t('submitRoute')}
-            </Link>
+            </Link> */}
             <Link
               href={`/${locale}/community`}
               className={`text-sm font-medium transition-colors ${
@@ -101,7 +101,7 @@ export function Header() {
           {/* Mobile Menu */}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="xl:hidden">
+              <Button variant="ghost" size="icon" className="lg:hidden" aria-label={t('openMenu')}>
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
@@ -191,7 +191,7 @@ export function Header() {
                 <div className="flex flex-col gap-3">
                   {loading ? (
                     <Button variant="ghost" disabled>
-                      Carregando...
+                      {tCommon('loading')}
                     </Button>
                   ) : user ? (
                     <>
@@ -205,7 +205,7 @@ export function Header() {
                         <Link href={`/${locale}/profile/admin`} onClick={() => setOpen(false)}>
                           <Button variant="ghost" className="w-full justify-start text-amber-600 hover:text-amber-700">
                             <Shield className="h-4 w-4 mr-2" />
-                            Admin
+                            {t('admin')}
                           </Button>
                         </Link>
                       )}
@@ -218,7 +218,7 @@ export function Header() {
                         }}
                       >
                         <LogOut className="h-4 w-4 mr-2" />
-                        Sair
+                        {t('signOut')}
                       </Button>
                     </>
                   ) : (
@@ -242,12 +242,12 @@ export function Header() {
           </Sheet>
 
           {/* Desktop Menu */}
-          <div className="hidden xl:flex items-center gap-2">
+          <div className="hidden lg:flex items-center gap-2">
             <ThemeToggle />
             <LanguageSwitcher />
             {loading ? (
               <Button variant="ghost" size="sm" disabled>
-                Carregando...
+                {tCommon('loading')}
               </Button>
             ) : user ? (
               <>
@@ -261,7 +261,7 @@ export function Header() {
                   <Link href={`/${locale}/profile/admin`}>
                     <Button variant="ghost" size="sm" className="text-amber-600 hover:text-amber-700">
                       <Shield className="h-4 w-4 mr-2" />
-                      Admin
+                      {t('admin')}
                     </Button>
                   </Link>
                 )}
@@ -272,7 +272,7 @@ export function Header() {
                   className="text-destructive hover:text-destructive"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
-                  Sair
+                  {t('signOut')}
                 </Button>
               </>
             ) : (

@@ -92,6 +92,10 @@ export async function generateMetadata({
       title: 'MotoTrip',
       statusBarStyle: 'black-translucent',
     },
+    // Next 14 only emits the Apple-prefixed tag; Chrome wants the standard one too.
+    other: {
+      'mobile-web-app-capable': 'yes',
+    },
     formatDetection: { telephone: false },
     robots: {
       index: true,
