@@ -1,7 +1,8 @@
 import { RouteWithDetails } from '@/types'
 import { Card, CardContent } from '@/components/ui/card'
 import { MapPin, Clock, Mountain, Star, TrendingUp, Navigation } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { regionLabel } from '@/lib/regions'
 import { formatDistance, formatDuration, formatElevation, formatRating } from '@/lib/utils'
 
 interface RouteStatsProps {
@@ -10,6 +11,7 @@ interface RouteStatsProps {
 
 export function RouteStats({ route }: RouteStatsProps) {
   const t = useTranslations()
+  const locale = useLocale()
   const stats = [
     {
       icon: Navigation,
@@ -29,7 +31,7 @@ export function RouteStats({ route }: RouteStatsProps) {
     {
       icon: MapPin,
       label: t('route.region'),
-      value: route.region || t('route.unknown'),
+      value: regionLabel(route, locale) || t('route.unknown'),
     },
   ]
 

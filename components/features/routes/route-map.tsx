@@ -60,17 +60,16 @@ export function RouteMap({ route }: RouteMapProps) {
       position: { lat: Number(stop.latitude), lng: Number(stop.longitude) },
       title: stop.name,
       html: String(index + 1),
-      color: "#ea4335",
-      size: 24,
+      size: 26,
     }));
     if (coordinates.length > 1) {
       markers.push({
         id: "end",
         position: coordinates[coordinates.length - 1],
         title: t("end"),
-        html: "🏁",
-        color: "#ef4444",
-        size: 32,
+        // Flag
+        html: '<svg width="15" height="15" viewBox="0 0 24 24" fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M5 22V3"/><path d="M5 4h12l-2.5 4.5L17 13H5z"/></svg>',
+        size: 34,
       });
     }
     if (coordinates.length > 0) {
@@ -78,9 +77,9 @@ export function RouteMap({ route }: RouteMapProps) {
         id: "start",
         position: coordinates[0],
         title: t("start"),
-        html: "▶",
-        color: "#16a34a",
-        size: 32,
+        // Play
+        html: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>',
+        size: 34,
       });
     }
     return markers;

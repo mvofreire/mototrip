@@ -74,7 +74,7 @@ export function Footer() {
               </Link>
             </h3>
             <ul className="space-y-3 text-sm">
-              {REGIONS.filter((r) => ['portugal', 'norte', 'algarve', 'espanha', 'picos-de-europa', 'pireneus'].includes(r.slug)).map((r) => (
+              {REGIONS.filter((r) => ['portugal', 'norte', 'algarve', 'espanha', 'picos-de-europa', 'pireneus', 'franca', 'alpes-franceses'].includes(r.slug)).map((r) => (
                 <li key={r.slug}>
                   <Link href={`/${locale}/regions/${r.slug}`} className="text-muted-foreground hover:text-foreground transition-colors">
                     {textFor(r.name, locale)}

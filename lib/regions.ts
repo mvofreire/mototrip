@@ -4,12 +4,14 @@
  * queries like "rotas de moto no Algarve".
  */
 
+import type { CountryCode } from './countries'
+
 export type Locale = 'pt' | 'en' | 'es' | 'fr' | 'de'
 type Text = Record<Locale, string>
 
 export interface Region {
   slug: string
-  country: 'PT' | 'ES'
+  country: CountryCode
   /** A whole country, or a region inside it */
   kind: 'country' | 'region'
   /** `routes.region` values that belong to this region (case-insensitive) */
@@ -187,6 +189,104 @@ export const REGIONS: Region[] = [
       de: 'Kurven über dem Mittelmeer zwischen Lloret, Tossa und dem Cap de Creus. Schmale Straßen, Buchten und Fischerdörfer.',
     },
   },
+  {
+    slug: 'franca',
+    country: 'FR',
+    kind: 'country',
+    match: [],
+    name: { pt: 'França', en: 'France', es: 'Francia', fr: 'France', de: 'Frankreich' },
+    intro: {
+      pt: 'Dos grandes colos dos Alpes e dos Pirenéus às gargantas da Provença, aos vulcões da Auvergne e às estradas da Córsega: rotas de moto em França com paradas e GPX grátis.',
+      en: 'From the great passes of the Alps and the Pyrenees to the gorges of Provence, the Auvergne volcanoes and the roads of Corsica: motorcycle routes in France with stops and free GPX.',
+      es: 'De los grandes puertos de los Alpes y los Pirineos a las gargantas de la Provenza, los volcanes de Auvernia y las carreteras de Córcega: rutas en moto por Francia con paradas y GPX gratis.',
+      fr: "Des grands cols des Alpes et des Pyrénées aux gorges de Provence, des volcans d'Auvergne aux routes de Corse : des itinéraires moto en France avec arrêts et GPX gratuit.",
+      de: 'Von den großen Pässen der Alpen und Pyrenäen über die Schluchten der Provence und die Vulkane der Auvergne bis zu den Straßen Korsikas: Motorradrouten in Frankreich mit Stopps und kostenlosem GPX.',
+    },
+  },
+  {
+    slug: 'alpes-franceses',
+    country: 'FR',
+    kind: 'region',
+    match: ['Alpes', 'Alps'],
+    name: { pt: 'Alpes franceses', en: 'French Alps', es: 'Alpes franceses', fr: 'Alpes françaises', de: 'Französische Alpen' },
+    intro: {
+      pt: 'Iseran, Galibier, Izoard e Bonette: os colos mais altos da Europa, ligados pela Route des Grandes Alpes. Abertos normalmente de junho a outubro.',
+      en: 'Iseran, Galibier, Izoard and Bonette: the highest passes in Europe, linked by the Route des Grandes Alpes. Usually open from June to October.',
+      es: 'Iseran, Galibier, Izoard y Bonette: los puertos más altos de Europa, unidos por la Route des Grandes Alpes. Normalmente abiertos de junio a octubre.',
+      fr: "Iseran, Galibier, Izoard et Bonette : les plus hauts cols d'Europe, reliés par la route des Grandes Alpes. Généralement ouverts de juin à octobre.",
+      de: 'Iseran, Galibier, Izoard und Bonette: die höchsten Pässe Europas, verbunden durch die Route des Grandes Alpes. Meist von Juni bis Oktober geöffnet.',
+    },
+  },
+  {
+    slug: 'provenca',
+    country: 'FR',
+    kind: 'region',
+    match: ['Provença', 'Provence'],
+    name: { pt: 'Provença e Côte d’Azur', en: 'Provence and the Riviera', es: 'Provenza y Costa Azul', fr: "Provence et Côte d'Azur", de: 'Provence und Côte d’Azur' },
+    intro: {
+      pt: 'As Gorges du Verdon, o Mont Ventoux, a Route Napoléon e os colos por cima de Nice. Sol, curvas e lavanda, com o Mediterrâneo sempre perto.',
+      en: 'The Gorges du Verdon, Mont Ventoux, the Route Napoléon and the passes above Nice. Sun, bends and lavender, with the Mediterranean always close.',
+      es: 'Las Gorges du Verdon, el Mont Ventoux, la Route Napoléon y los puertos sobre Niza. Sol, curvas y lavanda, con el Mediterráneo siempre cerca.',
+      fr: 'Les gorges du Verdon, le mont Ventoux, la route Napoléon et les cols au-dessus de Nice. Du soleil, des virages et de la lavande, avec la Méditerranée toujours proche.',
+      de: 'Die Gorges du Verdon, der Mont Ventoux, die Route Napoléon und die Pässe oberhalb von Nizza. Sonne, Kurven und Lavendel, das Mittelmeer immer in der Nähe.',
+    },
+  },
+  {
+    slug: 'pireneus-franceses',
+    country: 'FR',
+    kind: 'region',
+    match: ['Pirenéus', 'Pirineos', 'Pyrenees', 'Pyrénées'],
+    name: { pt: 'Pirenéus franceses', en: 'French Pyrenees', es: 'Pirineo francés', fr: 'Pyrénées françaises', de: 'Französische Pyrenäen' },
+    intro: {
+      pt: 'Tourmalet, Aubisque, Aspin e Peyresourde: os colos do Tour de France, com prados, vacas soltas e estradas cortadas na rocha.',
+      en: 'Tourmalet, Aubisque, Aspin and Peyresourde: the Tour de France passes, with meadows, free-roaming cows and roads cut into the rock.',
+      es: 'Tourmalet, Aubisque, Aspin y Peyresourde: los puertos del Tour de Francia, con prados, vacas sueltas y carreteras talladas en la roca.',
+      fr: 'Tourmalet, Aubisque, Aspin et Peyresourde : les cols du Tour de France, avec prairies, vaches en liberté et routes taillées dans la roche.',
+      de: 'Tourmalet, Aubisque, Aspin und Peyresourde: die Pässe der Tour de France mit Wiesen, frei laufenden Kühen und in den Fels gehauenen Straßen.',
+    },
+  },
+  {
+    slug: 'macico-central',
+    country: 'FR',
+    kind: 'region',
+    match: ['Maciço Central', 'Massif Central'],
+    name: { pt: 'Maciço Central', en: 'Massif Central', es: 'Macizo Central', fr: 'Massif central', de: 'Zentralmassiv' },
+    intro: {
+      pt: 'Os vulcões da Auvergne e as gargantas do Tarn e da Ardèche: estradas vazias, paisagem verde e algumas das curvas mais bonitas de França longe da multidão.',
+      en: 'The Auvergne volcanoes and the Tarn and Ardèche gorges: empty roads, green landscapes and some of the finest bends in France, away from the crowds.',
+      es: 'Los volcanes de Auvernia y las gargantas del Tarn y del Ardèche: carreteras vacías, paisaje verde y algunas de las curvas más bonitas de Francia lejos de las multitudes.',
+      fr: "Les volcans d'Auvergne et les gorges du Tarn et de l'Ardèche : des routes désertes, des paysages verts et certains des plus beaux virages de France, loin de la foule.",
+      de: 'Die Vulkane der Auvergne und die Schluchten von Tarn und Ardèche: leere Straßen, grüne Landschaft und einige der schönsten Kurven Frankreichs, abseits der Massen.',
+    },
+  },
+  {
+    slug: 'vosges-alsacia',
+    country: 'FR',
+    kind: 'region',
+    match: ['Vosges e Alsácia', 'Vosges', 'Alsace'],
+    name: { pt: 'Vosges e Alsácia', en: 'Vosges and Alsace', es: 'Vosgos y Alsacia', fr: 'Vosges et Alsace', de: 'Vogesen und Elsass' },
+    intro: {
+      pt: 'A Route des Crêtes pelo cume dos Vosges e a Rota dos Vinhos entre aldeias de enxaimel. Perto da Alemanha e da Suíça.',
+      en: 'The Route des Crêtes along the ridge of the Vosges and the Wine Route through half-timbered villages. Close to Germany and Switzerland.',
+      es: 'La Route des Crêtes por la cresta de los Vosgos y la Ruta del Vino entre pueblos de entramado de madera. Cerca de Alemania y Suiza.',
+      fr: "La route des Crêtes sur la ligne de crête des Vosges et la route des Vins entre villages à colombages. À deux pas de l'Allemagne et de la Suisse.",
+      de: 'Die Route des Crêtes auf dem Vogesenkamm und die Weinstraße durch Fachwerkdörfer. Nahe an Deutschland und der Schweiz.',
+    },
+  },
+  {
+    slug: 'corsega',
+    country: 'FR',
+    kind: 'region',
+    match: ['Córsega', 'Corsica', 'Corse'],
+    name: { pt: 'Córsega', en: 'Corsica', es: 'Córcega', fr: 'Corse', de: 'Korsika' },
+    intro: {
+      pt: 'A "ilha da beleza": falésias de granito vermelho, colos entre pinheiros e estradas costeiras estreitas onde nunca há uma reta.',
+      en: 'The "island of beauty": red granite cliffs, passes through pine forests and narrow coastal roads without a single straight.',
+      es: 'La "isla de la belleza": acantilados de granito rojo, puertos entre pinos y carreteras costeras estrechas donde nunca hay una recta.',
+      fr: "L'« île de Beauté » : falaises de granit rouge, cols au milieu des pins et routes côtières étroites où il n'y a jamais une ligne droite.",
+      de: 'Die „Insel der Schönheit“: rote Granitklippen, Pässe durch Kiefernwälder und schmale Küstenstraßen ohne eine einzige Gerade.',
+    },
+  },
 ]
 
 export function getRegion(slug: string) {
@@ -214,4 +314,10 @@ export function regionForRoute(route: { country: string | null; region: string |
     REGIONS.find((r) => r.kind === 'region' && routeInRegion(route, r)) ??
     REGIONS.find((r) => r.kind === 'country' && routeInRegion(route, r))
   )
+}
+
+/** Region name in the page's language (the raw routes.region when it has no page) */
+export function regionLabel(route: { country: string | null; region: string | null }, locale: string) {
+  const region = REGIONS.find((r) => r.kind === 'region' && routeInRegion(route, r))
+  return region ? textFor(region.name, locale) : route.region
 }

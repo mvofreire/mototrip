@@ -82,8 +82,9 @@ export function StopsEditor({
             position: { lat: s.latitude, lng: s.longitude },
             title: s.name || t('untitled'),
             html: String(i + 1),
-            color: placing === s.key ? '#2563eb' : '#ea4335',
-            size: 24,
+            // Brand gradient; blue while the stop is being placed
+            color: placing === s.key ? '#2563eb' : undefined,
+            size: 26,
           },
     )
     .filter((m): m is OsmMarker => m !== null)
@@ -191,7 +192,7 @@ export function StopsEditor({
           {stops.map((s, i) => (
             <li key={s.key} className="space-y-3 rounded-md border p-3">
               <div className="flex items-center gap-2">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
                   {i + 1}
                 </span>
                 <Input

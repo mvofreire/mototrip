@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { CommentsCount } from "@/components/features/comments";
 import { routePath } from "@/lib/route-url";
 import { localizeRoute } from "@/lib/localize";
+import { regionLabel } from "@/lib/regions";
 import { RouteThumbnail } from "@/components/features/routes/route-thumbnail";
 import {
   formatDistance,
@@ -116,7 +117,7 @@ export function RouteCard({ route: original, locale, variant = "grid" }: RouteCa
                   {/* Region */}
                   <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                     <MapPin className="h-4 w-4" />
-                    <span>{route.region}</span>
+                    <span>{regionLabel(route, locale)}</span>
                   </div>
 
                   {/* Description (opcional) */}
@@ -260,7 +261,7 @@ export function RouteCard({ route: original, locale, variant = "grid" }: RouteCa
             {/* Region */}
             <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <MapPin className="h-3.5 w-3.5" />
-              <span>{route.region}</span>
+              <span>{regionLabel(route, locale)}</span>
             </div>
 
             {/* Stats */}

@@ -10,7 +10,9 @@
  * Usage:
  *   npx tsx jobs/import_curated_routes.ts --dry [--out=/tmp/thumbs] [--only=Arrábida]
  *   npx tsx jobs/import_curated_routes.ts
- *   npx tsx jobs/import_curated_routes.ts --dataset=es [--dry ...]   (Spain; default is pt)
+ *   npx tsx jobs/import_curated_routes.ts --dataset=es|fr [--dry ...]   (Spain/France; default is pt)
+ *
+ * Routes and stops with an `i18n` field get their translations stored too.
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -22,6 +24,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { CURATED_ROUTES_PT, type CuratedRoute } from './data/curated_routes_pt';
 import { CURATED_ROUTES_ES } from './data/curated_routes_es';
+import { CURATED_ROUTES_FR } from './data/curated_routes_fr';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: join(__dirname, '../.env.local') });
@@ -35,6 +38,7 @@ const DATASET = (args.find((a) => a.startsWith('--dataset='))?.slice(10) ?? 'pt'
 const DATASETS: Record<string, { country: string; routes: CuratedRoute[] }> = {
   pt: { country: 'PT', routes: CURATED_ROUTES_PT },
   es: { country: 'ES', routes: CURATED_ROUTES_ES },
+  fr: { country: 'FR', routes: CURATED_ROUTES_FR },
 };
 if (!DATASETS[DATASET]) {
   console.error(`Unknown --dataset=${DATASET} (expected: ${Object.keys(DATASETS).join(', ')})`);
@@ -203,6 +207,7 @@ async function importRoute(route: CuratedRoute) {
       fun_factor_score: route.fun_factor_score,
       featured: route.featured ?? false,
       published: true,
+      translations: route.i18n ?? {},
     })
     .select('id')
     .single();
@@ -219,6 +224,7 @@ async function importRoute(route: CuratedRoute) {
         latitude: s.lat,
         longitude: s.lng,
         order_index: i,
+        translations: s.i18n ?? {},
       })),
     );
     if (stopsError) throw new Error(`insert stops: ${stopsError.message}`);

@@ -14,12 +14,16 @@ export type StopType =
   | 'landmark'
   | 'accommodation';
 
+export type TranslationLocale = 'en' | 'es' | 'fr' | 'de';
+
 export interface CuratedStop {
   name: string;
   description: string;
   type: StopType;
   lat: number;
   lng: number;
+  /** Stored in route_stops.translations (name falls back to the original) */
+  i18n?: Partial<Record<TranslationLocale, { name?: string; description: string }>>;
 }
 
 export interface CuratedRoute {
@@ -27,7 +31,8 @@ export interface CuratedRoute {
   description: string;
   region:
     | 'Norte' | 'Centro' | 'Lisboa' | 'Alentejo' | 'Algarve' // PT
-    | 'Picos de Europa' | 'Pirenéus' | 'Andaluzia' | 'Galiza' | 'Costa Brava'; // ES
+    | 'Picos de Europa' | 'Pirenéus' | 'Andaluzia' | 'Galiza' | 'Costa Brava' // ES (+ Pirenéus FR)
+    | 'Alpes' | 'Provença' | 'Maciço Central' | 'Vosges e Alsácia' | 'Córsega' | 'Normandia'; // FR
   category: 'scenic' | 'mountain' | 'coastal' | 'weekend' | 'adventure';
   difficulty: 'easy' | 'moderate' | 'challenging' | 'expert';
   route_type: 'loop' | 'out_and_back';
@@ -37,6 +42,8 @@ export interface CuratedRoute {
   featured?: boolean;
   waypoints: Array<[number, number]>;
   stops: CuratedStop[];
+  /** Stored in routes.translations (title falls back to the original) */
+  i18n?: Partial<Record<TranslationLocale, { title?: string; description: string }>>;
 }
 
 export const CURATED_ROUTES_PT: CuratedRoute[] = [

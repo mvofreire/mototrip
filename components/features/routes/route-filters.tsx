@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { COUNTRIES, countryName } from '@/lib/countries'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -36,10 +37,8 @@ export function RouteFilters({ filters, onFiltersChange }: RouteFiltersProps) {
     { value: 'expert', label: tDifficulty('expert') },
   ]
 
-  const countries = [
-    { value: 'PT', label: '🇵🇹 ' + tCountries('countryPortugal') },
-    { value: 'ES', label: '🇪🇸 ' + tCountries('countrySpain') },
-  ]
+  const locale = useLocale()
+  const countries = COUNTRIES.map((c) => ({ value: c.code, label: `${c.flag} ${countryName(c, locale)}` }))
 
   const routeTypes = [
     { value: 'loop', label: '🔄 ' + tCountries('routeTypeLoop') },

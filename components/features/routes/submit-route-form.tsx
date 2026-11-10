@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { useTranslations } from "next-intl";
+import { COUNTRIES, countryName } from "@/lib/countries";
 import { Loader2, MapPin, Save } from "lucide-react";
 import type { Database } from "@/types/database.types";
 import type { RouteWithDetails } from "@/types";
@@ -273,8 +274,11 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
             }
           >
             <option value="">{t("countryPlaceholder")}</option>
-            <option value="PT">🇵🇹 {t("countryPortugal")}</option>
-            <option value="ES">🇪🇸 {t("countrySpain")}</option>
+            {COUNTRIES.map((c) => (
+              <option key={c.code} value={c.code}>
+                {c.flag} {countryName(c, locale)}
+              </option>
+            ))}
           </select>
         </div>
       </Card>

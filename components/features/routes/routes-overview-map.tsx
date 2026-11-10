@@ -71,7 +71,8 @@ export function RoutesOverviewMap({ routes: original, locale }: RoutesOverviewMa
             id: m.id,
             position: m.position,
             title: m.title,
-            html: '🏍️',
+            variant: 'logo' as const,
+            size: 30,
             onClick: () => setSelectedRoute(m.id),
           }))}
         />

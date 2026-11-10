@@ -19,10 +19,14 @@ export interface OsmMarker {
   id: string;
   position: LatLng;
   title?: string;
-  /** Inline HTML rendered inside a circular pin */
-  html: string;
+  /** Inline HTML rendered inside the pin head (ignored for the "logo" variant) */
+  html?: string;
+  /** Flat color instead of the brand gradient (e.g. a highlighted marker) */
   color?: string;
+  /** Pin width in px */
   size?: number;
+  /** "pin": teardrop pin; "logo": the app icon (favicon) on a pointer */
+  variant?: "pin" | "logo";
   onClick?: () => void;
 }
 
@@ -40,12 +44,36 @@ export interface OsmMapProps {
   onMapClick?: (position: LatLng) => void;
 }
 
-function pinIcon({ html, color = "#f59e0b", size = 28 }: OsmMarker) {
+// Same red gradient as the favicon (app/icon.svg)
+const BRAND_GRADIENT = `<linearGradient id="mt-brand" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ef233c"/><stop offset=".55" stop-color="#d00f25"/><stop offset="1" stop-color="#8d0a1a"/></linearGradient>`;
+const SHADOW = "filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));cursor:pointer";
+
+function pinIcon({ html = "", color, size = 28, variant = "pin" }: OsmMarker) {
+  const fill = color ?? "url(#mt-brand)";
+
+  if (variant === "logo") {
+    // The favicon tile (rounded square + white map pin) with a small pointer
+    const w = size;
+    const h = Math.round(size * 1.2);
+    return L.divIcon({
+      className: "",
+      iconSize: [w, h],
+      iconAnchor: [w / 2, h],
+      tooltipAnchor: [0, -h],
+      html: `<svg width="${w}" height="${h}" viewBox="0 0 64 77" style="${SHADOW};overflow:visible"><defs>${BRAND_GRADIENT}</defs><path d="M24 62h16l-8 13z" fill="#8d0a1a"/><rect x="1" y="1" width="62" height="62" rx="14" fill="${fill}" stroke="#fff" stroke-width="3"/><g transform="translate(12 11) scale(1.6667)" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></g></svg>`,
+    });
+  }
+
+  // Teardrop pin in the brand gradient, white outline, content in the head
+  const w = size;
+  const h = Math.round(size * 1.3);
+  const font = Math.max(10, Math.round(size * 0.42));
   return L.divIcon({
     className: "",
-    iconSize: [size, size],
-    iconAnchor: [size / 2, size / 2],
-    html: `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};border:3px solid rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;box-shadow:0 2px 6px rgba(0,0,0,.35);cursor:pointer">${html}</div>`,
+    iconSize: [w, h],
+    iconAnchor: [w / 2, h],
+    tooltipAnchor: [0, -h],
+    html: `<div style="position:relative;width:${w}px;height:${h}px;${SHADOW}"><svg width="${w}" height="${h}" viewBox="0 0 32 42" style="position:absolute;inset:0;overflow:visible"><defs>${BRAND_GRADIENT}</defs><path d="M16 1.5C8 1.5 1.5 7.9 1.5 15.8c0 10.4 12.6 22.4 13.4 23.2a1.6 1.6 0 0 0 2.2 0c.8-.8 13.4-12.8 13.4-23.2C30.5 7.9 24 1.5 16 1.5z" fill="${fill}" stroke="#fff" stroke-width="2.5"/></svg><div style="position:absolute;left:0;right:0;top:0;height:${Math.round(w * 1.02)}px;display:flex;align-items:center;justify-content:center;color:#fff;font:700 ${font}px/1 system-ui,sans-serif">${html}</div></div>`,
   });
 }
 
