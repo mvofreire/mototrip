@@ -17,6 +17,12 @@ import { cn } from '@/lib/utils'
 type StatusFilter = RouteStatus | 'all'
 const FILTERS: StatusFilter[] = ['pending', 'rejected', 'approved', 'all']
 
+/** MotoTrip review filter, to find routes that need a (better) review */
+type CuratorFilter = 'any' | 'missing' | 'low'
+const CURATOR_FILTERS: CuratorFilter[] = ['any', 'missing', 'low']
+const matchesCurator = (r: AdminRouteWithUser, f: CuratorFilter) =>
+  f === 'any' || (f === 'missing' ? r.curator_rating == null : r.curator_confidence === 'low')
+
 export default function AdminPage() {
   const { user, loading: authLoading } = useAuth()
   const router = useRouter()
@@ -28,6 +34,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('pending')
+  const [curatorFilter, setCuratorFilter] = useState<CuratorFilter>('any')
 
   const isAdmin = role === 'admin'
   const isStaff = role === 'admin' || role === 'curator'
@@ -71,6 +78,7 @@ export default function AdminPage() {
     const q = searchTerm.trim().toLowerCase()
     return routes
       .filter((r) => statusFilter === 'all' || r.status === statusFilter)
+      .filter((r) => matchesCurator(r, curatorFilter))
       .filter(
         (r) =>
           !q ||
@@ -85,7 +93,14 @@ export default function AdminPage() {
           ? a.updated_at.localeCompare(b.updated_at)
           : b.updated_at.localeCompare(a.updated_at),
       )
-  }, [routes, searchTerm, statusFilter])
+  }, [routes, searchTerm, statusFilter, curatorFilter])
+
+  const curatorCounts = useMemo(() => {
+    const inStatus = routes.filter((r) => statusFilter === 'all' || r.status === statusFilter)
+    return Object.fromEntries(
+      CURATOR_FILTERS.map((f) => [f, inStatus.filter((r) => matchesCurator(r, f)).length]),
+    ) as Record<CuratorFilter, number>
+  }, [routes, statusFilter])
 
   const patch = (id: string, updated: Partial<AdminRouteWithUser>) =>
     setRoutes((prev) => prev.map((r) => (r.id === id ? { ...r, ...updated } : r)))
@@ -168,6 +183,20 @@ export default function AdminPage() {
             className={cn(f === 'pending' && counts.pending > 0 && statusFilter !== f && 'border-amber-400')}
           >
             {f === 'all' ? t('review.all') : tStatus(f)} ({counts[f]})
+          </Button>
+        ))}
+      </div>
+
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <span className="text-sm text-muted-foreground mr-1">{t('curatorFilter.label')}:</span>
+        {CURATOR_FILTERS.map((f) => (
+          <Button
+            key={f}
+            size="sm"
+            variant={curatorFilter === f ? 'secondary' : 'ghost'}
+            onClick={() => setCuratorFilter(f)}
+          >
+            {t(`curatorFilter.${f}`)} ({curatorCounts[f]})
           </Button>
         ))}
       </div>

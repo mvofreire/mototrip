@@ -241,21 +241,21 @@ export function RouteFilters({ filters, onFiltersChange }: RouteFiltersProps) {
 
         <Separator />
 
-        {/* Scenic Score Filter */}
+        {/* MotoTrip curator rating filter (1–5) */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-semibold">{t('minimumRating')}</Label>
             <span className="text-sm text-muted-foreground">
-              {filters.min_scenic_score || 0}+
+              {filters.min_curator_rating ? `${filters.min_curator_rating.toFixed(1)}+` : t('any')}
             </span>
           </div>
           <Slider
             min={0}
-            max={10}
+            max={5}
             step={0.5}
-            value={[filters.min_scenic_score || 0]}
+            value={[filters.min_curator_rating || 0]}
             onValueChange={([value]) =>
-              onFiltersChange({ ...filters, min_scenic_score: value })
+              onFiltersChange({ ...filters, min_curator_rating: value || undefined })
             }
           />
         </div>

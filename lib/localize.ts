@@ -41,3 +41,27 @@ export function localizeRoute<R extends LocalizableRoute>(route: R, locale: stri
     stops: route.stops ? route.stops.map((s) => localizeStop(s, locale)) : route.stops,
   }
 }
+
+type LocalizableCuratorReview = {
+  verdict: string
+  highlights: string[]
+  warnings: string[]
+  best_season: string | null
+  translations?: unknown
+}
+
+/** MotoTrip curator review in the page's locale (Portuguese as fallback) */
+export function localizeCuratorReview<C extends LocalizableCuratorReview>(review: C, locale: string): C {
+  if (locale === SOURCE_LOCALE) return review
+  const tr = (review.translations as Record<string, Partial<LocalizableCuratorReview> | undefined> | null)?.[locale]
+  if (!tr?.verdict?.trim()) return review
+  const list = (value: unknown, fallback: string[]) =>
+    Array.isArray(value) && value.length === fallback.length ? (value as string[]) : fallback
+  return {
+    ...review,
+    verdict: tr.verdict,
+    highlights: list(tr.highlights, review.highlights),
+    warnings: list(tr.warnings, review.warnings),
+    best_season: (typeof tr.best_season === 'string' && tr.best_season.trim()) || review.best_season,
+  }
+}

@@ -30,6 +30,12 @@ export type RouteRating = Database['public']['Tables']['route_ratings']['Row']
 export type RouteRatingInsert = Database['public']['Tables']['route_ratings']['Insert']
 export type RouteRatingUpdate = Database['public']['Tables']['route_ratings']['Update']
 
+// MotoTrip curator review (one per route, 1–5 in half steps)
+export type RouteCuratorReview = Database['public']['Tables']['route_curator_reviews']['Row']
+export type RouteCuratorReviewInsert = Database['public']['Tables']['route_curator_reviews']['Insert']
+export type RouteCuratorReviewUpdate = Database['public']['Tables']['route_curator_reviews']['Update']
+export type { CuratorConfidence, CuratorReviewSource, CuratorReviewTranslation } from './database.types'
+
 // Saved Route types
 export type SavedRoute = Database['public']['Tables']['saved_routes']['Row']
 export type SavedRouteInsert = Database['public']['Tables']['saved_routes']['Insert']
@@ -46,6 +52,7 @@ export interface RouteWithDetails extends Route {
   stops?: RouteStop[]
   photos?: RoutePhoto[]
   ratings?: RouteRating[]
+  curator_review?: RouteCuratorReview | null
   saved_by_current_user?: boolean
 }
 
@@ -75,12 +82,13 @@ export interface RouteFilters {
   region?: string[]
   country?: string[]
   route_type?: ('loop' | 'out_and_back')[]
-  min_scenic_score?: number
+  /** Minimum MotoTrip curator rating (1–5) */
+  min_curator_rating?: number
   search?: string
 }
 
 export interface RouteSort {
-  field: 'created_at' | 'distance_km' | 'duration_minutes' | 'scenic_score' | 'fun_factor_score'
+  field: 'created_at' | 'distance_km' | 'duration_minutes' | 'curator_rating' | 'rating_average'
   direction: 'asc' | 'desc'
 }
 

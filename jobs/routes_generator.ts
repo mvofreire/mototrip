@@ -747,10 +747,8 @@ async function saveRouteToDatabase(route: GeneratedRoute, dryRun: boolean = fals
       polyline_coordinates,
       region: route.region,
       category: route.category,
-      scenic_score: scores.scenic_score,
-      road_quality_score: scores.road_quality_score,
-      fun_factor_score: scores.fun_factor_score,
-      featured: scores.fun_factor_score > 8, // Feature high-scoring routes
+      // Scores only pick featured routes; the public rating is the MotoTrip review (/rate-routes)
+      featured: scores.fun_factor_score > 8,
       published: true,
     }
 

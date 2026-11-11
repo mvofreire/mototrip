@@ -10,6 +10,8 @@ type RouteUpdate = Database['public']['Tables']['routes']['Update']
 export interface AdminRouteWithUser extends Route {
   user_email?: string
   user_name?: string
+  /** MotoTrip review confidence (null = no review) */
+  curator_confidence?: 'high' | 'medium' | 'low' | null
 }
 
 export type AccountStatus = 'active' | 'suspended' | 'banned'
@@ -129,7 +131,7 @@ export class AdminService {
     // Get all routes
     const { data: routes, error: routesError } = await supabase
       .from('routes')
-      .select('*')
+      .select('*, curator_review:route_curator_reviews(confidence)')
       .order('created_at', { ascending: false })
 
     if (routesError) {
@@ -172,8 +174,9 @@ export class AdminService {
     )
 
     // Combine routes with profile info
-    return typedRoutes.map((route) => ({
+    return typedRoutes.map(({ curator_review, ...route }) => ({
       ...route,
+      curator_confidence: (Array.isArray(curator_review) ? curator_review[0] : curator_review)?.confidence ?? null,
       user_email: emailMap.get(route.user_id),
       user_name: nameMap.get(route.user_id) ?? undefined,
     }))

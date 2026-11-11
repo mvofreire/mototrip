@@ -13,7 +13,8 @@ import { RouteStatusBadge } from '@/components/features/routes/route-status-badg
 import { CommentsList } from '@/components/features/comments'
 import { Card } from '@/components/ui/card'
 import { useAuth } from '@/hooks/use-auth'
-import { canEditRoute } from '@/lib/auth/roles'
+import { canEditRoute, isStaff } from '@/lib/auth/roles'
+import { CuratorReviewEditor } from '@/components/admin/curator-review-editor'
 import { RoutesService } from '@/lib/services/routes.service'
 import type { RouteWithDetails } from '@/types'
 
@@ -88,6 +89,15 @@ export default function EditRoutePage({ params }: { params: { id: string; locale
             </section>
 
             <StopsEditor route={route} onSaved={() => load()} />
+
+            {/* MotoTrip review: staff only, goes live on save */}
+            {isStaff(user) && (
+              <CuratorReviewEditor
+                routeId={route.id}
+                review={route.curator_review}
+                onSaved={(review) => setRoute((r) => (r ? { ...r, curator_review: review } : r))}
+              />
+            )}
 
             <Card className="p-6">
               <RoutePhotos route={route} onChange={load} />

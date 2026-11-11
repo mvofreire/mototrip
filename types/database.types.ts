@@ -1,5 +1,13 @@
 export type RouteStatus = 'pending' | 'approved' | 'rejected'
 export type BlogPostStatus = 'draft' | 'published' | 'archived'
+export type CuratorConfidence = 'high' | 'medium' | 'low'
+export type CuratorReviewSource = { title: string; url: string; site?: string; lang?: string }
+export type CuratorReviewTranslation = {
+  verdict?: string
+  highlights?: string[]
+  warnings?: string[]
+  best_season?: string
+}
 
 export type Database = {
   public: {
@@ -45,6 +53,10 @@ export type Database = {
           rating_scenic: number | null
           rating_road: number | null
           rating_fun: number | null
+          curator_rating: number | null
+          curator_scenic: number | null
+          curator_road: number | null
+          curator_fun: number | null
           description: string | null
           difficulty: 'easy' | 'moderate' | 'challenging' | 'expert'
           distance_km: number
@@ -56,9 +68,6 @@ export type Database = {
           route_type: 'loop' | 'out_and_back' | null
           thumbnail_url: string | null
           category: 'scenic' | 'mountain' | 'coastal' | 'weekend' | 'adventure'
-          scenic_score: number
-          road_quality_score: number
-          fun_factor_score: number
           featured: boolean
           published: boolean
           status: RouteStatus
@@ -85,9 +94,6 @@ export type Database = {
           route_type?: 'loop' | 'out_and_back' | null
           thumbnail_url?: string | null
           category: 'scenic' | 'mountain' | 'coastal' | 'weekend' | 'adventure'
-          scenic_score?: number
-          road_quality_score?: number
-          fun_factor_score?: number
           featured?: boolean
           published?: boolean
           status?: RouteStatus
@@ -114,9 +120,6 @@ export type Database = {
           route_type?: 'loop' | 'out_and_back' | null
           thumbnail_url?: string | null
           category?: 'scenic' | 'mountain' | 'coastal' | 'weekend' | 'adventure'
-          scenic_score?: number
-          road_quality_score?: number
-          fun_factor_score?: number
           featured?: boolean
           published?: boolean
           status?: RouteStatus
@@ -225,6 +228,58 @@ export type Database = {
           comment?: string | null
           created_at?: string
           updated_at?: string
+        }
+      }
+      route_curator_reviews: {
+        Row: {
+          route_id: string
+          curator_id: string | null
+          overall: number
+          scenic: number
+          road: number
+          fun: number
+          verdict: string
+          highlights: string[]
+          warnings: string[]
+          best_season: string | null
+          translations: Record<string, CuratorReviewTranslation>
+          sources: CuratorReviewSource[]
+          confidence: CuratorConfidence
+          researched_at: string | null
+          updated_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          route_id: string
+          curator_id?: string | null
+          overall: number
+          scenic: number
+          road: number
+          fun: number
+          verdict: string
+          highlights?: string[]
+          warnings?: string[]
+          best_season?: string | null
+          translations?: Record<string, CuratorReviewTranslation>
+          sources?: CuratorReviewSource[]
+          confidence?: CuratorConfidence
+          researched_at?: string | null
+        }
+        Update: {
+          curator_id?: string | null
+          overall?: number
+          scenic?: number
+          road?: number
+          fun?: number
+          verdict?: string
+          highlights?: string[]
+          warnings?: string[]
+          best_season?: string | null
+          translations?: Record<string, CuratorReviewTranslation>
+          sources?: CuratorReviewSource[]
+          confidence?: CuratorConfidence
+          researched_at?: string | null
         }
       }
       saved_routes: {

@@ -10,8 +10,6 @@
  * - distance_km
  * - duration_minutes
  * - elevation_gain_m
- * - scenic_score
- * - fun_factor_score
  * 
  * Uses OpenStreetMap API to analyze routes and calculate values.
  * 
@@ -67,9 +65,6 @@ interface RouteData {
   polyline_coordinates: any;
   region: string | null;
   category: string | null;
-  scenic_score: number | null;
-  road_quality_score: number | null;
-  fun_factor_score: number | null;
   thumbnail_url: string | null;
   route_type: string | null;
   country: string | null;
@@ -83,9 +78,6 @@ interface RouteEnrichment {
   distance_km?: number;
   duration_minutes?: number;
   elevation_gain_m?: number | null;
-  scenic_score?: number;
-  fun_factor_score?: number;
-  road_quality_score?: number;
   thumbnail_url?: string | null;
 }
 
@@ -207,69 +199,6 @@ function calculateDifficulty(distance: number, elevation: number, roadType: stri
 }
 
 /**
- * Calculate scenic score based on route characteristics
- */
-function calculateScenicScore(
-  region: string | null,
-  category: string | null,
-  elevation: number
-): number {
-  let score = 5.0; // Base score
-
-  // Category bonus
-  if (category === 'scenic') score += 2.0;
-  else if (category === 'mountain') score += 1.5;
-  else if (category === 'coastal') score += 1.5;
-  else if (category === 'adventure') score += 1.0;
-
-  // Elevation bonus (more elevation = more scenic views)
-  if (elevation > 1000) score += 1.5;
-  else if (elevation > 500) score += 1.0;
-  else if (elevation > 200) score += 0.5;
-
-  // Region bonus (some regions are inherently scenic)
-  const scenicRegions = ['alpes', 'alps', 'dolomitas', 'dolomites', 'pyrénées', 'pyrenees', 'costa', 'coast'];
-  if (region && scenicRegions.some(r => region.toLowerCase().includes(r))) {
-    score += 1.0;
-  }
-
-  return Math.min(10, Math.max(0, Math.round(score * 10) / 10));
-}
-
-/**
- * Calculate fun factor score
- */
-function calculateFunFactorScore(
-  distance: number,
-  elevation: number,
-  difficulty: string,
-  category: string | null
-): number {
-  let score = 5.0; // Base score
-
-  // Sweet spot for distance (100-180km is most fun)
-  if (distance >= 100 && distance <= 180) score += 2.0;
-  else if (distance >= 80 && distance <= 220) score += 1.0;
-  else if (distance < 50 || distance > 300) score -= 1.0;
-
-  // Elevation makes it more fun
-  if (elevation > 800) score += 1.5;
-  else if (elevation > 400) score += 1.0;
-  else if (elevation > 150) score += 0.5;
-
-  // Category bonus
-  if (category === 'adventure') score += 1.5;
-  else if (category === 'mountain') score += 1.0;
-  else if (category === 'coastal') score += 1.0;
-
-  // Difficulty balance
-  if (difficulty === 'moderate' || difficulty === 'challenging') score += 1.0;
-  else if (difficulty === 'easy') score += 0.5;
-
-  return Math.min(10, Math.max(0, Math.round(score * 10) / 10));
-}
-
-/**
  * Determine route type from coordinates and OSM data
  */
 async function determineRouteType(coordinates: any[]): Promise<'loop' | 'out_and_back'> {
@@ -358,8 +287,6 @@ function checkMissingFields(route: RouteData): string[] {
   if (!route.distance_km || route.distance_km === 0) missing.push('distance_km');
   if (!route.duration_minutes || route.duration_minutes === 0) missing.push('duration_minutes');
   if (!route.elevation_gain_m) missing.push('elevation_gain_m');
-  if (!route.scenic_score || route.scenic_score === 0) missing.push('scenic_score');
-  if (!route.fun_factor_score || route.fun_factor_score === 0) missing.push('fun_factor_score');
 
   return missing;
 }
@@ -425,18 +352,6 @@ async function enrichRoute(route: RouteData): Promise<RouteEnrichment | null> {
 
     const difficulty = enrichment.difficulty || route.difficulty || 'moderate';
 
-    // Calculate scenic score
-    if (missing.includes('scenic_score')) {
-      enrichment.scenic_score = calculateScenicScore(route.region, route.category, elevation);
-      console.log(`  ✓ Scenic score: ${enrichment.scenic_score}/10`);
-    }
-
-    // Calculate fun factor
-    if (missing.includes('fun_factor_score')) {
-      enrichment.fun_factor_score = calculateFunFactorScore(distance, elevation, difficulty, route.category);
-      console.log(`  ✓ Fun factor: ${enrichment.fun_factor_score}/10`);
-    }
-
     // Generate description
     if (missing.includes('description')) {
       enrichment.description = generateDescription(
@@ -455,11 +370,6 @@ async function enrichRoute(route: RouteData): Promise<RouteEnrichment | null> {
     if (missing.includes('thumbnail_url')) {
       enrichment.thumbnail_url = await generateThumbnailUrl(route.id, coordinates);
       console.log(`  ✓ Generated thumbnail`);
-    }
-
-    // Set road quality score to a reasonable default if not set
-    if (!route.road_quality_score || route.road_quality_score === 0) {
-      enrichment.road_quality_score = 7.0; // Default good road quality
     }
 
     return enrichment;
@@ -615,8 +525,6 @@ async function displayStatistics() {
     distance_km: 0,
     duration_minutes: 0,
     elevation_gain_m: 0,
-    scenic_score: 0,
-    fun_factor_score: 0,
   };
 
   routes.forEach(route => {

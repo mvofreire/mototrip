@@ -1,9 +1,9 @@
 import { RouteWithDetails } from '@/types'
 import { Card, CardContent } from '@/components/ui/card'
-import { MapPin, Clock, Mountain, Star, TrendingUp, Navigation } from 'lucide-react'
+import { MapPin, Clock, Mountain, Navigation } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { regionLabel } from '@/lib/regions'
-import { formatDistance, formatDuration, formatElevation, formatRating } from '@/lib/utils'
+import { formatDistance, formatDuration, formatElevation } from '@/lib/utils'
 
 interface RouteStatsProps {
   route: RouteWithDetails
@@ -35,23 +35,6 @@ export function RouteStats({ route }: RouteStatsProps) {
     },
   ]
 
-  const ratings = [
-    {
-      label: t('ratings.scenic'),
-      value: route.scenic_score,
-    },
-    {
-      label: t('ratings.roadQuality'),
-      value: route.road_quality_score,
-    },
-    {
-      label: t('ratings.funFactor'),
-      value: route.fun_factor_score,
-    },
-  ]
-
-  const hasEditorial = ratings.some((r) => Number(r.value) > 0)
-
   return (
     <div className="space-y-4 md:space-y-6">
       {/* Primary Stats */}
@@ -72,36 +55,6 @@ export function RouteStats({ route }: RouteStatsProps) {
           </Card>
         ))}
       </div>
-
-      {/* Editorial scores (0–10, set by the MotoTrip team) */}
-      {hasEditorial && (
-        <Card className="overflow-hidden">
-          <CardContent className="pt-4 md:pt-6 p-4 md:p-6">
-            <div className="space-y-3 md:space-y-4">
-              <div className="flex items-center gap-2">
-                <Star className="h-5 w-5 shrink-0 fill-amber-400 text-amber-400" />
-                <span className="font-semibold">{t('ratings.editorialTitle')}</span>
-              </div>
-              <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
-                {ratings.map((rating, index) => (
-                  <div key={index} className="space-y-1">
-                    <div className="flex items-center justify-between text-sm gap-2">
-                      <span className="text-muted-foreground truncate">{rating.label}</span>
-                      <span className="font-semibold shrink-0">{formatRating(Number(rating.value))}</span>
-                    </div>
-                    <div className="h-2 bg-muted rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-brand transition-all"
-                        style={{ width: `${(Number(rating.value) / 10) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   )
 }

@@ -71,7 +71,13 @@
     "filters": "Filtros",
     "results": "{count} rotas encontradas",
     "noResults": "Nenhuma rota encontrada com seus critérios.",
-    "clearFilters": "Limpar filtros"
+    "clearFilters": "Limpar filtros",
+    "sort": {
+      "label": "Ordenar",
+      "recent": "Mais recentes",
+      "curator": "Melhor avaliação MotoTrip",
+      "community": "Melhor avaliação da comunidade"
+    }
   },
   "filters": {
     "title": "Filtros",
@@ -80,9 +86,10 @@
     "difficulty": "Dificuldade",
     "distance": "Distância (km)",
     "duration": "Duração (horas)",
-    "minimumRating": "Avaliação Mínima",
+    "minimumRating": "Avaliação MotoTrip mínima",
     "routeTypeLoop": "Loop (Circular)",
-    "routeTypeOutAndBack": "Vai e Volta"
+    "routeTypeOutAndBack": "Vai e Volta",
+    "any": "Qualquer"
   },
   "categories": {
     "scenic": "Cênica",
@@ -152,7 +159,9 @@
     "scenic": "Cenário",
     "roadQuality": "Qualidade da Estrada",
     "funFactor": "Fator Diversão",
-    "editorialTitle": "Avaliação MotoTrip"
+    "editorialTitle": "Avaliação MotoTrip",
+    "community": "Comunidade",
+    "communityTitle": "Avaliação da comunidade"
   },
   "footer": {
     "tagline": "Descubra e compartilhe as melhores rotas de motocicleta ao redor do mundo.",
@@ -485,7 +494,8 @@
       "created": "Criado",
       "actions": "Ações",
       "noRoutes": "Nenhuma rota encontrada",
-      "updated": "Atualizada"
+      "updated": "Atualizada",
+      "curator": "MotoTrip"
     },
     "categories": {
       "scenic": "Cênica",
@@ -729,6 +739,12 @@
       "errorSave": "Erro ao salvar o post: {message}",
       "errorLoad": "Post não encontrado.",
       "errorAction": "Erro ao atualizar o post."
+    },
+    "curatorFilter": {
+      "label": "Avaliação MotoTrip",
+      "any": "Todas",
+      "missing": "Sem avaliação",
+      "low": "Confiança baixa"
     }
   },
   "riders": {
@@ -997,5 +1013,46 @@
       "sendAnother": "Enviar outra mensagem",
       "error": "Não foi possível enviar sua mensagem. Tente novamente em instantes."
     }
+  },
+  "curator": {
+    "byCuration": "Curadoria MotoTrip",
+    "researchedAt": "pesquisado em {date}",
+    "lowConfidence": "Poucas fontes",
+    "highlights": "Destaques",
+    "warnings": "Atenção",
+    "bestSeason": "Melhor época",
+    "basedOn": "{count, plural, one {Baseado em # fonte} other {Baseado em # fontes}}"
+  },
+  "curatorAdmin": {
+    "descriptionEdit": "Avaliação da curadoria, assinada pelo perfil Mototrip. As alterações vão ao ar na hora.",
+    "descriptionNew": "Esta rota ainda não tem Avaliação MotoTrip. Ela vai ao ar assim que for criada.",
+    "overall": "Geral",
+    "confidence": "Confiança",
+    "confidenceLevels": {
+      "high": "Alta",
+      "medium": "Média",
+      "low": "Baixa"
+    },
+    "verdict": "Parecer (português)",
+    "highlights": "Destaques",
+    "warnings": "Avisos",
+    "onePerLine": "Um por linha",
+    "bestSeason": "Melhor época",
+    "sources": "Fontes",
+    "sourcesHelp": "Uma por linha: Título | URL | Site (site opcional)",
+    "dropsTranslations": "Você mudou o texto em português: ao salvar, as traduções (en, es, fr, de) são apagadas e o site mostra o texto em português até serem refeitas com /rate-routes.",
+    "errorScores": "Escolha as quatro notas.",
+    "errorVerdict": "Escreva o parecer.",
+    "errorSources": "Inclua pelo menos uma fonte.",
+    "errorSourceLines": "{count, plural, one {# linha de fonte inválida} other {# linhas de fonte inválidas}} (use Título | URL | Site).",
+    "save": "Salvar avaliação",
+    "create": "Criar avaliação",
+    "saved": "Avaliação salva e publicada.",
+    "saveFailed": "Não foi possível salvar. Tente novamente.",
+    "remove": "Remover avaliação",
+    "removed": "Avaliação removida.",
+    "removeTitle": "Remover a Avaliação MotoTrip?",
+    "removeDescription": "A avaliação, as fontes e as traduções somem da rota na hora. Isso não pode ser desfeito.",
+    "cancel": "Cancelar"
   }
 }

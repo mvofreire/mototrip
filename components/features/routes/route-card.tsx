@@ -35,6 +35,21 @@ import {
   formatRating,
 } from "@/lib/utils";
 
+/** Compact "MotoTrip 4.5" badge for routes with a curator review */
+function CuratorBadge({ rating, label, className = "" }: { rating: number; label: string; className?: string }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1 rounded-full bg-gradient-brand px-2 py-0.5 text-xs font-semibold text-white shadow-sm ${className}`}
+      title={label}
+    >
+      <MapPin className="h-3 w-3" aria-hidden />
+      <span>MotoTrip</span>
+      <span className="tabular-nums">{formatRating(rating)}</span>
+      <span className="sr-only">{label}</span>
+    </span>
+  );
+}
+
 interface RouteCardProps {
   route: RouteWithDetails;
   locale: string;
@@ -166,7 +181,10 @@ export function RouteCard({ route: original, locale, variant = "grid" }: RouteCa
                     </div>
                   )}
                   <div className="flex items-center gap-4 ml-auto">
-                    <div className="flex items-center gap-2">
+                    {route.curator_rating != null && (
+                      <CuratorBadge rating={Number(route.curator_rating)} label={t("ratings.editorialTitle")} />
+                    )}
+                    <div className="flex items-center gap-2" title={t("ratings.communityTitle")}>
                       <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                       <span className="text-sm font-medium">
                         {route.rating_average != null
@@ -203,6 +221,13 @@ export function RouteCard({ route: original, locale, variant = "grid" }: RouteCa
                 <Badge className="bg-brand-600 text-white border-0 uppercase tracking-wide">
                   {t("route.featured")}
                 </Badge>
+              </div>
+            )}
+
+            {/* MotoTrip curator rating */}
+            {route.curator_rating != null && (
+              <div className="absolute bottom-3 left-3">
+                <CuratorBadge rating={Number(route.curator_rating)} label={t("ratings.editorialTitle")} />
               </div>
             )}
 
@@ -267,7 +292,7 @@ export function RouteCard({ route: original, locale, variant = "grid" }: RouteCa
             {/* Stats */}
             <div className="grid grid-cols-3 gap-3 pt-2">
               <div className="flex flex-col">
-                <span className="text-xs text-muted-foreground">{t('route.rating')}</span>
+                <span className="text-xs text-muted-foreground">{t('ratings.community')}</span>
                 <div className="flex items-center gap-1">
                   <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
                   <span className="text-sm font-medium">

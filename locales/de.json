@@ -71,7 +71,13 @@
     "filters": "Filter",
     "results": "{count} Routen gefunden",
     "noResults": "Keine Routen gefunden, die Ihren Kriterien entsprechen.",
-    "clearFilters": "Filter löschen"
+    "clearFilters": "Filter löschen",
+    "sort": {
+      "label": "Sortieren",
+      "recent": "Neueste",
+      "curator": "Beste MotoTrip-Bewertung",
+      "community": "Beste Community-Bewertung"
+    }
   },
   "filters": {
     "title": "Filter",
@@ -80,9 +86,10 @@
     "difficulty": "Schwierigkeit",
     "distance": "Entfernung (km)",
     "duration": "Dauer (Stunden)",
-    "minimumRating": "Mindestbewertung",
+    "minimumRating": "Mindest-MotoTrip-Bewertung",
     "routeTypeLoop": "Rundfahrt",
-    "routeTypeOutAndBack": "Hin und Zurück"
+    "routeTypeOutAndBack": "Hin und Zurück",
+    "any": "Alle"
   },
   "categories": {
     "scenic": "Malerisch",
@@ -152,7 +159,9 @@
     "scenic": "Malerisch",
     "roadQuality": "Straßenqualität",
     "funFactor": "Spaßfaktor",
-    "editorialTitle": "MotoTrip-Bewertung"
+    "editorialTitle": "MotoTrip-Bewertung",
+    "community": "Community",
+    "communityTitle": "Community-Bewertung"
   },
   "footer": {
     "tagline": "Entdecken und teilen Sie die besten Motorradrouten der Welt.",
@@ -485,7 +494,8 @@
       "created": "Erstellt",
       "actions": "Aktionen",
       "noRoutes": "Keine Routen gefunden",
-      "updated": "Aktualisiert"
+      "updated": "Aktualisiert",
+      "curator": "MotoTrip"
     },
     "categories": {
       "scenic": "Malerisch",
@@ -729,6 +739,12 @@
       "errorSave": "Fehler beim Speichern: {message}",
       "errorLoad": "Beitrag nicht gefunden.",
       "errorAction": "Fehler beim Aktualisieren des Beitrags."
+    },
+    "curatorFilter": {
+      "label": "MotoTrip-Bewertung",
+      "any": "Alle",
+      "missing": "Ohne Bewertung",
+      "low": "Geringe Sicherheit"
     }
   },
   "riders": {
@@ -997,5 +1013,46 @@
       "sendAnother": "Weitere Nachricht senden",
       "error": "Deine Nachricht konnte nicht gesendet werden. Bitte versuche es gleich noch einmal."
     }
+  },
+  "curator": {
+    "byCuration": "MotoTrip-Kuratierung",
+    "researchedAt": "recherchiert {date}",
+    "lowConfidence": "Wenige Quellen",
+    "highlights": "Highlights",
+    "warnings": "Achtung",
+    "bestSeason": "Beste Reisezeit",
+    "basedOn": "{count, plural, one {Basierend auf # Quelle} other {Basierend auf # Quellen}}"
+  },
+  "curatorAdmin": {
+    "descriptionEdit": "Bewertung der Kuratierung, gezeichnet vom Mototrip-Profil. Änderungen gehen sofort online.",
+    "descriptionNew": "Diese Route hat noch keine MotoTrip-Bewertung. Sie geht online, sobald sie erstellt ist.",
+    "overall": "Gesamt",
+    "confidence": "Sicherheit",
+    "confidenceLevels": {
+      "high": "Hoch",
+      "medium": "Mittel",
+      "low": "Gering"
+    },
+    "verdict": "Urteil (Portugiesisch)",
+    "highlights": "Highlights",
+    "warnings": "Hinweise",
+    "onePerLine": "Eins pro Zeile",
+    "bestSeason": "Beste Reisezeit",
+    "sources": "Quellen",
+    "sourcesHelp": "Eine pro Zeile: Titel | URL | Seite (Seite optional)",
+    "dropsTranslations": "Du hast den portugiesischen Text geändert: Beim Speichern werden die Übersetzungen (en, es, fr, de) gelöscht, und die Seite zeigt den portugiesischen Text, bis sie mit /rate-routes neu erstellt sind.",
+    "errorScores": "Wähle alle vier Noten.",
+    "errorVerdict": "Schreibe das Urteil.",
+    "errorSources": "Füge mindestens eine Quelle hinzu.",
+    "errorSourceLines": "{count, plural, one {# ungültige Quellzeile} other {# ungültige Quellzeilen}} (Titel | URL | Seite).",
+    "save": "Bewertung speichern",
+    "create": "Bewertung erstellen",
+    "saved": "Bewertung gespeichert und veröffentlicht.",
+    "saveFailed": "Speichern fehlgeschlagen. Bitte erneut versuchen.",
+    "remove": "Bewertung entfernen",
+    "removed": "Bewertung entfernt.",
+    "removeTitle": "MotoTrip-Bewertung entfernen?",
+    "removeDescription": "Bewertung, Quellen und Übersetzungen verschwinden sofort von der Route. Das kann nicht rückgängig gemacht werden.",
+    "cancel": "Abbrechen"
   }
 }

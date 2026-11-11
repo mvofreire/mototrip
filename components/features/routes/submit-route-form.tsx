@@ -132,9 +132,6 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
         route_type: formData.route_type || null,
         thumbnail_url: null,
         category: formData.category,
-        scenic_score: 0,
-        road_quality_score: 0,
-        fun_factor_score: 0,
       };
 
       const result = await createRouteMutation.mutateAsync(routeData);

@@ -126,6 +126,7 @@ export function AdminRoutesTable({
               <TableHead>{t('table.category')}</TableHead>
               <TableHead className="text-right">{t('table.distance')}</TableHead>
               <TableHead>{t('table.status')}</TableHead>
+              <TableHead className="whitespace-nowrap">{t('table.curator')}</TableHead>
               <TableHead className="text-center">{t('table.featured')}</TableHead>
               <TableHead>{t('table.updated')}</TableHead>
               <TableHead className="text-right">{t('table.actions')}</TableHead>
@@ -134,7 +135,7 @@ export function AdminRoutesTable({
           <TableBody>
             {routes.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={9} className="py-8 text-center text-muted-foreground">
+                <TableCell colSpan={10} className="py-8 text-center text-muted-foreground">
                   {t('table.noRoutes')}
                 </TableCell>
               </TableRow>
@@ -187,6 +188,24 @@ export function AdminRoutesTable({
                       <p className="mt-1 line-clamp-2 text-xs text-muted-foreground" title={route.review_note}>
                         {route.review_note}
                       </p>
+                    )}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    {route.curator_rating != null ? (
+                      <div className="flex flex-col">
+                        <span className="font-semibold tabular-nums">{Number(route.curator_rating).toFixed(1)}</span>
+                        {route.curator_confidence && (
+                          <span
+                            className={`text-xs ${
+                              route.curator_confidence === 'low' ? 'text-amber-600 font-medium' : 'text-muted-foreground'
+                            }`}
+                          >
+                            {tAll(`curatorAdmin.confidenceLevels.${route.curator_confidence}`)}
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-sm text-muted-foreground">—</span>
                     )}
                   </TableCell>
                   <TableCell className="text-center">

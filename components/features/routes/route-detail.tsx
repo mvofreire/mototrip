@@ -12,6 +12,7 @@ import { RouteReviewBanner } from '@/components/features/routes/route-review-ban
 import { CommentsList } from '@/components/features/comments'
 import { ShareRoutePanel } from '@/components/features/routes/share-route-panel'
 import { RouteReviews } from '@/components/features/routes/route-reviews'
+import { RouteCuratorReview } from '@/components/features/routes/route-curator-review'
 
 /** Body of the route page (shared by the public and the private view) */
 export function RouteDetail({ route: unsorted, locale }: { route: RouteWithDetails; locale: string }) {
@@ -34,6 +35,9 @@ export function RouteDetail({ route: unsorted, locale }: { route: RouteWithDetai
           <RouteReviewBanner route={route} />
 
           <RouteStats route={route} />
+
+          {/* MotoTrip curation review (research-based, with sources) */}
+          <RouteCuratorReview review={route.curator_review} />
 
           {destination && (
             <Link

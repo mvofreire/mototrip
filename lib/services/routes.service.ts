@@ -52,8 +52,8 @@ export class RoutesService {
       query = query.lte("duration_minutes", filters.max_duration);
     }
 
-    if (filters?.min_scenic_score) {
-      query = query.gte("scenic_score", filters.min_scenic_score);
+    if (filters?.min_curator_rating) {
+      query = query.gte("curator_rating", filters.min_curator_rating);
     }
 
     if (filters?.region?.length) {
@@ -74,7 +74,10 @@ export class RoutesService {
 
     // Apply sorting
     if (sort) {
-      query = query.order(sort.field, { ascending: sort.direction === "asc" });
+      // Unrated routes always go last
+      query = query
+        .order(sort.field, { ascending: sort.direction === "asc", nullsFirst: false })
+        .order("created_at", { ascending: false });
     } else {
       query = query.order("created_at", { ascending: false });
     }
@@ -130,7 +133,8 @@ export class RoutesService {
         *,
         stops:route_stops(*),
         photos:route_photos(*),
-        ratings:route_ratings(*)
+        ratings:route_ratings(*),
+        curator_review:route_curator_reviews(*)
       `,
       )
       .eq(column, value)
@@ -225,7 +229,7 @@ export class RoutesService {
       )
       .eq("featured", true)
       .eq("published", true)
-      .order("scenic_score", { ascending: false })
+      .order("curator_rating", { ascending: false, nullsFirst: false })
       .limit(limit);
 
     if (error) throw error;
