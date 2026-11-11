@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,6 +14,7 @@ import { safeRedirectPath } from '@/lib/auth/redirects'
 import { GoogleSignInButton } from '@/components/auth/google-sign-in-button'
 import { AccountBlockedNotice } from '@/components/auth/account-blocked-notice'
 import { isBannedError, takeAccountBlock } from '@/lib/auth/account-block'
+import { authErrorKey } from '@/lib/auth/auth-errors'
 import type { AccountBlock } from '@/types/auth.types'
 
 /** Where to go after login: the ?redirect= param when it is an internal path. */
@@ -25,6 +27,9 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ locale }: LoginFormProps) {
+  const t = useTranslations('account')
+  const tp = useTranslations('password')
+  const tRoot = useTranslations()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -49,9 +54,9 @@ export function LoginForm({ locale }: LoginFormProps) {
     try {
       await signIn(email, password)
       router.push(getSafeRedirect(locale))
-    } catch (err: any) {
+    } catch (err) {
       if (isBannedError(err)) setBlock({})
-      else setError(err.message || 'Failed to sign in')
+      else setError(tRoot(authErrorKey(err, 'signIn')))
     } finally {
       setLoading(false)
     }
@@ -70,11 +75,12 @@ export function LoginForm({ locale }: LoginFormProps) {
       <GoogleSignInButton onError={(msg) => (isBannedError(msg) ? setBlock({}) : setError(msg))} />
 
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{tp('emailLabel')}</Label>
         <Input
           id="email"
           type="email"
-          placeholder="you@example.com"
+          autoComplete="email"
+          placeholder={tp('emailPlaceholder')}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -83,15 +89,15 @@ export function LoginForm({ locale }: LoginFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="password">Senha</Label>
+        <Label htmlFor="password">{t('passwordLabel')}</Label>
         <Input
           id="password"
           type="password"
+          autoComplete="current-password"
           placeholder="••••••••"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          minLength={8}
           disabled={loading}
         />
       </div>
@@ -101,19 +107,19 @@ export function LoginForm({ locale }: LoginFormProps) {
           href={`/${locale}/auth/forgot-password`}
           className="text-primary hover:underline"
         >
-          Esqueceu a senha?
+          {tp('forgotLink')}
         </Link>
       </div>
 
       <Button type="submit" className="w-full" disabled={loading}>
         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Entrar
+        {t('signIn')}
       </Button>
 
       <p className="text-center text-sm text-muted-foreground">
-        Não tem uma conta?{' '}
+        {t('noAccount')}{' '}
         <Link href={`/${locale}/auth/register`} className="text-primary hover:underline">
-          Criar conta
+          {t('createAccountLink')}
         </Link>
       </p>
     </form>

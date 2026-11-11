@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
 import { useAuth } from '@/hooks/use-auth'
 import { authService } from '@/lib/auth/auth.service'
 import { Button } from '@/components/ui/button'
@@ -11,14 +12,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Loader2, User, Mail, Calendar, Shield } from 'lucide-react'
 
-
-const ROLE_LABELS = {
-  admin: 'Administrador',
-  curator: 'Curador',
-  contributor: 'Contribuidor',
-} as const
-
 export function ProfileForm() {
+  const t = useTranslations('account')
+  const tRoles = useTranslations('admin.users.roles')
+  const locale = useLocale()
   const { user } = useAuth()
   const [fullName, setFullName] = useState(user?.profile?.full_name || '')
   const [loading, setLoading] = useState(false)
@@ -37,8 +34,9 @@ export function ProfileForm() {
       await authService.updateProfile(user.id, { full_name: fullName })
       setSuccess(true)
       setTimeout(() => setSuccess(false), 3000)
-    } catch (err: any) {
-      setError(err.message || 'Falha ao atualizar perfil')
+    } catch (err) {
+      console.error('Profile update failed', err)
+      setError(t('profileSaveFailed'))
     } finally {
       setLoading(false)
     }
@@ -47,12 +45,13 @@ export function ProfileForm() {
   if (!user) {
     return (
       <Alert>
-        <AlertDescription>Carregando informações do perfil...</AlertDescription>
+        <AlertDescription>{t('loadingProfile')}</AlertDescription>
       </Alert>
     )
   }
 
   const profile = user.profile
+  const roleLabel = tRoles(profile?.role ?? 'contributor')
 
   return (
     <div className="space-y-6">
@@ -64,7 +63,7 @@ export function ProfileForm() {
               <User className="h-10 w-10 text-white" />
             </div>
             <div className="flex-1">
-              <CardTitle className="text-2xl">{profile?.full_name || 'Sem nome'}</CardTitle>
+              <CardTitle className="text-2xl">{profile?.full_name || t('noName')}</CardTitle>
               <CardDescription className="flex items-center gap-2 mt-1">
                 <Mail className="h-4 w-4" />
                 {user.email}
@@ -72,12 +71,12 @@ export function ProfileForm() {
               <div className="flex items-center gap-2 mt-2">
                 <Badge variant={profile?.role === 'contributor' ? 'secondary' : 'default'}>
                   <Shield className="h-3 w-3 mr-1" />
-                  {ROLE_LABELS[profile?.role ?? 'contributor']}
+                  {roleLabel}
                 </Badge>
                 {profile?.created_at && (
                   <span className="text-xs text-muted-foreground flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
-                    Membro desde {new Date(profile.created_at).toLocaleDateString('pt-BR')}
+                    {t('memberSince', { date: new Date(profile.created_at).toLocaleDateString(locale) })}
                   </span>
                 )}
               </div>
@@ -89,10 +88,8 @@ export function ProfileForm() {
       {/* Edit Profile Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Editar Perfil</CardTitle>
-          <CardDescription>
-            Atualize suas informações pessoais
-          </CardDescription>
+          <CardTitle>{t('editTitle')}</CardTitle>
+          <CardDescription>{t('editDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -104,16 +101,17 @@ export function ProfileForm() {
 
             {success && (
               <Alert>
-                <AlertDescription>Perfil atualizado com sucesso!</AlertDescription>
+                <AlertDescription>{t('profileSaved')}</AlertDescription>
               </Alert>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="fullName">Nome Completo</Label>
+              <Label htmlFor="fullName">{t('fullName')}</Label>
               <Input
                 id="fullName"
                 type="text"
-                placeholder="Seu nome completo"
+                autoComplete="name"
+                placeholder={t('fullNameProfilePlaceholder')}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 disabled={loading}
@@ -121,7 +119,7 @@ export function ProfileForm() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('emailLabel')}</Label>
               <Input
                 id="email"
                 type="email"
@@ -129,28 +127,24 @@ export function ProfileForm() {
                 disabled
                 className="bg-muted"
               />
-              <p className="text-xs text-muted-foreground">
-                O email não pode ser alterado
-              </p>
+              <p className="text-xs text-muted-foreground">{t('emailCannotChange')}</p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="role">Função</Label>
+              <Label htmlFor="role">{t('roleLabel')}</Label>
               <Input
                 id="role"
                 type="text"
-                value={ROLE_LABELS[profile?.role ?? 'contributor']}
+                value={roleLabel}
                 disabled
                 className="bg-muted"
               />
-              <p className="text-xs text-muted-foreground">
-                A função é definida pelo sistema
-              </p>
+              <p className="text-xs text-muted-foreground">{t('roleSystem')}</p>
             </div>
 
             <Button type="submit" disabled={loading} className="w-full">
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Salvar Alterações
+              {t('saveChanges')}
             </Button>
           </form>
         </CardContent>
@@ -159,24 +153,22 @@ export function ProfileForm() {
       {/* Statistics */}
       <Card>
         <CardHeader>
-          <CardTitle>Estatísticas</CardTitle>
-          <CardDescription>
-            Seu resumo de atividades
-          </CardDescription>
+          <CardTitle>{t('statsTitle')}</CardTitle>
+          <CardDescription>{t('statsDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 rounded-lg bg-muted/50 text-center">
               <div className="text-2xl font-bold text-primary">0</div>
-              <div className="text-sm text-muted-foreground">Rotas Criadas</div>
+              <div className="text-sm text-muted-foreground">{t('statsRoutesCreated')}</div>
             </div>
             <div className="p-4 rounded-lg bg-muted/50 text-center">
               <div className="text-2xl font-bold text-primary">0</div>
-              <div className="text-sm text-muted-foreground">Rotas Salvas</div>
+              <div className="text-sm text-muted-foreground">{t('statsRoutesSaved')}</div>
             </div>
             <div className="p-4 rounded-lg bg-muted/50 text-center">
               <div className="text-2xl font-bold text-primary">0</div>
-              <div className="text-sm text-muted-foreground">Avaliações</div>
+              <div className="text-sm text-muted-foreground">{t('statsReviews')}</div>
             </div>
           </div>
         </CardContent>

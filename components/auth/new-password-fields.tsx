@@ -19,6 +19,9 @@ interface NewPasswordFieldsProps {
   onPasswordChange: (value: string) => void
   onConfirmationChange: (value: string) => void
   disabled?: boolean
+  /** Defaults to "New password" / "Confirm new password" */
+  label?: string
+  confirmationLabel?: string
 }
 
 /** "New password" + "Confirm new password" inputs shared by reset and change */
@@ -28,13 +31,15 @@ export function NewPasswordFields({
   onPasswordChange,
   onConfirmationChange,
   disabled,
+  label,
+  confirmationLabel,
 }: NewPasswordFieldsProps) {
   const t = useTranslations('password')
 
   return (
     <>
       <div className="space-y-2">
-        <Label htmlFor="new-password">{t('newPassword')}</Label>
+        <Label htmlFor="new-password">{label ?? t('newPassword')}</Label>
         <Input
           id="new-password"
           type="password"
@@ -49,7 +54,7 @@ export function NewPasswordFields({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="confirm-password">{t('confirmPassword')}</Label>
+        <Label htmlFor="confirm-password">{confirmationLabel ?? t('confirmPassword')}</Label>
         <Input
           id="confirm-password"
           type="password"

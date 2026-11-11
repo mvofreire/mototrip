@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,12 +11,17 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { GoogleSignInButton } from '@/components/auth/google-sign-in-button'
+import { NewPasswordFields, newPasswordProblem } from '@/components/auth/new-password-fields'
+import { authErrorKey } from '@/lib/auth/auth-errors'
 
 interface RegisterFormProps {
   locale: string
 }
 
 export function RegisterForm({ locale }: RegisterFormProps) {
+  const t = useTranslations('account')
+  const tp = useTranslations('password')
+  const tRoot = useTranslations()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -30,27 +36,23 @@ export function RegisterForm({ locale }: RegisterFormProps) {
     e.preventDefault()
     setError('')
 
-    if (password !== confirmPassword) {
-      setError('As senhas não coincidem')
-      return
-    }
-
-    if (password.length < 8) {
-      setError('A senha deve ter no mínimo 8 caracteres')
+    const problem = newPasswordProblem(password, confirmPassword)
+    if (problem) {
+      setError(tp(problem))
       return
     }
 
     setLoading(true)
 
     try {
-      const { needsConfirmation } = await signUp(email, password, fullName)
+      const { needsConfirmation } = await signUp(email.trim(), password, fullName.trim())
       if (needsConfirmation) {
         setConfirmationSentTo(email)
       } else {
         router.push(`/${locale}`)
       }
-    } catch (err: any) {
-      setError(err.message || 'Falha ao criar conta')
+    } catch (err) {
+      setError(tRoot(authErrorKey(err, 'signUp')))
     } finally {
       setLoading(false)
     }
@@ -61,16 +63,20 @@ export function RegisterForm({ locale }: RegisterFormProps) {
       <div className="space-y-4 text-center">
         <Alert>
           <AlertDescription>
-            Enviamos um link de confirmação para <strong>{confirmationSentTo}</strong>.
-            Abra o email e clique no link para ativar sua conta.
+            {t.rich('confirmationSent', {
+              email: confirmationSentTo,
+              strong: (chunks) => <strong>{chunks}</strong>,
+            })}
           </AlertDescription>
         </Alert>
         <p className="text-sm text-muted-foreground">
-          Não recebeu? Verifique a pasta de spam ou{' '}
-          <Link href={`/${locale}/auth/login`} className="text-primary hover:underline">
-            volte ao login
-          </Link>
-          .
+          {t.rich('notReceived', {
+            link: (chunks) => (
+              <Link href={`/${locale}/auth/login`} className="text-primary hover:underline">
+                {chunks}
+              </Link>
+            ),
+          })}
         </p>
       </div>
     )
@@ -87,11 +93,12 @@ export function RegisterForm({ locale }: RegisterFormProps) {
       <GoogleSignInButton onError={setError} />
 
       <div className="space-y-2">
-        <Label htmlFor="fullName">Nome Completo</Label>
+        <Label htmlFor="fullName">{t('fullName')}</Label>
         <Input
           id="fullName"
           type="text"
-          placeholder="João Silva"
+          autoComplete="name"
+          placeholder={t('fullNamePlaceholder')}
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           required
@@ -100,11 +107,12 @@ export function RegisterForm({ locale }: RegisterFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{tp('emailLabel')}</Label>
         <Input
           id="email"
           type="email"
-          placeholder="voce@exemplo.com"
+          autoComplete="email"
+          placeholder={tp('emailPlaceholder')}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -112,46 +120,25 @@ export function RegisterForm({ locale }: RegisterFormProps) {
         />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="password">Senha</Label>
-        <Input
-          id="password"
-          type="password"
-          placeholder="••••••••"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          minLength={8}
-          disabled={loading}
-        />
-        <p className="text-xs text-muted-foreground">
-          Mínimo de 8 caracteres
-        </p>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="confirmPassword">Confirmar Senha</Label>
-        <Input
-          id="confirmPassword"
-          type="password"
-          placeholder="••••••••"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-          minLength={8}
-          disabled={loading}
-        />
-      </div>
+      <NewPasswordFields
+        password={password}
+        confirmation={confirmPassword}
+        onPasswordChange={setPassword}
+        onConfirmationChange={setConfirmPassword}
+        disabled={loading}
+        label={t('passwordLabel')}
+        confirmationLabel={t('confirmPassword')}
+      />
 
       <Button type="submit" className="w-full" disabled={loading}>
         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Criar Conta
+        {t('createAccount')}
       </Button>
 
       <p className="text-center text-sm text-muted-foreground">
-        Já tem uma conta?{' '}
+        {t('haveAccount')}{' '}
         <Link href={`/${locale}/auth/login`} className="text-primary hover:underline">
-          Entrar
+          {t('signInLink')}
         </Link>
       </p>
     </form>
