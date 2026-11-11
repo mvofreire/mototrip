@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ChevronRight, Clock, MapPin, Route as RouteIcon } from 'lucide-react'
 import { locales } from '@/i18n'
 import { RoutesService } from '@/lib/services/routes.service'
@@ -35,6 +35,8 @@ const byFeaturedThenTitle = (a: RouteWithDetails, b: RouteWithDetails) =>
   Number(b.featured) - Number(a.featured) || a.title.localeCompare(b.title)
 
 export default async function RegionsIndexPage({ params: { locale } }: Props) {
+  setRequestLocale(locale)
+
   const t = await getTranslations({ locale, namespace: 'regions' })
   const tAll = await getTranslations({ locale })
   const routes = (((await RoutesService.getRoutes()) as RouteWithDetails[]) ?? [])

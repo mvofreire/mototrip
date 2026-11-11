@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
 import { MapPin, Users, Heart, Globe, Instagram } from 'lucide-react'
 import { INSTAGRAM } from '@/lib/social'
@@ -21,6 +21,8 @@ export default async function AboutPage({
 }: {
   params: { locale: string }
 }) {
+  setRequestLocale(locale)
+
   const t = await getTranslations({ locale, namespace: 'about' })
 
   return (

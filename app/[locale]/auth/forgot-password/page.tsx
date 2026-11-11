@@ -1,7 +1,10 @@
+import { setRequestLocale } from 'next-intl/server'
 import { ForgotPasswordForm } from '@/components/auth/forgot-password-form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function ForgotPasswordPage({ params }: { params: { locale: string } }) {
+  setRequestLocale(params.locale)
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <Card className="w-full max-w-md">

@@ -1,7 +1,10 @@
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
 import { Trophy, MapPin, Gauge } from 'lucide-react'
 import { RoutesService } from '@/lib/services/routes.service'
+
+// Served from the edge cache and rebuilt in the background every hour
+export const revalidate = 3600
 
 export async function generateMetadata({
   params: { locale },
@@ -21,6 +24,8 @@ export default async function RidersPage({
 }: {
   params: { locale: string }
 }) {
+  setRequestLocale(locale)
+
   const t = await getTranslations({ locale, namespace: 'riders' })
 
   let contributors: Awaited<ReturnType<typeof RoutesService.getTopContributors>> = []

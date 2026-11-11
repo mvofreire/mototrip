@@ -190,6 +190,27 @@ export class RoutesService {
   }
 
   /**
+   * Most recently published routes (home page)
+   */
+  static async getLatestRoutes(limit = 6) {
+    const { data, error } = await supabase
+      .from("routes")
+      .select(
+        `
+        *,
+        stops:route_stops(*),
+        photos:route_photos(*)
+      `,
+      )
+      .eq("published", true)
+      .order("created_at", { ascending: false })
+      .limit(limit);
+
+    if (error) throw error;
+    return data as RouteWithDetails[];
+  }
+
+  /**
    * Get featured routes
    */
   static async getFeaturedRoutes(limit = 3) {

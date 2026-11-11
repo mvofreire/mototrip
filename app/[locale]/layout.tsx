@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Barlow_Condensed, Inter } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages, getTranslations } from 'next-intl/server'
+import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import '../globals.css'
 import { locales } from '@/i18n'
@@ -125,6 +125,9 @@ export default async function LocaleLayout({
 }) {
   // Validate that the incoming `locale` parameter is valid
   if (!locales.includes(locale as any)) notFound()
+
+  // Lets every page under this layout be rendered statically
+  setRequestLocale(locale)
 
   // Providing all messages to the client
   const messages = await getMessages()

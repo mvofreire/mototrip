@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
 import { Shield, Heart, Users, AlertTriangle } from 'lucide-react'
 
@@ -20,6 +20,8 @@ export default async function GuidelinesPage({
 }: {
   params: { locale: string }
 }) {
+  setRequestLocale(locale)
+
   const t = await getTranslations({ locale, namespace: 'guidelines' })
 
   return (

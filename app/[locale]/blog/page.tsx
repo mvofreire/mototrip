@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowRight } from 'lucide-react'
 import { locales } from '@/i18n'
 import { getPublishedPosts, pickTranslation } from '@/lib/blog/posts'
@@ -20,6 +20,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function BlogPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale)
+
   const t = await getTranslations({ locale, namespace: 'blog' })
   // Newest first; the cover image is the map of the post's main route
   const posts = await getPublishedPosts().catch(() => [])

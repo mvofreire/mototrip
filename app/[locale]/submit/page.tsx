@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
 import { SubmitRouteForm } from '@/components/features/routes/submit-route-form'
 import { ProtectedRoute } from '@/components/auth/protected-route'
@@ -21,6 +21,8 @@ export default async function SubmitRoutePage({
 }: {
   params: { locale: string }
 }) {
+  setRequestLocale(locale)
+
   const t = await getTranslations({ locale, namespace: 'submit' })
 
   return (

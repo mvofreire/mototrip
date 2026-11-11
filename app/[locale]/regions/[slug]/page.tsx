@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ChevronRight, MapPin, Route as RouteIcon } from 'lucide-react'
 import { locales } from '@/i18n'
 import { RoutesService } from '@/lib/services/routes.service'
@@ -60,6 +60,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function RegionPage({ params }: Props) {
+  setRequestLocale(params.locale)
+
   const { locale } = params
   const region = getRegion(params.slug)
   if (!region) notFound()

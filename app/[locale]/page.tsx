@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowRight, MapPin, Gauge, Mountain, Star, Navigation, Map, MessageCircle } from 'lucide-react'
 import { RouteCard } from '@/components/features/routes/route-card'
 import { RoutesService } from '@/lib/services/routes.service'
@@ -15,11 +15,16 @@ import {
   SectionGrid,
 } from '@/components/ui/section'
 
+// Served from the edge cache and rebuilt in the background every 10 minutes
+export const revalidate = 600
+
 export default async function HomePage({
   params: { locale },
 }: {
   params: { locale: string }
 }) {
+  setRequestLocale(locale)
+
   const t = await getTranslations({ locale, namespace: 'home' })
   const tNav = await getTranslations({ locale, namespace: 'nav' })
   
@@ -29,10 +34,11 @@ export default async function HomePage({
   let stats = { routes: 0, km: 0, regions: 0 }
   
   try {
-    featuredRoutes = await RoutesService.getFeaturedRoutes(3)
-    popularRoutes = await RoutesService.getRoutes({}, { field: 'created_at', direction: 'desc' })
-    popularRoutes = popularRoutes.slice(0, 6)
-    stats = await RoutesService.getStats()
+    ;[featuredRoutes, popularRoutes, stats] = await Promise.all([
+      RoutesService.getFeaturedRoutes(3),
+      RoutesService.getLatestRoutes(6),
+      RoutesService.getStats(),
+    ])
   } catch (error) {
     console.error('Error fetching routes:', error)
   }

@@ -7,7 +7,16 @@ import { localizeRoute } from '@/lib/localize'
 import { RouteDetail } from '@/components/features/routes/route-detail'
 import { PrivateRouteDetail } from '@/components/features/routes/private-route-detail'
 import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
+
+// Served from the edge cache and rebuilt in the background every 5 minutes
+export const revalidate = 300
+
+// No route is built ahead of time: each one is rendered on its first visit and
+// then served from the cache (an empty list is what turns that on)
+export function generateStaticParams() {
+  return []
+}
 
 interface RoutePageProps {
   params: {
@@ -61,6 +70,8 @@ export async function generateMetadata({ params }: RoutePageProps): Promise<Meta
 }
 
 export default async function RoutePage({ params }: RoutePageProps) {
+  setRequestLocale(params.locale)
+
   let route
   try {
     route = await RoutesService.getRouteByIdOrSlug(params.id)
