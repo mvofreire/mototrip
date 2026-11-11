@@ -9,6 +9,7 @@ import { Providers } from './providers'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Pwa } from '@/components/pwa/pwa'
 import { SOCIAL_PROFILES } from '@/lib/social'
 
@@ -160,6 +161,7 @@ export default async function LocaleLayout({
           </Providers>
         </NextIntlClientProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
