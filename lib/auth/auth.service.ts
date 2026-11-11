@@ -1,7 +1,7 @@
 import type { User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase/client'
 import type { AccountBlock, AuthUser, Profile } from '@/types/auth.types'
-import { authRedirectUrl } from '@/lib/auth/redirects'
+import { authRedirectUrl, currentLocale } from '@/lib/auth/redirects'
 
 // Readable profile columns (email is intentionally not granted to clients)
 const PROFILE_COLUMNS = 'id, full_name, avatar_url, role, created_at, updated_at'
@@ -15,6 +15,8 @@ export const authService = {
       options: {
         data: {
           full_name: fullName,
+          // Read by the Supabase auth email templates to pick the language
+          locale: currentLocale(),
         },
         // Where the confirmation link lands (otherwise Supabase's Site URL)
         emailRedirectTo: authRedirectUrl(''),

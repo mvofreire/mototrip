@@ -1,0 +1,210 @@
+{{- /*
+  Supabase → Authentication → Emails → "Confirm signup" (Message body)
+  Language comes from user_metadata.locale (set in authService.signUp);
+  users without it, or with an unknown value, get English (the site default).
+  This comment is a template comment and is not sent.
+
+  Subject (one line; the dashboard caps its length, so keep it compact):
+  {{$l:=.Data.locale}}{{if eq $l "pt"}}Confirme seu e-mail{{else if eq $l "es"}}Confirma tu correo{{else if eq $l "fr"}}Confirmez votre e-mail{{else if eq $l "de"}}E-Mail bestätigen{{else}}Confirm your email{{end}}
+*/ -}}
+{{- $l := "en" -}}{{- with .Data.locale -}}{{- $l = . -}}{{- end -}}
+{{- $preheader := "One step left: confirm your email and start exploring the best motorcycle routes." -}}
+{{- $eyebrow := "Welcome to the road" -}}
+{{- $title := "Confirm your email" -}}
+{{- $hello := "Hi" -}}
+{{- $open := "" -}}{{- $bang := "!" -}}
+{{- $introBefore := "Thanks for signing up for MotoTrip. Click the button below to confirm" -}}
+{{- $introAfter := "and activate your account." -}}
+{{- $button := "Confirm email" -}}
+{{- $nextTitle := "Once you're in" -}}
+{{- $nextBody := "Save your favourite routes, rate the roads you've ridden and share your trips with the community." -}}
+{{- $fallback := "Button not working? Copy and paste this link into your browser:" -}}
+{{- $ignore := "If you didn't create a MotoTrip account, you can safely ignore this email." -}}
+{{- if eq $l "pt" -}}
+  {{- $preheader = "Falta pouco: confirme seu e-mail e comece a explorar as melhores rotas de moto." -}}
+  {{- $eyebrow = "Bem-vindo à estrada" -}}
+  {{- $title = "Confirme seu e-mail" -}}
+  {{- $hello = "Olá" -}}
+  {{- $introBefore = "Obrigado por se cadastrar no MotoTrip. Clique no botão abaixo para confirmar" -}}
+  {{- $introAfter = "e ativar sua conta." -}}
+  {{- $button = "Confirmar e-mail" -}}
+  {{- $nextTitle = "Depois de confirmar" -}}
+  {{- $nextBody = "Salve rotas favoritas, avalie as estradas que já percorreu e compartilhe suas viagens com a comunidade." -}}
+  {{- $fallback = "O botão não funciona? Copie e cole este link no navegador:" -}}
+  {{- $ignore = "Se você não criou uma conta no MotoTrip, pode ignorar este e-mail com segurança." -}}
+{{- else if eq $l "es" -}}
+  {{- $preheader = "Ya casi está: confirma tu correo y empieza a explorar las mejores rutas en moto." -}}
+  {{- $eyebrow = "Bienvenido a la carretera" -}}
+  {{- $title = "Confirma tu correo" -}}
+  {{- $hello = "Hola" -}}{{- $open = "¡" -}}
+  {{- $introBefore = "Gracias por registrarte en MotoTrip. Haz clic en el botón de abajo para confirmar" -}}
+  {{- $introAfter = "y activar tu cuenta." -}}
+  {{- $button = "Confirmar correo" -}}
+  {{- $nextTitle = "Después de confirmar" -}}
+  {{- $nextBody = "Guarda tus rutas favoritas, valora las carreteras que ya recorriste y comparte tus viajes con la comunidad." -}}
+  {{- $fallback = "¿El botón no funciona? Copia y pega este enlace en tu navegador:" -}}
+  {{- $ignore = "Si no creaste una cuenta en MotoTrip, puedes ignorar este correo con total seguridad." -}}
+{{- else if eq $l "fr" -}}
+  {{- $preheader = "Plus qu'une étape : confirmez votre e-mail et découvrez les plus beaux itinéraires moto." -}}
+  {{- $eyebrow = "Bienvenue sur la route" -}}
+  {{- $title = "Confirmez votre e-mail" -}}
+  {{- $hello = "Bonjour" -}}{{- $bang = " !" -}}
+  {{- $introBefore = "Merci de vous être inscrit sur MotoTrip. Cliquez sur le bouton ci-dessous pour confirmer" -}}
+  {{- $introAfter = "et activer votre compte." -}}
+  {{- $button = "Confirmer l'e-mail" -}}
+  {{- $nextTitle = "Une fois confirmé" -}}
+  {{- $nextBody = "Enregistrez vos itinéraires favoris, notez les routes que vous avez parcourues et partagez vos voyages avec la communauté." -}}
+  {{- $fallback = "Le bouton ne fonctionne pas ? Copiez et collez ce lien dans votre navigateur :" -}}
+  {{- $ignore = "Si vous n'avez pas créé de compte MotoTrip, vous pouvez ignorer cet e-mail en toute sécurité." -}}
+{{- else if eq $l "de" -}}
+  {{- $preheader = "Nur noch ein Schritt: Bestätige deine E-Mail und entdecke die besten Motorradrouten." -}}
+  {{- $eyebrow = "Willkommen auf der Straße" -}}
+  {{- $title = "Bestätige deine E-Mail" -}}
+  {{- $hello = "Hallo" -}}
+  {{- $introBefore = "Danke für deine Registrierung bei MotoTrip. Klicke auf den Button unten, um" -}}
+  {{- $introAfter = "zu bestätigen und dein Konto zu aktivieren." -}}
+  {{- $button = "E-Mail bestätigen" -}}
+  {{- $nextTitle = "Nach der Bestätigung" -}}
+  {{- $nextBody = "Speichere Lieblingsrouten, bewerte Strecken, die du gefahren bist, und teile deine Touren mit der Community." -}}
+  {{- $fallback = "Der Button funktioniert nicht? Kopiere diesen Link in deinen Browser:" -}}
+  {{- $ignore = "Wenn du kein MotoTrip-Konto erstellt hast, kannst du diese E-Mail einfach ignorieren." -}}
+{{- else -}}
+  {{- $l = "en" -}}
+{{- end -}}
+<!doctype html>
+<html lang="{{ $l }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light only">
+  <title>{{ $title }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; padding: 0; }
+    a { color: #D90F25; }
+    @media (max-width: 600px) {
+      .px { padding-left: 24px !important; padding-right: 24px !important; }
+      .hero-title { font-size: 30px !important; line-height: 34px !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:#F6F7F9;">
+  <!-- Inbox preview text -->
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">{{ $preheader }}</div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F6F7F9;">
+    <tr>
+      <td align="center" style="padding:32px 12px;">
+        <!--[if mso]><table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:560px;">
+
+          <!-- Logo -->
+          <tr>
+            <td align="left" style="padding:0 4px 20px 4px;">
+              <a href="https://mototrip.pt/{{ $l }}" style="text-decoration:none;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td style="padding-right:10px;vertical-align:middle;">
+                      <img src="https://mototrip.pt/icon-192.png" width="36" height="36" alt="" style="display:block;border:0;border-radius:8px;">
+                    </td>
+                    <td style="vertical-align:middle;font-family:Inter,Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;color:#0F1218;">
+                      MotoTrip
+                    </td>
+                  </tr>
+                </table>
+              </a>
+            </td>
+          </tr>
+
+          <!-- Card -->
+          <tr>
+            <td style="background-color:#FFFFFF;border:1px solid #D5D9E2;border-radius:8px;overflow:hidden;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+
+                <!-- Hero with the brand gradient -->
+                <tr>
+                  <td class="px" bgcolor="#D00F25" style="background-color:#D00F25;background-image:linear-gradient(135deg,#ef233c 0%,#d00f25 55%,#8d0a1a 100%);padding:40px 40px 36px 40px;border-radius:8px 8px 0 0;">
+                    <div style="font-family:Inter,Arial,Helvetica,sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#FFC5CB;padding-bottom:10px;">
+                      {{ $eyebrow }}
+                    </div>
+                    <h1 class="hero-title" style="margin:0;font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;font-size:38px;line-height:40px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:#FFFFFF;">
+                      {{ $title }}
+                    </h1>
+                  </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                  <td class="px" style="padding:36px 40px 8px 40px;font-family:Inter,Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;color:#2B313F;">
+                    <p style="margin:0 0 16px 0;">
+                      {{ $open }}{{ $hello }}{{ if .Data.full_name }}, {{ .Data.full_name }}{{ end }}{{ $bang }}
+                    </p>
+                    <p style="margin:0 0 28px 0;">
+                      {{ $introBefore }} <strong style="color:#0F1218;">{{ .Email }}</strong> {{ $introAfter }}
+                    </p>
+                  </td>
+                </tr>
+
+                <!-- Button -->
+                <tr>
+                  <td class="px" style="padding:0 40px 32px 40px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td bgcolor="#D90F25" style="border-radius:6px;background-color:#D90F25;">
+                          <a href="{{ .ConfirmationURL }}" target="_blank"
+                             style="display:inline-block;padding:15px 30px;font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;font-size:18px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#FFFFFF;text-decoration:none;border-radius:6px;">
+                            {{ $button }} &rarr;
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- What's next -->
+                <tr>
+                  <td class="px" style="padding:0 40px 32px 40px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F6F7F9;border-left:3px solid #D90F25;border-radius:4px;">
+                      <tr>
+                        <td style="padding:18px 20px;font-family:Inter,Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#434C61;">
+                          <strong style="display:block;font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;font-size:16px;letter-spacing:0.5px;text-transform:uppercase;color:#0F1218;padding-bottom:4px;">
+                            {{ $nextTitle }}
+                          </strong>
+                          {{ $nextBody }}
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- Fallback link -->
+                <tr>
+                  <td class="px" style="padding:0 40px 36px 40px;border-top:1px solid #ECEEF2;font-family:Inter,Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#667490;">
+                    <p style="margin:24px 0 8px 0;">{{ $fallback }}</p>
+                    <p style="margin:0;word-break:break-all;">
+                      <a href="{{ .ConfirmationURL }}" style="color:#D90F25;text-decoration:underline;">{{ .ConfirmationURL }}</a>
+                    </p>
+                  </td>
+                </tr>
+
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding:24px 16px 0 16px;font-family:Inter,Arial,Helvetica,sans-serif;font-size:12px;line-height:19px;color:#8592AA;">
+              {{ $ignore }}<br>
+              <a href="https://mototrip.pt/{{ $l }}" style="color:#667490;text-decoration:none;font-weight:600;">mototrip.pt</a>
+              &nbsp;·&nbsp;
+              <a href="https://www.instagram.com/mototrip.pt/" style="color:#667490;text-decoration:none;">Instagram</a>
+            </td>
+          </tr>
+
+        </table>
+        <!--[if mso]></td></tr></table><![endif]-->
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
