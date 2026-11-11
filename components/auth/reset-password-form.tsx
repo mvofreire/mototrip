@@ -1,11 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import { useAuth } from '@/hooks/use-auth'
 import { authService } from '@/lib/auth/auth.service'
+import { passwordErrorKey } from '@/lib/auth/password-errors'
+import { NewPasswordFields, newPasswordProblem } from '@/components/auth/new-password-fields'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Loader2, CheckCircle } from 'lucide-react'
 
@@ -13,40 +16,47 @@ interface ResetPasswordFormProps {
   locale: string
 }
 
+/**
+ * Landing page of the reset email. supabase-js turns the link's tokens into a
+ * session on load (detectSessionInUrl); an expired or reused link arrives as
+ * #error=...&error_code=otp_expired instead, and then there is no session.
+ */
 export function ResetPasswordForm({ locale }: ResetPasswordFormProps) {
+  const t = useTranslations('password')
+  const { user, loading: authLoading } = useAuth()
+  const router = useRouter()
+  const [linkError, setLinkError] = useState(false)
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [confirmation, setConfirmation] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    const hash = new URLSearchParams(window.location.hash.slice(1))
+    const query = new URLSearchParams(window.location.search)
+    if (hash.get('error') || query.get('error')) setLinkError(true)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
-    if (password !== confirmPassword) {
-      setError('As senhas não coincidem')
+    const problem = newPasswordProblem(password, confirmation)
+    if (problem) {
+      setError(t(problem))
       return
     }
 
-    if (password.length < 8) {
-      setError('A senha deve ter no mínimo 8 caracteres')
-      return
-    }
-
-    setLoading(true)
-
+    setSaving(true)
     try {
       await authService.updatePassword(password)
       setSuccess(true)
-      setTimeout(() => {
-        router.push(`/${locale}/auth/login`)
-      }, 2000)
-    } catch (err: any) {
-      setError(err.message || 'Falha ao redefinir senha')
+      setTimeout(() => router.replace(`/${locale}/profile`), 2000)
+    } catch (err) {
+      setError(t(passwordErrorKey(err)))
     } finally {
-      setLoading(false)
+      setSaving(false)
     }
   }
 
@@ -54,10 +64,30 @@ export function ResetPasswordForm({ locale }: ResetPasswordFormProps) {
     return (
       <Alert>
         <CheckCircle className="h-4 w-4" />
-        <AlertDescription>
-          Senha redefinida com sucesso! Redirecionando...
-        </AlertDescription>
+        <AlertDescription>{t('resetDone')}</AlertDescription>
       </Alert>
+    )
+  }
+
+  if (!linkError && authLoading) {
+    return (
+      <p className="flex items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
+        <Loader2 className="h-4 w-4 animate-spin" />
+        {t('checkingLink')}
+      </p>
+    )
+  }
+
+  if (linkError || !user) {
+    return (
+      <div className="space-y-4">
+        <Alert variant="destructive">
+          <AlertDescription>{t('linkInvalid')}</AlertDescription>
+        </Alert>
+        <Button asChild className="w-full">
+          <Link href={`/${locale}/auth/forgot-password`}>{t('requestNew')}</Link>
+        </Button>
+      </div>
     )
   }
 
@@ -69,40 +99,20 @@ export function ResetPasswordForm({ locale }: ResetPasswordFormProps) {
         </Alert>
       )}
 
-      <div className="space-y-2">
-        <Label htmlFor="password">Nova Senha</Label>
-        <Input
-          id="password"
-          type="password"
-          placeholder="••••••••"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          minLength={8}
-          disabled={loading}
-        />
-        <p className="text-xs text-muted-foreground">
-          Mínimo de 8 caracteres
-        </p>
-      </div>
+      {/* Lets password managers save the new password under the right account */}
+      <input type="email" name="email" autoComplete="username" value={user.email} readOnly hidden />
 
-      <div className="space-y-2">
-        <Label htmlFor="confirmPassword">Confirmar Nova Senha</Label>
-        <Input
-          id="confirmPassword"
-          type="password"
-          placeholder="••••••••"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-          minLength={8}
-          disabled={loading}
-        />
-      </div>
+      <NewPasswordFields
+        password={password}
+        confirmation={confirmation}
+        onPasswordChange={setPassword}
+        onConfirmationChange={setConfirmation}
+        disabled={saving}
+      />
 
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Redefinir Senha
+      <Button type="submit" className="w-full" disabled={saving}>
+        {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {t('submitReset')}
       </Button>
     </form>
   )

@@ -113,6 +113,37 @@ export const authService = {
     if (error) throw error
   },
 
+  // Change the signed-in user's password. Users who already have one must
+  // confirm it first; Google-only users (no password yet) just set one.
+  async changePassword(newPassword: string, currentPassword?: string) {
+    if (currentPassword !== undefined) {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user?.email) throw new Error('Not signed in')
+      const { error } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword,
+      })
+      if (error) throw error
+    }
+    await this.updatePassword(newPassword)
+  },
+
+  // Whether the signed-in user signs in with email + password (vs Google only)
+  async hasPassword(): Promise<boolean> {
+    const { data: { user } } = await supabase.auth.getUser()
+    return !!user?.identities?.some((identity) => identity.provider === 'email')
+  },
+
+  // Keep user_metadata.locale on the language the user browses in: the auth
+  // email templates (confirm signup, reset password) read it. Covers Google
+  // sign-ups and accounts created before the locale was stored.
+  async syncLocale(user: User) {
+    const locale = currentLocale()
+    if (user.user_metadata?.locale === locale) return
+    const { error } = await supabase.auth.updateUser({ data: { locale } })
+    if (error) console.warn('Could not save the user locale', error.message)
+  },
+
   // Update profile
   async updateProfile(
     userId: string,

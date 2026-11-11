@@ -39,6 +39,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             window.location.replace(`/${locale}/auth/login?blocked=1`)
             return
           }
+          // Fire and forget: only the auth emails depend on it
+          void authService.syncLocale(authUser)
         }
         const next = authUser ? await authService.toAuthUser(authUser) : null
         if (active) setUser(next)

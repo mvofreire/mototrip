@@ -1,4 +1,5 @@
 import { ProfileForm } from '@/components/profile/profile-form'
+import { ChangePasswordForm } from '@/components/profile/change-password-form'
 import { ProtectedRoute } from '@/components/auth/protected-route'
 import { SavedRoutes } from '@/components/profile/saved-routes'
 import { MyRoutes } from '@/components/profile/my-routes'
@@ -15,6 +16,9 @@ export default function ProfilePage() {
             </p>
           </div>
           <ProfileForm />
+          <div className="mt-6">
+            <ChangePasswordForm />
+          </div>
           <div className="mt-12">
             <MyRoutes />
           </div>
