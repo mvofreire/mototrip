@@ -25,7 +25,7 @@ Cada rota:
 - **title**: `"Nome | Ponto A > Ponto B > Ponto C"`. Os nomes de lugares ficam no idioma local. Ele gera o slug (`public.slugify`), que **nunca muda depois de criado**. O slugify só converte `áàâãäåāéèêëēíìîïóòôõöøúùûüçñ`, e apóstrofos são removidos. Evite `œ æ ß ł` e afins no título.
 - **description**: original em **português europeu**, como nos datasets existentes ("paragem", "miradouro", "abasteça"). Use 2 a 4 frases: que estrada é, o que tem de especial, avisos (época de abertura, estrada estreita, trânsito).
 - **region**: um valor da união `region` em `curated_routes_pt.ts`. Se for uma região nova, acrescente-a ali.
-- **category**, **difficulty**, **route_type** (`loop` só se termina no ponto de partida) e scores de 0 a 10 realistas. Use `featured: true` em no máximo 1 ou 2 por país.
+- **category**, **difficulty** e **route_type** (`loop` só se termina no ponto de partida). Use `featured: true` em no máximo 1 ou 2 por país. Não dê notas: a nota pública é a Avaliação MotoTrip, feita com pesquisa no passo 6.
 - **waypoints** `[lat, lng]`: pontos **na estrada pretendida**, que obrigam o OSRM a seguir esse caminho. Prefira vilas, colos e cruzamentos conhecidos, e não ponha pontos em cumes fora da estrada.
 - **stops**: 2 ou 3 paradas reais (`viewpoint`, `cafe`, `gas_station`, `restaurant`, `landmark`, `accommodation`) com coordenadas.
 - **i18n** da rota: `en`, `es`, `fr`, `de` com `description` (obrigatório) e `title` só quando difere do original (ex.: "Lago de Annecy" → "Lake Annecy").
@@ -61,12 +61,16 @@ Rode em background: ele espera 3 s entre rotas e faz backoff quando o OSRM devol
 - Avalie incluir o destino em `components/layout/footer.tsx` (lista fixa de slugs).
 - Sitemap, página de destinos e páginas de região são gerados a partir de `REGIONS`, então não precisa mexer neles.
 
-## 6. Verificar
+## 6. Avaliação MotoTrip
+
+Depois de importar, rode `/rate-routes` com os slugs das rotas novas. Ele pesquisa cada rota na internet e grava as notas (1–5), o veredito e as fontes. Rota sem avaliação aparece no site sem nota e no fim da ordenação por "Melhor avaliação MotoTrip".
+
+## 7. Verificar
 
 - SQL: confirme quantidade, `status = 'approved'`, `thumbnail_url` preenchido e traduções. Por exemplo, `(select count(*) from jsonb_object_keys(translations))` deve dar 4, e as paradas devem ter `translations ? 'fr'`.
 - `npx tsc --noEmit -p .` e `npx tsc --noEmit -p jobs`.
 - Dev server (`preview_start` com `mototrip-dev`): `/fr/explore` com o filtro do país, `/pt/regions/<slug>` e uma página de rota em outro idioma.
 
-## 7. Relatório
+## 8. Relatório
 
-Liste as rotas criadas por região com o **slug** de cada uma (o `/create-post` usa esses slugs), as correções de waypoint feitas e o que não foi verificado. Não faça commit sem o usuário pedir.
+Liste as rotas criadas por região com o **slug** de cada uma (o `/create-post` usa esses slugs), a nota MotoTrip e a confiança de cada uma, as correções de waypoint feitas e o que não foi verificado. Não faça commit sem o usuário pedir.

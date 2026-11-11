@@ -71,7 +71,13 @@
     "filters": "Filtres",
     "results": "{count} itinéraires trouvés",
     "noResults": "Aucun itinéraire trouvé correspondant à vos critères.",
-    "clearFilters": "Effacer les filtres"
+    "clearFilters": "Effacer les filtres",
+    "sort": {
+      "label": "Trier par",
+      "recent": "Plus récents",
+      "curator": "Meilleure note MotoTrip",
+      "community": "Meilleure note de la communauté"
+    }
   },
   "filters": {
     "title": "Filtres",
@@ -80,9 +86,10 @@
     "difficulty": "Difficulté",
     "distance": "Distance (km)",
     "duration": "Durée (heures)",
-    "minimumRating": "Note Minimale",
+    "minimumRating": "Note MotoTrip minimale",
     "routeTypeLoop": "Boucle",
-    "routeTypeOutAndBack": "Aller-Retour"
+    "routeTypeOutAndBack": "Aller-Retour",
+    "any": "Toutes"
   },
   "categories": {
     "scenic": "Panoramique",
@@ -152,7 +159,9 @@
     "scenic": "Panoramique",
     "roadQuality": "Qualité de la Route",
     "funFactor": "Facteur Plaisir",
-    "editorialTitle": "Note MotoTrip"
+    "editorialTitle": "Note MotoTrip",
+    "community": "Communauté",
+    "communityTitle": "Note de la communauté"
   },
   "footer": {
     "tagline": "Découvrez et partagez les meilleurs itinéraires moto du monde.",
@@ -485,7 +494,8 @@
       "created": "Créé",
       "actions": "Actions",
       "noRoutes": "Aucun itinéraire trouvé",
-      "updated": "Mis à jour"
+      "updated": "Mis à jour",
+      "curator": "MotoTrip"
     },
     "categories": {
       "scenic": "Panoramique",
@@ -729,6 +739,12 @@
       "errorSave": "Erreur lors de l'enregistrement : {message}",
       "errorLoad": "Article introuvable.",
       "errorAction": "Erreur lors de la mise à jour de l'article."
+    },
+    "curatorFilter": {
+      "label": "Note MotoTrip",
+      "any": "Toutes",
+      "missing": "Sans note",
+      "low": "Confiance faible"
     }
   },
   "riders": {
@@ -997,5 +1013,46 @@
       "sendAnother": "Envoyer un autre message",
       "error": "Impossible d’envoyer votre message. Réessayez dans un instant."
     }
+  },
+  "curator": {
+    "byCuration": "Sélection MotoTrip",
+    "researchedAt": "recherche de {date}",
+    "lowConfidence": "Peu de sources",
+    "highlights": "Points forts",
+    "warnings": "Attention",
+    "bestSeason": "Meilleure saison",
+    "basedOn": "{count, plural, one {Basé sur # source} other {Basé sur # sources}}"
+  },
+  "curatorAdmin": {
+    "descriptionEdit": "Avis de la curation, signé par le profil Mototrip. Les modifications sont publiées immédiatement.",
+    "descriptionNew": "Cet itinéraire n'a pas encore de note MotoTrip. Elle est publiée dès sa création.",
+    "overall": "Globale",
+    "confidence": "Confiance",
+    "confidenceLevels": {
+      "high": "Élevée",
+      "medium": "Moyenne",
+      "low": "Faible"
+    },
+    "verdict": "Avis (portugais)",
+    "highlights": "Points forts",
+    "warnings": "Avertissements",
+    "onePerLine": "Un par ligne",
+    "bestSeason": "Meilleure saison",
+    "sources": "Sources",
+    "sourcesHelp": "Une par ligne : Titre | URL | Site (site facultatif)",
+    "dropsTranslations": "Vous avez modifié le texte portugais : l'enregistrement supprime les traductions (en, es, fr, de) et le site affiche le texte portugais jusqu'à ce qu'elles soient refaites avec /rate-routes.",
+    "errorScores": "Choisissez les quatre notes.",
+    "errorVerdict": "Rédigez l'avis.",
+    "errorSources": "Ajoutez au moins une source.",
+    "errorSourceLines": "{count, plural, one {# ligne de source invalide} other {# lignes de source invalides}} (utilisez Titre | URL | Site).",
+    "save": "Enregistrer la note",
+    "create": "Créer la note",
+    "saved": "Note enregistrée et publiée.",
+    "saveFailed": "Impossible d'enregistrer. Réessayez.",
+    "remove": "Supprimer la note",
+    "removed": "Note supprimée.",
+    "removeTitle": "Supprimer la note MotoTrip ?",
+    "removeDescription": "La note, ses sources et ses traductions disparaissent immédiatement de l'itinéraire. Action irréversible.",
+    "cancel": "Annuler"
   }
 }

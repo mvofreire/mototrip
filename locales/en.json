@@ -71,7 +71,13 @@
     "filters": "Filters",
     "results": "{count} routes found",
     "noResults": "No routes found matching your criteria.",
-    "clearFilters": "Clear filters"
+    "clearFilters": "Clear filters",
+    "sort": {
+      "label": "Sort by",
+      "recent": "Newest",
+      "curator": "Top MotoTrip rating",
+      "community": "Top community rating"
+    }
   },
   "filters": {
     "title": "Filters",
@@ -80,9 +86,10 @@
     "difficulty": "Difficulty",
     "distance": "Distance (km)",
     "duration": "Duration (hours)",
-    "minimumRating": "Minimum Rating",
+    "minimumRating": "Minimum MotoTrip rating",
     "routeTypeLoop": "Loop",
-    "routeTypeOutAndBack": "Out and Back"
+    "routeTypeOutAndBack": "Out and Back",
+    "any": "Any"
   },
   "categories": {
     "scenic": "Scenic",
@@ -152,7 +159,9 @@
     "scenic": "Scenic",
     "roadQuality": "Road Quality",
     "funFactor": "Fun Factor",
-    "editorialTitle": "MotoTrip rating"
+    "editorialTitle": "MotoTrip rating",
+    "community": "Community",
+    "communityTitle": "Community rating"
   },
   "footer": {
     "tagline": "Discover and share the best motorcycle riding routes around the world.",
@@ -485,7 +494,8 @@
       "created": "Created",
       "actions": "Actions",
       "noRoutes": "No routes found",
-      "updated": "Updated"
+      "updated": "Updated",
+      "curator": "MotoTrip"
     },
     "categories": {
       "scenic": "Scenic",
@@ -729,6 +739,12 @@
       "errorSave": "Error saving the post: {message}",
       "errorLoad": "Post not found.",
       "errorAction": "Error updating the post."
+    },
+    "curatorFilter": {
+      "label": "MotoTrip rating",
+      "any": "All",
+      "missing": "No rating",
+      "low": "Low confidence"
     }
   },
   "riders": {
@@ -997,5 +1013,46 @@
       "sendAnother": "Send another message",
       "error": "We couldn't send your message. Please try again in a moment."
     }
+  },
+  "curator": {
+    "byCuration": "MotoTrip curation",
+    "researchedAt": "researched {date}",
+    "lowConfidence": "Few sources",
+    "highlights": "Highlights",
+    "warnings": "Watch out",
+    "bestSeason": "Best season",
+    "basedOn": "{count, plural, one {Based on # source} other {Based on # sources}}"
+  },
+  "curatorAdmin": {
+    "descriptionEdit": "Curation review, signed by the Mototrip profile. Changes go live immediately.",
+    "descriptionNew": "This route has no MotoTrip rating yet. It goes live as soon as it is created.",
+    "overall": "Overall",
+    "confidence": "Confidence",
+    "confidenceLevels": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "verdict": "Verdict (Portuguese)",
+    "highlights": "Highlights",
+    "warnings": "Warnings",
+    "onePerLine": "One per line",
+    "bestSeason": "Best season",
+    "sources": "Sources",
+    "sourcesHelp": "One per line: Title | URL | Site (site optional)",
+    "dropsTranslations": "You changed the Portuguese text: saving deletes the translations (en, es, fr, de) and the site shows the Portuguese text until they are redone with /rate-routes.",
+    "errorScores": "Pick all four scores.",
+    "errorVerdict": "Write the verdict.",
+    "errorSources": "Add at least one source.",
+    "errorSourceLines": "{count, plural, one {# invalid source line} other {# invalid source lines}} (use Title | URL | Site).",
+    "save": "Save rating",
+    "create": "Create rating",
+    "saved": "Rating saved and published.",
+    "saveFailed": "Could not save. Please try again.",
+    "remove": "Remove rating",
+    "removed": "Rating removed.",
+    "removeTitle": "Remove the MotoTrip rating?",
+    "removeDescription": "The rating, its sources and translations disappear from the route immediately. This cannot be undone.",
+    "cancel": "Cancel"
   }
 }

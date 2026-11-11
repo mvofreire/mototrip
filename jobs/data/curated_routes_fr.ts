@@ -19,9 +19,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "mountain",
     difficulty: "challenging",
     route_type: "out_and_back",
-    scenic_score: 9.8,
-    road_quality_score: 8,
-    fun_factor_score: 9.4,
     featured: true,
     waypoints: [
       [45.6186, 6.769], // Bourg-Saint-Maurice
@@ -86,9 +83,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "mountain",
     difficulty: "challenging",
     route_type: "out_and_back",
-    scenic_score: 9.9,
-    road_quality_score: 8.5,
-    fun_factor_score: 9.7,
     featured: true,
     waypoints: [
       [45.2203, 6.47], // Saint-Michel-de-Maurienne
@@ -154,9 +148,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "mountain",
     difficulty: "challenging",
     route_type: "out_and_back",
-    scenic_score: 9.5,
-    road_quality_score: 8,
-    fun_factor_score: 9.3,
     waypoints: [
       [44.8986, 6.6436], // Briançon
       [44.8686, 6.7236], // Cervières
@@ -207,9 +198,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "mountain",
     difficulty: "expert",
     route_type: "out_and_back",
-    scenic_score: 9.6,
-    road_quality_score: 7,
-    fun_factor_score: 9.2,
     waypoints: [
       [44.417, 6.73], // Jausiers
       [44.3266, 6.8063], // Cime de la Bonette
@@ -258,9 +246,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "scenic",
     difficulty: "easy",
     route_type: "loop",
-    scenic_score: 9.2,
-    road_quality_score: 8.5,
-    fun_factor_score: 8,
     waypoints: [
       [45.8992, 6.1294], // Annecy
       [45.8406, 6.2135], // Talloires
@@ -315,9 +300,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "scenic",
     difficulty: "moderate",
     route_type: "out_and_back",
-    scenic_score: 9.8,
-    road_quality_score: 7.5,
-    fun_factor_score: 9.2,
     featured: true,
     waypoints: [
       [43.8467, 6.5133], // Castellane
@@ -381,9 +363,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "mountain",
     difficulty: "moderate",
     route_type: "out_and_back",
-    scenic_score: 9.3,
-    road_quality_score: 8.5,
-    fun_factor_score: 9,
     waypoints: [
       [44.125, 5.1797], // Bédoin
       [44.1741, 5.2789], // Summit
@@ -432,9 +411,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "scenic",
     difficulty: "moderate",
     route_type: "out_and_back",
-    scenic_score: 8.8,
-    road_quality_score: 9.3,
-    fun_factor_score: 9.4,
     waypoints: [
       [43.6589, 6.9236], // Grasse
       [43.6981, 6.8483], // Saint-Vallier-de-Thiey
@@ -486,9 +462,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "mountain",
     difficulty: "challenging",
     route_type: "out_and_back",
-    scenic_score: 8.7,
-    road_quality_score: 8,
-    fun_factor_score: 9.6,
     waypoints: [
       [43.8775, 7.4486], // Sospel
       [43.9433, 7.4067], // Moulinet
@@ -539,9 +512,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "coastal",
     difficulty: "easy",
     route_type: "out_and_back",
-    scenic_score: 9.4,
-    road_quality_score: 8.5,
-    fun_factor_score: 8.2,
     waypoints: [
       [43.695, 7.285], // Nice, port
       [43.7192, 7.3289], // Col de Villefranche (Moyenne Corniche)
@@ -595,9 +565,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "mountain",
     difficulty: "challenging",
     route_type: "out_and_back",
-    scenic_score: 9.4,
-    road_quality_score: 8.5,
-    fun_factor_score: 9.4,
     featured: true,
     waypoints: [
       [42.8717, -0.0028], // Luz-Saint-Sauveur
@@ -649,9 +616,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "mountain",
     difficulty: "challenging",
     route_type: "out_and_back",
-    scenic_score: 9.6,
-    road_quality_score: 7,
-    fun_factor_score: 9.2,
     waypoints: [
       [42.9886, -0.4256], // Laruns
       [42.9725, -0.3911], // Eaux-Bonnes
@@ -703,9 +667,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "mountain",
     difficulty: "moderate",
     route_type: "out_and_back",
-    scenic_score: 9,
-    road_quality_score: 8.5,
-    fun_factor_score: 9,
     waypoints: [
       [42.79, 0.5933], // Bagnères-de-Luchon
       [42.7967, 0.4483], // Col de Peyresourde
@@ -758,9 +719,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "mountain",
     difficulty: "moderate",
     route_type: "out_and_back",
-    scenic_score: 9.4,
-    road_quality_score: 7.5,
-    fun_factor_score: 9,
     waypoints: [
       [45.1394, 2.495], // Salers
       [45.1097, 2.6728], // Pas de Peyrol
@@ -809,9 +767,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "scenic",
     difficulty: "easy",
     route_type: "out_and_back",
-    scenic_score: 9.5,
-    road_quality_score: 8,
-    fun_factor_score: 8.6,
     waypoints: [
       [44.3714, 3.5333], // Ispagnac
       [44.3653, 3.4114], // Sainte-Énimie
@@ -876,9 +831,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "scenic",
     difficulty: "easy",
     route_type: "out_and_back",
-    scenic_score: 9.2,
-    road_quality_score: 8,
-    fun_factor_score: 8.4,
     waypoints: [
       [44.4069, 4.3947], // Vallon-Pont-d'Arc
       [44.3833, 4.4161], // Pont d'Arc
@@ -930,9 +882,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "mountain",
     difficulty: "moderate",
     route_type: "out_and_back",
-    scenic_score: 9,
-    road_quality_score: 8,
-    fun_factor_score: 8.8,
     waypoints: [
       [47.8064, 7.1764], // Cernay
       [47.9017, 7.0983], // Grand Ballon
@@ -983,9 +932,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "weekend",
     difficulty: "easy",
     route_type: "out_and_back",
-    scenic_score: 8.8,
-    road_quality_score: 8,
-    fun_factor_score: 7,
     waypoints: [
       [48.4622, 7.4817], // Obernai
       [48.4083, 7.4492], // Barr
@@ -1042,9 +988,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "coastal",
     difficulty: "moderate",
     route_type: "out_and_back",
-    scenic_score: 9.8,
-    road_quality_score: 7,
-    fun_factor_score: 9,
     waypoints: [
       [42.2653, 8.7031], // Porto
       [42.25, 8.655], // Les Calanches
@@ -1094,9 +1037,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "mountain",
     difficulty: "challenging",
     route_type: "out_and_back",
-    scenic_score: 9.6,
-    road_quality_score: 7,
-    fun_factor_score: 9.4,
     waypoints: [
       [41.8572, 9.4019], // Solenzara
       [41.8217, 9.3058], // Vallée de la Solenzara
@@ -1146,9 +1086,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "coastal",
     difficulty: "moderate",
     route_type: "loop",
-    scenic_score: 9.5,
-    road_quality_score: 7,
-    fun_factor_score: 9,
     waypoints: [
       [42.6975, 9.4508], // Bastia
       [42.7742, 9.4747], // Erbalunga
@@ -1204,9 +1141,6 @@ export const CURATED_ROUTES_FR: CuratedRoute[] = [
     category: "coastal",
     difficulty: "easy",
     route_type: "out_and_back",
-    scenic_score: 8.7,
-    road_quality_score: 8.5,
-    fun_factor_score: 7.2,
     waypoints: [
       [49.7075, 0.2047], // Étretat
       [49.7578, 0.3747], // Fécamp

@@ -35,6 +35,13 @@ export function routeStructuredData(route: RouteWithDetails, locale: string, lab
   const ratingCount = Number(route.rating_count ?? 0)
   const avg = ratingCount > 0 && route.rating_average != null ? Number(route.rating_average) : null
 
+  const curator = route.curator_review
+  // MotoTrip's own review, in the page's locale when translated
+  const curatorText =
+    curator && locale !== 'pt'
+      ? (curator.translations as Record<string, { verdict?: string }> | null)?.[locale]?.verdict || curator.verdict
+      : curator?.verdict
+
   const trip: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'TouristTrip',
@@ -91,6 +98,22 @@ export function routeStructuredData(route: RouteWithDetails, locale: string, lab
                 geo: { '@type': 'GeoCoordinates', latitude: Number(s.latitude), longitude: Number(s.longitude) },
               },
             })),
+          },
+        }
+      : {}),
+    ...(curator
+      ? {
+          review: {
+            '@type': 'Review',
+            author: { '@type': 'Organization', name: 'MotoTrip', url: base },
+            datePublished: (curator.researched_at ?? curator.created_at).slice(0, 10),
+            reviewBody: curatorText,
+            reviewRating: {
+              '@type': 'Rating',
+              ratingValue: Number(curator.overall),
+              bestRating: 5,
+              worstRating: 1,
+            },
           },
         }
       : {}),

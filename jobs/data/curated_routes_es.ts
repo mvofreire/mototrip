@@ -18,9 +18,6 @@ export const CURATED_ROUTES_ES: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'moderate',
     route_type: 'out_and_back',
-    scenic_score: 9.6,
-    road_quality_score: 8,
-    fun_factor_score: 9,
     featured: true,
     waypoints: [
       [43.3234, -4.584], // Panes
@@ -69,9 +66,6 @@ export const CURATED_ROUTES_ES: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'challenging',
     route_type: 'loop',
-    scenic_score: 9.8,
-    road_quality_score: 8,
-    fun_factor_score: 9.7,
     featured: true,
     waypoints: [
       [43.3507, -5.129], // Cangas de Onís
@@ -142,9 +136,6 @@ export const CURATED_ROUTES_ES: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'moderate',
     route_type: 'out_and_back',
-    scenic_score: 9.3,
-    road_quality_score: 9,
-    fun_factor_score: 8.8,
     waypoints: [
       [42.5693, -0.5494], // Jaca
       [42.5184, -0.3648], // Sabiñánigo
@@ -192,9 +183,6 @@ export const CURATED_ROUTES_ES: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'challenging',
     route_type: 'out_and_back',
-    scenic_score: 9.4,
-    road_quality_score: 7.5,
-    fun_factor_score: 9.3,
     waypoints: [
       [42.6286, -0.3216], // Biescas
       [42.6163, -0.21], // Puerto de Cotefablo
@@ -243,9 +231,6 @@ export const CURATED_ROUTES_ES: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'moderate',
     route_type: 'out_and_back',
-    scenic_score: 9.4,
-    road_quality_score: 9.2,
-    fun_factor_score: 9.4,
     featured: true,
     waypoints: [
       [42.4115, 1.1298], // Sort
@@ -288,9 +273,6 @@ export const CURATED_ROUTES_ES: CuratedRoute[] = [
     category: 'scenic',
     difficulty: 'challenging',
     route_type: 'loop',
-    scenic_score: 9.5,
-    road_quality_score: 8,
-    fun_factor_score: 9.4,
     featured: true,
     waypoints: [
       [36.7421, -5.1666], // Ronda
@@ -340,9 +322,6 @@ export const CURATED_ROUTES_ES: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'moderate',
     route_type: 'out_and_back',
-    scenic_score: 9.2,
-    road_quality_score: 7.5,
-    fun_factor_score: 9,
     waypoints: [
       [36.9181, -3.4802], // Lanjarón
       [36.899, -3.424], // Órgiva
@@ -385,9 +364,6 @@ export const CURATED_ROUTES_ES: CuratedRoute[] = [
     category: 'coastal',
     difficulty: 'moderate',
     route_type: 'out_and_back',
-    scenic_score: 9.7,
-    road_quality_score: 7,
-    fun_factor_score: 8.8,
     featured: true,
     waypoints: [
       [43.661, -8.056], // Cedeira
@@ -437,9 +413,6 @@ export const CURATED_ROUTES_ES: CuratedRoute[] = [
     category: 'coastal',
     difficulty: 'moderate',
     route_type: 'out_and_back',
-    scenic_score: 9.3,
-    road_quality_score: 8,
-    fun_factor_score: 9.5,
     waypoints: [
       [41.6974, 2.8392], // Lloret de Mar
       [41.7198, 2.9312], // Tossa de Mar
@@ -478,9 +451,6 @@ export const CURATED_ROUTES_ES: CuratedRoute[] = [
     category: 'coastal',
     difficulty: 'moderate',
     route_type: 'out_and_back',
-    scenic_score: 9.2,
-    road_quality_score: 8,
-    fun_factor_score: 8.8,
     waypoints: [
       [42.364, 3.153], // Llançà
       [42.337, 3.204], // El Port de la Selva

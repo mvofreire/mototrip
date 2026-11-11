@@ -36,9 +36,6 @@ export interface CuratedRoute {
   category: 'scenic' | 'mountain' | 'coastal' | 'weekend' | 'adventure';
   difficulty: 'easy' | 'moderate' | 'challenging' | 'expert';
   route_type: 'loop' | 'out_and_back';
-  scenic_score: number;
-  road_quality_score: number;
-  fun_factor_score: number;
   featured?: boolean;
   waypoints: Array<[number, number]>;
   stops: CuratedStop[];
@@ -56,9 +53,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'scenic',
     difficulty: 'moderate',
     route_type: 'out_and_back',
-    scenic_score: 9.8,
-    road_quality_score: 8.5,
-    fun_factor_score: 9.5,
     featured: true,
     waypoints: [
       [41.1631, -7.7887], // Peso da Régua
@@ -98,9 +92,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'scenic',
     difficulty: 'easy',
     route_type: 'out_and_back',
-    scenic_score: 8.5,
-    road_quality_score: 7.5,
-    fun_factor_score: 7.5,
     waypoints: [
       [41.1373, -8.6125], // Vila Nova de Gaia, cais
       [41.0648, -8.5011], // Crestuma
@@ -142,9 +133,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'challenging',
     route_type: 'loop',
-    scenic_score: 9.5,
-    road_quality_score: 7,
-    fun_factor_score: 9,
     featured: true,
     waypoints: [
       [41.5454, -8.4265], // Braga
@@ -196,9 +184,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'moderate',
     route_type: 'loop',
-    scenic_score: 9,
-    road_quality_score: 7,
-    fun_factor_score: 8.5,
     waypoints: [
       [41.7672, -8.5835], // Ponte de Lima
       [41.8466, -8.4187], // Arcos de Valdevez
@@ -239,9 +224,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'moderate',
     route_type: 'out_and_back',
-    scenic_score: 8.5,
-    road_quality_score: 7.5,
-    fun_factor_score: 9,
     waypoints: [
       [41.2717, -8.082], // Amarante
       [41.2532, -8.0504], // Padronelo
@@ -274,9 +256,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'adventure',
     difficulty: 'moderate',
     route_type: 'out_and_back',
-    scenic_score: 9,
-    road_quality_score: 7.5,
-    fun_factor_score: 8.5,
     waypoints: [
       [41.495, -6.274], // Miranda do Douro
       [41.3896, -6.4265], // Sendim
@@ -318,9 +297,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'adventure',
     difficulty: 'challenging',
     route_type: 'loop',
-    scenic_score: 8.5,
-    road_quality_score: 6,
-    fun_factor_score: 8,
     waypoints: [
       [41.8061, -6.7567], // Bragança
       [41.9022, -6.736], // França
@@ -354,9 +330,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'challenging',
     route_type: 'out_and_back',
-    scenic_score: 9.7,
-    road_quality_score: 7.5,
-    fun_factor_score: 9.5,
     featured: true,
     waypoints: [
       [40.2805, -7.5044], // Covilhã
@@ -405,9 +378,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'expert',
     route_type: 'loop',
-    scenic_score: 9.6,
-    road_quality_score: 7,
-    fun_factor_score: 9.3,
     waypoints: [
       [40.4024, -7.5383], // Manteigas
       [40.329, -7.588], // Covão d'Ametade
@@ -449,9 +419,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'adventure',
     difficulty: 'challenging',
     route_type: 'out_and_back',
-    scenic_score: 9.2,
-    road_quality_score: 6.5,
-    fun_factor_score: 9,
     waypoints: [
       [40.218, -8.054], // Arganil
       [40.269, -7.993], // Côja
@@ -482,9 +449,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'weekend',
     difficulty: 'moderate',
     route_type: 'loop',
-    scenic_score: 8.5,
-    road_quality_score: 7.5,
-    fun_factor_score: 8.5,
     waypoints: [
       [39.603, -8.415], // Tomar
       [39.544, -8.32], // Barragem de Castelo de Bode
@@ -526,9 +490,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'coastal',
     difficulty: 'easy',
     route_type: 'out_and_back',
-    scenic_score: 8.5,
-    road_quality_score: 8,
-    fun_factor_score: 7,
     waypoints: [
       [39.36, -9.408], // Cabo Carvoeiro
       [39.3558, -9.3811], // Peniche
@@ -573,9 +534,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'coastal',
     difficulty: 'moderate',
     route_type: 'loop',
-    scenic_score: 9.3,
-    road_quality_score: 7.5,
-    fun_factor_score: 9,
     featured: true,
     waypoints: [
       [38.6979, -9.4215], // Cascais
@@ -626,9 +584,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'coastal',
     difficulty: 'moderate',
     route_type: 'out_and_back',
-    scenic_score: 9.5,
-    road_quality_score: 7.5,
-    fun_factor_score: 8.8,
     waypoints: [
       [38.5244, -8.8882], // Setúbal
       [38.4866, -8.9852], // Convento da Arrábida
@@ -676,9 +631,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'weekend',
     difficulty: 'easy',
     route_type: 'loop',
-    scenic_score: 8.5,
-    road_quality_score: 8.5,
-    fun_factor_score: 7,
     waypoints: [
       [38.5714, -7.9135], // Évora
       [38.4256, -7.5345], // Reguengos de Monsaraz
@@ -727,9 +679,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'moderate',
     route_type: 'loop',
-    scenic_score: 9,
-    road_quality_score: 7.5,
-    fun_factor_score: 8.5,
     waypoints: [
       [39.2967, -7.4285], // Portalegre
       [39.394, -7.377], // Marvão
@@ -761,9 +710,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'scenic',
     difficulty: 'moderate',
     route_type: 'out_and_back',
-    scenic_score: 8.5,
-    road_quality_score: 8,
-    fun_factor_score: 8.5,
     waypoints: [
       [37.638, -7.662], // Mértola
       [37.471, -7.472], // Alcoutim
@@ -807,9 +753,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'coastal',
     difficulty: 'easy',
     route_type: 'out_and_back',
-    scenic_score: 9.5,
-    road_quality_score: 8,
-    fun_factor_score: 7.5,
     featured: true,
     waypoints: [
       [37.0227, -8.9965], // Cabo de São Vicente
@@ -867,9 +810,6 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
     category: 'mountain',
     difficulty: 'moderate',
     route_type: 'loop',
-    scenic_score: 8.8,
-    road_quality_score: 8,
-    fun_factor_score: 9,
     waypoints: [
       [37.1366, -8.5377], // Portimão
       [37.287, -8.553], // Caldas de Monchique

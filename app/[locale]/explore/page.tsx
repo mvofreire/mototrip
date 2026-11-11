@@ -9,10 +9,19 @@ import { RouteCard } from '@/components/features/routes/route-card'
 import { RouteFilters } from '@/components/features/routes/route-filters'
 import { RoutesOverviewMap } from '@/components/features/routes/routes-overview-map'
 import { RoutesService } from '@/lib/services/routes.service'
-import { RouteFilters as RouteFiltersType } from '@/types'
+import { RouteFilters as RouteFiltersType, RouteSort } from '@/types'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Search, SlidersHorizontal, LayoutGrid, List, Map as MapIcon, Loader2 } from 'lucide-react'
 
 type ViewMode = 'grid' | 'list' | 'map'
+
+const SORTS = {
+  recent: undefined,
+  curator: { field: 'curator_rating', direction: 'desc' },
+  community: { field: 'rating_average', direction: 'desc' },
+} satisfies Record<string, RouteSort | undefined>
+type SortKey = keyof typeof SORTS
+const isSortKey = (v: string | null): v is SortKey => !!v && v in SORTS
 
 export default function ExplorePage({
   params: { locale },
@@ -45,14 +54,18 @@ export default function ExplorePage({
     const maxDuration = searchParams.get('max_duration')
     if (maxDuration) urlFilters.max_duration = parseInt(maxDuration)
     
-    const minScore = searchParams.get('min_scenic_score')
-    if (minScore) urlFilters.min_scenic_score = parseFloat(minScore)
+    const minRating = parseFloat(searchParams.get('min_rating') ?? '')
+    if (minRating > 0 && minRating <= 5) urlFilters.min_curator_rating = minRating
     
     return urlFilters
   }
   
   const [filters, setFilters] = useState<RouteFiltersType>(getFiltersFromURL())
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
+  const [sort, setSort] = useState<SortKey>(() => {
+    const v = searchParams.get('sort')
+    return isSortKey(v) ? v : 'recent'
+  })
   const [showFilters, setShowFilters] = useState(false)
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [routes, setRoutes] = useState<any[]>([])
@@ -87,8 +100,12 @@ export default function ExplorePage({
       params.set('max_duration', filters.max_duration.toString())
     }
     
-    if (filters.min_scenic_score !== undefined && filters.min_scenic_score > 0) {
-      params.set('min_scenic_score', filters.min_scenic_score.toString())
+    if (sort !== 'recent') {
+      params.set('sort', sort)
+    }
+
+    if (filters.min_curator_rating !== undefined && filters.min_curator_rating > 0) {
+      params.set('min_rating', filters.min_curator_rating.toString())
     }
     
     if (searchQuery) {
@@ -97,7 +114,7 @@ export default function ExplorePage({
     
     const newURL = `/${locale}/explore${params.toString() ? '?' + params.toString() : ''}`
     router.replace(newURL, { scroll: false })
-  }, [filters, searchQuery, locale, router])
+  }, [filters, searchQuery, sort, locale, router])
 
   // Fetch routes from Supabase
   useEffect(() => {
@@ -105,10 +122,10 @@ export default function ExplorePage({
       setLoading(true)
       setError(null)
       try {
-        const data = await RoutesService.getRoutes({
-          ...filters,
-          search: searchQuery || undefined,
-        })
+        const data = await RoutesService.getRoutes(
+          { ...filters, search: searchQuery || undefined },
+          SORTS[sort],
+        )
         setRoutes(data)
       } catch (err) {
         console.error('Error fetching routes:', err)
@@ -119,7 +136,7 @@ export default function ExplorePage({
     }
 
     fetchRoutes()
-  }, [filters, searchQuery])
+  }, [filters, searchQuery, sort])
 
   // Filter logic is now handled by the service
   const filteredRoutes = routes
@@ -166,11 +183,24 @@ export default function ExplorePage({
 
           {/* Routes Grid */}
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-sm text-muted-foreground">
                 {t('results', { count: filteredRoutes.length })}
               </p>
               
+              <div className="flex items-center gap-2">
+              {/* Sort */}
+              <Select value={sort} onValueChange={(v) => isSortKey(v) && setSort(v)}>
+                <SelectTrigger className="h-10 w-[180px] sm:w-[220px]" aria-label={t('sort.label')}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="recent">{t('sort.recent')}</SelectItem>
+                  <SelectItem value="curator">{t('sort.curator')}</SelectItem>
+                  <SelectItem value="community">{t('sort.community')}</SelectItem>
+                </SelectContent>
+              </Select>
+
               {/* View Mode Toggle */}
               <div className="flex items-center gap-1 border rounded-lg p-1">
                 <Button
@@ -200,6 +230,7 @@ export default function ExplorePage({
                 >
                   <MapIcon className="h-4 w-4" />
                 </Button>
+              </div>
               </div>
             </div>
 
