@@ -15,6 +15,7 @@ import * as dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import type { Database } from '../types/database.types';
+import { notifyCuratorNewRoutes, type NewRouteSummary } from '../lib/email/curator-notification';
 
 // Load environment variables from .env.local
 const __filename = fileURLToPath(import.meta.url);
@@ -694,6 +695,9 @@ function mapOSMTagsToStopType(tags: Record<string, string>): RouteStop['type'] |
 // DATABASE OPERATIONS
 // ================================================================================
 
+/** Routes saved in this run, sent to the curators in one email at the end */
+const newRoutes: NewRouteSummary[] = [];
+
 async function saveRouteToDatabase(route: GeneratedRoute, dryRun: boolean = false): Promise<string | null> {
   const title = generateRouteTitle(route);
   const description = generateRouteDescription(route);
@@ -755,7 +759,7 @@ async function saveRouteToDatabase(route: GeneratedRoute, dryRun: boolean = fals
     const { data: routeData, error: routeError } = await (supabase as any)
       .from('routes')
       .insert(routeInsert)
-      .select('id')
+      .select('id, slug')
       .single();
     
     if (routeError) {
@@ -769,6 +773,17 @@ async function saveRouteToDatabase(route: GeneratedRoute, dryRun: boolean = fals
     }
     
     const routeId = (routeData as { id: string }).id;
+    newRoutes.push({
+      id: routeId,
+      slug: (routeData as { slug?: string | null }).slug,
+      title,
+      description,
+      region: route.region,
+      distance_km: routeInsert.distance_km,
+      duration_minutes,
+      difficulty: route.difficulty,
+      category: route.category,
+    });
     logger.success(`Saved route: ${title} (${routeId})`);
     
     // Insert stops
@@ -880,6 +895,9 @@ async function main() {
     logger.info(`Total routes generated: ${allRoutes.length}`);
     logger.info(`Successfully saved: ${savedCount}`);
     logger.info(`Failed: ${failedCount}`);
+    if (newRoutes.length && (await notifyCuratorNewRoutes(newRoutes))) {
+      logger.info(`Curators notified about ${newRoutes.length} new route(s)`);
+    }
   }
   logger.info('='.repeat(80));
 }

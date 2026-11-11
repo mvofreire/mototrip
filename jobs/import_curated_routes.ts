@@ -19,6 +19,7 @@ import { createClient } from '@supabase/supabase-js';
 import * as turf from '@turf/turf';
 import * as dotenv from 'dotenv';
 import { renderRouteThumbnail } from './lib/route_thumbnail';
+import { notifyCuratorNewRoutes, type NewRouteSummary } from '../lib/email/curator-notification';
 import { mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -206,10 +207,22 @@ async function importRoute(route: CuratedRoute) {
       published: true,
       translations: route.i18n ?? {},
     })
-    .select('id')
+    .select('id, slug')
     .single();
   if (error || !inserted) throw new Error(`insert route: ${error?.message}`);
   const routeId = inserted.id as string;
+  newRoutes.push({
+    id: routeId,
+    slug: inserted.slug,
+    title: route.title,
+    description: route.description,
+    region: route.region,
+    country: COUNTRY,
+    distance_km: routed.distanceKm,
+    duration_minutes: routed.durationMin,
+    difficulty: route.difficulty,
+    category: route.category,
+  });
 
   if (route.stops.length) {
     const { error: stopsError } = await supabase.from('route_stops').insert(
@@ -242,6 +255,9 @@ async function importRoute(route: CuratedRoute) {
   return 'inserted';
 }
 
+/** Routes inserted in this run, sent to the curators in one email at the end */
+const newRoutes: NewRouteSummary[] = [];
+
 async function main() {
   const routes = DATASETS[DATASET].routes.filter((r) => !ONLY || r.title.includes(ONLY));
   console.log(`${DRY_RUN ? '[DRY RUN] ' : ''}${routes.length} curated routes (${COUNTRY})`);
@@ -258,6 +274,9 @@ async function main() {
     await sleep(3000); // be polite to the public OSRM / Open-Meteo servers
   }
   console.log('\nDone:', results);
+  if (newRoutes.length && (await notifyCuratorNewRoutes(newRoutes))) {
+    console.log(`Curators notified about ${newRoutes.length} new route(s)`);
+  }
 }
 
 main();

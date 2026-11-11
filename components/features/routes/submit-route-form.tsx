@@ -135,6 +135,12 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
       };
 
       const result = await createRouteMutation.mutateAsync(routeData);
+      // Let the curators know there is a new route to review (fire-and-forget).
+      fetch("/api/routes/notify-curator", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ routeId: result.id }),
+      }).catch((e) => console.warn("Could not notify curators:", e));
       // Static OpenStreetMap image of the route (used for social previews).
       // A failure here must not fail the submission.
       try {
