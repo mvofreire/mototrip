@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Check, Link2, Linkedin, Share2 } from 'lucide-react'
+import { Check, Link2, Share2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { FacebookIcon, WhatsAppIcon } from '@/components/features/routes/share-route-panel'
-import { copyText, facebookLink, linkedinLink, tagUrl, whatsappLink, xLink, type ShareSource } from '@/lib/share'
+import { copyText, facebookLink, tagUrl, whatsappLink, xLink, type ShareSource } from '@/lib/share'
 
 function XIcon({ className }: { className?: string }) {
   return (
@@ -15,7 +15,7 @@ function XIcon({ className }: { className?: string }) {
   )
 }
 
-/** "Share this guide": WhatsApp, Facebook, X, LinkedIn, native share and copy link, each tagged with utm_source. */
+/** "Share this guide": WhatsApp, Facebook, X, native share and copy link, each tagged with utm_source. */
 export function SharePostPanel({ post }: { post: { slug: string; title: string } }) {
   const t = useTranslations('blog')
   const locale = useLocale()
@@ -62,12 +62,6 @@ export function SharePostPanel({ post }: { post: { slug: string; title: string }
         <Button asChild className="flex-1 bg-black text-white hover:bg-black/80 sm:flex-initial">
           <a href={xLink(text, url('x'))} {...ext}>
             <XIcon className="mr-2 h-4 w-4" />X
-          </a>
-        </Button>
-        <Button asChild className="flex-1 bg-[#0A66C2] text-white hover:bg-[#0958a8] sm:flex-initial">
-          <a href={linkedinLink(url('linkedin'))} {...ext}>
-            <Linkedin className="mr-2 h-4 w-4" />
-            LinkedIn
           </a>
         </Button>
         {canNative && (

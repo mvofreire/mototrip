@@ -1,7 +1,7 @@
 import { getSiteUrl } from '@/lib/site-url'
 import { routePath } from '@/lib/route-url'
 
-export type ShareSource = 'whatsapp' | 'facebook' | 'x' | 'linkedin' | 'copy' | 'native'
+export type ShareSource = 'whatsapp' | 'facebook' | 'x' | 'copy' | 'native'
 
 /** Canonical route URL tagged with where it was shared (shows up in analytics) */
 export function shareUrl(locale: string, route: { id: string; slug?: string | null }, source: ShareSource) {
@@ -23,9 +23,6 @@ export const facebookLink = (url: string) =>
 
 export const xLink = (text: string, url: string) =>
   `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`
-
-export const linkedinLink = (url: string) =>
-  `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`
 
 export async function copyText(text: string): Promise<boolean> {
   try {
