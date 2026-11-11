@@ -7,6 +7,7 @@ import { locales } from '@/i18n'
 import { getPublishedPost, getPublishedPosts, pickTranslation, routesBySlug } from '@/lib/blog/posts'
 import { BlogMarkdown, routeSlugsIn } from '@/lib/blog/markdown'
 import { getSiteUrl } from '@/lib/site-url'
+import { SharePostPanel } from '@/components/features/blog/share-post-panel'
 
 export const revalidate = 3600
 
@@ -98,6 +99,8 @@ export default async function BlogPostPage({ params }: Props) {
         )}
 
         <BlogMarkdown markdown={c.body_md} locale={locale} routes={routes} />
+
+        <SharePostPanel post={{ slug: post.slug, title: c.title }} />
       </div>
     </article>
   )

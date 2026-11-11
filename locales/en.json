@@ -285,7 +285,13 @@
     "comingSoonDesc": "We're working on bringing you amazing stories from riders around the world. Check back soon!",
     "readMore": "Read the guide",
     "back": "Back to the blog",
-    "availableIn": "This guide is available in {language}."
+    "availableIn": "This guide is available in {language}.",
+    "shareTitle": "Share this guide",
+    "shareDescription": "Enjoyed it? Send it to whoever is riding with you.",
+    "shareText": "Check out this motorcycle guide: {title}",
+    "share": "Share",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied!"
   },
   "about": {
     "title": "About Us",

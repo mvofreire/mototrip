@@ -285,7 +285,13 @@
     "comingSoonDesc": "Nous travaillons pour vous apporter des histoires incroyables de motards du monde entier. Revenez bientôt!",
     "readMore": "Lire le guide",
     "back": "Retour au blog",
-    "availableIn": "Ce guide est disponible en {language}."
+    "availableIn": "Ce guide est disponible en {language}.",
+    "shareTitle": "Partager ce guide",
+    "shareDescription": "Il vous a plu ? Envoyez-le à ceux qui roulent avec vous.",
+    "shareText": "Découvre ce guide moto : {title}",
+    "share": "Partager",
+    "copyLink": "Copier le lien",
+    "linkCopied": "Lien copié !"
   },
   "about": {
     "title": "À Propos",
