@@ -173,7 +173,8 @@
     "termsOfService": "Termos de Serviço",
     "copyright": "© 2026 MotoTrip. Todos os direitos reservados.",
     "builtForRiders": "Feito para motociclistas, por motociclistas 🏍️",
-    "followInstagram": "Siga o MotoTrip no Instagram"
+    "followInstagram": "Siga o MotoTrip no Instagram",
+    "contact": "Contato"
   },
   "notFound": {
     "title": "404",
@@ -978,5 +979,23 @@
     "cancel": "Cancelar",
     "save": "Salvar",
     "anonymous": "Motociclista"
+  },
+  "contact": {
+    "title": "Fale com a gente",
+    "subtitle": "Dúvidas, sugestões de rotas, parcerias ou um problema no site? Escreva pra gente.",
+    "description": "Entre em contato com a equipe do MotoTrip.",
+    "instagram": "Prefere conversar por lá? Estamos no Instagram",
+    "form": {
+      "name": "Nome",
+      "email": "Email",
+      "subject": "Assunto (opcional)",
+      "message": "Mensagem",
+      "messagePlaceholder": "Conte como podemos ajudar…",
+      "submit": "Enviar mensagem",
+      "sending": "Enviando…",
+      "success": "Mensagem enviada! Vamos responder no seu email assim que possível.",
+      "sendAnother": "Enviar outra mensagem",
+      "error": "Não foi possível enviar sua mensagem. Tente novamente em instantes."
+    }
   }
 }

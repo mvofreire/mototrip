@@ -173,7 +173,8 @@
     "termsOfService": "Conditions d'Utilisation",
     "copyright": "© 2026 MotoTrip. Tous droits réservés.",
     "builtForRiders": "Construit pour les motards, par les motards 🏍️",
-    "followInstagram": "Suivez MotoTrip sur Instagram"
+    "followInstagram": "Suivez MotoTrip sur Instagram",
+    "contact": "Contact"
   },
   "notFound": {
     "title": "404",
@@ -978,5 +979,23 @@
     "cancel": "Annuler",
     "save": "Enregistrer",
     "anonymous": "Motard"
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Des questions, des suggestions d’itinéraires, un partenariat ou un problème sur le site ? Écrivez-nous.",
+    "description": "Contactez l’équipe MotoTrip.",
+    "instagram": "Vous préférez discuter là-bas ? Retrouvez-nous sur Instagram",
+    "form": {
+      "name": "Nom",
+      "email": "Email",
+      "subject": "Objet (facultatif)",
+      "message": "Message",
+      "messagePlaceholder": "Dites-nous comment nous pouvons vous aider…",
+      "submit": "Envoyer le message",
+      "sending": "Envoi…",
+      "success": "Message envoyé ! Nous vous répondrons par email dès que possible.",
+      "sendAnother": "Envoyer un autre message",
+      "error": "Impossible d’envoyer votre message. Réessayez dans un instant."
+    }
   }
 }
