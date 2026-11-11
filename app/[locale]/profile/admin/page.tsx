@@ -15,7 +15,7 @@ import type { RouteStatus } from '@/types/database.types'
 import { cn } from '@/lib/utils'
 
 type StatusFilter = RouteStatus | 'all'
-const FILTERS: StatusFilter[] = ['pending', 'rejected', 'approved', 'all']
+const FILTERS: StatusFilter[] = [ 'all', 'pending', 'rejected', 'approved']
 
 /** MotoTrip review filter, to find routes that need a (better) review */
 type CuratorFilter = 'any' | 'missing' | 'low'
@@ -33,7 +33,7 @@ export default function AdminPage() {
   const [routes, setRoutes] = useState<AdminRouteWithUser[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('pending')
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
   const [curatorFilter, setCuratorFilter] = useState<CuratorFilter>('any')
 
   const isAdmin = role === 'admin'
