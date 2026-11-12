@@ -1841,5 +1841,93 @@ export const CURATOR_REVIEWS_PT: CuratorReviewEntry[] = [
         "best_season": "Mai bis Oktober; Tage mit Glätte- oder Schneerisiko meiden"
       }
     }
+  },
+{
+  "slug": "n305-n13-serreleis-caminha",
+  "overall": 3,
+  "scenic": 3.5,
+  "road": 3.5,
+  "fun": 3,
+  "confidence": "low",
+  "researched_at": "2026-11-11",
+  "verdict": "Passeio curto e descontraído entre o vale do Lima e Caminha: a N305 dá o troço mais interessante, entre aldeias e pinhal, e a N13 segue paralela à costa, com berma larga e desvios para localidades como Vila Praia de Âncora. Para pilotar vale mais pelo cenário minhoto do que pelas curvas, já que a N13 atravessa várias povoações. Há pouca informação de motociclistas sobre estas estradas, por isso a nota é prudente.",
+  "highlights": [
+    "Chegada a Caminha e à foz do Minho",
+    "Vila Praia de Âncora e a costa atlântica",
+    "Berma larga na N13"
+  ],
+  "warnings": [
+    "Acidente mortal de mota na N305 em Vila Praia de Âncora (2021): cuidado no troço da Reta de Baralha",
+    "A N13 atravessa várias localidades, com trânsito de passagem"
+  ],
+  "best_season": "Primavera e outono; no verão o litoral tem mais trânsito",
+  "sources": [
+    {
+      "title": "Viana – Ponte de Lima – Caminha cycle route",
+      "url": "https://epicroadrides.com/cycling-portugal/viana-do-castelo-northern-portugal/viana-ponte-de-lima-caminha-cycle-route/",
+      "site": "Epic Road Rides",
+      "lang": "en"
+    },
+    {
+      "title": "Homem de 50 anos morre em despiste de motociclo em Viana do Castelo",
+      "url": "https://www.cmjornal.pt/portugal/detalhe/homem-de-50-anos-morre-em-despiste-de-motociclo-em-viana-do-castelo",
+      "site": "Correio da Manhã",
+      "lang": "pt"
+    }
+  ],
+  "i18n": {
+    "en": {
+      "verdict": "A short, relaxed ride between the Lima valley and Caminha: the N305 is the more interesting stretch, between villages and pine woods, and the N13 runs parallel to the coast with a wide shoulder and detours into towns such as Vila Praia de Âncora. It is worth riding more for the Minho scenery than for the bends, as the N13 passes through several towns. There is little rider information about these roads, so the score is cautious.",
+      "highlights": [
+        "Arrival in Caminha and the Minho estuary",
+        "Vila Praia de Âncora and the Atlantic coast",
+        "Wide shoulder on the N13"
+      ],
+      "warnings": [
+        "Fatal motorcycle crash on the N305 at Vila Praia de Âncora (2021): take care on the Reta de Baralha stretch",
+        "The N13 passes through several towns, with through traffic"
+      ],
+      "best_season": "Spring and autumn; in summer the coast is busier"
+    },
+    "es": {
+      "verdict": "Un paseo corto y tranquilo entre el valle del Lima y Caminha: la N305 es el tramo más interesante, entre aldeas y pinares, y la N13 discurre paralela a la costa, con arcén ancho y desvíos a localidades como Vila Praia de Âncora. Vale más por el paisaje del Miño que por las curvas, ya que la N13 cruza varios pueblos. Hay poca información de moteros sobre estas carreteras, así que la nota es prudente.",
+      "highlights": [
+        "Llegada a Caminha y la desembocadura del Miño",
+        "Vila Praia de Âncora y la costa atlántica",
+        "Arcén ancho en la N13"
+      ],
+      "warnings": [
+        "Accidente mortal de moto en la N305 en Vila Praia de Âncora (2021): precaución en el tramo de la Reta de Baralha",
+        "La N13 cruza varias localidades, con tráfico de paso"
+      ],
+      "best_season": "Primavera y otoño; en verano la costa tiene más tráfico"
+    },
+    "fr": {
+      "verdict": "Une balade courte et tranquille entre la vallée du Lima et Caminha : la N305 offre le tronçon le plus intéressant, entre villages et pinèdes, et la N13 longe la côte avec un large accotement et des détours par des localités comme Vila Praia de Âncora. On y roule davantage pour les paysages du Minho que pour les virages, car la N13 traverse plusieurs localités. Les retours de motards sur ces routes sont rares, d'où une note prudente.",
+      "highlights": [
+        "Arrivée à Caminha et à l'embouchure du Minho",
+        "Vila Praia de Âncora et la côte atlantique",
+        "Large accotement sur la N13"
+      ],
+      "warnings": [
+        "Accident mortel de moto sur la N305 à Vila Praia de Âncora (2021) : prudence sur le tronçon de la Reta de Baralha",
+        "La N13 traverse plusieurs localités, avec du trafic de transit"
+      ],
+      "best_season": "Printemps et automne ; en été, la côte est plus fréquentée"
+    },
+    "de": {
+      "verdict": "Eine kurze, entspannte Fahrt zwischen dem Lima-Tal und Caminha: Die N305 ist der interessantere Abschnitt zwischen Dörfern und Pinienwäldern, die N13 verläuft parallel zur Küste, mit breitem Seitenstreifen und Abstechern in Orte wie Vila Praia de Âncora. Sie lohnt sich eher wegen der Landschaft des Minho als wegen der Kurven, da die N13 durch mehrere Ortschaften führt. Es gibt kaum Berichte von Motorradfahrern über diese Straßen, daher ist die Bewertung vorsichtig.",
+      "highlights": [
+        "Ankunft in Caminha und an der Minho-Mündung",
+        "Vila Praia de Âncora und die Atlantikküste",
+        "Breiter Seitenstreifen auf der N13"
+      ],
+      "warnings": [
+        "Tödlicher Motorradunfall auf der N305 in Vila Praia de Âncora (2021): Vorsicht im Abschnitt Reta de Baralha",
+        "Die N13 führt durch mehrere Ortschaften, mit Durchgangsverkehr"
+      ],
+      "best_season": "Frühling und Herbst; im Sommer ist an der Küste mehr Verkehr"
+    }
   }
+}
 ];

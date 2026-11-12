@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
 
-// Mensagens do formulário de contato são enviadas pelo Resend (https://resend.com).
-// Sem domínio verificado no Resend, o remetente onboarding@resend.dev só entrega
-// para o email do dono da conta, o que basta enquanto o destino for um só.
-const TO = process.env.CONTACT_TO_EMAIL || 'vinny.freire@gmail.com'
-const FROM = process.env.CONTACT_FROM_EMAIL || 'MotoTrip <onboarding@resend.dev>'
+// Mensagens do formulário de contato são enviadas pelo Resend (https://resend.com)
+// e chegam na caixa contact@mototrip.pt. O domínio mototrip.pt é verificado no
+// Resend, então o remetente pode ser um endereço do próprio domínio.
+const TO = process.env.CONTACT_TO_EMAIL || 'contact@mototrip.pt'
+const FROM = process.env.CONTACT_FROM_EMAIL || 'MotoTrip <contact@mototrip.pt>'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
