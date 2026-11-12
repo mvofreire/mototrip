@@ -48,7 +48,7 @@ export interface OsmMapProps {
 const BRAND_GRADIENT = `<linearGradient id="mt-brand" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ef233c"/><stop offset=".55" stop-color="#d00f25"/><stop offset="1" stop-color="#8d0a1a"/></linearGradient>`;
 const SHADOW = "filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));cursor:pointer";
 
-function pinIcon({ html = "", color, size = 28, variant = "pin" }: OsmMarker) {
+export function pinIcon({ html = "", color, size = 28, variant = "pin" }: OsmMarker) {
   const fill = color ?? "url(#mt-brand)";
 
   if (variant === "logo") {

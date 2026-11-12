@@ -206,7 +206,7 @@ function calculateTotalDistance(points: GPXPoint[]): number {
  * Haversine distance formula
  * Returns distance in kilometers
  */
-function haversineDistance(
+export function haversineDistance(
   lat1: number,
   lon1: number,
   lat2: number,
