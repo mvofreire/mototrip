@@ -24,6 +24,7 @@ import { RouteStorage } from "@/lib/storage/storage.service";
 import { renderRouteThumbnail } from "@/lib/map-thumbnail";
 import { RouteBuilder } from "./route-builder/route-builder";
 import { useRouteBuilder } from "@/hooks/use-route-builder";
+import { useRouteBuilderAccess } from "@/hooks/use-route-builder-access";
 import { cn } from "@/lib/utils";
 
 type RouteInsert = Database["public"]["Tables"]["routes"]["Insert"];
@@ -81,7 +82,10 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
   const [gpxKey, setGpxKey] = useState(0);
 
   // Where the track comes from: a GPX file (default) or drawn on the map
-  const [source, setSource] = useState<"gpx" | "map">("gpx");
+  // Drawing is behind the "route-builder" flag; everyone else only sees the GPX upload
+  const canDraw = useRouteBuilderAccess();
+  const [sourceChoice, setSource] = useState<"gpx" | "map">("gpx");
+  const source = canDraw ? sourceChoice : "gpx";
   const initialLine = useMemo(
     () =>
       ((route?.polyline_coordinates?.coordinates ?? []) as [number, number][]).map(
@@ -528,41 +532,51 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
       {/* Route track: GPX file (default) or drawn on the map */}
       <Card className="p-4 sm:p-6 space-y-4">
         <h2 className="text-xl font-semibold">
-          {isEdit ? t("builder.cardTitleEdit") : t("builder.cardTitle")}
-        </h2>
-        <div
-          role="tablist"
-          aria-label={t("builder.sourceLabel")}
-          className="grid grid-cols-2 gap-1 rounded-lg bg-muted p-1"
-        >
-          {(["gpx", "map"] as const).map((option) => (
-            <button
-              key={option}
-              type="button"
-              role="tab"
-              aria-selected={source === option}
-              onClick={() => setSource(option)}
-              className={cn(
-                "inline-flex h-11 items-center justify-center gap-2 rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                source === option
-                  ? "bg-background text-foreground shadow"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {option === "gpx" ? <FileUp className="h-4 w-4" /> : <Route className="h-4 w-4" />}
-              {option === "gpx" ? t("builder.sourceGpx") : t("builder.sourceMap")}
-            </button>
-          ))}
-        </div>
-        <p className="text-sm text-muted-foreground">
-          {source === "map"
+          {canDraw
             ? isEdit
-              ? t("builder.editHint")
-              : t("builder.intro")
+              ? t("builder.cardTitleEdit")
+              : t("builder.cardTitle")
             : isEdit
-              ? tEdit("replaceGpxHint")
-              : t("builder.gpxIntro")}
-        </p>
+              ? tEdit("replaceGpx")
+              : t("gpxFile")}
+        </h2>
+        {canDraw && (
+          <div
+            role="tablist"
+            aria-label={t("builder.sourceLabel")}
+            className="grid grid-cols-2 gap-1 rounded-lg bg-muted p-1"
+          >
+            {(["gpx", "map"] as const).map((option) => (
+              <button
+                key={option}
+                type="button"
+                role="tab"
+                aria-selected={source === option}
+                onClick={() => setSource(option)}
+                className={cn(
+                  "inline-flex h-11 items-center justify-center gap-2 rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  source === option
+                    ? "bg-background text-foreground shadow"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {option === "gpx" ? <FileUp className="h-4 w-4" /> : <Route className="h-4 w-4" />}
+                {option === "gpx" ? t("builder.sourceGpx") : t("builder.sourceMap")}
+              </button>
+            ))}
+          </div>
+        )}
+        {(canDraw || isEdit) && (
+          <p className="text-sm text-muted-foreground">
+            {source === "map"
+              ? isEdit
+                ? t("builder.editHint")
+                : t("builder.intro")
+              : isEdit
+                ? tEdit("replaceGpxHint")
+                : t("builder.gpxIntro")}
+          </p>
+        )}
         {/* Kept mounted so an uploaded file survives a look at the map */}
         <div className={source === "gpx" ? undefined : "hidden"}>
           <GPXUpload key={gpxKey} onGPXParsed={handleGPXParsed} locale={locale} />

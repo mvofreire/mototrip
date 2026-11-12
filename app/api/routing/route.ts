@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { getApiUser } from '@/lib/auth/api-user'
+import { canUseRouteBuilder } from '@/lib/flags/route-builder'
 
 // Calcula o trecho de estrada entre dois pontos para o editor de rota no mapa
-// (OpenRouteService). A chave fica só no servidor; o endpoint exige sessão e
-// limita os pedidos por usuário para proteger a cota gratuita.
+// (OpenRouteService). A chave fica só no servidor; o endpoint exige sessão,
+// só atende quem tem a flag "route-builder" (Vercel Flags) e limita os
+// pedidos por usuário para proteger a cota gratuita.
 const ORS_URL = 'https://api.openrouteservice.org/v2/directions/driving-car/geojson'
 // Distância máxima (m) a que um ponto tocado é encaixado na estrada mais próxima
 const SNAP_RADIUS_M = 1500
@@ -37,15 +39,11 @@ const isPoint = (p: unknown): p is { lat: number; lng: number } => {
 }
 
 export async function POST(request: Request) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  const token = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '')
-  if (!supabaseUrl || !anonKey || !token) {
-    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  const user = await getApiUser(request)
+  if (!user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  if (!(await canUseRouteBuilder(user))) {
+    return NextResponse.json({ error: 'forbidden' }, { status: 403 })
   }
-  const supabase = createClient(supabaseUrl, anonKey, { auth: { persistSession: false } })
-  const { data: auth } = await supabase.auth.getUser(token)
-  if (!auth?.user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
 
   let body: { from?: unknown; to?: unknown }
   try {
@@ -61,7 +59,7 @@ export async function POST(request: Request) {
   const apiKey = process.env.OPENROUTESERVICE_API_KEY
   if (!apiKey) return NextResponse.json({ error: 'unavailable' }, { status: 503 })
 
-  if (rateLimited(auth.user.id)) {
+  if (rateLimited(user.id)) {
     return NextResponse.json({ error: 'rate_limited' }, { status: 429 })
   }
 

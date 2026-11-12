@@ -14,6 +14,9 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ['lucide-react'],
+    // Loaded by Node at runtime: it optionally imports the flag definitions
+    // that Vercel embeds at build time, which webpack can't resolve.
+    serverComponentsExternalPackages: ['@vercel/flags-core'],
   },
 }
 
