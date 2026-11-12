@@ -151,7 +151,7 @@ export function AdminRoutesTable({
                       />
                     </TableCell>
                   )}
-                  <TableCell className="max-w-[260px]">
+                  <TableCell className="max-w-[260px] truncate">
                     <Link
                       href={routePath(locale, route)}
                       target="_blank"
