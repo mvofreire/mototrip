@@ -9,12 +9,24 @@ Todos os mapas usam **OpenStreetMap** com **Leaflet** (`react-leaflet`). Não h�
 | Página da rota (mapa interativo com início, fim e paradas) | `components/features/routes/route-map.tsx` |
 | Explorar → aba Mapa (pins de início de cada rota) | `components/features/routes/routes-overview-map.tsx` |
 | Enviar rota → preview do GPX | `components/features/routes/gpx-upload.tsx` |
+| Enviar / editar rota → desenhar no mapa | `components/features/routes/route-builder/route-builder.tsx` → `route-builder-map.tsx` |
 | Capa da página da rota (sem foto) | `components/features/routes/route-cover.tsx` → `route-cover-map.tsx` |
 | Thumbnail dos cards de rota | `components/features/routes/route-thumbnail.tsx` → `route-cover-map.tsx` (`variant="thumbnail"`) |
 
 O mapa interativo base está em `components/features/maps/map.tsx` (carregado só no cliente) e `osm-map.tsx`.
 
 A capa e os thumbnails partilham o mesmo estilo: tiles em tons de cinza (invertidos no dark mode, via `.route-cover-map` em `app/globals.css`) e a rota em vermelho com brilho. Os thumbnails só montam o mapa quando o card se aproxima do viewport.
+
+## Desenhar a rota no mapa
+
+Alternativa ao GPX no formulário de envio (e na edição, para ajustar o traçado). O usuário toca no mapa para colocar pontos e o caminho entre cada par de pontos é calculado pelas estradas.
+
+- **Estado**: `hooks/use-route-builder.ts` guarda os pontos (anchors), os trechos entre eles (segments), as paradas e o histórico de desfazer/refazer. Rotas novas ficam em `localStorage` até serem enviadas.
+- **Geometria**: `lib/routing/route-builder.ts` (dividir trechos, distância, ganho de elevação, converter a linha guardada em pontos editáveis).
+- **Roteamento**: `app/api/routing/route.ts` chama o [OpenRouteService](https://openrouteservice.org) (perfil `driving-car`, com elevação). Precisa de `OPENROUTESERVICE_API_KEY` (plano gratuito), exige sessão e limita a 30 pedidos/minuto por usuário. Cada ponto novo gasta 1 pedido; arrastar um ponto gasta até 2.
+- **Sem chave ou sem estrada**: o trecho é ligado em linha reta (tracejada) e o usuário é avisado. O botão do ímã na toolbar desliga o "seguir estradas" de propósito (trilhas, off-road).
+- **Edição**: só a linha final é guardada (`routes.polyline_coordinates`). Ao editar, os pontos são derivados da linha por simplificação e o traçado original entre eles é mantido; só os trechos vizinhos de um ponto movido são recalculados.
+- **Toque**: em telas de toque o mapa inline é só um preview; a edição abre em tela cheia para não prender o scroll da página.
 
 ## Imagem estática (`routes.thumbnail_url`)
 

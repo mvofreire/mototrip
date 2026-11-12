@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { useTranslations } from "next-intl";
 import { COUNTRIES, countryName } from "@/lib/countries";
-import { Loader2, MapPin, Save, Trash2 } from "lucide-react";
+import { FileUp, Loader2, MapPin, Route, Save, Trash2 } from "lucide-react";
 import type { Database } from "@/types/database.types";
 import type { RouteWithDetails } from "@/types";
 import { useAuth } from "@/hooks/use-auth";
@@ -22,6 +22,9 @@ import type { StopType } from "@/types";
 import { useRoutesCreateMutation, useRoutesUpdateMutation } from "@/hooks/use-routes";
 import { RouteStorage } from "@/lib/storage/storage.service";
 import { renderRouteThumbnail } from "@/lib/map-thumbnail";
+import { RouteBuilder } from "./route-builder/route-builder";
+import { useRouteBuilder } from "@/hooks/use-route-builder";
+import { cn } from "@/lib/utils";
 
 type RouteInsert = Database["public"]["Tables"]["routes"]["Insert"];
 
@@ -32,6 +35,9 @@ interface SubmitRouteFormProps {
   /** Edit mode: called with the saved route */
   onSaved?: (route: RouteWithDetails) => void;
 }
+
+/** Keeps a route being drawn on the map across reloads (new routes) */
+const DRAFT_STORAGE_KEY = "mototrip:route-builder-draft";
 
 /** Slider upper bound that never cuts off the current value */
 const sliderMax = (base: number, value: number, step: number) =>
@@ -74,6 +80,35 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
   // Remounts the GPX picker after a replaced track is saved
   const [gpxKey, setGpxKey] = useState(0);
 
+  // Where the track comes from: a GPX file (default) or drawn on the map
+  const [source, setSource] = useState<"gpx" | "map">("gpx");
+  const initialLine = useMemo(
+    () =>
+      ((route?.polyline_coordinates?.coordinates ?? []) as [number, number][]).map(
+        ([lng, lat]) => ({ lat, lng }),
+      ),
+    [route?.polyline_coordinates],
+  );
+  const builder = useRouteBuilder(
+    route
+      ? { initialLine, initialDurationMin: route.duration_minutes }
+      : { storageKey: DRAFT_STORAGE_KEY },
+  );
+  const { draft, dirty: builderDirty } = builder;
+
+  // The drawn route fills in distance, duration and elevation, like a GPX does
+  useEffect(() => {
+    if (source !== "map" || !builderDirty || draft.points.length < 2) return;
+    setFormData((prev) => ({
+      ...prev,
+      distance_km: Math.max(1, Math.round(draft.distanceKm)),
+      duration_minutes: Math.max(5, Math.round(draft.durationMin / 5) * 5),
+      elevation_gain_m:
+        draft.elevationGainM === null ? prev.elevation_gain_m : Math.round(draft.elevationGainM),
+      route_type: prev.route_type || (draft.isLoop ? "loop" : ""),
+    }));
+  }, [source, builderDirty, draft]);
+
   const handleGPXParsed = (parsedData: GPXData, file: File) => {
     setGpxData(parsedData);
     setGpxFile(file);
@@ -109,15 +144,40 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
         return;
       }
 
-      // Validate GPX file
-      if (!gpxData) {
-        setError(t("gpxRequired"));
+      // The track: drawn on the map or read from the GPX file
+      const track =
+        source === "map"
+          ? draft.points.length > 1
+            ? {
+                points: draft.points,
+                stops: draft.stops.map((s) => ({
+                  name: s.name,
+                  description: s.description,
+                  type: s.type as StopType,
+                  lat: s.lat,
+                  lng: s.lng,
+                })),
+              }
+            : null
+          : gpxData
+            ? {
+                points: gpxData.points,
+                stops: gpxStops.map((w) => ({
+                  name: w.name,
+                  description: w.description,
+                  type: w.type as StopType,
+                  lat: w.lat,
+                  lng: w.lng,
+                })),
+              }
+            : null;
+      if (!track) {
+        setError(source === "map" ? t("builder.required") : t("gpxRequired"));
         setLoading(false);
         return;
       }
 
-      // Convert GPX data to polyline coordinates
-      const polyline_coordinates = gpxPointsToGeoJSON(gpxData.points);
+      const polyline_coordinates = gpxPointsToGeoJSON(track.points);
       const routeData: RouteInsert = {
         user_id: user.id,
         title: formData.title,
@@ -144,7 +204,7 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
       // Static OpenStreetMap image of the route (used for social previews).
       // A failure here must not fail the submission.
       try {
-        const image = await renderRouteThumbnail(gpxData.points);
+        const image = await renderRouteThumbnail(track.points);
         const publicThumbnail = await RouteStorage.uploadRouteThumbnail(image, result.id);
         await updateRouteMutation.mutateAsync({
           id: result.id,
@@ -153,24 +213,25 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
       } catch (thumbError) {
         console.warn("Could not create route thumbnail:", thumbError);
       }
-      // Stops from the GPX. A failure here must not fail the submission:
-      // the author can still add them in the route editor.
-      if (gpxStops.length) {
+      // Stops from the GPX or the map. A failure here must not fail the
+      // submission: the author can still add them in the route editor.
+      if (track.stops.length) {
         try {
           await RoutesService.saveStops(
             result.id,
-            gpxStops.map((w) => ({
+            track.stops.map((w) => ({
               name: w.name.slice(0, 120),
               description: w.description || null,
-              type: w.type as StopType,
+              type: w.type,
               latitude: w.lat,
               longitude: w.lng,
             })),
           );
         } catch (stopsError) {
-          console.warn("Could not save the GPX stops:", stopsError);
+          console.warn("Could not save the route stops:", stopsError);
         }
       }
+      if (source === "map") builder.reset();
       setSuccess(true);
 
       // New routes wait for review: show them in "My routes"
@@ -198,8 +259,15 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
       route_type: formData.route_type || null,
       category: formData.category,
     };
-    if (gpxData) {
-      updates.polyline_coordinates = gpxPointsToGeoJSON(gpxData.points);
+    // A new track: redrawn on the map or a replacement GPX
+    const newPoints =
+      source === "map"
+        ? builderDirty && draft.points.length > 1
+          ? draft.points
+          : null
+        : (gpxData?.points ?? null);
+    if (newPoints) {
+      updates.polyline_coordinates = gpxPointsToGeoJSON(newPoints);
     }
 
     let saved = await updateRouteMutation.mutateAsync({
@@ -207,9 +275,9 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
       routeData: updates,
     });
 
-    if (gpxData) {
+    if (newPoints) {
       try {
-        const image = await renderRouteThumbnail(gpxData.points);
+        const image = await renderRouteThumbnail(newPoints);
         const url = await RouteStorage.uploadRouteThumbnail(image, current.id);
         // Bust caches: the file name doesn't change
         saved = await updateRouteMutation.mutateAsync({
@@ -457,19 +525,53 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
         </div>
       </Card>
 
-      {/* GPX File Upload */}
-      <Card className="p-6 space-y-4">
+      {/* Route track: GPX file (default) or drawn on the map */}
+      <Card className="p-4 sm:p-6 space-y-4">
         <h2 className="text-xl font-semibold">
-          {isEdit ? tEdit("replaceGpx") : t("gpxFile")}
+          {isEdit ? t("builder.cardTitleEdit") : t("builder.cardTitle")}
         </h2>
-        {isEdit && (
-          <p className="text-sm text-muted-foreground">{tEdit("replaceGpxHint")}</p>
-        )}
-        <GPXUpload key={gpxKey} onGPXParsed={handleGPXParsed} locale={locale} />
+        <div
+          role="tablist"
+          aria-label={t("builder.sourceLabel")}
+          className="grid grid-cols-2 gap-1 rounded-lg bg-muted p-1"
+        >
+          {(["gpx", "map"] as const).map((option) => (
+            <button
+              key={option}
+              type="button"
+              role="tab"
+              aria-selected={source === option}
+              onClick={() => setSource(option)}
+              className={cn(
+                "inline-flex h-11 items-center justify-center gap-2 rounded-md px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                source === option
+                  ? "bg-background text-foreground shadow"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {option === "gpx" ? <FileUp className="h-4 w-4" /> : <Route className="h-4 w-4" />}
+              {option === "gpx" ? t("builder.sourceGpx") : t("builder.sourceMap")}
+            </button>
+          ))}
+        </div>
+        <p className="text-sm text-muted-foreground">
+          {source === "map"
+            ? isEdit
+              ? t("builder.editHint")
+              : t("builder.intro")
+            : isEdit
+              ? tEdit("replaceGpxHint")
+              : t("builder.gpxIntro")}
+        </p>
+        {/* Kept mounted so an uploaded file survives a look at the map */}
+        <div className={source === "gpx" ? undefined : "hidden"}>
+          <GPXUpload key={gpxKey} onGPXParsed={handleGPXParsed} locale={locale} />
+        </div>
+        {source === "map" && <RouteBuilder builder={builder} allowStops={!isEdit} />}
       </Card>
 
       {/* Stops found in the GPX (new routes only) */}
-      {!isEdit && gpxStops.length > 0 && (
+      {!isEdit && source === "gpx" && gpxStops.length > 0 && (
         <Card className="p-6 space-y-4">
           <div>
             <h2 className="text-xl font-semibold">{t("gpxStops.title", { count: gpxStops.length })}</h2>
