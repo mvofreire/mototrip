@@ -1,68 +1,74 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useLocale, useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { MapPin, Menu, User, LogOut, Shield } from 'lucide-react'
-import { LanguageSwitcher } from '@/components/language-switcher'
-import { ThemeToggle } from '@/components/theme-toggle'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { MapPin, Menu, User, LogOut, Shield } from "lucide-react";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet'
-import { useState } from 'react'
-import { isStaff } from '@/lib/auth/roles'
-import { useAuth } from '@/hooks/use-auth'
+} from "@/components/ui/sheet";
+import { useState } from "react";
+import { isStaff } from "@/lib/auth/roles";
+import { useAuth } from "@/hooks/use-auth";
 
 export function Header() {
-  const t = useTranslations('nav')
-  const tCommon = useTranslations('common')
-  const locale = useLocale()
-  const pathname = usePathname()
-  const [open, setOpen] = useState(false)
-  const { user, loading, signOut } = useAuth()
+  const t = useTranslations("nav");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const { user, loading, signOut } = useAuth();
 
-  const isAdmin = isStaff(user)
+  const isAdmin = isStaff(user);
 
   const isActive = (path: string) => {
-    return pathname === `/${locale}${path}` || pathname.startsWith(`/${locale}${path}/`)
-  }
+    return (
+      pathname === `/${locale}${path}` ||
+      pathname.startsWith(`/${locale}${path}/`)
+    );
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 pt-[env(safe-area-inset-top)] backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link href={`/${locale}`} className="flex items-center gap-2 font-bold text-xl">
+          <Link
+            href={`/${locale}`}
+            className="flex items-center gap-2 font-bold text-xl"
+          >
             <div className="h-8 w-8 rounded-md bg-gradient-brand flex items-center justify-center">
               <MapPin className="h-5 w-5 text-white" />
             </div>
-            <span className="inline-block">{tCommon('mototrip')}</span>
+            <span className="inline-block">{tCommon("mototrip")}</span>
           </Link>
 
           <nav className="hidden lg:flex items-center gap-6 whitespace-nowrap">
             <Link
               href={`/${locale}/explore`}
               className={`text-sm font-medium transition-colors ${
-                isActive('/explore')
-                  ? 'text-foreground font-semibold'
-                  : 'text-muted-foreground hover:text-foreground'
+                isActive("/explore")
+                  ? "text-foreground font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {t('exploreRoutes')}
+              {t("exploreRoutes")}
             </Link>
             <Link
               href={`/${locale}/regions`}
               className={`text-sm font-medium transition-colors ${
-                isActive('/regions')
-                  ? 'text-foreground font-semibold'
-                  : 'text-muted-foreground hover:text-foreground'
+                isActive("/regions")
+                  ? "text-foreground font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {t('destinations')}
+              {t("destinations")}
             </Link>
             {/* <Link
               href={`/${locale}/submit`}
@@ -74,7 +80,7 @@ export function Header() {
             >
               {t('submitRoute')}
             </Link> */}
-            <Link
+            {/* <Link
               href={`/${locale}/community`}
               className={`text-sm font-medium transition-colors ${
                 isActive('/community')
@@ -83,16 +89,16 @@ export function Header() {
               }`}
             >
               {t('community')}
-            </Link>
+            </Link> */}
             <Link
               href={`/${locale}/blog`}
               className={`text-sm font-medium transition-colors ${
-                isActive('/blog')
-                  ? 'text-foreground font-semibold'
-                  : 'text-muted-foreground hover:text-foreground'
+                isActive("/blog")
+                  ? "text-foreground font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {t('blog')}
+              {t("blog")}
             </Link>
           </nav>
         </div>
@@ -101,7 +107,12 @@ export function Header() {
           {/* Mobile Menu */}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden" aria-label={t('openMenu')}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="lg:hidden"
+                aria-label={t("openMenu")}
+              >
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
@@ -111,10 +122,10 @@ export function Header() {
                   <div className="h-8 w-8 rounded-md bg-gradient-brand flex items-center justify-center">
                     <MapPin className="h-5 w-5 text-white" />
                   </div>
-                  {tCommon('mototrip')}
+                  {tCommon("mototrip")}
                 </SheetTitle>
               </SheetHeader>
-              
+
               <div className="flex flex-col gap-6 mt-8">
                 {/* Navigation Links */}
                 <nav className="flex flex-col gap-4">
@@ -122,25 +133,25 @@ export function Header() {
                     href={`/${locale}/explore`}
                     onClick={() => setOpen(false)}
                     className={`text-lg font-medium transition-colors py-2 ${
-                      isActive('/explore')
-                        ? 'text-foreground font-semibold'
-                        : 'text-muted-foreground hover:text-foreground'
+                      isActive("/explore")
+                        ? "text-foreground font-semibold"
+                        : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    {t('exploreRoutes')}
+                    {t("exploreRoutes")}
                   </Link>
                   <Link
                     href={`/${locale}/regions`}
                     onClick={() => setOpen(false)}
                     className={`text-lg font-medium transition-colors py-2 ${
-                      isActive('/regions')
-                        ? 'text-foreground font-semibold'
-                        : 'text-muted-foreground hover:text-foreground'
+                      isActive("/regions")
+                        ? "text-foreground font-semibold"
+                        : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    {t('destinations')}
+                    {t("destinations")}
                   </Link>
-                  <Link
+                  {/* <Link
                     href={`/${locale}/submit`}
                     onClick={() => setOpen(false)}
                     className={`text-lg font-medium transition-colors py-2 ${
@@ -150,8 +161,8 @@ export function Header() {
                     }`}
                   >
                     {t('submitRoute')}
-                  </Link>
-                  <Link
+                  </Link> */}
+                  {/* <Link
                     href={`/${locale}/community`}
                     onClick={() => setOpen(false)}
                     className={`text-lg font-medium transition-colors py-2 ${
@@ -161,17 +172,17 @@ export function Header() {
                     }`}
                   >
                     {t('community')}
-                  </Link>
+                  </Link> */}
                   <Link
                     href={`/${locale}/blog`}
                     onClick={() => setOpen(false)}
                     className={`text-lg font-medium transition-colors py-2 ${
-                      isActive('/blog')
-                        ? 'text-foreground font-semibold'
-                        : 'text-muted-foreground hover:text-foreground'
+                      isActive("/blog")
+                        ? "text-foreground font-semibold"
+                        : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    {t('blog')}
+                    {t("blog")}
                   </Link>
                 </nav>
 
@@ -191,47 +202,68 @@ export function Header() {
                 <div className="flex flex-col gap-3">
                   {loading ? (
                     <Button variant="ghost" disabled>
-                      {tCommon('loading')}
+                      {tCommon("loading")}
                     </Button>
                   ) : user ? (
                     <>
-                      <Link href={`/${locale}/profile`} onClick={() => setOpen(false)}>
-                        <Button variant="ghost" className="w-full justify-start">
+                      <Link
+                        href={`/${locale}/profile`}
+                        onClick={() => setOpen(false)}
+                      >
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start"
+                        >
                           <User className="h-4 w-4 mr-2" />
                           {user.profile?.full_name || user.email}
                         </Button>
                       </Link>
                       {isAdmin && (
-                        <Link href={`/${locale}/profile/admin`} onClick={() => setOpen(false)}>
-                          <Button variant="ghost" className="w-full justify-start text-amber-600 hover:text-amber-700">
+                        <Link
+                          href={`/${locale}/profile/admin`}
+                          onClick={() => setOpen(false)}
+                        >
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start text-amber-600 hover:text-amber-700"
+                          >
                             <Shield className="h-4 w-4 mr-2" />
-                            {t('admin')}
+                            {t("admin")}
                           </Button>
                         </Link>
                       )}
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         className="justify-start text-destructive hover:text-destructive"
                         onClick={() => {
-                          signOut()
-                          setOpen(false)
+                          signOut();
+                          setOpen(false);
                         }}
                       >
                         <LogOut className="h-4 w-4 mr-2" />
-                        {t('signOut')}
+                        {t("signOut")}
                       </Button>
                     </>
                   ) : (
                     <>
-                      <Link href={`/${locale}/auth/login`} onClick={() => setOpen(false)}>
-                        <Button variant="ghost" className="w-full justify-start">
+                      <Link
+                        href={`/${locale}/auth/login`}
+                        onClick={() => setOpen(false)}
+                      >
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start"
+                        >
                           <User className="h-4 w-4 mr-2" />
-                          {t('signIn')}
+                          {t("signIn")}
                         </Button>
                       </Link>
-                      <Link href={`/${locale}/auth/register`} onClick={() => setOpen(false)}>
+                      <Link
+                        href={`/${locale}/auth/register`}
+                        onClick={() => setOpen(false)}
+                      >
                         <Button className="w-full bg-gradient-brand hover:opacity-90">
-                          {t('getStarted')}
+                          {t("getStarted")}
                         </Button>
                       </Link>
                     </>
@@ -247,7 +279,7 @@ export function Header() {
             <LanguageSwitcher />
             {loading ? (
               <Button variant="ghost" size="sm" disabled>
-                {tCommon('loading')}
+                {tCommon("loading")}
               </Button>
             ) : user ? (
               <>
@@ -265,17 +297,26 @@ export function Header() {
                     </span>
                   </Button>
                 </Link>
-                {isAdmin && (
+                {isAdmin ? (
                   <Link href={`/${locale}/profile/admin`}>
                     <Button
                       variant="ghost"
                       size="sm"
                       className="text-amber-600 hover:text-amber-700"
-                      title={t('admin')}
-                      aria-label={t('admin')}
+                      title={t("admin")}
+                      aria-label={t("admin")}
                     >
                       <Shield className="h-4 w-4 xl:mr-2" />
-                      <span className="hidden xl:inline">{t('admin')}</span>
+                      <span className="hidden xl:inline">{t("admin")}</span>
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link href={`/${locale}/submit`}>
+                    <Button
+                      size="sm"
+                      className="bg-gradient-brand hover:opacity-90"
+                    >
+                      {t("submitRoute")}
                     </Button>
                   </Link>
                 )}
@@ -284,11 +325,11 @@ export function Header() {
                   size="sm"
                   onClick={signOut}
                   className="text-destructive hover:text-destructive"
-                  title={t('signOut')}
-                  aria-label={t('signOut')}
+                  title={t("signOut")}
+                  aria-label={t("signOut")}
                 >
                   <LogOut className="h-4 w-4 xl:mr-2" />
-                  <span className="hidden xl:inline">{t('signOut')}</span>
+                  <span className="hidden xl:inline">{t("signOut")}</span>
                 </Button>
               </>
             ) : (
@@ -296,12 +337,15 @@ export function Header() {
                 <Link href={`/${locale}/auth/login`}>
                   <Button variant="ghost" size="sm">
                     <User className="h-4 w-4 mr-2" />
-                    {t('signIn')}
+                    {t("signIn")}
                   </Button>
                 </Link>
-                <Link href={`/${locale}/auth/register`}>
-                  <Button size="sm" className="bg-gradient-brand hover:opacity-90">
-                    {t('getStarted')}
+                <Link href={`/${locale}/submit`}>
+                  <Button
+                    size="sm"
+                    className="bg-gradient-brand hover:opacity-90"
+                  >
+                    {t("submitRoute")}
                   </Button>
                 </Link>
               </>
@@ -310,5 +354,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }
