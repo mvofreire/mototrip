@@ -15,7 +15,12 @@ import * as dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import type { Database } from '../types/database.types';
-import { notifyCuratorNewRoutes, type NewRouteSummary } from '../lib/email/curator-notification';
+import * as curatorEmail from '../lib/email/curator-notification';
+import type { NewRouteSummary } from '../lib/email/curator-notification';
+
+// lib/ is loaded as CommonJS from this ESM job, so the named export can sit under `default`
+const curatorModule = curatorEmail as typeof curatorEmail & { default?: typeof curatorEmail };
+const notifyCuratorNewRoutes = curatorModule.notifyCuratorNewRoutes ?? curatorModule.default!.notifyCuratorNewRoutes;
 
 // Load environment variables from .env.local
 const __filename = fileURLToPath(import.meta.url);
