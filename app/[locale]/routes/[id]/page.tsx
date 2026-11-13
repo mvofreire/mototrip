@@ -35,10 +35,6 @@ export async function generateMetadata({ params }: RoutePageProps): Promise<Meta
         category: t(`categories.${route.category}`),
         region: route.region || 'Portugal',
       })
-    const cover =
-      [...(route.photos ?? [])].sort((a, b) => a.order_index - b.order_index)[0]?.url ||
-      route.thumbnail_url
-
     return {
       title: route.title,
       description,
@@ -51,13 +47,12 @@ export async function generateMetadata({ params }: RoutePageProps): Promise<Meta
         title: route.title,
         description,
         url: routePath(params.locale, route),
-        images: cover ? [{ url: cover, alt: route.title }] : undefined,
+        // image: opengraph-image.tsx next to this page
       },
       twitter: {
-        card: cover ? 'summary_large_image' : 'summary',
+        card: 'summary_large_image',
         title: route.title,
         description,
-        images: cover ? [cover] : undefined,
       },
     }
   } catch {

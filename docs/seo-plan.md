@@ -16,7 +16,9 @@
 6. **Páginas que não devem ser indexadas:** auth, profile, submit, edit → `robots: { index: false }` na metadata (o robots.txt bloqueia o rastreio, mas não impede indexar URL vista em link).
 7. Unificar `getBaseUrl()` do layout com `lib/site-url.ts` (padrões diferentes: localhost vs mototrip.pt).
 
-## Fase 2 — On-page e dados estruturados
+## Fase 2 — On-page e dados estruturados (itens 1–3 ✅ feito; 4 aguarda dados do GSC)
+
+> Nota: o Google aposentou a caixa de busca de sitelinks (`SearchAction`) em 2024 — ficou só `WebSite`, que define o nome do site nos resultados. Imagem OG dinâmica feita para rotas; regiões e posts continuam com a foto de capa.
 
 1. **`/explore` é client-side** (`'use client'`): o Google vê pouco conteúdo. Renderizar no servidor a lista inicial de rotas com links (o filtro continua no cliente).
 2. **Open Graph próprio por página** + imagens OG dinâmicas (`opengraph-image.tsx`) para rotas, regiões e posts — melhora compartilhamento, que é o canal de marca.

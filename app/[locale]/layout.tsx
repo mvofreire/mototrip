@@ -113,14 +113,30 @@ export default async function LocaleLayout({
   // Providing all messages to the client
   const messages = await getMessages()
 
-  // Lets search engines tie the site to its official profiles
-  const organization = {
+  // Organization ties the site to its official profiles; WebSite gives Google
+  // the site name to show above results ("MotoTrip" instead of the domain)
+  const siteUrl = getSiteUrl()
+  const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'MotoTrip',
-    url: getSiteUrl(),
-    logo: `${getSiteUrl()}/icon-512.png`,
-    sameAs: SOCIAL_PROFILES,
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${siteUrl}/#organization`,
+        name: 'MotoTrip',
+        url: siteUrl,
+        logo: `${siteUrl}/icon-512.png`,
+        sameAs: SOCIAL_PROFILES,
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        name: 'MotoTrip',
+        alternateName: 'mototrip.pt',
+        url: siteUrl,
+        inLanguage: locale,
+        publisher: { '@id': `${siteUrl}/#organization` },
+      },
+    ],
   }
 
   return (
@@ -128,7 +144,7 @@ export default async function LocaleLayout({
       <body className={`${inter.className} ${display.variable}`}>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
         <NextIntlClientProvider messages={messages}>
           <Providers>
