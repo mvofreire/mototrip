@@ -12,9 +12,12 @@ export function LanguageSwitcher() {
   const pathname = usePathname()
 
   const switchLanguage = (newLocale: Locale) => {
-    // Remove current locale from pathname and add new one
-    const pathnameWithoutLocale = pathname.replace(`/${locale}`, '')
-    router.push(`/${newLocale}${pathnameWithoutLocale}`)
+    // Persist the explicit choice so later visits to `/` or unprefixed
+    // links skip Accept-Language detection (read by middleware.ts).
+    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; samesite=lax`
+    // Swap only the leading locale segment, keeping query and hash.
+    const rest = pathname.replace(new RegExp(`^/${locale}(?=/|$)`), '')
+    router.push(`/${newLocale}${rest}${window.location.search}${window.location.hash}`)
   }
 
   return (
