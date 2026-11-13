@@ -9,6 +9,7 @@ import { getPublishedPost, getPublishedPosts, pickTranslation, routesBySlug } fr
 import { BlogMarkdown, routeSlugsIn } from '@/lib/blog/markdown'
 import { getSiteUrl } from '@/lib/site-url'
 import { SharePostPanel } from '@/components/features/blog/share-post-panel'
+import { PostNextSteps } from '@/components/features/blog/post-next-steps'
 
 export const revalidate = 3600
 
@@ -56,7 +57,14 @@ export default async function BlogPostPage({ params }: Props) {
   const { locale } = params
   const t = await getTranslations({ locale, namespace: 'blog' })
   const slugs = routeSlugsIn(c.body_md)
-  const routes = await routesBySlug(slugs)
+  const [routes, allPosts] = await Promise.all([routesBySlug(slugs), getPublishedPosts().catch(() => [])])
+  // Other guides: ones written in this language first, then the newest
+  const related = allPosts
+    .filter((p) => p.slug !== post.slug)
+    .map((p, i) => ({ p, i, own: p.translations.some((tr) => tr.locale === locale) }))
+    .sort((a, b) => Number(b.own) - Number(a.own) || a.i - b.i)
+    .slice(0, 3)
+    .map(({ p }) => p)
   const cover = post.cover?.thumbnail_url
   const date = post.published_at
     ? new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(post.published_at))
@@ -114,9 +122,16 @@ export default async function BlogPostPage({ params }: Props) {
           <img src={cover} alt="" className="mb-10 w-full rounded-lg border object-cover" />
         )}
 
-        <BlogMarkdown markdown={c.body_md} locale={locale} routes={routes} />
+        <BlogMarkdown markdown={c.body_md} locale={locale} routes={routes} postSlug={post.slug} />
 
         <SharePostPanel post={{ slug: post.slug, title: c.title }} />
+
+        <PostNextSteps
+          locale={locale}
+          postSlug={post.slug}
+          routes={slugs.map((s) => routes.get(s)).filter((r): r is NonNullable<typeof r> => !!r)}
+          related={related}
+        />
       </div>
     </article>
   )

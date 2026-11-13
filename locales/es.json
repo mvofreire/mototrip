@@ -345,7 +345,18 @@
     "shareText": "Mira esta guía de moto: {title}",
     "share": "Compartir",
     "copyLink": "Copiar enlace",
-    "linkCopied": "¡Enlace copiado!"
+    "linkCopied": "¡Enlace copiado!",
+    "openMap": "Ver en el mapa",
+    "routeCta": "Ver la ruta completa",
+    "routeCtaHint": "Mapa interactivo, paradas y GPX gratis",
+    "nextSteps": "Sigue explorando",
+    "routesInPost": "{count, plural, one {La ruta de esta guía} other {Las # rutas de esta guía}}",
+    "routesInPostDesc": "Abre cada ruta para ver el mapa, las paradas y descargar el GPX.",
+    "exploreTitle": "¿Listo para salir a la carretera?",
+    "exploreDesc": "Descubre más rutas en moto seleccionadas, con mapa y GPX gratis.",
+    "moreInRegion": "Rutas en {region}",
+    "exploreAll": "Explorar todas las rutas",
+    "readNext": "Sigue leyendo"
   },
   "about": {
     "title": "Sobre Nosotros",

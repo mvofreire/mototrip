@@ -17,7 +17,7 @@ import remarkGfm from 'remark-gfm'
 import remarkDirective from 'remark-directive'
 import { visit, SKIP } from 'unist-util-visit'
 import { Lightbulb } from 'lucide-react'
-import { RouteCard } from '@/components/features/routes/route-card'
+import { BlogRouteCard } from '@/components/features/blog/blog-route-card'
 import type { RouteWithDetails } from '@/types'
 
 const ROUTE_DIRECTIVE = /::route\{[^}]*?slug=["']([^"']+)["'][^}]*\}/g
@@ -78,9 +78,11 @@ interface BlogMarkdownProps {
   routes: Map<string, RouteWithDetails>
   /** What to show for a slug that is not in `routes` (the site shows nothing) */
   renderMissingRoute?: (slug: string) => ReactNode
+  /** Slug of the post being rendered (for click analytics) */
+  postSlug?: string
 }
 
-export function BlogMarkdown({ markdown, locale, routes, renderMissingRoute }: BlogMarkdownProps) {
+export function BlogMarkdown({ markdown, locale, routes, renderMissingRoute, postSlug }: BlogMarkdownProps) {
   const components = {
     // One h1 per page (the post title), so headings in the body start at h2
     h1: ({ children }) => <h2 className="pt-4 text-2xl font-bold md:text-3xl">{children}</h2>,
@@ -127,7 +129,7 @@ export function BlogMarkdown({ markdown, locale, routes, renderMissingRoute }: B
       if (!route) return slug && renderMissingRoute ? <>{renderMissingRoute(slug)}</> : null
       return (
         <div className="mx-auto max-w-md">
-          <RouteCard route={route} locale={locale} />
+          <BlogRouteCard route={route} locale={locale} postSlug={postSlug} />
         </div>
       )
     },
