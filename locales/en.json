@@ -763,8 +763,8 @@
       "slugLocked": "Already published: the slug cannot change.",
       "slugInvalid": "Use only lowercase letters, numbers and hyphens.",
       "slugTaken": "A post with this slug already exists.",
-      "cover": "Cover route",
-      "coverHelp": "This route's map is the cover image.",
+      "cover": "Cover",
+      "coverHelp": "A route's map or your own image (ideally 1600 px wide or more).",
       "chooseRoute": "Choose route",
       "changeRoute": "Change",
       "removeCover": "Remove",
@@ -791,7 +791,8 @@
         "link": "Link",
         "quote": "Quote",
         "tip": "Tip",
-        "route": "Route"
+        "route": "Route",
+        "image": "Image"
       },
       "tipPlaceholder": "Tip text",
       "textPlaceholder": "text",
@@ -809,7 +810,15 @@
       "unsaved": "You have unsaved changes. Leave anyway?",
       "errorSave": "Error saving the post: {message}",
       "errorLoad": "Post not found.",
-      "errorAction": "Error updating the post."
+      "errorAction": "Error updating the post.",
+      "uploadImage": "Upload image",
+      "coverImage": "Cover image",
+      "changeImage": "Change",
+      "coverCredit": "Photo credit",
+      "coverCreditPlaceholder": "Photo credit (e.g. Photo: Ana Silva / Unsplash)",
+      "imageAltPlaceholder": "describe the image",
+      "imageInvalid": "Use a JPG, PNG or WebP image up to 5 MB.",
+      "imageUploadFailed": "Could not upload the image. Try again."
     },
     "curatorFilter": {
       "label": "MotoTrip rating",

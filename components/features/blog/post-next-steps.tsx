@@ -1,11 +1,12 @@
+import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
-import { ArrowRight, ChevronRight, Compass, MapPin } from 'lucide-react'
+import { ArrowRight, BookOpen, ChevronRight, Compass, MapPin } from 'lucide-react'
 import type { RouteWithDetails } from '@/types'
 import { routePath } from '@/lib/route-url'
 import { localizeRoute } from '@/lib/localize'
 import { regionForRoute, regionLabel, textFor, type Region } from '@/lib/regions'
 import { formatDistance, formatDuration } from '@/lib/utils'
-import { pickTranslation, type BlogPost } from '@/lib/blog/posts'
+import { coverOf, pickTranslation, type BlogPost } from '@/lib/blog/posts'
 import { TrackedLink } from './tracked-link'
 
 interface PostNextStepsProps {
@@ -109,7 +110,7 @@ export async function PostNextSteps({ locale, postSlug, routes, related }: PostN
             {related.map((post) => {
               const c = pickTranslation(post, locale)
               if (!c) return null
-              const img = post.cover?.thumbnail_url
+              const img = coverOf(post)
               return (
                 <TrackedLink
                   key={post.slug}
@@ -118,12 +119,15 @@ export async function PostNextSteps({ locale, postSlug, routes, related }: PostN
                   data={{ post: postSlug, to: post.slug }}
                   className="group flex flex-col overflow-hidden rounded-xl border bg-card transition-shadow hover:shadow-lg"
                 >
-                  {img ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={img} alt="" loading="lazy" decoding="async" className="aspect-[16/9] w-full object-cover" />
-                  ) : (
-                    <div className="aspect-[16/9] w-full bg-sand-100" />
-                  )}
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-muted">
+                    {img ? (
+                      <Image src={img} alt="" fill sizes="(max-width: 640px) 100vw, 256px" className="object-cover" />
+                    ) : (
+                      <div className="flex h-full items-center justify-center bg-gradient-brand">
+                        <BookOpen className="h-8 w-8 text-white/80" aria-hidden />
+                      </div>
+                    )}
+                  </div>
                   <div className="flex flex-1 flex-col gap-2 p-4">
                     <h3 className="font-semibold leading-tight group-hover:text-primary">{c.title}</h3>
                     <p className="line-clamp-2 text-sm text-muted-foreground">{c.description}</p>

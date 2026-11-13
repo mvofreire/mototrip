@@ -763,8 +763,8 @@
       "slugLocked": "Bereits veröffentlicht: Der Slug kann nicht mehr geändert werden.",
       "slugInvalid": "Nur Kleinbuchstaben, Zahlen und Bindestriche verwenden.",
       "slugTaken": "Es gibt bereits einen Beitrag mit diesem Slug.",
-      "cover": "Titelbild-Route",
-      "coverHelp": "Die Karte dieser Route ist das Titelbild.",
+      "cover": "Titelbild",
+      "coverHelp": "Die Karte einer Route oder ein eigenes Bild (am besten mindestens 1600 px breit).",
       "chooseRoute": "Route wählen",
       "changeRoute": "Ändern",
       "removeCover": "Entfernen",
@@ -791,7 +791,8 @@
         "link": "Link",
         "quote": "Zitat",
         "tip": "Tipp",
-        "route": "Route"
+        "route": "Route",
+        "image": "Bild"
       },
       "tipPlaceholder": "Tipptext",
       "textPlaceholder": "Text",
@@ -809,7 +810,15 @@
       "unsaved": "Es gibt ungespeicherte Änderungen. Trotzdem verlassen?",
       "errorSave": "Fehler beim Speichern: {message}",
       "errorLoad": "Beitrag nicht gefunden.",
-      "errorAction": "Fehler beim Aktualisieren des Beitrags."
+      "errorAction": "Fehler beim Aktualisieren des Beitrags.",
+      "uploadImage": "Bild hochladen",
+      "coverImage": "Titelbild",
+      "changeImage": "Ändern",
+      "coverCredit": "Bildnachweis",
+      "coverCreditPlaceholder": "Bildnachweis (z. B. Foto: Ana Silva / Unsplash)",
+      "imageAltPlaceholder": "Bild beschreiben",
+      "imageInvalid": "Verwende ein JPG-, PNG- oder WebP-Bild bis 5 MB.",
+      "imageUploadFailed": "Das Bild konnte nicht hochgeladen werden. Bitte erneut versuchen."
     },
     "curatorFilter": {
       "label": "MotoTrip-Bewertung",

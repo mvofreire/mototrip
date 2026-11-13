@@ -334,6 +334,8 @@ export type Database = {
           slug: string
           status: BlogPostStatus
           cover_route_id: string | null
+          cover_image_url: string | null
+          cover_image_credit: string | null
           published_at: string | null
           author_id: string | null
           updated_by: string | null
@@ -345,12 +347,16 @@ export type Database = {
           slug: string
           status?: BlogPostStatus
           cover_route_id?: string | null
+          cover_image_url?: string | null
+          cover_image_credit?: string | null
           published_at?: string | null
         }
         Update: {
           slug?: string
           status?: BlogPostStatus
           cover_route_id?: string | null
+          cover_image_url?: string | null
+          cover_image_credit?: string | null
           published_at?: string | null
         }
       }

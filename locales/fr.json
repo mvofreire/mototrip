@@ -763,8 +763,8 @@
       "slugLocked": "Article déjà publié : le slug ne peut plus changer.",
       "slugInvalid": "Utilisez uniquement des minuscules, des chiffres et des tirets.",
       "slugTaken": "Un article avec ce slug existe déjà.",
-      "cover": "Itinéraire de couverture",
-      "coverHelp": "La carte de cet itinéraire sert d'image de couverture.",
+      "cover": "Couverture",
+      "coverHelp": "La carte d'un itinéraire ou votre propre image (idéalement 1600 px de large ou plus).",
       "chooseRoute": "Choisir un itinéraire",
       "changeRoute": "Changer",
       "removeCover": "Retirer",
@@ -791,7 +791,8 @@
         "link": "Lien",
         "quote": "Citation",
         "tip": "Astuce",
-        "route": "Itinéraire"
+        "route": "Itinéraire",
+        "image": "Image"
       },
       "tipPlaceholder": "Texte de l'astuce",
       "textPlaceholder": "texte",
@@ -809,7 +810,15 @@
       "unsaved": "Des modifications ne sont pas enregistrées. Quitter quand même ?",
       "errorSave": "Erreur lors de l'enregistrement : {message}",
       "errorLoad": "Article introuvable.",
-      "errorAction": "Erreur lors de la mise à jour de l'article."
+      "errorAction": "Erreur lors de la mise à jour de l'article.",
+      "uploadImage": "Importer une image",
+      "coverImage": "Image de couverture",
+      "changeImage": "Changer",
+      "coverCredit": "Crédit photo",
+      "coverCreditPlaceholder": "Crédit photo (ex. : Photo : Ana Silva / Unsplash)",
+      "imageAltPlaceholder": "décrivez l'image",
+      "imageInvalid": "Utilisez une image JPG, PNG ou WebP de 5 Mo maximum.",
+      "imageUploadFailed": "Impossible d'importer l'image. Réessayez."
     },
     "curatorFilter": {
       "label": "Note MotoTrip",

@@ -1,11 +1,12 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowLeft } from 'lucide-react'
 import { locales } from '@/i18n'
 import { languageAlternates } from '@/lib/seo'
-import { getPublishedPost, getPublishedPosts, pickTranslation, routesBySlug } from '@/lib/blog/posts'
+import { coverOf, getPublishedPost, getPublishedPosts, pickTranslation, routesBySlug } from '@/lib/blog/posts'
 import { BlogMarkdown, routeSlugsIn } from '@/lib/blog/markdown'
 import { getSiteUrl } from '@/lib/site-url'
 import { SharePostPanel } from '@/components/features/blog/share-post-panel'
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPublishedPost(params.slug).catch(() => null)
   const c = post && pickTranslation(post, params.locale)
   if (!post || !c) return {}
-  const cover = post.cover?.thumbnail_url
+  const cover = coverOf(post)
   return {
     title: c.title,
     description: c.description,
@@ -65,7 +66,7 @@ export default async function BlogPostPage({ params }: Props) {
     .sort((a, b) => Number(b.own) - Number(a.own) || a.i - b.i)
     .slice(0, 3)
     .map(({ p }) => p)
-  const cover = post.cover?.thumbnail_url
+  const cover = coverOf(post)
   const date = post.published_at
     ? new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(post.published_at))
     : null
@@ -118,8 +119,21 @@ export default async function BlogPostPage({ params }: Props) {
         </header>
 
         {cover && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={cover} alt="" className="mb-10 w-full rounded-lg border object-cover" />
+          <figure className="mb-10">
+            <div className="relative aspect-[16/9] overflow-hidden rounded-lg border bg-muted">
+              <Image
+                src={cover}
+                alt={post.cover_image_url ? c.title : ''}
+                fill
+                priority
+                sizes="(max-width: 800px) 100vw, 768px"
+                className="object-cover"
+              />
+            </div>
+            {post.cover_image_url && post.cover_image_credit && (
+              <figcaption className="mt-2 text-right text-xs text-muted-foreground">{post.cover_image_credit}</figcaption>
+            )}
+          </figure>
         )}
 
         <BlogMarkdown markdown={c.body_md} locale={locale} routes={routes} postSlug={post.slug} />

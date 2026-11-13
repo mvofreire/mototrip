@@ -1,26 +1,10 @@
 import { supabase } from '@/lib/supabase/client'
 import type { RoutePhoto } from '@/types'
+import { ACCEPTED_IMAGE_TYPES, MAX_IMAGE_BYTES, prepareImage } from '@/lib/images/prepare-image'
 
 const BUCKET = 'route_photos'
-const MAX_BYTES = 5 * 1024 * 1024
-const MAX_SIDE = 2000
-export const ACCEPTED_PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp']
-
-/** Downscale large phone photos to keep uploads small (JPEG, max 2000px). */
-async function prepareImage(file: File): Promise<Blob> {
-  const bitmap = await createImageBitmap(file).catch(() => null)
-  if (!bitmap) return file
-  const scale = Math.min(1, MAX_SIDE / Math.max(bitmap.width, bitmap.height))
-  if (scale === 1 && file.size <= MAX_BYTES && file.type === 'image/jpeg') return file
-
-  const canvas = document.createElement('canvas')
-  canvas.width = Math.round(bitmap.width * scale)
-  canvas.height = Math.round(bitmap.height * scale)
-  canvas.getContext('2d')!.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
-  return new Promise((resolve) =>
-    canvas.toBlob((b) => resolve(b ?? file), 'image/jpeg', 0.85),
-  )
-}
+const MAX_BYTES = MAX_IMAGE_BYTES
+export const ACCEPTED_PHOTO_TYPES = ACCEPTED_IMAGE_TYPES
 
 function storagePathFromUrl(url: string): string | null {
   const marker = `/${BUCKET}/`

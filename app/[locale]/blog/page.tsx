@@ -1,9 +1,10 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import { buildAlternates } from '@/lib/seo'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import { ArrowRight } from 'lucide-react'
-import { getPublishedPosts, pickTranslation } from '@/lib/blog/posts'
+import { ArrowRight, BookOpen } from 'lucide-react'
+import { coverOf, getPublishedPosts, pickTranslation } from '@/lib/blog/posts'
 
 export const revalidate = 3600
 
@@ -20,7 +21,7 @@ export default async function BlogPage({ params: { locale } }: { params: { local
   setRequestLocale(locale)
 
   const t = await getTranslations({ locale, namespace: 'blog' })
-  // Newest first; the cover image is the map of the post's main route
+  // Newest first; the cover is an uploaded image or the map of the post's main route
   const posts = await getPublishedPosts().catch(() => [])
   const date = (iso: string | null) => (iso ? new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(iso)) : '')
 
@@ -36,17 +37,29 @@ export default async function BlogPage({ params: { locale } }: { params: { local
           {posts.map((post, i) => {
             const c = pickTranslation(post, locale)
             if (!c) return null
-            const img = post.cover?.thumbnail_url
+            const img = coverOf(post)
             return (
               <Link
                 key={post.slug}
                 href={`/${locale}/blog/${post.slug}`}
                 className={`group overflow-hidden rounded-lg border bg-card transition-shadow hover:shadow-lg ${i === 0 ? 'md:col-span-2' : ''}`}
               >
-                {img && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={img} alt="" className={`w-full object-cover ${i === 0 ? 'aspect-[21/9]' : 'aspect-[16/9]'}`} loading="lazy" />
-                )}
+                <div className={`relative overflow-hidden bg-muted ${i === 0 ? 'aspect-[21/9]' : 'aspect-[16/9]'}`}>
+                  {img ? (
+                    <Image
+                      src={img}
+                      alt=""
+                      fill
+                      priority={i === 0}
+                      sizes={i === 0 ? '(max-width: 1024px) 100vw, 1024px' : '(max-width: 768px) 100vw, 512px'}
+                      className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center bg-gradient-brand">
+                      <BookOpen className="h-12 w-12 text-white/80" aria-hidden />
+                    </div>
+                  )}
+                </div>
                 <div className="space-y-2 p-6">
                   <p className="text-xs uppercase tracking-wider text-muted-foreground">{date(post.published_at)}</p>
                   <h2 className={`font-bold leading-tight group-hover:text-primary ${i === 0 ? 'text-3xl' : 'text-2xl'}`}>{c.title}</h2>
