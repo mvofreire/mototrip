@@ -76,7 +76,15 @@
       "label": "Sortieren",
       "recent": "Neueste",
       "curator": "Beste MotoTrip-Bewertung",
-      "community": "Beste Community-Bewertung"
+      "community": "Beste Community-Bewertung",
+      "shortest": "Kürzeste zuerst",
+      "longest": "Längste zuerst"
+    },
+    "noResultsHint": "Entferne einen Filter oder suche nach etwas anderem.",
+    "view": {
+      "grid": "Raster",
+      "list": "Liste",
+      "map": "Karte"
     }
   },
   "filters": {
@@ -89,7 +97,57 @@
     "minimumRating": "Mindest-MotoTrip-Bewertung",
     "routeTypeLoop": "Rundfahrt",
     "routeTypeOutAndBack": "Hin und Zurück",
-    "any": "Alle"
+    "any": "Alle",
+    "clearAll": "Alle löschen",
+    "clearSearch": "Suche löschen",
+    "remove": "Filter entfernen",
+    "close": "Schließen",
+    "sheetHint": "Die Zahlen zeigen, wie viele Routen jede Option übrig lässt.",
+    "showResults": "{count, plural, =0 {Keine Routen} one {# Route anzeigen} other {# Routen anzeigen}}",
+    "groups": {
+      "style": "Routenstil",
+      "country": "Land",
+      "region": "Region",
+      "distance": "Distanz",
+      "time": "Fahrzeit",
+      "difficulty": "Schwierigkeit",
+      "terrain": "Gelände",
+      "rating": "MotoTrip-Bewertung",
+      "format": "Form",
+      "stops": "Stopps unterwegs",
+      "highlights": "Highlights"
+    },
+    "help": {
+      "distance": "Gesamtlänge der Route.",
+      "time": "Geschätzte Zeit auf dem Motorrad, ohne Stopps.",
+      "terrain": "Gesamte Höhenmeter bergauf.",
+      "rating": "Die Note unserer Kuratoren, von 1 bis 5.",
+      "stops": "Routen mit mindestens einem dieser Stopps.",
+      "highlights": "Basierend auf den Noten der MotoTrip-Bewertung."
+    },
+    "dist": {
+      "short": "Kurz",
+      "medium": "Mittel",
+      "long": "Lang",
+      "epic": "Episch"
+    },
+    "time": {
+      "quick": "Kurze Runde",
+      "half": "Vor- oder Nachmittag",
+      "long": "Halber Tag",
+      "day": "Ganzer Tag"
+    },
+    "elev": {
+      "flat": "Sanft",
+      "hilly": "Hügelig",
+      "mountain": "Gebirge"
+    },
+    "feat": {
+      "featured": "MotoTrip-Tipp",
+      "views": "Top-Aussicht",
+      "curves": "Viele Kurven",
+      "asphalt": "Guter Asphalt"
+    }
   },
   "categories": {
     "scenic": "Malerisch",

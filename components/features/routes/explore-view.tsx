@@ -1,289 +1,294 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useDeferredValue, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { Search, SlidersHorizontal, LayoutGrid, List, Map as MapIcon, X, Star } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { RouteCard } from '@/components/features/routes/route-card'
-import { RouteFilters } from '@/components/features/routes/route-filters'
+import {
+  RouteFilters, FilterChip, toggleValue, useFilterSections,
+} from '@/components/features/routes/route-filters'
 import { RoutesOverviewMap } from '@/components/features/routes/routes-overview-map'
-import { RoutesService } from '@/lib/services/routes.service'
-import { RouteFilters as RouteFiltersType, RouteSort } from '@/types'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Search, SlidersHorizontal, LayoutGrid, List, Map as MapIcon, Loader2 } from 'lucide-react'
+import { Sheet, SheetContent, SheetTitle, SheetDescription } from '@/components/ui/sheet'
+import {
+  activeCount, countOptions, filterRoutes, filtersFromParams, filtersToParams, isSortKey, sortRoutes,
+  SORTS, type ExploreFilters, type SortKey,
+} from '@/lib/route-filtering'
+import { cn } from '@/lib/utils'
+import type { RouteWithDetails } from '@/types'
 
 type ViewMode = 'grid' | 'list' | 'map'
 
-const SORTS = {
-  recent: undefined,
-  curator: { field: 'curator_rating', direction: 'desc' },
-  community: { field: 'rating_average', direction: 'desc' },
-} satisfies Record<string, RouteSort | undefined>
-type SortKey = keyof typeof SORTS
-const isSortKey = (v: string | null): v is SortKey => !!v && v in SORTS
-
 /**
- * Interactive explore listing. Starts from the routes the server already
- * rendered (`initialRoutes`, unfiltered, newest first) and only refetches once
- * the URL or the user asks for filters, search or another sort.
+ * Interactive explore listing. Every published route comes from the server
+ * (`initialRoutes`), so filters, search and sort all run in the browser: the
+ * list updates instantly and the URL is kept in sync without a navigation.
  */
 export function ExploreView({ locale, initialRoutes }: { locale: string; initialRoutes: any[] }) {
   const t = useTranslations('explore')
-  const router = useRouter()
+  const tf = useTranslations('filters')
   const searchParams = useSearchParams()
-  
-  // Initialize filters from URL params
-  const getFiltersFromURL = (): RouteFiltersType => {
-    const urlFilters: RouteFiltersType = {}
-    
-    const categories = searchParams.getAll('category')
-    if (categories.length > 0) urlFilters.category = categories as any
-    
-    const difficulties = searchParams.getAll('difficulty')
-    if (difficulties.length > 0) urlFilters.difficulty = difficulties as any
-    
-    const minDistance = searchParams.get('min_distance')
-    if (minDistance) urlFilters.min_distance = parseInt(minDistance)
-    
-    const maxDistance = searchParams.get('max_distance')
-    if (maxDistance) urlFilters.max_distance = parseInt(maxDistance)
-    
-    const minDuration = searchParams.get('min_duration')
-    if (minDuration) urlFilters.min_duration = parseInt(minDuration)
-    
-    const maxDuration = searchParams.get('max_duration')
-    if (maxDuration) urlFilters.max_duration = parseInt(maxDuration)
-    
-    const minRating = parseFloat(searchParams.get('min_rating') ?? '')
-    if (minRating > 0 && minRating <= 5) urlFilters.min_curator_rating = minRating
-    
-    return urlFilters
-  }
-  
-  const [filters, setFilters] = useState<RouteFiltersType>(getFiltersFromURL())
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
+  const routes = initialRoutes as RouteWithDetails[]
+  const sections = useFilterSections(locale)
+
+  const [filters, setFilters] = useState<ExploreFilters>(() => filtersFromParams(searchParams))
   const [sort, setSort] = useState<SortKey>(() => {
     const v = searchParams.get('sort')
     return isSortKey(v) ? v : 'recent'
   })
-  const [showFilters, setShowFilters] = useState(false)
+  const [sheetOpen, setSheetOpen] = useState(false)
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
-  const [routes, setRoutes] = useState<any[]>(initialRoutes)
-  const [loading, setLoading] = useState(false)
-  // The server list matches the default view, so skip the first fetch then
-  const skipFetch = useRef(searchParams.toString() === '')
-  const [error, setError] = useState<string | null>(null)
 
-  // Update URL when filters change
+  // Keep the URL shareable. replaceState updates it without a Next navigation,
+  // so nothing reloads while the user taps filters.
   useEffect(() => {
-    const params = new URLSearchParams()
-    
-    if (filters.category && filters.category.length > 0) {
-      filters.category.forEach(cat => params.append('category', cat))
+    const qs = filtersToParams(filters, sort).toString()
+    const url = `${window.location.pathname}${qs ? `?${qs}` : ''}`
+    if (url !== `${window.location.pathname}${window.location.search}`) {
+      window.history.replaceState(window.history.state, '', url)
     }
-    
-    if (filters.difficulty && filters.difficulty.length > 0) {
-      filters.difficulty.forEach(diff => params.append('difficulty', diff))
-    }
-    
-    if (filters.min_distance !== undefined && filters.min_distance > 0) {
-      params.set('min_distance', filters.min_distance.toString())
-    }
-    
-    if (filters.max_distance !== undefined && filters.max_distance < 500) {
-      params.set('max_distance', filters.max_distance.toString())
-    }
-    
-    if (filters.min_duration !== undefined && filters.min_duration > 0) {
-      params.set('min_duration', filters.min_duration.toString())
-    }
-    
-    if (filters.max_duration !== undefined && filters.max_duration < 720) {
-      params.set('max_duration', filters.max_duration.toString())
-    }
-    
-    if (sort !== 'recent') {
-      params.set('sort', sort)
-    }
+  }, [filters, sort])
 
-    if (filters.min_curator_rating !== undefined && filters.min_curator_rating > 0) {
-      params.set('min_rating', filters.min_curator_rating.toString())
-    }
-    
-    if (searchQuery) {
-      params.set('search', searchQuery)
-    }
-    
-    const newURL = `/${locale}/explore${params.toString() ? '?' + params.toString() : ''}`
-    router.replace(newURL, { scroll: false })
-  }, [filters, searchQuery, sort, locale, router])
+  const deferredFilters = useDeferredValue(filters)
+  const results = useMemo(
+    () => sortRoutes(filterRoutes(routes, deferredFilters, locale), sort),
+    [routes, deferredFilters, locale, sort],
+  )
 
-  // Fetch routes from Supabase
-  useEffect(() => {
-    if (skipFetch.current) {
-      skipFetch.current = false
-      return
-    }
-    async function fetchRoutes() {
-      setLoading(true)
-      setError(null)
-      try {
-        const data = await RoutesService.getRoutes(
-          { ...filters, search: searchQuery || undefined },
-          SORTS[sort],
-        )
-        setRoutes(data)
-      } catch (err) {
-        console.error('Error fetching routes:', err)
-        setError('Erro ao carregar rotas')
-      } finally {
-        setLoading(false)
-      }
-    }
+  const active = activeCount(filters)
+  const clearAll = () => setFilters({})
 
-    fetchRoutes()
-  }, [filters, searchQuery, sort])
+  // Category chips double as quick filters above the list on mobile
+  const categorySection = sections.find((s) => s.group === 'category')!
+  const categoryCounts = countOptions(routes, filters, locale, 'category', categorySection.options.map((o) => o.value))
 
-  // Filter logic is now handled by the service
-  const filteredRoutes = routes
+  // Pills for what is on right now, each removable on its own
+  const pills: { key: string; text: string; label: React.ReactNode; remove: () => void }[] = []
+  for (const section of sections) {
+    for (const value of filters[section.group] ?? []) {
+      const option = section.options.find((o) => o.value === value)
+      if (!option) continue
+      pills.push({
+        key: `${section.group}:${value}`,
+        text: option.hint ? `${option.label} ${option.hint}` : option.label,
+        label: (
+          <>
+            {option.prefix}
+            {option.label}
+            {option.hint && <span className="text-muted-foreground">· {option.hint}</span>}
+          </>
+        ),
+        remove: () => setFilters((f) => toggleValue(f, section.group, value)),
+      })
+    }
+  }
+  if (filters.rating) {
+    pills.push({
+      key: 'rating',
+      text: `MotoTrip ${filters.rating}+`,
+      label: (
+        <>
+          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+          MotoTrip {filters.rating}+
+        </>
+      ),
+      remove: () => setFilters((f) => ({ ...f, rating: undefined })),
+    })
+  }
+
+  const panel = (
+    <RouteFilters
+      routes={routes}
+      filters={filters}
+      onFiltersChange={setFilters}
+      locale={locale}
+      sections={sections}
+    />
+  )
 
   return (
-    <div className="container py-8">
-      <div className="space-y-8">
-        {/* Header */}
-        <div className="space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight">{t('title')}</h1>
-          <p className="text-muted-foreground text-lg">
-            {t('subtitle', { count: routes.length })}
-          </p>
-        </div>
+    <div className="container py-6 md:py-8">
+      {/* Header */}
+      <div className="space-y-2">
+        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{t('title')}</h1>
+        <p className="text-muted-foreground md:text-lg">{t('subtitle', { count: routes.length })}</p>
+      </div>
 
-        {/* Search Bar */}
+      {/* Search + filters toolbar (sticky under the site header on mobile) */}
+      <div className="sticky top-[calc(4rem+env(safe-area-inset-top))] z-30 -mx-8 mt-5 border-b bg-background/95 px-8 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/80 lg:static lg:mx-0 lg:border-0 lg:bg-transparent lg:px-0 lg:py-0 lg:backdrop-blur-none">
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
+              inputMode="search"
+              enterKeyHint="search"
               placeholder={t('searchPlaceholder')}
-              className="pl-9"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-11 rounded-full pl-9 pr-9"
+              value={filters.search ?? ''}
+              onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value || undefined }))}
             />
+            {filters.search && (
+              <button
+                type="button"
+                aria-label={tf('clearSearch')}
+                onClick={() => setFilters((f) => ({ ...f, search: undefined }))}
+                className="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
           </div>
           <Button
-            variant="outline"
-            className="md:hidden"
-            onClick={() => setShowFilters(!showFilters)}
+            variant={active ? 'default' : 'outline'}
+            className="h-11 shrink-0 rounded-full px-4 lg:hidden"
+            onClick={() => setSheetOpen(true)}
           >
-            <SlidersHorizontal className="h-4 w-4 mr-2" />
-            {t('filters')}
+            <SlidersHorizontal className="h-4 w-4 sm:mr-2" />
+            <span className="sr-only sm:not-sr-only">{t('filters')}</span>
+            {active > 0 && (
+              <span className="ml-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-foreground px-1.5 text-xs font-semibold text-primary">
+                {active}
+              </span>
+            )}
           </Button>
         </div>
 
-        {/* Main Content */}
-        <div className="grid gap-8 md:grid-cols-[280px_1fr]">
-          {/* Filters Sidebar */}
-          <aside className={`${showFilters ? 'block' : 'hidden'} md:block md:sticky md:top-20 md:self-start`}>
-            <RouteFilters filters={filters} onFiltersChange={setFilters} />
-          </aside>
+        {/* Quick category chips — mobile/tablet */}
+        <div className="-mx-8 mt-3 flex gap-2 overflow-x-auto px-8 pb-0.5 [scrollbar-width:none] lg:hidden [&::-webkit-scrollbar]:hidden">
+          {categorySection.options.map((o) => {
+            const isOn = !!filters.category?.includes(o.value)
+            return (
+              <FilterChip
+                key={o.value}
+                selected={isOn}
+                disabled={!isOn && categoryCounts[o.value] === 0}
+                onClick={() => setFilters((f) => toggleValue(f, 'category', o.value))}
+              >
+                {o.icon && <o.icon className="h-4 w-4" />}
+                {o.label}
+              </FilterChip>
+            )
+          })}
+        </div>
+      </div>
 
-          {/* Routes Grid */}
-          <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-sm text-muted-foreground">
-                {t('results', { count: filteredRoutes.length })}
-              </p>
-              
-              <div className="flex items-center gap-2">
-              {/* Sort */}
+      <div className="mt-6 grid gap-8 lg:grid-cols-[300px_1fr]">
+        {/* Desktop sidebar */}
+        <aside className="hidden lg:block">
+          <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl border bg-card p-5 [scrollbar-width:thin]">
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 font-semibold">
+                <SlidersHorizontal className="h-4 w-4" />
+                {tf('title')}
+              </h2>
+              {active > 0 && (
+                <Button variant="ghost" size="sm" className="h-8 px-2 text-muted-foreground" onClick={clearAll}>
+                  {tf('clearAll')}
+                </Button>
+              )}
+            </div>
+            {panel}
+          </div>
+        </aside>
+
+        {/* Results */}
+        <div className="min-w-0 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm font-medium" aria-live="polite">
+              {t('results', { count: results.length })}
+            </p>
+            <div className="flex items-center gap-2">
               <Select value={sort} onValueChange={(v) => isSortKey(v) && setSort(v)}>
-                <SelectTrigger className="h-10 w-[180px] sm:w-[220px]" aria-label={t('sort.label')}>
+                <SelectTrigger className="h-10 w-[170px] sm:w-[230px]" aria-label={t('sort.label')}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="recent">{t('sort.recent')}</SelectItem>
-                  <SelectItem value="curator">{t('sort.curator')}</SelectItem>
-                  <SelectItem value="community">{t('sort.community')}</SelectItem>
+                  {SORTS.map((s) => (
+                    <SelectItem key={s} value={s}>{t(`sort.${s}`)}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
-
-              {/* View Mode Toggle */}
-              <div className="flex items-center gap-1 border rounded-lg p-1">
-                <Button
-                  variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
-                  size="sm"
-                  onClick={() => setViewMode('grid')}
-                  className="h-8 w-8 p-0"
-                  title="Grid view"
-                >
-                  <LayoutGrid className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant={viewMode === 'list' ? 'secondary' : 'ghost'}
-                  size="sm"
-                  onClick={() => setViewMode('list')}
-                  className="h-8 w-8 p-0"
-                  title="List view"
-                >
-                  <List className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant={viewMode === 'map' ? 'secondary' : 'ghost'}
-                  size="sm"
-                  onClick={() => setViewMode('map')}
-                  className="h-8 w-8 p-0"
-                  title="Map view"
-                >
-                  <MapIcon className="h-4 w-4" />
-                </Button>
-              </div>
+              <div className="flex items-center gap-1 rounded-lg border p-1">
+                {([
+                  ['grid', LayoutGrid, t('view.grid')],
+                  ['list', List, t('view.list')],
+                  ['map', MapIcon, t('view.map')],
+                ] as const).map(([mode, Icon, label]) => (
+                  <Button
+                    key={mode}
+                    variant={viewMode === mode ? 'secondary' : 'ghost'}
+                    size="sm"
+                    onClick={() => setViewMode(mode)}
+                    className="h-8 w-8 p-0"
+                    title={label}
+                    aria-label={label}
+                    aria-pressed={viewMode === mode}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </Button>
+                ))}
               </div>
             </div>
+          </div>
 
-            {loading ? (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-              </div>
-            ) : error ? (
-              <div className="text-center py-12">
-                <p className="text-destructive">{error}</p>
-              </div>
-            ) : filteredRoutes.length > 0 ? (
-              <>
-                {viewMode === 'map' ? (
-                  <div className="space-y-6">
-                    <RoutesOverviewMap routes={filteredRoutes} locale={locale} />
-                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-                      {filteredRoutes.map((route) => (
-                        <RouteCard key={route.id} route={route} locale={locale} />
-                      ))}
-                    </div>
-                  </div>
-                ) : viewMode === 'grid' ? (
-                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-                    {filteredRoutes.map((route) => (
+          {/* Active filters */}
+          {pills.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2">
+              {pills.map((p) => (
+                <button
+                  key={p.key}
+                  type="button"
+                  onClick={p.remove}
+                  aria-label={`${tf('remove')}: ${p.text}`}
+                  className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-medium hover:bg-muted/70"
+                >
+                  {p.label}
+                  <X className="h-3.5 w-3.5 text-muted-foreground" />
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={clearAll}
+                className="min-h-8 px-1 text-xs font-medium text-primary underline-offset-4 hover:underline"
+              >
+                {tf('clearAll')}
+              </button>
+            </div>
+          )}
+
+          <div className={cn('transition-opacity', deferredFilters !== filters && 'opacity-60')}>
+            {results.length > 0 ? (
+              viewMode === 'map' ? (
+                <div className="space-y-6">
+                  <RoutesOverviewMap routes={results} locale={locale} />
+                  <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                    {results.map((route) => (
                       <RouteCard key={route.id} route={route} locale={locale} />
                     ))}
                   </div>
-                ) : (
-                  <div className="flex flex-col gap-6">
-                    {filteredRoutes.map((route) => (
-                      <RouteCard key={route.id} route={route} locale={locale} variant="list" />
-                    ))}
-                  </div>
-                )}
-              </>
+                </div>
+              ) : viewMode === 'grid' ? (
+                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                  {results.map((route) => (
+                    <RouteCard key={route.id} route={route} locale={locale} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col gap-6">
+                  {results.map((route) => (
+                    <RouteCard key={route.id} route={route} locale={locale} variant="list" />
+                  ))}
+                </div>
+              )
             ) : (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">{t('noResults')}</p>
-                <Button
-                  variant="link"
-                  onClick={() => {
-                    setFilters({})
-                    setSearchQuery('')
-                  }}
-                >
+              <div className="rounded-2xl border border-dashed px-6 py-14 text-center">
+                <p className="font-medium">{t('noResults')}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{t('noResultsHint')}</p>
+                <Button variant="outline" className="mt-4 rounded-full" onClick={clearAll}>
                   {t('clearFilters')}
                 </Button>
               </div>
@@ -291,6 +296,39 @@ export function ExploreView({ locale, initialRoutes }: { locale: string; initial
           </div>
         </div>
       </div>
+
+      {/* Mobile/tablet filters: bottom sheet */}
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <SheetContent
+          side="bottom"
+          className="flex h-[88dvh] flex-col gap-0 rounded-t-3xl p-0 lg:hidden [&>button:last-child]:hidden"
+        >
+          <div className="mx-auto mt-2.5 h-1.5 w-10 shrink-0 rounded-full bg-muted-foreground/30" aria-hidden />
+          <div className="flex shrink-0 items-center justify-between border-b px-5 pb-3 pt-2">
+            <div>
+              <SheetTitle>{tf('title')}</SheetTitle>
+              <SheetDescription className="text-xs">{tf('sheetHint')}</SheetDescription>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSheetOpen(false)}
+              aria-label={tf('close')}
+              className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-muted"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-5">{panel}</div>
+          <div className="flex shrink-0 gap-3 border-t bg-background px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <Button variant="ghost" className="h-12 rounded-full px-5" onClick={clearAll} disabled={!active}>
+              {tf('clearAll')}
+            </Button>
+            <Button className="h-12 flex-1 rounded-full text-base" onClick={() => setSheetOpen(false)}>
+              {tf('showResults', { count: filterRoutes(routes, filters, locale).length })}
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }

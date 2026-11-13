@@ -76,7 +76,15 @@
       "label": "Ordenar",
       "recent": "Mais recentes",
       "curator": "Melhor avaliação MotoTrip",
-      "community": "Melhor avaliação da comunidade"
+      "community": "Melhor avaliação da comunidade",
+      "shortest": "Mais curtas primeiro",
+      "longest": "Mais longas primeiro"
+    },
+    "noResultsHint": "Tente remover um filtro ou buscar outro termo.",
+    "view": {
+      "grid": "Grade",
+      "list": "Lista",
+      "map": "Mapa"
     }
   },
   "filters": {
@@ -89,7 +97,57 @@
     "minimumRating": "Avaliação MotoTrip mínima",
     "routeTypeLoop": "Loop (Circular)",
     "routeTypeOutAndBack": "Vai e Volta",
-    "any": "Qualquer"
+    "any": "Qualquer",
+    "clearAll": "Limpar tudo",
+    "clearSearch": "Limpar busca",
+    "remove": "Remover filtro",
+    "close": "Fechar",
+    "sheetHint": "Os números mostram quantas rotas sobram em cada opção.",
+    "showResults": "{count, plural, =0 {Nenhuma rota} one {Ver # rota} other {Ver # rotas}}",
+    "groups": {
+      "style": "Estilo da rota",
+      "country": "País",
+      "region": "Região",
+      "distance": "Distância",
+      "time": "Tempo pilotando",
+      "difficulty": "Dificuldade",
+      "terrain": "Relevo",
+      "rating": "Avaliação MotoTrip",
+      "format": "Formato",
+      "stops": "Paradas no caminho",
+      "highlights": "Destaques"
+    },
+    "help": {
+      "distance": "Extensão total da rota.",
+      "time": "Tempo estimado em cima da moto, sem paradas.",
+      "terrain": "Subida acumulada ao longo da rota.",
+      "rating": "Nota da nossa curadoria, de 1 a 5.",
+      "stops": "Rotas com pelo menos uma destas paradas.",
+      "highlights": "Baseados nas notas da avaliação MotoTrip."
+    },
+    "dist": {
+      "short": "Curta",
+      "medium": "Média",
+      "long": "Longa",
+      "epic": "Épica"
+    },
+    "time": {
+      "quick": "Rápida",
+      "half": "Manhã ou tarde",
+      "long": "Meio dia",
+      "day": "Dia inteiro"
+    },
+    "elev": {
+      "flat": "Suave",
+      "hilly": "Ondulada",
+      "mountain": "Serra"
+    },
+    "feat": {
+      "featured": "Destaque MotoTrip",
+      "views": "Paisagem top",
+      "curves": "Muitas curvas",
+      "asphalt": "Bom asfalto"
+    }
   },
   "categories": {
     "scenic": "Cênica",

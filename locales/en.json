@@ -76,7 +76,15 @@
       "label": "Sort by",
       "recent": "Newest",
       "curator": "Top MotoTrip rating",
-      "community": "Top community rating"
+      "community": "Top community rating",
+      "shortest": "Shortest first",
+      "longest": "Longest first"
+    },
+    "noResultsHint": "Try removing a filter or searching for something else.",
+    "view": {
+      "grid": "Grid",
+      "list": "List",
+      "map": "Map"
     }
   },
   "filters": {
@@ -89,7 +97,57 @@
     "minimumRating": "Minimum MotoTrip rating",
     "routeTypeLoop": "Loop",
     "routeTypeOutAndBack": "Out and Back",
-    "any": "Any"
+    "any": "Any",
+    "clearAll": "Clear all",
+    "clearSearch": "Clear search",
+    "remove": "Remove filter",
+    "close": "Close",
+    "sheetHint": "Numbers show how many routes each option leaves.",
+    "showResults": "{count, plural, =0 {No routes} one {Show # route} other {Show # routes}}",
+    "groups": {
+      "style": "Route style",
+      "country": "Country",
+      "region": "Region",
+      "distance": "Distance",
+      "time": "Riding time",
+      "difficulty": "Difficulty",
+      "terrain": "Terrain",
+      "rating": "MotoTrip rating",
+      "format": "Shape",
+      "stops": "Stops along the way",
+      "highlights": "Highlights"
+    },
+    "help": {
+      "distance": "Total length of the route.",
+      "time": "Estimated time on the bike, without stops.",
+      "terrain": "Total climbing along the route.",
+      "rating": "Our curators' score, from 1 to 5.",
+      "stops": "Routes with at least one of these stops.",
+      "highlights": "Based on the MotoTrip review scores."
+    },
+    "dist": {
+      "short": "Short",
+      "medium": "Medium",
+      "long": "Long",
+      "epic": "Epic"
+    },
+    "time": {
+      "quick": "Quick ride",
+      "half": "Morning or afternoon",
+      "long": "Half day",
+      "day": "Full day"
+    },
+    "elev": {
+      "flat": "Gentle",
+      "hilly": "Rolling",
+      "mountain": "Mountain"
+    },
+    "feat": {
+      "featured": "MotoTrip pick",
+      "views": "Top scenery",
+      "curves": "Lots of curves",
+      "asphalt": "Good asphalt"
+    }
   },
   "categories": {
     "scenic": "Scenic",
