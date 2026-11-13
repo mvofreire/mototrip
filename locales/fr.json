@@ -345,7 +345,18 @@
     "shareText": "Découvre ce guide moto : {title}",
     "share": "Partager",
     "copyLink": "Copier le lien",
-    "linkCopied": "Lien copié !"
+    "linkCopied": "Lien copié !",
+    "openMap": "Voir sur la carte",
+    "routeCta": "Voir l'itinéraire complet",
+    "routeCtaHint": "Carte interactive, arrêts et GPX gratuit",
+    "nextSteps": "Continuez à explorer",
+    "routesInPost": "{count, plural, one {L'itinéraire de ce guide} other {Les # itinéraires de ce guide}}",
+    "routesInPostDesc": "Ouvrez chaque itinéraire pour voir la carte, les arrêts et télécharger le GPX.",
+    "exploreTitle": "Prêt à prendre la route ?",
+    "exploreDesc": "Découvrez d'autres itinéraires moto sélectionnés, avec carte et GPX gratuit.",
+    "moreInRegion": "Itinéraires : {region}",
+    "exploreAll": "Voir tous les itinéraires",
+    "readNext": "À lire aussi"
   },
   "about": {
     "title": "À Propos",
