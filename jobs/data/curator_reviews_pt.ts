@@ -1929,5 +1929,343 @@ export const CURATOR_REVIEWS_PT: CuratorReviewEntry[] = [
       "best_season": "Frühling und Herbst; im Sommer ist an der Küste mehr Verkehr"
     }
   }
-}
+},
+  {
+    "slug": "cascatas-do-geres-portela-do-homem-leonte-geres-fecha-de-barjas",
+    "overall": 4,
+    "scenic": 4.5,
+    "road": 4,
+    "fun": 3.5,
+    "confidence": "medium",
+    "researched_at": "2026-11-13",
+    "verdict": "Estrada de parque nacional mais para apreciar do que para acelerar: a N308-1 entre a Caniçada e a Portela do Homem tem curvas muito fechadas e atravessa a Mata da Albergaria, onde não se pode parar. O prémio são as cascatas a curta distância da estrada, de Leonte à Portela do Homem e às lagoas de Fecha de Barjas. Ideal para uma volta calma com paragens a pé.",
+    "highlights": [
+      "Mata da Albergaria, carvalhal protegido do Gerês",
+      "Cascata da Portela do Homem junto à antiga fronteira",
+      "Lagoas de Fecha de Barjas (\"Tahiti\")"
+    ],
+    "warnings": [
+      "Proibido parar ou estacionar dentro da Mata da Albergaria",
+      "Animais na estrada dentro do parque",
+      "Descida para as lagoas do Tahiti íngreme e escorregadia com piso molhado"
+    ],
+    "best_season": "Primavera e início do outono; evite fins de semana de agosto pela enchente nas cascatas.",
+    "sources": [
+      {
+        "title": "N308-1 : Albufeira da Caniçada / Portela do Homem",
+        "url": "https://www.bestbikingroads.com/motorcycle-roads/portugal/northern-portugal/ride/n308-1-albufeira-da-canicada-portela-do-homem",
+        "site": "Best Biking Roads",
+        "lang": "en"
+      },
+      {
+        "title": "Mata de Albergaria: um tesouro no Gerês",
+        "url": "https://www.e-konomista.pt/mata-de-albergaria-geres/",
+        "site": "e-konomista",
+        "lang": "pt"
+      },
+      {
+        "title": "9 wonderful waterfalls in Geres National Park",
+        "url": "https://www.portugalthings.com/?p=1158",
+        "site": "Portugal Things",
+        "lang": "en"
+      },
+      {
+        "title": "Cascata do Tahiti – Gerês: como ir visitar",
+        "url": "https://www.vagamundos.pt/cascata-do-tahiti-geres/",
+        "site": "Vagamundos",
+        "lang": "pt"
+      }
+    ],
+    "i18n": {
+      "en": {
+        "verdict": "A national park road to savour rather than rush: the N308-1 between Caniçada and Portela do Homem has very tight corners and runs through the Mata da Albergaria, where stopping is not allowed. The reward is the waterfalls a short walk from the road, from Leonte to Portela do Homem and the Fecha de Barjas pools. Best for a relaxed ride with stops on foot.",
+        "highlights": [
+          "Mata da Albergaria, the protected oak forest of Gerês",
+          "Portela do Homem waterfall by the old border",
+          "Fecha de Barjas pools (\"Tahiti\")"
+        ],
+        "warnings": [
+          "No stopping or parking inside the Mata da Albergaria",
+          "Animals on the road inside the park",
+          "Steep, slippery descent to the Tahiti pools when wet"
+        ],
+        "best_season": "Spring and early autumn; avoid August weekends, when the waterfalls are packed."
+      },
+      "es": {
+        "verdict": "Carretera de parque nacional más para disfrutar que para correr: la N308-1 entre la Caniçada y Portela do Homem tiene curvas muy cerradas y cruza la Mata da Albergaria, donde no se puede parar. El premio son las cascadas a poca distancia de la carretera, de Leonte a Portela do Homem y las pozas de Fecha de Barjas. Ideal para una ruta tranquila con paradas a pie.",
+        "highlights": [
+          "Mata da Albergaria, robledal protegido del Gerês",
+          "Cascada de Portela do Homem junto a la antigua frontera",
+          "Pozas de Fecha de Barjas (\"Tahiti\")"
+        ],
+        "warnings": [
+          "Prohibido parar o aparcar dentro de la Mata da Albergaria",
+          "Animales en la carretera dentro del parque",
+          "Bajada a las pozas del Tahiti empinada y resbaladiza con suelo mojado"
+        ],
+        "best_season": "Primavera y principios de otoño; evita los fines de semana de agosto por la afluencia a las cascadas."
+      },
+      "fr": {
+        "verdict": "Une route de parc national à savourer plutôt qu'à attaquer : la N308-1 entre la Caniçada et Portela do Homem a des virages très serrés et traverse la Mata da Albergaria, où l'arrêt est interdit. La récompense, ce sont les cascades à deux pas de la route, de Leonte à Portela do Homem et aux vasques de Fecha de Barjas. Idéale pour une balade tranquille avec des arrêts à pied.",
+        "highlights": [
+          "Mata da Albergaria, chênaie protégée du Gerês",
+          "Cascade de Portela do Homem près de l'ancienne frontière",
+          "Vasques de Fecha de Barjas (« Tahiti »)"
+        ],
+        "warnings": [
+          "Arrêt et stationnement interdits dans la Mata da Albergaria",
+          "Animaux sur la route dans le parc",
+          "Descente vers les vasques du Tahiti raide et glissante par temps humide"
+        ],
+        "best_season": "Printemps et début d'automne ; évitez les week-ends d'août, quand les cascades sont bondées."
+      },
+      "de": {
+        "verdict": "Eine Nationalparkstraße zum Genießen statt zum Rasen: Die N308-1 zwischen Caniçada und Portela do Homem hat sehr enge Kurven und führt durch die Mata da Albergaria, wo Halten verboten ist. Der Lohn sind die Wasserfälle nur einen kurzen Fußweg von der Straße, von Leonte bis Portela do Homem und zu den Gumpen von Fecha de Barjas. Ideal für eine ruhige Tour mit Stopps zu Fuß.",
+        "highlights": [
+          "Mata da Albergaria, geschützter Eichenwald des Gerês",
+          "Wasserfall an der Portela do Homem beim alten Grenzposten",
+          "Gumpen von Fecha de Barjas („Tahiti“)"
+        ],
+        "warnings": [
+          "Halten und Parken in der Mata da Albergaria verboten",
+          "Tiere auf der Straße im Park",
+          "Steiler, bei Nässe rutschiger Abstieg zu den Tahiti-Gumpen"
+        ],
+        "best_season": "Frühling und Frühherbst; Augustwochenenden meiden, dann sind die Wasserfälle überlaufen."
+      }
+    }
+  },
+  {
+    "slug": "fisgas-de-ermelo-mondim-de-basto-ermelo-lamas-de-olo-vila-real",
+    "overall": 3.5,
+    "scenic": 4,
+    "road": 3.5,
+    "fun": 3.5,
+    "confidence": "low",
+    "researched_at": "2026-11-13",
+    "verdict": "A ligação de Mondim de Basto a Vila Real pela serra do Alvão vale a viagem pela paisagem, que muda em poucos quilómetros do vale verde para o planalto quase despido. As Fisgas de Ermelo, das quedas de água mais altas do país, não se veem da estrada: é preciso fazer o trilho a pé a partir de Ermelo. Há pouca informação sobre o estado do piso, por isso a nota é prudente.",
+    "highlights": [
+      "Mudança rápida de paisagem entre o vale e o planalto do Alvão",
+      "Aldeia de Ermelo, com casas de xisto",
+      "Trilho PR3 até às Fisgas de Ermelo"
+    ],
+    "warnings": [
+      "As Fisgas só se veem a pé, pelo trilho a partir de Ermelo"
+    ],
+    "best_season": "Primavera, quando as Fisgas levam mais água.",
+    "sources": [
+      {
+        "title": "Pelo Parque do Alvão",
+        "url": "https://www.e-konomista.pt/pelo-parque-do-alvao/",
+        "site": "e-konomista",
+        "lang": "pt"
+      },
+      {
+        "title": "Trilho das Fisgas de Ermelo",
+        "url": "https://www.e-konomista.pt/trilho-fisgas-ermelo/",
+        "site": "e-konomista",
+        "lang": "pt"
+      }
+    ],
+    "i18n": {
+      "en": {
+        "verdict": "The link from Mondim de Basto to Vila Real across the Alvão range is worth it for the scenery, which changes within a few kilometres from green valley to almost bare plateau. The Fisgas de Ermelo, among the tallest waterfalls in the country, can't be seen from the road: you need to walk the trail from Ermelo. There is little information on the road surface, so the score is cautious.",
+        "highlights": [
+          "Quick change of scenery between the valley and the Alvão plateau",
+          "Ermelo village, with its schist houses",
+          "PR3 trail to the Fisgas de Ermelo"
+        ],
+        "warnings": [
+          "The Fisgas can only be seen on foot, on the trail from Ermelo"
+        ],
+        "best_season": "Spring, when the Fisgas carry the most water."
+      },
+      "es": {
+        "verdict": "La conexión de Mondim de Basto a Vila Real por la sierra del Alvão merece la pena por el paisaje, que en pocos kilómetros pasa del valle verde a la meseta casi desnuda. Las Fisgas de Ermelo, de las cascadas más altas del país, no se ven desde la carretera: hay que hacer el sendero a pie desde Ermelo. Hay poca información sobre el estado del firme, así que la nota es prudente.",
+        "highlights": [
+          "Cambio rápido de paisaje entre el valle y la meseta del Alvão",
+          "Pueblo de Ermelo, con casas de pizarra",
+          "Sendero PR3 hasta las Fisgas de Ermelo"
+        ],
+        "warnings": [
+          "Las Fisgas solo se ven a pie, por el sendero desde Ermelo"
+        ],
+        "best_season": "Primavera, cuando las Fisgas llevan más agua."
+      },
+      "fr": {
+        "verdict": "La liaison de Mondim de Basto à Vila Real par la serra do Alvão vaut le détour pour le paysage, qui passe en quelques kilomètres de la vallée verte au plateau presque nu. Les Fisgas de Ermelo, parmi les plus hautes cascades du pays, ne se voient pas de la route : il faut suivre le sentier à pied depuis Ermelo. On trouve peu d'informations sur l'état du revêtement, d'où une note prudente.",
+        "highlights": [
+          "Changement rapide de paysage entre la vallée et le plateau de l'Alvão",
+          "Village d'Ermelo, aux maisons de schiste",
+          "Sentier PR3 jusqu'aux Fisgas de Ermelo"
+        ],
+        "warnings": [
+          "Les Fisgas ne se voient qu'à pied, par le sentier depuis Ermelo"
+        ],
+        "best_season": "Au printemps, quand les Fisgas ont le plus d'eau."
+      },
+      "de": {
+        "verdict": "Die Verbindung von Mondim de Basto nach Vila Real über die Serra do Alvão lohnt sich wegen der Landschaft, die auf wenigen Kilometern vom grünen Tal zur fast kahlen Hochebene wechselt. Die Fisgas de Ermelo, einer der höchsten Wasserfälle des Landes, sieht man nicht von der Straße: Dafür geht man den Wanderweg ab Ermelo. Über den Straßenzustand gibt es wenig Informationen, daher ist die Note vorsichtig.",
+        "highlights": [
+          "Schneller Landschaftswechsel zwischen Tal und Alvão-Hochebene",
+          "Dorf Ermelo mit Schieferhäusern",
+          "Wanderweg PR3 zu den Fisgas de Ermelo"
+        ],
+        "warnings": [
+          "Die Fisgas sieht man nur zu Fuß, über den Wanderweg ab Ermelo"
+        ],
+        "best_season": "Frühling, wenn die Fisgas am meisten Wasser führen."
+      }
+    }
+  },
+  {
+    "slug": "serra-da-freita-arouca-frecha-da-mizarela-cascata-da-cabreia-sever-do-vouga",
+    "overall": 4,
+    "scenic": 4.5,
+    "road": 3.5,
+    "fun": 4,
+    "confidence": "medium",
+    "researched_at": "2026-11-13",
+    "verdict": "Subida de montanha a partir de Arouca até ao planalto da Freita, com a Frecha da Mizarela, apontada como a cascata mais alta de Portugal continental, que se vê de um miradouro. A descida para o vale do Vouga leva à Cascata da Cabreia, com parque de lazer, o que faz desta uma das voltas com mais cascatas por quilómetro no Centro. Pouco se encontra sobre o piso, por isso a nota da estrada é prudente.",
+    "highlights": [
+      "Frecha da Mizarela, cerca de 75 m de queda",
+      "Planalto da Serra da Freita no Arouca Geopark",
+      "Cascata da Cabreia e parque de lazer"
+    ],
+    "warnings": [
+      "Zona de banho da Cabreia sem vigilância"
+    ],
+    "best_season": "Primavera e outono, com as cascatas cheias e menos calor.",
+    "sources": [
+      {
+        "title": "Cascata da Frecha da Mizarela",
+        "url": "https://www.timeout.pt/lisboa/pt/atraccoes/cascata-da-frecha-da-mizarela",
+        "site": "Time Out",
+        "lang": "pt"
+      },
+      {
+        "title": "Praia Fluvial e Cascata da Cabreia | Sever do Vouga",
+        "url": "https://www.vagamundos.pt/praia-fluvial-cascata-da-cabreia/",
+        "site": "Vagamundos",
+        "lang": "pt"
+      }
+    ],
+    "i18n": {
+      "en": {
+        "verdict": "A mountain climb from Arouca to the Freita plateau, with the Frecha da Mizarela, cited as the highest waterfall in mainland Portugal, seen from a viewpoint. The descent towards the Vouga valley leads to the Cabreia waterfall and its leisure park, making this one of the rides with the most waterfalls per kilometre in central Portugal. Little is published about the surface, so the road score is cautious.",
+        "highlights": [
+          "Frecha da Mizarela, a drop of about 75 m",
+          "Serra da Freita plateau in the Arouca Geopark",
+          "Cabreia waterfall and leisure park"
+        ],
+        "warnings": [
+          "No lifeguard at the Cabreia swimming area"
+        ],
+        "best_season": "Spring and autumn, with full waterfalls and less heat."
+      },
+      "es": {
+        "verdict": "Subida de montaña desde Arouca hasta la meseta de la Freita, con la Frecha da Mizarela, señalada como la cascada más alta del Portugal continental, que se ve desde un mirador. La bajada hacia el valle del Vouga lleva a la cascada de la Cabreia, con parque de ocio, lo que hace de esta una de las rutas con más cascadas por kilómetro del centro del país. Se encuentra poco sobre el firme, así que la nota de la carretera es prudente.",
+        "highlights": [
+          "Frecha da Mizarela, unos 75 m de caída",
+          "Meseta de la Serra da Freita en el Arouca Geopark",
+          "Cascada de la Cabreia y parque de ocio"
+        ],
+        "warnings": [
+          "Zona de baño de la Cabreia sin vigilancia"
+        ],
+        "best_season": "Primavera y otoño, con las cascadas llenas y menos calor."
+      },
+      "fr": {
+        "verdict": "Une montée depuis Arouca jusqu'au plateau de la Freita, avec la Frecha da Mizarela, citée comme la plus haute cascade du Portugal continental, visible depuis un belvédère. La descente vers la vallée du Vouga mène à la cascade de la Cabreia et son parc de loisirs : l'une des balades les plus riches en cascades du centre du pays. On trouve peu d'informations sur le revêtement, d'où une note prudente pour la route.",
+        "highlights": [
+          "Frecha da Mizarela, environ 75 m de chute",
+          "Plateau de la Serra da Freita dans l'Arouca Geopark",
+          "Cascade de la Cabreia et parc de loisirs"
+        ],
+        "warnings": [
+          "Baignade non surveillée à la Cabreia"
+        ],
+        "best_season": "Printemps et automne, cascades pleines et moins de chaleur."
+      },
+      "de": {
+        "verdict": "Ein Bergaufstieg von Arouca auf das Freita-Plateau, mit der Frecha da Mizarela, die als höchster Wasserfall des portugiesischen Festlands gilt, die man von einem Aussichtspunkt sieht. Die Abfahrt ins Vouga-Tal führt zum Wasserfall von Cabreia mit Freizeitpark – eine der Touren mit den meisten Wasserfällen pro Kilometer in Mittelportugal. Über den Belag findet man wenig, daher ist die Straßennote vorsichtig.",
+        "highlights": [
+          "Frecha da Mizarela, rund 75 m Fallhöhe",
+          "Hochebene der Serra da Freita im Arouca Geopark",
+          "Wasserfall von Cabreia und Freizeitpark"
+        ],
+        "warnings": [
+          "Badestelle in Cabreia ohne Aufsicht"
+        ],
+        "best_season": "Frühling und Herbst, mit vollen Wasserfällen und weniger Hitze."
+      }
+    }
+  },
+  {
+    "slug": "fraga-da-pena-e-piodao-arganil-benfeita-mata-da-margaraca-piodao",
+    "overall": 4,
+    "scenic": 4.5,
+    "road": 3.5,
+    "fun": 4,
+    "confidence": "low",
+    "researched_at": "2026-11-13",
+    "verdict": "A subida da Benfeita ao Piódão pela EM518, a EN344 e a EM508 é uma das estradas panorâmicas das Aldeias do Xisto, com vistas sobre a Mata da Margaraça e um troço final com miradouros até à aldeia. É uma estrada para ir com calma e parar, mais do que para ritmo. Há poucos relatos de motociclistas sobre o piso, por isso a nota é prudente.",
+    "highlights": [
+      "Vistas sobre a Mata da Margaraça",
+      "Troço panorâmico da EM508 com miradouros",
+      "Chegada ao Piódão com a aldeia sempre à vista"
+    ],
+    "warnings": [],
+    "best_season": "Primavera e outono, com melhor luz e menos visitantes no Piódão.",
+    "sources": [
+      {
+        "title": "Estradas panorâmicas: Benfeita – Piódão",
+        "url": "https://www.aldeiasdoxisto.com/en/xistopedia/panoramic-roads",
+        "site": "Aldeias do Xisto",
+        "lang": "en"
+      }
+    ],
+    "i18n": {
+      "en": {
+        "verdict": "The climb from Benfeita to Piódão on the EM518, EN344 and EM508 is one of the panoramic roads of the Schist Villages network, with views over the Mata da Margaraça and a final stretch with viewpoints down to the village. It is a road to take slowly and stop, rather than ride at pace. There are few riders' reports on the surface, so the score is cautious.",
+        "highlights": [
+          "Views over the Mata da Margaraça",
+          "Panoramic EM508 stretch with viewpoints",
+          "Arrival at Piódão with the village in view"
+        ],
+        "warnings": [],
+        "best_season": "Spring and autumn, with better light and fewer visitors in Piódão."
+      },
+      "es": {
+        "verdict": "La subida de Benfeita a Piódão por la EM518, la EN344 y la EM508 es una de las carreteras panorámicas de las Aldeias do Xisto, con vistas sobre la Mata da Margaraça y un tramo final con miradores hasta el pueblo. Es una carretera para ir con calma y parar, más que para llevar ritmo. Hay pocos relatos de motoristas sobre el firme, así que la nota es prudente.",
+        "highlights": [
+          "Vistas sobre la Mata da Margaraça",
+          "Tramo panorámico de la EM508 con miradores",
+          "Llegada a Piódão con el pueblo siempre a la vista"
+        ],
+        "warnings": [],
+        "best_season": "Primavera y otoño, con mejor luz y menos visitantes en Piódão."
+      },
+      "fr": {
+        "verdict": "La montée de Benfeita à Piódão par la EM518, la EN344 et la EM508 fait partie des routes panoramiques des Aldeias do Xisto, avec des vues sur la Mata da Margaraça et un dernier tronçon jalonné de belvédères jusqu'au village. C'est une route à parcourir tranquillement, en s'arrêtant, plutôt qu'à rythme soutenu. Les récits de motards sur le revêtement sont rares, d'où une note prudente.",
+        "highlights": [
+          "Vues sur la Mata da Margaraça",
+          "Tronçon panoramique de la EM508 avec belvédères",
+          "Arrivée à Piódão avec le village en vue"
+        ],
+        "warnings": [],
+        "best_season": "Printemps et automne, meilleure lumière et moins de visiteurs à Piódão."
+      },
+      "de": {
+        "verdict": "Der Aufstieg von Benfeita nach Piódão über EM518, EN344 und EM508 gehört zu den Panoramastraßen der Aldeias do Xisto, mit Blick auf die Mata da Margaraça und einem letzten Abschnitt mit Aussichtspunkten bis ins Dorf. Eine Straße zum Genießen und Anhalten, nicht für Tempo. Berichte von Motorradfahrern über den Belag sind selten, daher ist die Note vorsichtig.",
+        "highlights": [
+          "Blick auf die Mata da Margaraça",
+          "Panoramaabschnitt der EM508 mit Aussichtspunkten",
+          "Ankunft in Piódão mit dem Dorf im Blick"
+        ],
+        "warnings": [],
+        "best_season": "Frühling und Herbst, mit besserem Licht und weniger Besuchern in Piódão."
+      }
+    }
+  }
 ];

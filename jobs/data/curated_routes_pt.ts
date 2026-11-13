@@ -845,4 +845,256 @@ export const CURATED_ROUTES_PT: CuratedRoute[] = [
       },
     ],
   },
+  // ───────────────────────────── CASCATAS ─────────────────────────────
+  {
+    title: 'Cascatas do Gerês | Portela do Homem > Leonte > Gerês > Fecha de Barjas',
+    description:
+      'Três quedas de água do Parque Nacional da Peneda-Gerês numa só estrada. Da fronteira na Portela do Homem desce-se pela Mata da Albergaria, ao lado dos marcos miliários da Geira romana, até à Cascata de Leonte e à vila do Gerês. Depois segue-se pela EM 308 até ao miradouro de Fecha de Barjas, as lagoas conhecidas por "Tahiti". Na Mata da Albergaria não é permitido parar nem estacionar: para ver a cascata da Portela do Homem, deixe a mota junto à antiga fronteira.',
+    region: 'Norte',
+    category: 'scenic',
+    difficulty: 'moderate',
+    route_type: 'out_and_back',
+    waypoints: [
+      [41.8091, -8.1315], // Portela do Homem
+      [41.7607, -8.1494], // Cascata de Leonte
+      [41.729, -8.1595], // Gerês
+      [41.7042, -8.1101], // Miradouro de Fecha de Barjas (EM 308)
+      [41.7137, -8.036], // Cabril
+    ],
+    stops: [
+      {
+        name: 'Portela do Homem',
+        description: 'Fronteira com a Galiza, com uma cascata e poços de água junto à ponte.',
+        type: 'viewpoint',
+        lat: 41.8091,
+        lng: -8.1315,
+        i18n: {
+          en: { description: 'The border with Galicia, with a waterfall and pools by the bridge.' },
+          es: { description: 'Frontera con Galicia, con una cascada y pozas junto al puente.' },
+          fr: { description: 'La frontière avec la Galice, avec une cascade et des vasques près du pont.' },
+          de: { description: 'Grenze zu Galicien, mit einem Wasserfall und Gumpen an der Brücke.' },
+        },
+      },
+      {
+        name: 'Cascata de Leonte',
+        description: 'Queda de água à beira da estrada, no meio do carvalhal da Mata da Albergaria.',
+        type: 'viewpoint',
+        lat: 41.7607,
+        lng: -8.1494,
+        i18n: {
+          en: { name: 'Leonte Waterfall', description: 'A roadside waterfall in the oak woods of the Mata da Albergaria.' },
+          es: { name: 'Cascada de Leonte', description: 'Cascada junto a la carretera, en el robledal de la Mata da Albergaria.' },
+          fr: { name: 'Cascade de Leonte', description: 'Une cascade en bord de route, dans la chênaie de la Mata da Albergaria.' },
+          de: { name: 'Wasserfall von Leonte', description: 'Wasserfall direkt an der Straße im Eichenwald der Mata da Albergaria.' },
+        },
+      },
+      {
+        name: 'Miradouro de Fecha de Barjas',
+        description: 'Vista sobre as cascatas e lagoas do rio Arado, conhecidas por "Tahiti".',
+        type: 'viewpoint',
+        lat: 41.7042,
+        lng: -8.1101,
+        i18n: {
+          en: { name: 'Fecha de Barjas viewpoint', description: 'View over the waterfalls and pools known as "Tahiti".' },
+          es: { name: 'Mirador de Fecha de Barjas', description: 'Vista sobre las cascadas y pozas conocidas como "Tahiti".' },
+          fr: { name: 'Belvédère de Fecha de Barjas', description: 'Vue sur les cascades et les vasques surnommées « Tahiti ».' },
+          de: { name: 'Aussichtspunkt Fecha de Barjas', description: 'Blick auf die Wasserfälle und Gumpen, die „Tahiti“ genannt werden.' },
+        },
+      },
+    ],
+    i18n: {
+      en: { title: 'Gerês waterfalls | Portela do Homem > Leonte > Gerês > Fecha de Barjas', description: 'Three waterfalls of the Peneda-Gerês National Park on a single road. From the border at Portela do Homem you ride down through the Mata da Albergaria, past the milestones of the Roman Geira road, to the Leonte waterfall and the village of Gerês. Then the EM 308 takes you to the Fecha de Barjas viewpoint, above the pools known as "Tahiti". Stopping and parking are not allowed inside the Mata da Albergaria: to see the Portela do Homem waterfall, leave the bike by the old border post.' },
+      es: { title: 'Cascadas del Gerês | Portela do Homem > Leonte > Gerês > Fecha de Barjas', description: 'Tres cascadas del Parque Nacional de Peneda-Gerês en una sola carretera. Desde la frontera en Portela do Homem se baja por la Mata da Albergaria, junto a los miliarios de la vía romana Geira, hasta la cascada de Leonte y el pueblo de Gerês. Después la EM 308 lleva al mirador de Fecha de Barjas, sobre las pozas conocidas como "Tahiti". En la Mata da Albergaria no se permite parar ni aparcar: para ver la cascada de Portela do Homem, deja la moto junto a la antigua frontera.' },
+      fr: { title: 'Cascades du Gerês | Portela do Homem > Leonte > Gerês > Fecha de Barjas', description: "Trois cascades du parc national de Peneda-Gerês sur une seule route. Depuis la frontière à Portela do Homem, on descend par la Mata da Albergaria, le long des bornes milliaires de la voie romaine Geira, jusqu'à la cascade de Leonte et au village de Gerês. La EM 308 mène ensuite au belvédère de Fecha de Barjas, au-dessus des vasques surnommées « Tahiti ». Dans la Mata da Albergaria, il est interdit de s'arrêter et de stationner : pour voir la cascade de Portela do Homem, laissez la moto près de l'ancienne frontière." },
+      de: { title: 'Wasserfälle des Gerês | Portela do Homem > Leonte > Gerês > Fecha de Barjas', description: 'Drei Wasserfälle des Nationalparks Peneda-Gerês an einer einzigen Straße. Von der Grenze an der Portela do Homem geht es durch die Mata da Albergaria, vorbei an den Meilensteinen der römischen Geira, zum Wasserfall von Leonte und ins Dorf Gerês. Danach führt die EM 308 zum Aussichtspunkt Fecha de Barjas über den Gumpen, die „Tahiti“ genannt werden. In der Mata da Albergaria ist Halten und Parken verboten: Für den Wasserfall an der Portela do Homem das Motorrad am alten Grenzposten abstellen.' },
+    },
+  },
+  {
+    title: 'Fisgas de Ermelo | Mondim de Basto > Ermelo > Lamas de Olo > Vila Real',
+    description:
+      'Travessia do Parque Natural do Alvão pela zona das Fisgas de Ermelo, uma das maiores quedas de água de Portugal, formada pelo rio Olo. Para as ver de perto, o trilho PR3 parte da aldeia de Ermelo. De Mondim de Basto sobe-se a Ermelo e ao planalto, passa-se pela aldeia de Lamas de Olo, com casas de granito e colmo, e desce-se até Vila Real. Estrada estreita e com pouco trânsito no planalto.',
+    region: 'Norte',
+    category: 'scenic',
+    difficulty: 'moderate',
+    route_type: 'out_and_back',
+    waypoints: [
+      [41.4103, -7.9534], // Mondim de Basto
+      [41.3602, -7.8892], // Ermelo
+      [41.3764, -7.8535], // Varzigueto
+      [41.3709, -7.7951], // Lamas de Olo
+      [41.2977, -7.7458], // Vila Real
+    ],
+    stops: [
+      {
+        name: 'Ermelo',
+        description: 'Aldeia ao pé da serra, de onde parte o trilho pedestre das Fisgas.',
+        type: 'landmark',
+        lat: 41.3602,
+        lng: -7.8892,
+        i18n: {
+          en: { description: 'A village at the foot of the range, where the Fisgas hiking trail starts.' },
+          es: { description: 'Pueblo al pie de la sierra, donde empieza el sendero de las Fisgas.' },
+          fr: { description: 'Village au pied de la montagne, départ du sentier des Fisgas.' },
+          de: { description: 'Dorf am Fuß des Gebirges, Ausgangspunkt des Wanderwegs zu den Fisgas.' },
+        },
+      },
+      {
+        name: 'Miradouro das Fisgas de Ermelo',
+        description: 'Vista sobre os saltos do rio Olo, no trilho PR3 que parte de Ermelo (só a pé).',
+        type: 'viewpoint',
+        lat: 41.3764,
+        lng: -7.8703,
+        i18n: {
+          en: { name: 'Fisgas de Ermelo viewpoint', description: 'View over the falls of the Olo river, on the PR3 trail from Ermelo (on foot only).' },
+          es: { name: 'Mirador de las Fisgas de Ermelo', description: 'Vista sobre los saltos del río Olo, en el sendero PR3 que sale de Ermelo (solo a pie).' },
+          fr: { name: 'Belvédère des Fisgas de Ermelo', description: "Vue sur les chutes de l'Olo, sur le sentier PR3 depuis Ermelo (à pied uniquement)." },
+          de: { name: 'Aussichtspunkt Fisgas de Ermelo', description: 'Blick auf die Fälle des Olo, am Wanderweg PR3 ab Ermelo (nur zu Fuß).' },
+        },
+      },
+      {
+        name: 'Lamas de Olo',
+        description: 'Aldeia de montanha no planalto do Alvão, com casas de granito e telhados de colmo.',
+        type: 'landmark',
+        lat: 41.3709,
+        lng: -7.7951,
+        i18n: {
+          en: { description: 'A mountain village on the Alvão plateau, with granite houses and thatched roofs.' },
+          es: { description: 'Aldea de montaña en la meseta del Alvão, con casas de granito y tejados de paja.' },
+          fr: { description: "Village de montagne sur le plateau de l'Alvão, aux maisons de granit et toits de chaume." },
+          de: { description: 'Bergdorf auf der Hochebene des Alvão mit Granithäusern und Strohdächern.' },
+        },
+      },
+    ],
+    i18n: {
+      en: { description: 'A crossing of the Alvão Natural Park through the Fisgas de Ermelo area, one of the largest waterfalls in Portugal, formed by the Olo river. To see it up close, the PR3 trail starts in the village of Ermelo. From Mondim de Basto you climb to Ermelo and the plateau, pass the village of Lamas de Olo, with its granite and thatch houses, and ride down to Vila Real. A narrow road with little traffic on the plateau.' },
+      es: { description: 'Travesía del Parque Natural del Alvão por la zona de las Fisgas de Ermelo, una de las mayores cascadas de Portugal, formada por el río Olo. Para verlas de cerca, el sendero PR3 sale del pueblo de Ermelo. Desde Mondim de Basto se sube a Ermelo y a la meseta, se pasa por la aldea de Lamas de Olo, con casas de granito y paja, y se baja a Vila Real. Carretera estrecha y con poco tráfico en la meseta.' },
+      fr: { description: "Une traversée du parc naturel de l'Alvão par le secteur des Fisgas de Ermelo, l'une des plus grandes cascades du Portugal, formée par l'Olo. Pour les voir de près, le sentier PR3 part du village d'Ermelo. De Mondim de Basto, on monte à Ermelo et sur le plateau, on traverse le village de Lamas de Olo, aux maisons de granit et de chaume, puis on descend vers Vila Real. Route étroite et peu fréquentée sur le plateau." },
+      de: { description: 'Eine Durchquerung des Naturparks Alvão durch das Gebiet der Fisgas de Ermelo, eines der größten Wasserfälle Portugals, gebildet vom Olo. Aus der Nähe sieht man sie über den Wanderweg PR3, der im Dorf Ermelo beginnt. Von Mondim de Basto geht es hinauf nach Ermelo und auf die Hochebene, durch das Dorf Lamas de Olo mit Granithäusern und Strohdächern und hinunter nach Vila Real. Schmale Straße mit wenig Verkehr auf der Hochebene.' },
+    },
+  },
+  {
+    title: 'Serra da Freita | Arouca > Frecha da Mizarela > Cascata da Cabreia > Sever do Vouga',
+    description:
+      'Duas cascatas numa volta pelo Arouca Geopark, classificado pela UNESCO. De Arouca sobe-se à Serra da Freita pelo Merujal até à Frecha da Mizarela, uma das quedas de água mais altas de Portugal continental, que se vê de um miradouro a poucos minutos a pé da estrada. Depois desce-se para o vale do Vouga até à Cascata da Cabreia, no meio da mata, antes de terminar em Sever do Vouga.',
+    region: 'Centro',
+    category: 'scenic',
+    difficulty: 'moderate',
+    route_type: 'out_and_back',
+    waypoints: [
+      [40.9289, -8.2442], // Arouca
+      [40.8753, -8.2989], // Merujal
+      [40.8685, -8.2753], // Albergaria da Serra
+      [40.7582, -8.3907], // Silva Escura (Cabreia)
+      [40.7342, -8.37], // Sever do Vouga
+    ],
+    stops: [
+      {
+        name: 'Mosteiro de Arouca',
+        description: 'Mosteiro cisterciense no centro da vila, ponto de partida para a serra.',
+        type: 'landmark',
+        lat: 40.9279,
+        lng: -8.2466,
+        i18n: {
+          en: { name: 'Arouca Monastery', description: 'A Cistercian monastery in the centre of town, the starting point for the climb.' },
+          es: { name: 'Monasterio de Arouca', description: 'Monasterio cisterciense en el centro del pueblo, punto de partida hacia la sierra.' },
+          fr: { name: "Monastère d'Arouca", description: 'Monastère cistercien au centre de la ville, point de départ vers la montagne.' },
+          de: { name: 'Kloster Arouca', description: 'Zisterzienserkloster im Ortszentrum, Ausgangspunkt für die Auffahrt in die Berge.' },
+        },
+      },
+      {
+        name: 'Frecha da Mizarela',
+        description: 'Miradouro sobre a queda de água, a poucos minutos a pé do estacionamento.',
+        type: 'viewpoint',
+        lat: 40.8638,
+        lng: -8.2858,
+        i18n: {
+          en: { description: 'Viewpoint over the waterfall, a few minutes on foot from the car park.' },
+          es: { description: 'Mirador sobre la cascada, a pocos minutos a pie del aparcamiento.' },
+          fr: { description: 'Belvédère sur la cascade, à quelques minutes à pied du parking.' },
+          de: { description: 'Aussichtspunkt über dem Wasserfall, wenige Gehminuten vom Parkplatz.' },
+        },
+      },
+      {
+        name: 'Cascata da Cabreia',
+        description: 'Queda de água rodeada de mata, com parque de merendas junto ao rio.',
+        type: 'viewpoint',
+        lat: 40.7534,
+        lng: -8.3896,
+        i18n: {
+          en: { name: 'Cabreia Waterfall', description: 'A waterfall surrounded by woods, with a picnic area by the river.' },
+          es: { name: 'Cascada de la Cabreia', description: 'Cascada rodeada de bosque, con merendero junto al río.' },
+          fr: { name: 'Cascade de la Cabreia', description: 'Une cascade entourée de bois, avec une aire de pique-nique au bord de la rivière.' },
+          de: { name: 'Wasserfall von Cabreia', description: 'Wasserfall im Wald mit Picknickplatz am Fluss.' },
+        },
+      },
+    ],
+    i18n: {
+      en: { description: 'Two waterfalls on a ride through the UNESCO-listed Arouca Geopark. From Arouca you climb the Serra da Freita via Merujal to the Frecha da Mizarela, one of the highest waterfalls in mainland Portugal, seen from a viewpoint a few minutes on foot from the road. Then you drop towards the Vouga valley to the Cabreia waterfall, hidden in the woods, before finishing in Sever do Vouga.' },
+      es: { description: 'Dos cascadas en una ruta por el Arouca Geopark, reconocido por la UNESCO. Desde Arouca se sube a la Serra da Freita por Merujal hasta la Frecha da Mizarela, una de las cascadas más altas del Portugal continental, que se ve desde un mirador a pocos minutos a pie de la carretera. Después se baja hacia el valle del Vouga hasta la cascada de la Cabreia, en medio del bosque, para terminar en Sever do Vouga.' },
+      fr: { description: "Deux cascades sur un itinéraire à travers l'Arouca Geopark, labellisé par l'UNESCO. D'Arouca, on monte dans la Serra da Freita par Merujal jusqu'à la Frecha da Mizarela, l'une des plus hautes cascades du Portugal continental, visible depuis un belvédère à quelques minutes à pied de la route. On redescend ensuite vers la vallée du Vouga jusqu'à la cascade de la Cabreia, en pleine forêt, avant de finir à Sever do Vouga." },
+      de: { description: 'Zwei Wasserfälle auf einer Tour durch den von der UNESCO ausgezeichneten Arouca Geopark. Von Arouca geht es über Merujal hinauf in die Serra da Freita zur Frecha da Mizarela, einem der höchsten Wasserfälle des portugiesischen Festlands, den man von einem Aussichtspunkt wenige Gehminuten von der Straße sieht. Danach geht es hinunter ins Vouga-Tal zum Wasserfall von Cabreia im Wald und weiter bis Sever do Vouga.' },
+    },
+  },
+  {
+    title: 'Fraga da Pena e Piódão | Arganil > Benfeita > Mata da Margaraça > Piódão',
+    description:
+      'Estrada de montanha pela Paisagem Protegida da Serra do Açor até à aldeia histórica do Piódão. Saindo de Arganil, passa-se pela Benfeita e pela Mata da Margaraça, onde um trilho curto desce até à cascata da Fraga da Pena. Daí a estrada sobe pela serra com curvas apertadas e vistas sobre vales de xisto até ao Piódão, com as casas em anfiteatro na encosta. Estrada estreita: abasteça em Arganil antes de subir a serra.',
+    region: 'Centro',
+    category: 'mountain',
+    difficulty: 'challenging',
+    route_type: 'out_and_back',
+    waypoints: [
+      [40.2202, -7.9807], // Arganil
+      [40.2301, -7.9444], // Benfeita
+      [40.2251, -7.9324], // Pardieiros
+      [40.2296, -7.8248], // Piódão
+    ],
+    stops: [
+      {
+        name: 'Fraga da Pena',
+        description: 'Cascata na Mata da Margaraça, a poucos minutos a pé por um trilho a partir da estrada.',
+        type: 'viewpoint',
+        lat: 40.2184,
+        lng: -7.935,
+        i18n: {
+          en: { description: 'A waterfall in the Mata da Margaraça, a short walk along a trail from the road.' },
+          es: { description: 'Cascada en la Mata da Margaraça, a pocos minutos a pie por un sendero desde la carretera.' },
+          fr: { description: 'Une cascade dans la Mata da Margaraça, à quelques minutes de marche par un sentier depuis la route.' },
+          de: { description: 'Wasserfall in der Mata da Margaraça, wenige Gehminuten über einen Pfad von der Straße.' },
+        },
+      },
+      {
+        name: 'Mata da Margaraça',
+        description: 'Floresta de carvalhos e castanheiros, uma das últimas manchas de mata original da região.',
+        type: 'viewpoint',
+        lat: 40.2163,
+        lng: -7.919,
+        i18n: {
+          en: { description: 'Oak and chestnut woodland, one of the last stretches of native forest in the area.' },
+          es: { description: 'Bosque de robles y castaños, una de las últimas manchas de bosque original de la zona.' },
+          fr: { description: "Forêt de chênes et de châtaigniers, l'un des derniers îlots de forêt d'origine de la région." },
+          de: { description: 'Eichen- und Kastanienwald, eines der letzten Stücke ursprünglichen Waldes der Gegend.' },
+        },
+      },
+      {
+        name: 'Piódão',
+        description: 'Aldeia histórica de xisto, com cafés e restaurantes na praça junto à igreja.',
+        type: 'restaurant',
+        lat: 40.2296,
+        lng: -7.8248,
+        i18n: {
+          en: { description: 'A historic schist village, with cafés and restaurants on the square by the church.' },
+          es: { description: 'Aldea histórica de pizarra, con cafés y restaurantes en la plaza junto a la iglesia.' },
+          fr: { description: "Village historique de schiste, avec cafés et restaurants sur la place près de l'église." },
+          de: { description: 'Historisches Schieferdorf mit Cafés und Restaurants am Platz bei der Kirche.' },
+        },
+      },
+    ],
+    i18n: {
+      en: { title: 'Fraga da Pena and Piódão | Arganil > Benfeita > Mata da Margaraça > Piódão', description: 'A mountain road through the Serra do Açor Protected Landscape to the historic village of Piódão. Leaving Arganil, you pass Benfeita and the Mata da Margaraça, where a short trail leads down to the Fraga da Pena waterfall. From there the road climbs with tight bends and views over schist valleys to Piódão, its houses stacked up the hillside. A narrow road: fill up in Arganil before heading into the hills.' },
+      es: { description: 'Carretera de montaña por el Paisaje Protegido de la Serra do Açor hasta la aldea histórica de Piódão. Saliendo de Arganil se pasa por Benfeita y la Mata da Margaraça, donde un sendero corto baja hasta la cascada de la Fraga da Pena. Desde allí la carretera sube por la sierra con curvas cerradas y vistas sobre valles de pizarra hasta Piódão, con sus casas en anfiteatro en la ladera. Carretera estrecha: reposta en Arganil antes de subir a la sierra.' },
+      fr: { description: "Une route de montagne à travers le paysage protégé de la Serra do Açor jusqu'au village historique de Piódão. En quittant Arganil, on passe par Benfeita et la Mata da Margaraça, d'où un court sentier descend à la cascade de la Fraga da Pena. La route grimpe ensuite en lacets serrés, avec des vues sur les vallées de schiste, jusqu'à Piódão et ses maisons en amphithéâtre. Route étroite : faites le plein à Arganil avant de monter dans la montagne." },
+      de: { description: 'Eine Bergstraße durch das Landschaftsschutzgebiet der Serra do Açor bis zum historischen Dorf Piódão. Hinter Arganil geht es durch Benfeita und die Mata da Margaraça, wo ein kurzer Pfad zum Wasserfall Fraga da Pena hinunterführt. Danach steigt die Straße mit engen Kehren und Blick auf Schiefertäler bis Piódão, dessen Häuser sich am Hang stapeln. Schmale Straße: vor der Auffahrt in Arganil volltanken.' },
+    },
+  },
 ];

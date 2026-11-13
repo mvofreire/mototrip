@@ -19,7 +19,12 @@ import { createClient } from '@supabase/supabase-js';
 import * as turf from '@turf/turf';
 import * as dotenv from 'dotenv';
 import { renderRouteThumbnail } from './lib/route_thumbnail';
-import { notifyCuratorNewRoutes, type NewRouteSummary } from '../lib/email/curator-notification';
+import * as curatorEmail from '../lib/email/curator-notification';
+import type { NewRouteSummary } from '../lib/email/curator-notification';
+
+// lib/ is loaded as CommonJS from this ESM job, so the named export can sit under `default`
+const curatorModule = curatorEmail as typeof curatorEmail & { default?: typeof curatorEmail };
+const notifyCuratorNewRoutes = curatorModule.notifyCuratorNewRoutes ?? curatorModule.default!.notifyCuratorNewRoutes;
 import { mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
