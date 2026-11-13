@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<title>MotoTrip – Capa Facebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@500;600;700&display=block" rel="stylesheet">
+<style>
+  /* Facebook cover: 1640x624 (desktop shows full width; mobile crops to the centre ~1100px).
+     Profile photo overlaps the bottom-left on desktop, so content sits from x≈380. */
+  :root {
+    --asphalt: #0c0e13;
+    --asphalt-2: #12151c;
+    --red: #EF233C;
+    --red-600: #D90F25;
+    --steel-300: #B0B8C8;
+    --steel-400: #8592AA;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1640px; height: 624px; background: var(--asphalt); overflow: hidden; }
+  .cover {
+    position: relative; width: 1640px; height: 624px; overflow: hidden;
+    background:
+      radial-gradient(700px 420px at 22% 18%, rgba(217,15,37,.22), transparent 70%),
+      radial-gradient(600px 500px at 82% 70%, rgba(217,15,37,.10), transparent 70%),
+      linear-gradient(180deg, var(--asphalt-2), var(--asphalt));
+    font-family: Inter, system-ui, sans-serif; color: #fff;
+  }
+  .stripes {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(-62deg, rgba(255,255,255,.035) 0 1px, transparent 1px 46px);
+  }
+  svg.route { position: absolute; inset: 0; }
+  .content { position: absolute; left: 380px; top: 92px; }
+  .brand { display: flex; align-items: center; gap: 18px; }
+  .badge {
+    width: 64px; height: 64px; border-radius: 14px;
+    background: linear-gradient(135deg, #ef233c 0%, #d00f25 55%, #8d0a1a 100%);
+    display: grid; place-items: center;
+    box-shadow: 0 8px 30px rgba(239,35,60,.35);
+  }
+  .brand-name { font-family: Inter, sans-serif; font-weight: 700; font-size: 38px; letter-spacing: -.01em; }
+  h1 {
+    margin-top: 34px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+    font-size: 116px; line-height: .9; text-transform: uppercase; letter-spacing: .005em;
+  }
+  h1 .red { color: var(--red); display: block; }
+  .tagline { margin-top: 26px; font-size: 26px; font-weight: 500; color: var(--steel-300); }
+  .tagline b { color: #fff; font-weight: 600; }
+  .url {
+    display: inline-block; margin-top: 26px;
+    font-family: Inter, sans-serif; font-weight: 700; font-size: 24px; letter-spacing: .02em;
+    padding: 12px 22px; border-radius: 999px;
+    border: 1.5px solid rgba(239,35,60,.55); background: rgba(239,35,60,.10);
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="stripes"></div>
+
+  <svg class="route" width="1640" height="624" viewBox="0 0 1640 624" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="9" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <linearGradient id="fade" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stop-color="#EF233C" stop-opacity=".25"/>
+        <stop offset=".25" stop-color="#EF233C" stop-opacity="1"/>
+      </linearGradient>
+    </defs>
+
+    <!-- faint topo contours -->
+    <g fill="none" stroke="rgba(255,255,255,.045)" stroke-width="1.2">
+      <path d="M1040 -20 C1120 90 1300 60 1360 160 S1520 300 1680 260"/>
+      <path d="M1000 -20 C1090 120 1280 100 1330 200 S1500 350 1680 310"/>
+      <path d="M960 -20 C1060 150 1250 140 1300 240 S1480 400 1680 360"/>
+      <path d="M920 -20 C1030 180 1220 180 1270 280 S1460 450 1680 410"/>
+      <path d="M880 -20 C1000 210 1190 220 1240 320 S1440 500 1680 460"/>
+    </g>
+
+    <g transform="translate(60 0)">
+    <!-- the road -->
+    <path id="road" d="M1010 660 C1010 560 1090 520 1110 460 C1140 370 1020 330 1060 250
+             C1100 170 1240 210 1300 150 C1350 100 1330 64 1400 54 C1440 48 1470 72 1500 62"
+          fill="none" stroke="url(#fade)" stroke-width="7" stroke-linecap="round" filter="url(#glow)"/>
+    <path d="M1010 660 C1010 560 1090 520 1110 460 C1140 370 1020 330 1060 250
+             C1100 170 1240 210 1300 150 C1350 100 1330 64 1400 54 C1440 48 1470 72 1500 62"
+          fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.6" stroke-dasharray="9 11"/>
+
+    <!-- waypoints -->
+    <g>
+      <circle cx="1105" cy="474" r="13" fill="#fff"/>
+      <circle cx="1105" cy="474" r="6.5" fill="#EF233C"/>
+      <circle cx="1300" cy="150" r="9" fill="#0c0e13" stroke="#fff" stroke-width="3"/>
+    </g>
+
+    <!-- finish flag -->
+    <g transform="translate(1500 62)">
+      <line x1="0" y1="0" x2="0" y2="-46" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M2 -46 L30 -37 L2 -28 Z" fill="#EF233C"/>
+    </g>
+    </g>
+  </svg>
+
+  <div class="content">
+    <div class="brand">
+      <div class="badge">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" fill="#fff"/>
+          <circle cx="12" cy="10" r="2.6" fill="#D90F25"/>
+        </svg>
+      </div>
+      <span class="brand-name">MotoTrip</span>
+    </div>
+    <h1>As melhores<span class="red">rotas de moto</span></h1>
+    <p class="tagline">Estradas curadas por motociclistas · <b>Portugal</b></p>
+    <div class="url">mototrip.pt</div>
+  </div>
+
+</div>
+</body>
+</html>
