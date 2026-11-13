@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowLeft } from 'lucide-react'
 import { locales } from '@/i18n'
+import { languageAlternates } from '@/lib/seo'
 import { getPublishedPost, getPublishedPosts, pickTranslation, routesBySlug } from '@/lib/blog/posts'
 import { BlogMarkdown, routeSlugsIn } from '@/lib/blog/markdown'
 import { getSiteUrl } from '@/lib/site-url'
@@ -27,14 +28,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: c.title,
     description: c.description,
     alternates: {
-      canonical: `/${params.locale}/blog/${post.slug}`,
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/blog/${post.slug}`])),
+      // A fallback translation points at the language it is written in
+      canonical: `/${c.locale}/blog/${post.slug}`,
+      languages: languageAlternates(
+        (l) => `/${l}/blog/${post.slug}`,
+        locales.filter((l) => post.translations.some((t) => t.locale === l)),
+      ),
     },
     openGraph: {
       type: 'article',
       title: c.title,
       description: c.description,
-      url: `/${params.locale}/blog/${post.slug}`,
+      url: `/${c.locale}/blog/${post.slug}`,
       publishedTime: post.published_at ?? undefined,
       modifiedTime: post.updated_at,
       images: cover ? [{ url: cover, alt: c.title }] : undefined,

@@ -1,12 +1,12 @@
 import { permanentRedirect } from 'next/navigation'
 import { RoutesService } from '@/lib/services/routes.service'
-import { locales } from '@/i18n'
 import { isUuid, routePath } from '@/lib/route-url'
 import { routeStructuredData } from '@/lib/route-structured-data'
 import { localizeRoute } from '@/lib/localize'
 import { RouteDetail } from '@/components/features/routes/route-detail'
 import { PrivateRouteDetail } from '@/components/features/routes/private-route-detail'
 import { Metadata } from 'next'
+import { languageAlternates } from '@/lib/seo'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 // Served from the edge cache and rebuilt in the background every 5 minutes
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: RoutePageProps): Promise<Meta
       description,
       alternates: {
         canonical: routePath(params.locale, route),
-        languages: Object.fromEntries(locales.map((l) => [l, routePath(l, route)])),
+        languages: languageAlternates((l) => routePath(l, route)),
       },
       openGraph: {
         type: 'article',
