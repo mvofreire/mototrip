@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
+import { NO_INDEX } from '@/lib/seo'
 import { SubmitRouteForm } from '@/components/features/routes/submit-route-form'
 import { ProtectedRoute } from '@/components/auth/protected-route'
 
@@ -13,6 +14,7 @@ export async function generateMetadata({
   return {
     title: t('title'),
     description: t('subtitle'),
+    robots: NO_INDEX,
   }
 }
 

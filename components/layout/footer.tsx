@@ -94,7 +94,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href={`/${locale}/community`} className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link href={`/${locale}/explore?sort=community`} className="text-muted-foreground hover:text-foreground transition-colors">
                   {t('popularRoutes')}
                 </Link>
               </li>

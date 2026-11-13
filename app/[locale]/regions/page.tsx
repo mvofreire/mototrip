@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { buildAlternates } from '@/lib/seo'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ChevronRight, Clock, MapPin, Route as RouteIcon } from 'lucide-react'
-import { locales } from '@/i18n'
 import { RoutesService } from '@/lib/services/routes.service'
 import { REGIONS, regionForRoute, textFor, type Region } from '@/lib/regions'
 import { getSiteUrl } from '@/lib/site-url'
@@ -21,10 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: t('indexTitle'),
     description: t('indexDescription'),
-    alternates: {
-      canonical: `/${params.locale}/regions`,
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/regions`])),
-    },
+    alternates: buildAlternates(params.locale, '/regions'),
   }
 }
 

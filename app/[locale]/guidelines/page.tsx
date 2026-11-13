@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
+import { buildAlternates } from '@/lib/seo'
 import { Shield, Heart, Users, AlertTriangle } from 'lucide-react'
 
 export async function generateMetadata({
@@ -12,6 +13,7 @@ export async function generateMetadata({
   return {
     title: t('title'),
     description: t('description'),
+    alternates: buildAlternates(locale, '/guidelines'),
   }
 }
 

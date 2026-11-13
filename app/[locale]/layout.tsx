@@ -12,6 +12,8 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Pwa } from '@/components/pwa/pwa'
 import { SOCIAL_PROFILES } from '@/lib/social'
+import { getSiteUrl } from '@/lib/site-url'
+import { OG_LOCALE } from '@/lib/seo'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -26,17 +28,6 @@ const display = Barlow_Condensed({
   variable: '--font-display',
 })
 
-function getBaseUrl(): string {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-  
-  // Se a URL não tem protocolo, adicionar https://
-  if (!siteUrl.startsWith('http://') && !siteUrl.startsWith('https://')) {
-    return `https://${siteUrl}`
-  }
-  
-  return siteUrl
-}
-
 export async function generateMetadata({
   params: { locale },
 }: {
@@ -45,26 +36,17 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: 'home.hero' })
 
   return {
-    metadataBase: new URL(getBaseUrl()),
+    metadataBase: new URL(getSiteUrl()),
     title: {
       default: 'MotoTrip - ' + t('title') + ' ' + t('titleHighlight'),
       template: '%s | MotoTrip',
     },
     description: t('subtitle'),
-    keywords: [
-      'motorcycle',
-      'routes',
-      'riding',
-      'adventure',
-      'scenic roads',
-      'motorcycle touring',
-    ],
     authors: [{ name: 'MotoTrip' }],
     creator: 'MotoTrip',
     openGraph: {
       type: 'website',
-      locale: ({ pt: 'pt_BR', es: 'es_ES', fr: 'fr_FR', de: 'de_DE' } as Record<string, string>)[locale] ?? 'en_US',
-      url: `/${locale}`,
+      locale: OG_LOCALE[locale] ?? 'en_US',
       siteName: 'MotoTrip',
       title: 'MotoTrip - ' + t('title') + ' ' + t('titleHighlight'),
       description: t('subtitle'),
@@ -83,10 +65,8 @@ export async function generateMetadata({
       description: t('subtitle'),
       images: ['/og-image.png'],
     },
-    alternates: {
-      canonical: `/${locale}`,
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}`])),
-    },
+    // No canonical/hreflang here: each page sets its own (see lib/seo.ts),
+    // otherwise pages without one would claim to be the home page.
     applicationName: 'MotoTrip',
     appleWebApp: {
       capable: true,
@@ -138,8 +118,8 @@ export default async function LocaleLayout({
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'MotoTrip',
-    url: getBaseUrl(),
-    logo: `${getBaseUrl()}/icon-512.png`,
+    url: getSiteUrl(),
+    logo: `${getSiteUrl()}/icon-512.png`,
     sameAs: SOCIAL_PROFILES,
   }
 

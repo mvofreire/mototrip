@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { buildAlternates } from '@/lib/seo'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowRight } from 'lucide-react'
-import { locales } from '@/i18n'
 import { getPublishedPosts, pickTranslation } from '@/lib/blog/posts'
 
 export const revalidate = 3600
@@ -12,10 +12,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   return {
     title: t('title'),
     description: t('subtitle'),
-    alternates: {
-      canonical: `/${locale}/blog`,
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/blog`])),
-    },
+    alternates: buildAlternates(locale, '/blog'),
   }
 }
 

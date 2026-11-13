@@ -5,6 +5,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowRight, MapPin, Gauge, Mountain, Star, Navigation, Map, MessageCircle } from 'lucide-react'
 import { RouteCard } from '@/components/features/routes/route-card'
 import { RoutesService } from '@/lib/services/routes.service'
+import type { Metadata } from 'next'
+import { buildAlternates } from '@/lib/seo'
 import {
   Section,
   SectionContainer,
@@ -17,6 +19,10 @@ import {
 
 // Served from the edge cache and rebuilt in the background every 10 minutes
 export const revalidate = 600
+
+export function generateMetadata({ params: { locale } }: { params: { locale: string } }): Metadata {
+  return { alternates: buildAlternates(locale, '') }
+}
 
 export default async function HomePage({
   params: { locale },

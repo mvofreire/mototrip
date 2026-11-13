@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
+import { NO_INDEX } from '@/lib/seo'
 
 export async function generateMetadata({
   params: { locale },
@@ -11,6 +12,7 @@ export async function generateMetadata({
   return {
     title: t('title'),
     description: t('subtitle'),
+    robots: NO_INDEX,
   }
 }
 
