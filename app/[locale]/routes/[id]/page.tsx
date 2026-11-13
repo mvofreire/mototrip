@@ -4,6 +4,10 @@ import { isUuid, routePath } from '@/lib/route-url'
 import { routeStructuredData } from '@/lib/route-structured-data'
 import { localizeRoute } from '@/lib/localize'
 import { RouteDetail } from '@/components/features/routes/route-detail'
+import { RelatedRoutes, RouteInPosts } from '@/components/features/routes/route-related'
+import { getPostsForRoute, getRelatedRoutes } from '@/lib/routes/related'
+import { regionForRoute } from '@/lib/regions'
+import { getSiteUrl } from '@/lib/site-url'
 import { PrivateRouteDetail } from '@/components/features/routes/private-route-detail'
 import { Metadata } from 'next'
 import { languageAlternates } from '@/lib/seo'
@@ -80,6 +84,13 @@ export default async function RoutePage({ params }: RoutePageProps) {
     permanentRedirect(routePath(params.locale, route))
   }
 
+  const [related, posts] = await Promise.all([
+    getRelatedRoutes(route).catch(() => []),
+    getPostsForRoute(route, params.locale).catch(() => []),
+  ])
+  const region = regionForRoute(route)
+  const routeSlug = route.slug ?? route.id
+
   route = localizeRoute(route, params.locale)
   const t = await getTranslations({ locale: params.locale })
   const jsonLd = routeStructuredData(route, params.locale, {
@@ -88,6 +99,15 @@ export default async function RoutePage({ params }: RoutePageProps) {
     duration: t('route.duration'),
     elevation: t('route.elevation'),
   })
+  // Blog guides about this route, for search engines (TouristTrip.subjectOf)
+  if (posts.length) {
+    const base = getSiteUrl()
+    ;(jsonLd[0] as Record<string, unknown>).subjectOf = posts.map((p) => ({
+      '@type': 'BlogPosting',
+      headline: p.title,
+      url: `${base}/${params.locale}/blog/${p.slug}`,
+    }))
+  }
 
   return (
     <>
@@ -96,7 +116,19 @@ export default async function RoutePage({ params }: RoutePageProps) {
         // Escape "<" so route text can't close the script tag
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
-      <RouteDetail route={route} locale={params.locale} />
+      <RouteDetail
+        route={route}
+        locale={params.locale}
+        guides={<RouteInPosts posts={posts} locale={params.locale} routeSlug={routeSlug} />}
+        footer={
+          <RelatedRoutes
+            routes={related}
+            locale={params.locale}
+            routeSlug={routeSlug}
+            exploreHref={region ? `/${params.locale}/regions/${region.slug}` : `/${params.locale}/explore`}
+          />
+        }
+      />
     </>
   )
 }

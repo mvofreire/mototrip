@@ -203,7 +203,13 @@
     "shareTitle": "Partagez cet itinéraire",
     "shareDescription": "Envoyez-le à votre groupe de balade ou publiez-le pour vos amis.",
     "shareText": "{title} : itinéraire moto avec carte, arrêts et GPX gratuit sur MotoTrip.",
-    "copyLink": "Copier le lien"
+    "copyLink": "Copier le lien",
+    "related": {
+      "title": "Itinéraires qui pourraient vous plaire",
+      "seeMore": "Voir plus d'itinéraires",
+      "inGuide": "Cet itinéraire figure dans le guide",
+      "readGuide": "Lire le guide"
+    }
   },
   "stopTypes": {
     "viewpoint": "Point de Vue",
