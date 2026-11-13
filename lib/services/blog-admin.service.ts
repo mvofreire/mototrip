@@ -2,6 +2,28 @@ import { supabase } from '@/lib/supabase/client'
 import type { BlogPostStatus } from '@/types/database.types'
 import type { BlogLocale, BlogPost, BlogTranslation } from '@/lib/blog/posts'
 import type { RouteWithDetails } from '@/types'
+import { ACCEPTED_IMAGE_TYPES, MAX_IMAGE_BYTES, prepareImage } from '@/lib/images/prepare-image'
+
+const IMAGES_BUCKET = 'blog_images'
+
+export class InvalidImageError extends Error {}
+
+/**
+ * Upload an image for a post (cover or inside the text) to the public
+ * blog_images bucket and return its public URL. Large images are resized to
+ * 1920px JPEG in the browser first.
+ */
+export async function uploadBlogImage(file: File): Promise<string> {
+  if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) throw new InvalidImageError()
+  const blob = await prepareImage(file, 1920, 0.82)
+  if (blob.size > MAX_IMAGE_BYTES) throw new InvalidImageError()
+  const path = `${new Date().getFullYear()}/${crypto.randomUUID()}.jpg`
+  const { error } = await supabase.storage
+    .from(IMAGES_BUCKET)
+    .upload(path, blob, { contentType: 'image/jpeg', cacheControl: '31536000' })
+  if (error) throw error
+  return supabase.storage.from(IMAGES_BUCKET).getPublicUrl(path).data.publicUrl
+}
 
 /**
  * Blog management for staff (admin and curator). RLS (migration 020) enforces
@@ -12,6 +34,9 @@ export interface BlogPostDraft {
   slug: string
   status: BlogPostStatus
   cover_route_id: string | null
+  /** Uploaded cover image; a post has a route cover or an image cover, not both */
+  cover_image_url: string | null
+  cover_image_credit: string | null
   /** ISO date, or null to set it on first publish */
   published_at: string | null
   translations: BlogTranslation[]
@@ -27,7 +52,7 @@ export interface RouteOption {
 }
 
 const POST_FIELDS =
-  'id, slug, status, cover_route_id, published_at, created_at, updated_at, cover:routes(slug, title, thumbnail_url)'
+  'id, slug, status, cover_route_id, cover_image_url, cover_image_credit, published_at, created_at, updated_at, cover:routes(slug, title, thumbnail_url)'
 
 /** Ask the site to rebuild the blog pages now (needs the staff session token) */
 async function revalidateSite() {
@@ -63,7 +88,9 @@ export class BlogAdminService {
     const fields = {
       slug: draft.slug,
       status: draft.status,
-      cover_route_id: draft.cover_route_id,
+      cover_route_id: draft.cover_image_url ? null : draft.cover_route_id,
+      cover_image_url: draft.cover_image_url,
+      cover_image_credit: draft.cover_image_url ? draft.cover_image_credit?.trim() || null : null,
       published_at: draft.published_at,
     }
     let postId = id

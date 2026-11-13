@@ -763,8 +763,8 @@
       "slugLocked": "Post já publicado: o slug não pode mudar.",
       "slugInvalid": "Use só letras minúsculas, números e hífens.",
       "slugTaken": "Já existe um post com este slug.",
-      "cover": "Rota da capa",
-      "coverHelp": "O mapa desta rota é a imagem de capa.",
+      "cover": "Capa",
+      "coverHelp": "O mapa de uma rota ou uma imagem própria (de preferência com 1600 px de largura ou mais).",
       "chooseRoute": "Escolher rota",
       "changeRoute": "Trocar",
       "removeCover": "Remover",
@@ -791,7 +791,8 @@
         "link": "Link",
         "quote": "Citação",
         "tip": "Dica",
-        "route": "Rota"
+        "route": "Rota",
+        "image": "Imagem"
       },
       "tipPlaceholder": "Texto da dica",
       "textPlaceholder": "texto",
@@ -809,7 +810,15 @@
       "unsaved": "Há alterações não salvas. Sair mesmo assim?",
       "errorSave": "Erro ao salvar o post: {message}",
       "errorLoad": "Post não encontrado.",
-      "errorAction": "Erro ao atualizar o post."
+      "errorAction": "Erro ao atualizar o post.",
+      "uploadImage": "Enviar imagem",
+      "coverImage": "Imagem de capa",
+      "changeImage": "Trocar",
+      "coverCredit": "Crédito da foto",
+      "coverCreditPlaceholder": "Crédito da foto (ex.: Foto: Ana Silva / Unsplash)",
+      "imageAltPlaceholder": "descreva a imagem",
+      "imageInvalid": "Use uma imagem JPG, PNG ou WebP de até 5 MB.",
+      "imageUploadFailed": "Não foi possível enviar a imagem. Tente de novo."
     },
     "curatorFilter": {
       "label": "Avaliação MotoTrip",

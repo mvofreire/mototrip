@@ -12,6 +12,8 @@ import {
   Check,
   Heading2,
   Heading3,
+  ImageIcon,
+  ImagePlus,
   Italic,
   Lightbulb,
   Link2,
@@ -22,7 +24,8 @@ import {
   Quote,
   X,
 } from 'lucide-react'
-import { BlogAdminService, type RouteOption } from '@/lib/services/blog-admin.service'
+import { BlogAdminService, InvalidImageError, uploadBlogImage, type RouteOption } from '@/lib/services/blog-admin.service'
+import { ACCEPTED_IMAGE_TYPES } from '@/lib/images/prepare-image'
 import { BLOG_LOCALES, type BlogLocale, type BlogPost } from '@/lib/blog/posts'
 import { BlogMarkdown, routeDirective, routeSlugsIn } from '@/lib/blog/markdown'
 import type { MarkdownEditorHandle } from '@/components/admin/markdown-editor'
@@ -49,6 +52,8 @@ type Cover = Pick<RouteOption, 'id' | 'slug' | 'title' | 'thumbnail_url'>
 interface EditorState {
   slug: string
   cover: Cover | null
+  /** Uploaded cover image; replaces the route cover */
+  coverImage: { url: string; credit: string } | null
   /** YYYY-MM-DD or '' */
   date: string
   translations: Partial<Record<BlogLocale, Content>>
@@ -72,6 +77,7 @@ function fromPost(post: BlogPost): EditorState {
   return {
     slug: post.slug,
     cover: post.cover && post.cover_route_id ? { id: post.cover_route_id, ...post.cover } : null,
+    coverImage: post.cover_image_url ? { url: post.cover_image_url, credit: post.cover_image_credit ?? '' } : null,
     date: post.published_at ? post.published_at.slice(0, 10) : '',
     translations: Object.fromEntries(
       post.translations.map((t) => [t.locale, { title: t.title, description: t.description, body_md: t.body_md }]),
@@ -93,7 +99,7 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
 
   const [loading, setLoading] = useState(!!postId)
   const [notFound, setNotFound] = useState(false)
-  const [state, setState] = useState<EditorState>({ slug: '', cover: null, date: '', translations: { pt: emptyContent() } })
+  const [state, setState] = useState<EditorState>({ slug: '', cover: null, coverImage: null, date: '', translations: { pt: emptyContent() } })
   const [saved, setSaved] = useState<string>(JSON.stringify(state))
   const [status, setStatus] = useState<BlogPostStatus>('draft')
   const [slugLocked, setSlugLocked] = useState(false)
@@ -105,6 +111,9 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
   const [saving, setSaving] = useState(false)
   const [justSaved, setJustSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [uploading, setUploading] = useState<'cover' | 'body' | null>(null)
+  const coverInput = useRef<HTMLInputElement>(null)
+  const bodyInput = useRef<HTMLInputElement>(null)
   const editor = useRef<MarkdownEditorHandle | null>(null)
 
   // ------------------------------------------------------------------ load
@@ -232,7 +241,9 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
       const id = await BlogAdminService.savePost(postId, {
         slug: state.slug,
         status: nextStatus,
-        cover_route_id: state.cover?.id ?? null,
+        cover_route_id: state.coverImage ? null : state.cover?.id ?? null,
+        cover_image_url: state.coverImage?.url ?? null,
+        cover_image_credit: state.coverImage?.credit ?? null,
         published_at: state.date ? `${state.date}T12:00:00Z` : null,
         translations: [
           ...languages.map((l) => ({ locale: l, ...(state.translations[l] as Content) })),
@@ -259,11 +270,32 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
   }
 
   const onPick = (r: RouteOption) => {
-    if (picker === 'cover') setState((s) => ({ ...s, cover: r }))
+    if (picker === 'cover') setState((s) => ({ ...s, cover: r, coverImage: null }))
     else editor.current?.insertBlock(routeDirective(r.slug))
     setPicker(null)
     // The dialog gives focus back to its trigger when it closes; keep typing in the editor
     if (picker === 'route') window.setTimeout(() => editor.current?.focus(), 50)
+  }
+
+  // ---------------------------------------------------------------- images
+  const upload = async (file: File | undefined, target: 'cover' | 'body') => {
+    if (!file) return
+    setError(null)
+    setUploading(target)
+    try {
+      const url = await uploadBlogImage(file)
+      if (target === 'cover') {
+        setState((s) => ({ ...s, cover: null, coverImage: { url, credit: '' } }))
+      } else {
+        editor.current?.insertBlock(`![${tb('imageAltPlaceholder')}](${url})`)
+        window.setTimeout(() => editor.current?.focus(), 50)
+      }
+    } catch (e) {
+      console.error(e)
+      setError(e instanceof InvalidImageError ? tb('imageInvalid') : tb('imageUploadFailed'))
+    } finally {
+      setUploading(null)
+    }
   }
 
   // ------------------------------------------------------------------- UI
@@ -360,7 +392,29 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
         </div>
         <div className="space-y-1.5">
           <Label>{tb('cover')}</Label>
-          {state.cover ? (
+          {state.coverImage ? (
+            <div className="space-y-2 rounded-md border p-1.5">
+              <div className="flex items-center gap-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={state.coverImage.url} alt="" className="h-9 w-14 shrink-0 rounded object-cover" />
+                <span className="min-w-0 flex-1 truncate text-sm">{tb('coverImage')}</span>
+                <Button size="sm" variant="ghost" disabled={!!uploading} onClick={() => coverInput.current?.click()}>
+                  {uploading === 'cover' ? <Loader2 className="h-4 w-4 animate-spin" /> : tb('changeImage')}
+                </Button>
+                <Button size="icon" variant="ghost" className="h-8 w-8" title={tb('removeCover')} onClick={() => setState((s) => ({ ...s, coverImage: null }))}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              <Input
+                aria-label={tb('coverCredit')}
+                placeholder={tb('coverCreditPlaceholder')}
+                maxLength={200}
+                value={state.coverImage.credit}
+                onChange={(e) => setState((s) => (s.coverImage ? { ...s, coverImage: { ...s.coverImage, credit: e.target.value } } : s))}
+                className="h-8 text-sm"
+              />
+            </div>
+          ) : state.cover ? (
             <div className="flex items-center gap-2 rounded-md border p-1.5">
               {state.cover.thumbnail_url && (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -373,10 +427,26 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
               </Button>
             </div>
           ) : (
-            <Button variant="outline" className="w-full justify-start" onClick={() => setPicker('cover')}>
-              <MapPin className="mr-2 h-4 w-4" /> {tb('chooseRoute')}
-            </Button>
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="outline" className="justify-start" onClick={() => setPicker('cover')}>
+                <MapPin className="mr-2 h-4 w-4" /> {tb('chooseRoute')}
+              </Button>
+              <Button variant="outline" className="justify-start" disabled={!!uploading} onClick={() => coverInput.current?.click()}>
+                {uploading === 'cover' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ImagePlus className="mr-2 h-4 w-4" />}
+                {tb('uploadImage')}
+              </Button>
+            </div>
           )}
+          <input
+            ref={coverInput}
+            type="file"
+            accept={ACCEPTED_IMAGE_TYPES.join(',')}
+            className="hidden"
+            onChange={(e) => {
+              upload(e.target.files?.[0], 'cover')
+              e.target.value = ''
+            }}
+          />
           <p className="text-xs text-muted-foreground">{tb('coverHelp')}</p>
         </div>
         <div className="space-y-1.5">
@@ -455,6 +525,28 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
                 <Icon className="h-4 w-4" />
               </Button>
             ))}
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              className="h-8 w-8"
+              title={tb('toolbar.image')}
+              aria-label={tb('toolbar.image')}
+              disabled={!!uploading}
+              onClick={() => bodyInput.current?.click()}
+            >
+              {uploading === 'body' ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
+            </Button>
+            <input
+              ref={bodyInput}
+              type="file"
+              accept={ACCEPTED_IMAGE_TYPES.join(',')}
+              className="hidden"
+              onChange={(e) => {
+                upload(e.target.files?.[0], 'body')
+                e.target.value = ''
+              }}
+            />
             <Button type="button" size="sm" variant="secondary" className="ml-auto h-8" onClick={() => setPicker('route')}>
               <MapPin className="mr-1.5 h-4 w-4" /> {tb('toolbar.route')}
             </Button>

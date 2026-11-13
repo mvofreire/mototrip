@@ -27,6 +27,9 @@ export interface BlogPost {
   slug: string
   status: BlogPostStatus
   cover_route_id: string | null
+  /** Uploaded cover image (posts without a main route); wins over the route map */
+  cover_image_url: string | null
+  cover_image_credit: string | null
   published_at: string | null
   created_at: string
   updated_at: string
@@ -34,7 +37,7 @@ export interface BlogPost {
   translations: BlogTranslation[]
 }
 
-const POST_FIELDS = 'id, slug, status, cover_route_id, published_at, created_at, updated_at, cover:routes(slug, title, thumbnail_url)'
+const POST_FIELDS = 'id, slug, status, cover_route_id, cover_image_url, cover_image_credit, published_at, created_at, updated_at, cover:routes(slug, title, thumbnail_url)'
 
 /**
  * Translation shown for a page locale: that language, else English, else
@@ -43,6 +46,11 @@ const POST_FIELDS = 'id, slug, status, cover_route_id, published_at, created_at,
 export function pickTranslation(post: Pick<BlogPost, 'translations'>, locale: string): BlogTranslation | undefined {
   const by = (l: string) => post.translations.find((t) => t.locale === l)
   return by(locale) ?? by('en') ?? by('pt') ?? post.translations[0]
+}
+
+/** The post's cover: its uploaded image, else its main route's map, else null */
+export function coverOf(post: Pick<BlogPost, 'cover_image_url' | 'cover'>): string | null {
+  return post.cover_image_url || post.cover?.thumbnail_url || null
 }
 
 /** Published posts, newest first (title and description only, no body) */

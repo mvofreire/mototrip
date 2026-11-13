@@ -5,12 +5,18 @@
  * File format:
  *   {
  *     "slug": "rotas-de-moto-nas-dolomitas",
- *     "cover_route_slug": "passo-giau-cortina-d-ampezzo-...",   // optional
+ *     "cover_route_slug": "passo-giau-cortina-d-ampezzo-...",   // optional, or:
+ *     "cover_image": "./capa.jpg",          // optional local JPG/PNG/WebP (≤ 5 MB),
+ *                                           // uploaded to the blog_images bucket
+ *     "cover_image_credit": "Foto: Ana Silva / Unsplash",        // optional
  *     "translations": {
  *       "pt": { "title": "...", "description": "...", "body_md": "..." },
  *       "en": { ... }, "es": { ... }, "fr": { ... }              // fr/de optional
  *     }
  *   }
+ *
+ * The cover is a route map OR an image, not both. A relative cover_image
+ * path is read from the JSON file's folder.
  *
  * A new slug creates a draft. An existing draft with the same slug is updated
  * (its translations are replaced). Published or deactivated posts are never
@@ -22,9 +28,10 @@
 
 import { createClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
-import { readFileSync } from 'fs';
+import { readFileSync, statSync } from 'fs';
+import { randomUUID } from 'crypto';
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { dirname, extname, join, resolve } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: join(__dirname, '../.env.local') });
@@ -35,6 +42,8 @@ const SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 interface Input {
   slug: string;
   cover_route_slug?: string | null;
+  cover_image?: string | null;
+  cover_image_credit?: string | null;
   translations: Record<string, { title: string; description: string; body_md: string }>;
 }
 
@@ -72,6 +81,14 @@ async function main() {
     coverId = data.id;
   }
 
+  if (input.cover_image && coverId) throw new Error('Use cover_route_slug or cover_image, not both');
+  const coverImageUrl = input.cover_image ? await uploadCover(input.cover_image) : null;
+  const cover = {
+    cover_route_id: coverId,
+    cover_image_url: coverImageUrl,
+    cover_image_credit: coverImageUrl ? input.cover_image_credit?.trim() || null : null,
+  };
+
   const { data: existing } = await supabase
     .from('blog_posts')
     .select('id, status')
@@ -83,13 +100,13 @@ async function main() {
 
   let postId = existing?.id as string | undefined;
   if (postId) {
-    const { error } = await supabase.from('blog_posts').update({ cover_route_id: coverId }).eq('id', postId);
+    const { error } = await supabase.from('blog_posts').update(cover).eq('id', postId);
     if (error) throw error;
     await supabase.from('blog_post_translations').delete().eq('post_id', postId);
   } else {
     const { data, error } = await supabase
       .from('blog_posts')
-      .insert({ slug: input.slug, status: 'draft', cover_route_id: coverId })
+      .insert({ slug: input.slug, status: 'draft', ...cover })
       .select('id')
       .single();
     if (error || !data) throw new Error(error?.message ?? 'insert failed');
@@ -109,6 +126,22 @@ async function main() {
 
   console.log(`${existing ? 'Updated' : 'Created'} draft "${input.slug}" (${langs.join(', ')})`);
   console.log(`Review and publish: ${SITE}/pt/profile/admin/blog/${postId}`);
+}
+
+const IMAGE_TYPES: Record<string, string> = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp' };
+
+/** Uploads a local cover image to the public blog_images bucket and returns its URL */
+async function uploadCover(path: string): Promise<string> {
+  const full = resolve(dirname(resolve(file)), path);
+  const type = IMAGE_TYPES[extname(full).toLowerCase()];
+  if (!type) throw new Error(`cover_image must be JPG, PNG or WebP: ${path}`);
+  if (statSync(full).size > 5 * 1024 * 1024) throw new Error(`cover_image is over 5 MB: ${path}`);
+  const key = `${new Date().getFullYear()}/${randomUUID()}${extname(full).toLowerCase()}`;
+  const { error } = await supabase.storage
+    .from('blog_images')
+    .upload(key, readFileSync(full), { contentType: type, cacheControl: '31536000' });
+  if (error) throw new Error(`Cover upload failed: ${error.message}`);
+  return supabase.storage.from('blog_images').getPublicUrl(key).data.publicUrl;
 }
 
 main().catch((e) => {

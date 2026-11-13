@@ -47,6 +47,8 @@ Escreva um JSON no scratchpad com este formato:
 {
   "slug": "rotas-de-moto-nas-dolomitas",
   "cover_route_slug": "<slug da rota principal>",
+  "cover_image": null,
+  "cover_image_credit": null,
   "translations": {
     "pt": { "title": "...", "description": "...", "body_md": "..." },
     "en": { "title": "...", "description": "...", "body_md": "..." },
@@ -56,7 +58,9 @@ Escreva um JSON no scratchpad com este formato:
 ```
 
 - `slug`: em português, curto, com palavras-chave de busca (`[a-z0-9-]`). É a URL e fica fixa depois de publicada.
-- `cover_route_slug`: a rota cujo mapa vira a capa.
+- **Capa**: use uma das duas, nunca as duas.
+  - `cover_route_slug`: a rota cujo mapa vira a capa. É o padrão para posts sobre rotas ou regiões.
+  - `cover_image`: caminho de uma imagem local (JPG, PNG ou WebP, até 5 MB, de preferência com 1600 px de largura ou mais), relativo ao JSON. Serve para posts sem rota principal, como checklist da moto, kit de viagem ou regras de trânsito. Use só imagens que o usuário forneceu ou que tenham licença clara. Nunca baixe fotos da internet por conta própria. Preencha `cover_image_credit` quando a licença pedir crédito (ex.: `"Foto: Ana Silva / Unsplash"`). Sem imagem, deixe as duas como `null` e diga no relatório que falta a capa, que pode ser enviada depois no Admin.
 - **pt é obrigatório** (sem ele o post não pode ser publicado). en e es também devem ser escritos. Escreva fr quando o artigo for sobre França ou tiver público francês, e de quando fizer sentido. Idiomas sem versão própria caem para en e depois pt, com aviso.
 - `title`: até ~70 caracteres, com o destino e "de moto"/"by motorcycle"/"en moto"/"à moto". `description`: 1 frase para SEO, até ~160 caracteres.
 
