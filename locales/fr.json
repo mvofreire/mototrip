@@ -76,7 +76,15 @@
       "label": "Trier par",
       "recent": "Plus récents",
       "curator": "Meilleure note MotoTrip",
-      "community": "Meilleure note de la communauté"
+      "community": "Meilleure note de la communauté",
+      "shortest": "Les plus courtes d'abord",
+      "longest": "Les plus longues d'abord"
+    },
+    "noResultsHint": "Essayez de retirer un filtre ou de chercher autre chose.",
+    "view": {
+      "grid": "Grille",
+      "list": "Liste",
+      "map": "Carte"
     }
   },
   "filters": {
@@ -89,7 +97,57 @@
     "minimumRating": "Note MotoTrip minimale",
     "routeTypeLoop": "Boucle",
     "routeTypeOutAndBack": "Aller-Retour",
-    "any": "Toutes"
+    "any": "Toutes",
+    "clearAll": "Tout effacer",
+    "clearSearch": "Effacer la recherche",
+    "remove": "Retirer le filtre",
+    "close": "Fermer",
+    "sheetHint": "Les chiffres indiquent combien d'itinéraires restent pour chaque option.",
+    "showResults": "{count, plural, =0 {Aucun itinéraire} one {Voir # itinéraire} other {Voir # itinéraires}}",
+    "groups": {
+      "style": "Style d'itinéraire",
+      "country": "Pays",
+      "region": "Région",
+      "distance": "Distance",
+      "time": "Temps de conduite",
+      "difficulty": "Difficulté",
+      "terrain": "Relief",
+      "rating": "Note MotoTrip",
+      "format": "Format",
+      "stops": "Arrêts en chemin",
+      "highlights": "Points forts"
+    },
+    "help": {
+      "distance": "Longueur totale de l'itinéraire.",
+      "time": "Temps estimé sur la moto, sans arrêts.",
+      "terrain": "Dénivelé positif cumulé.",
+      "rating": "La note de nos curateurs, de 1 à 5.",
+      "stops": "Itinéraires avec au moins un de ces arrêts.",
+      "highlights": "D'après les notes de l'avis MotoTrip."
+    },
+    "dist": {
+      "short": "Courte",
+      "medium": "Moyenne",
+      "long": "Longue",
+      "epic": "Épique"
+    },
+    "time": {
+      "quick": "Rapide",
+      "half": "Matinée ou après-midi",
+      "long": "Demi-journée",
+      "day": "Journée entière"
+    },
+    "elev": {
+      "flat": "Doux",
+      "hilly": "Vallonné",
+      "mountain": "Montagne"
+    },
+    "feat": {
+      "featured": "Coup de cœur MotoTrip",
+      "views": "Paysages top",
+      "curves": "Beaucoup de virages",
+      "asphalt": "Bon asphalte"
+    }
   },
   "categories": {
     "scenic": "Panoramique",
