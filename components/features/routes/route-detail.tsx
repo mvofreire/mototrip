@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { MapPin } from 'lucide-react'
 import { regionForRoute, textFor } from '@/lib/regions'
@@ -15,7 +16,19 @@ import { RouteReviews } from '@/components/features/routes/route-reviews'
 import { RouteCuratorReview } from '@/components/features/routes/route-curator-review'
 
 /** Body of the route page (shared by the public and the private view) */
-export function RouteDetail({ route: unsorted, locale }: { route: RouteWithDetails; locale: string }) {
+export function RouteDetail({
+  route: unsorted,
+  locale,
+  guides,
+  footer,
+}: {
+  route: RouteWithDetails
+  locale: string
+  /** Blog guides that feature this route (public page only) */
+  guides?: ReactNode
+  /** End of the page, e.g. related routes (public page only) */
+  footer?: ReactNode
+}) {
   // Stops come from the database in no particular order
   const route = {
     ...unsorted,
@@ -49,6 +62,8 @@ export function RouteDetail({ route: unsorted, locale }: { route: RouteWithDetai
             </Link>
           )}
 
+          {guides}
+
           {route.description && (
             <div className="space-y-3">
               <h2 className="text-xl md:text-2xl font-bold">{t('aboutRoute')}</h2>
@@ -80,6 +95,8 @@ export function RouteDetail({ route: unsorted, locale }: { route: RouteWithDetai
           {route.published && (
             <CommentsList routeId={route.id} locale={locale} routeAuthorId={route.user_id} />
           )}
+
+          {footer}
         </div>
       </div>
     </div>

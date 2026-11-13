@@ -203,7 +203,13 @@
     "shareTitle": "Comparte esta ruta",
     "shareDescription": "Envíala al grupo de la salida o publícala para tus amigos.",
     "shareText": "{title}: ruta en moto con mapa, paradas y GPX gratis en MotoTrip.",
-    "copyLink": "Copiar enlace"
+    "copyLink": "Copiar enlace",
+    "related": {
+      "title": "Rutas que también te pueden interesar",
+      "seeMore": "Ver más rutas",
+      "inGuide": "Esta ruta aparece en la guía",
+      "readGuide": "Leer la guía"
+    }
   },
   "stopTypes": {
     "viewpoint": "Mirador",

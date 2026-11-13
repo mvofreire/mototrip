@@ -203,7 +203,13 @@
     "shareTitle": "Teile diese Route",
     "shareDescription": "Schick sie an deine Tourgruppe oder poste sie für deine Freunde.",
     "shareText": "{title}: Motorradroute mit Karte, Stopps und kostenlosem GPX auf MotoTrip.",
-    "copyLink": "Link kopieren"
+    "copyLink": "Link kopieren",
+    "related": {
+      "title": "Routen, die dir auch gefallen könnten",
+      "seeMore": "Mehr Routen ansehen",
+      "inGuide": "Diese Route ist Teil des Guides",
+      "readGuide": "Guide lesen"
+    }
   },
   "stopTypes": {
     "viewpoint": "Aussichtspunkt",
