@@ -1,8 +1,8 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
 import { buildAlternates } from '@/lib/seo'
-import { MapPin, Users, Heart, Globe, Instagram } from 'lucide-react'
-import { INSTAGRAM } from '@/lib/social'
+import { MapPin, Users, Heart, Globe, Instagram, Facebook } from 'lucide-react'
+import { INSTAGRAM, FACEBOOK } from '@/lib/social'
 
 export async function generateMetadata({
   params: { locale },
@@ -130,14 +130,26 @@ export default async function AboutPage({
               <h2 className="text-xl font-bold">{t('instagram.title')}</h2>
               <p className="text-muted-foreground">{t('instagram.description')}</p>
             </div>
-            <a
-              href={INSTAGRAM.url}
-              target="_blank"
-              rel="noopener noreferrer me"
-              className="inline-flex items-center justify-center rounded-md border px-5 py-2.5 font-semibold hover:bg-muted transition-colors"
-            >
-              @{INSTAGRAM.handle}
-            </a>
+            <div className="flex flex-col gap-2 sm:items-stretch">
+              <a
+                href={INSTAGRAM.url}
+                target="_blank"
+                rel="noopener noreferrer me"
+                className="inline-flex items-center justify-center gap-2 rounded-md border px-5 py-2.5 font-semibold hover:bg-muted transition-colors"
+              >
+                <Instagram className="h-4 w-4" />
+                @{INSTAGRAM.handle}
+              </a>
+              <a
+                href={FACEBOOK.url}
+                target="_blank"
+                rel="noopener noreferrer me"
+                className="inline-flex items-center justify-center gap-2 rounded-md border px-5 py-2.5 font-semibold hover:bg-muted transition-colors"
+              >
+                <Facebook className="h-4 w-4" />
+                Facebook
+              </a>
+            </div>
           </section>
         </div>
       </div>

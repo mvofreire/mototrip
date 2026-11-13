@@ -1,8 +1,8 @@
 'use client'
 
 import Link from "next/link"
-import { MapPin, Instagram } from "lucide-react"
-import { INSTAGRAM } from "@/lib/social"
+import { MapPin, Instagram, Facebook } from "lucide-react"
+import { INSTAGRAM, FACEBOOK } from "@/lib/social"
 import { REGIONS, textFor } from "@/lib/regions"
 import { Separator } from "@/components/ui/separator"
 import { useLocale, useTranslations } from 'next-intl'
@@ -27,16 +27,28 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">
               {t('tagline')}
             </p>
-            <a
-              href={INSTAGRAM.url}
-              target="_blank"
-              rel="noopener noreferrer me"
-              aria-label={t('followInstagram')}
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Instagram className="h-5 w-5" />
-              <span>@{INSTAGRAM.handle}</span>
-            </a>
+            <div className="flex flex-col gap-2">
+              <a
+                href={INSTAGRAM.url}
+                target="_blank"
+                rel="noopener noreferrer me"
+                aria-label={t('followInstagram')}
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Instagram className="h-5 w-5" />
+                <span>@{INSTAGRAM.handle}</span>
+              </a>
+              <a
+                href={FACEBOOK.url}
+                target="_blank"
+                rel="noopener noreferrer me"
+                aria-label={t('followFacebook')}
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Facebook className="h-5 w-5" />
+                <span>{FACEBOOK.name}</span>
+              </a>
+            </div>
           </div>
 
           {/* Routes */}

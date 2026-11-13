@@ -183,6 +183,7 @@
     "copyright": "© 2026 MotoTrip. Tous droits réservés.",
     "builtForRiders": "Construit pour les motards, par les motards 🏍️",
     "followInstagram": "Suivez MotoTrip sur Instagram",
+    "followFacebook": "Suivez MotoTrip sur Facebook",
     "contact": "Contact"
   },
   "notFound": {
@@ -397,7 +398,7 @@
       "button": "Soumettre Votre Premier Itinéraire"
     },
     "instagram": {
-      "title": "Suivez MotoTrip sur Instagram",
+      "title": "Suivez MotoTrip sur Instagram et Facebook",
       "description": "Nouveaux itinéraires, photos de la route et temps forts de la communauté. Identifiez @mototrip.pt dans vos balades."
     }
   },
@@ -1080,7 +1081,7 @@
     "title": "Contactez-nous",
     "subtitle": "Des questions, des suggestions d’itinéraires, un partenariat ou un problème sur le site ? Écrivez-nous.",
     "description": "Contactez l’équipe MotoTrip.",
-    "instagram": "Vous préférez discuter là-bas ? Retrouvez-nous sur Instagram",
+    "instagram": "Vous préférez discuter là-bas ? Retrouvez-nous sur Instagram et Facebook",
     "form": {
       "name": "Nom",
       "email": "Email",

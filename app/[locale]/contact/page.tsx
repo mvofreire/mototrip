@@ -1,8 +1,8 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
 import { buildAlternates } from '@/lib/seo'
-import { Instagram, Mail } from 'lucide-react'
-import { INSTAGRAM } from '@/lib/social'
+import { Facebook, Instagram, Mail } from 'lucide-react'
+import { FACEBOOK, INSTAGRAM } from '@/lib/social'
 import { ContactForm } from '@/components/contact-form'
 
 export async function generateMetadata({
@@ -44,15 +44,25 @@ export default async function ContactPage({
         </section>
 
         <p className="flex flex-wrap items-center justify-center gap-2 text-center text-sm text-muted-foreground">
-          <Instagram className="h-4 w-4" />
           {t('instagram')}
           <a
             href={INSTAGRAM.url}
             target="_blank"
             rel="noopener noreferrer me"
-            className="font-medium text-foreground hover:underline"
+            className="inline-flex items-center gap-1 font-medium text-foreground hover:underline"
           >
+            <Instagram className="h-4 w-4" />
             @{INSTAGRAM.handle}
+          </a>
+          <span aria-hidden="true">·</span>
+          <a
+            href={FACEBOOK.url}
+            target="_blank"
+            rel="noopener noreferrer me"
+            className="inline-flex items-center gap-1 font-medium text-foreground hover:underline"
+          >
+            <Facebook className="h-4 w-4" />
+            Facebook
           </a>
         </p>
       </div>
