@@ -64,7 +64,8 @@ export default async function BlogPostPage({ params }: Props) {
   const language = new Intl.DisplayNames([locale], { type: 'language' }).of(c.locale) ?? c.locale
 
   const base = getSiteUrl()
-  const jsonLd = {
+  const postUrl = `${base}/${c.locale}/blog/${post.slug}`
+  const posting = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: c.title,
@@ -73,7 +74,7 @@ export default async function BlogPostPage({ params }: Props) {
     datePublished: post.published_at,
     dateModified: post.updated_at,
     image: cover ? [cover] : undefined,
-    url: `${base}/${locale}/blog/${post.slug}`,
+    url: postUrl,
     author: { '@type': 'Organization', name: 'MotoTrip', url: base },
     publisher: { '@type': 'Organization', name: 'MotoTrip', logo: { '@type': 'ImageObject', url: `${base}/icon-512.png` } },
     mentions: slugs
@@ -81,6 +82,16 @@ export default async function BlogPostPage({ params }: Props) {
       .filter((r) => !!r)
       .map((r) => ({ '@type': 'TouristTrip', name: r!.title, url: `${base}/${locale}/routes/${r!.slug}` })),
   }
+  const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'MotoTrip', item: `${base}/${locale}` },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${base}/${locale}/blog` },
+      { '@type': 'ListItem', position: 3, name: c.title, item: postUrl },
+    ],
+  }
+  const jsonLd = [posting, breadcrumb]
 
   return (
     <article className="container py-10 md:py-14">
