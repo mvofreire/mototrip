@@ -160,7 +160,7 @@ export default async function GuidelinesPage({
             <h2 className="text-3xl font-bold">{t('reporting.title')}</h2>
             <p className="text-muted-foreground">{t('reporting.description')}</p>
             <div className="bg-muted p-4 rounded-lg">
-              <p className="font-mono text-sm">support@mototrip.com</p>
+              <p className="font-mono text-sm">contact@mototrip.pt</p>
             </div>
           </section>
 

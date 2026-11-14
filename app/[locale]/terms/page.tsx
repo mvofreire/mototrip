@@ -138,7 +138,7 @@ export default async function TermsPage({
             <h2 className="text-2xl font-bold">{t('contact.title')}</h2>
             <p className="text-muted-foreground">{t('contact.description')}</p>
             <div className="bg-muted p-4 rounded-lg">
-              <p className="font-mono text-sm">legal@mototrip.com</p>
+              <p className="font-mono text-sm">contact@mototrip.pt</p>
             </div>
           </section>
         </div>
