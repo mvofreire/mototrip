@@ -132,7 +132,7 @@ export default async function PrivacyPage({
             <h2 className="text-2xl font-bold">{t('contact.title')}</h2>
             <p className="text-muted-foreground">{t('contact.description')}</p>
             <div className="bg-muted p-4 rounded-lg">
-              <p className="font-mono text-sm">privacy@mototrip.com</p>
+              <p className="font-mono text-sm">contact@mototrip.pt</p>
             </div>
           </section>
         </div>
