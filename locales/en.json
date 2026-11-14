@@ -64,6 +64,74 @@
       "submitYourRoute": "Submit Your Route"
     }
   },
+  "homeRoad": {
+    "hero": {
+      "badge": "{routes} curated routes · {regions} regions",
+      "title": "Discover the best",
+      "titleHighlight": "motorcycle routes",
+      "subtitle": "Routes picked by riders, with recommended stops, a MotoTrip rating and the full map. When you find one you like, take it on the road: <strong>download the GPX for free or open it in Google Maps</strong>.",
+      "explore": "Explore routes",
+      "submit": "Submit a route"
+    },
+    "perks": {
+      "gpx": "Free GPX",
+      "maps": "Opens in Google Maps",
+      "noSignup": "No sign-up"
+    },
+    "heroCard": {
+      "featured": "Featured",
+      "distance": "Distance",
+      "duration": "Duration",
+      "rating": "Rating",
+      "gpx": "Download GPX"
+    },
+    "stats": {
+      "routes": "published routes",
+      "km": "km of road",
+      "regions": "regions",
+      "freeValue": "€0",
+      "free": "to download any GPX"
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "title": "From idea to open road in three steps",
+      "notGps": "We're not a GPS. We pick beautiful, well-organised routes, and navigation stays with the app you already use.",
+      "step1Title": "Pick a route",
+      "step1Desc": "Filter by country, region, road type (mountain, coast, scenic) and difficulty. Every route shows distance, duration and elevation.",
+      "step2Title": "See every detail",
+      "step2Desc": "Full map, recommended stops, photos, the MotoTrip rating with highlights and warnings, and scores from riders who have done it.",
+      "step3Title": "Take it on the road",
+      "step3Desc": "Download the GPX for free for your GPS or app, or open the route in Google Maps with one tap. No sign-up, nothing to pay."
+    },
+    "export": {
+      "eyebrow": "Always free",
+      "title": "From screen to road in one tap",
+      "description": "Every route has two buttons: one downloads the GPX file, the other opens it in Google Maps with the waypoints already set. You don't need an account for either.",
+      "gpxTitle": "GPX file",
+      "gpxDesc": "Works with Garmin, TomTom, Calimoto, OsmAnd and most motorcycle GPS units.",
+      "mapsTitle": "Google Maps",
+      "mapsDesc": "Opens straight on your phone, with the route's start, finish and waypoints.",
+      "phoneGpx": "Download free GPX",
+      "phoneMaps": "Open in Google Maps"
+    },
+    "featured": {
+      "eyebrow": "Featured",
+      "title": "Routes to start with",
+      "viewAll": "See all routes",
+      "freeGpx": "Free GPX"
+    },
+    "destinations": {
+      "title": "Destinations",
+      "routes": "{count, plural, one {# route} other {# routes}}",
+      "all": "All destinations"
+    },
+    "cta": {
+      "title": "Ready to hit the road?",
+      "subtitle": "Find your next route, download the GPX for free and ride. Know a road that deserves to be here? Share it with the community.",
+      "explore": "Start exploring",
+      "submit": "Submit your route"
+    }
+  },
   "explore": {
     "title": "Explore Routes",
     "subtitle": "Discover your next adventure from {count} curated motorcycle routes",

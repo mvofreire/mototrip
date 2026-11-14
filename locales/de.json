@@ -64,6 +64,74 @@
       "submitYourRoute": "Ihre Route Einreichen"
     }
   },
+  "homeRoad": {
+    "hero": {
+      "badge": "{routes} ausgewählte Routen · {regions} Regionen",
+      "title": "Entdecke die besten",
+      "titleHighlight": "Motorradrouten",
+      "subtitle": "Von Motorradfahrern ausgewählte Routen mit empfohlenen Stopps, MotoTrip-Bewertung und vollständiger Karte. Wenn dir eine gefällt, ab auf die Straße: <strong>GPX kostenlos herunterladen oder in Google Maps öffnen</strong>.",
+      "explore": "Routen entdecken",
+      "submit": "Route einreichen"
+    },
+    "perks": {
+      "gpx": "Kostenloses GPX",
+      "maps": "Öffnet in Google Maps",
+      "noSignup": "Ohne Anmeldung"
+    },
+    "heroCard": {
+      "featured": "Empfohlen",
+      "distance": "Distanz",
+      "duration": "Dauer",
+      "rating": "Bewertung",
+      "gpx": "GPX herunterladen"
+    },
+    "stats": {
+      "routes": "veröffentlichte Routen",
+      "km": "Straßenkilometer",
+      "regions": "Regionen",
+      "freeValue": "0 €",
+      "free": "für jedes GPX"
+    },
+    "how": {
+      "eyebrow": "So funktioniert's",
+      "title": "Von der Idee auf die Straße in drei Schritten",
+      "notGps": "Wir sind kein Navi. Wir wählen schöne, gut aufbereitete Routen aus – navigiert wird mit der App, die du schon nutzt.",
+      "step1Title": "Route wählen",
+      "step1Desc": "Filtere nach Land, Region, Straßentyp (Berge, Küste, Panorama) und Schwierigkeit. Jede Route zeigt Distanz, Dauer und Höhenmeter.",
+      "step2Title": "Jedes Detail sehen",
+      "step2Desc": "Vollständige Karte, empfohlene Stopps, Fotos, die MotoTrip-Bewertung mit Highlights und Hinweisen und die Wertungen von Fahrern, die sie gefahren sind.",
+      "step3Title": "Ab auf die Straße",
+      "step3Desc": "Lade das GPX kostenlos für dein Navi oder deine App herunter oder öffne die Route mit einem Tipp in Google Maps. Ohne Anmeldung, ohne Kosten."
+    },
+    "export": {
+      "eyebrow": "Immer kostenlos",
+      "title": "Vom Bildschirm auf die Straße mit einem Tipp",
+      "description": "Jede Route hat zwei Buttons: einer lädt die GPX-Datei herunter, der andere öffnet die Strecke in Google Maps mit allen Wegpunkten. Für keinen von beiden brauchst du ein Konto.",
+      "gpxTitle": "GPX-Datei",
+      "gpxDesc": "Funktioniert mit Garmin, TomTom, Calimoto, OsmAnd und den meisten Motorrad-Navis.",
+      "mapsTitle": "Google Maps",
+      "mapsDesc": "Öffnet direkt auf dem Handy, mit Start, Ziel und Wegpunkten der Route.",
+      "phoneGpx": "GPX kostenlos laden",
+      "phoneMaps": "In Google Maps öffnen"
+    },
+    "featured": {
+      "eyebrow": "Empfohlen",
+      "title": "Routen für den Anfang",
+      "viewAll": "Alle Routen ansehen",
+      "freeGpx": "GPX gratis"
+    },
+    "destinations": {
+      "title": "Reiseziele",
+      "routes": "{count, plural, one {# Route} other {# Routen}}",
+      "all": "Alle Reiseziele"
+    },
+    "cta": {
+      "title": "Bereit für die Straße?",
+      "subtitle": "Finde deine nächste Route, lade das GPX kostenlos herunter und fahr los. Kennst du eine Straße, die hierher gehört? Teile sie mit der Community.",
+      "explore": "Jetzt entdecken",
+      "submit": "Deine Route einreichen"
+    }
+  },
   "explore": {
     "title": "Routen Erkunden",
     "subtitle": "Entdecken Sie Ihr nächstes Abenteuer aus {count} kuratierten Motorradrouten",

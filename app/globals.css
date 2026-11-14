@@ -139,3 +139,33 @@ html, body {
   line-height: 1.4;
   padding: 0 4px;
 }
+
+/* "Road" homepage: the hero route draws itself, the end point pulses, cards float */
+.road-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: road-draw 3.2s ease-out 0.3s forwards;
+}
+.road-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: road-pulse 2.2s ease-in-out infinite;
+}
+.road-float {
+  animation: road-float 6s ease-in-out infinite;
+}
+@keyframes road-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes road-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.6); opacity: 0.25; }
+}
+@keyframes road-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .road-draw { animation: none; stroke-dashoffset: 0; }
+  .road-pulse, .road-float { animation: none; }
+}

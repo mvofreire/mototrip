@@ -64,6 +64,74 @@
       "submitYourRoute": "Enviar Sua Rota"
     }
   },
+  "homeRoad": {
+    "hero": {
+      "badge": "{routes} rotas curadas · {regions} regiões",
+      "title": "Descubra as melhores",
+      "titleHighlight": "rotas de moto",
+      "subtitle": "Rotas escolhidas por motociclistas, com paradas recomendadas, avaliação MotoTrip e mapa completo. Quando gostar de uma, leve para a estrada: <strong>baixe o GPX grátis ou abra no Google Maps</strong>.",
+      "explore": "Explorar rotas",
+      "submit": "Enviar uma rota"
+    },
+    "perks": {
+      "gpx": "GPX grátis",
+      "maps": "Abre no Google Maps",
+      "noSignup": "Sem cadastro"
+    },
+    "heroCard": {
+      "featured": "Em destaque",
+      "distance": "Distância",
+      "duration": "Duração",
+      "rating": "Avaliação",
+      "gpx": "Baixar GPX"
+    },
+    "stats": {
+      "routes": "rotas publicadas",
+      "km": "km de estrada",
+      "regions": "regiões",
+      "freeValue": "0 €",
+      "free": "para baixar qualquer GPX"
+    },
+    "how": {
+      "eyebrow": "Como funciona",
+      "title": "Da ideia à estrada em três passos",
+      "notGps": "Não somos um GPS. Escolhemos rotas bonitas e bem organizadas, e a navegação fica com o app que você já usa.",
+      "step1Title": "Escolha a rota",
+      "step1Desc": "Filtre por país, região, tipo de estrada (montanha, costa, cênica) e dificuldade. Cada rota mostra distância, duração e elevação.",
+      "step2Title": "Veja cada detalhe",
+      "step2Desc": "Mapa completo, paradas recomendadas, fotos, a avaliação MotoTrip com destaques e avisos, e as notas de quem já fez a rota.",
+      "step3Title": "Leve para a estrada",
+      "step3Desc": "Baixe o GPX grátis para o seu GPS ou app, ou abra a rota no Google Maps com um toque. Sem cadastro, sem pagar nada."
+    },
+    "export": {
+      "eyebrow": "Grátis, sempre",
+      "title": "Da tela para a estrada em um toque",
+      "description": "Toda rota tem dois botões: um baixa o arquivo GPX, o outro abre o trajeto no Google Maps com os pontos de passagem já marcados. Você não precisa criar conta para nenhum dos dois.",
+      "gpxTitle": "Arquivo GPX",
+      "gpxDesc": "Funciona no Garmin, TomTom, Calimoto, OsmAnd e na maioria dos GPS de moto.",
+      "mapsTitle": "Google Maps",
+      "mapsDesc": "Abre direto no celular, com origem, destino e pontos de passagem da rota.",
+      "phoneGpx": "Baixar GPX grátis",
+      "phoneMaps": "Abrir no Google Maps"
+    },
+    "featured": {
+      "eyebrow": "Em destaque",
+      "title": "Rotas para começar",
+      "viewAll": "Ver todas as rotas",
+      "freeGpx": "GPX grátis"
+    },
+    "destinations": {
+      "title": "Destinos",
+      "routes": "{count, plural, one {# rota} other {# rotas}}",
+      "all": "Todos os destinos"
+    },
+    "cta": {
+      "title": "Pronto para pegar a estrada?",
+      "subtitle": "Encontre sua próxima rota, baixe o GPX grátis e saia. Conhece uma estrada que merece estar aqui? Envie para a comunidade.",
+      "explore": "Começar a explorar",
+      "submit": "Enviar sua rota"
+    }
+  },
   "explore": {
     "title": "Explorar Rotas",
     "subtitle": "Descubra sua próxima aventura entre {count} rotas de motocicleta curadas",
