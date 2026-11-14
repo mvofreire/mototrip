@@ -64,6 +64,74 @@
       "submitYourRoute": "Soumettre Votre Itinéraire"
     }
   },
+  "homeRoad": {
+    "hero": {
+      "badge": "{routes} itinéraires sélectionnés · {regions} régions",
+      "title": "Découvrez les plus beaux",
+      "titleHighlight": "itinéraires moto",
+      "subtitle": "Des itinéraires choisis par des motards, avec arrêts recommandés, note MotoTrip et carte complète. Quand l'un d'eux vous plaît, prenez la route : <strong>téléchargez le GPX gratuitement ou ouvrez-le dans Google Maps</strong>.",
+      "explore": "Explorer les itinéraires",
+      "submit": "Proposer un itinéraire"
+    },
+    "perks": {
+      "gpx": "GPX gratuit",
+      "maps": "S'ouvre dans Google Maps",
+      "noSignup": "Sans inscription"
+    },
+    "heroCard": {
+      "featured": "À la une",
+      "distance": "Distance",
+      "duration": "Durée",
+      "rating": "Note",
+      "gpx": "Télécharger le GPX"
+    },
+    "stats": {
+      "routes": "itinéraires publiés",
+      "km": "km de route",
+      "regions": "régions",
+      "freeValue": "0 €",
+      "free": "pour télécharger n'importe quel GPX"
+    },
+    "how": {
+      "eyebrow": "Comment ça marche",
+      "title": "De l'idée à la route en trois étapes",
+      "notGps": "Nous ne sommes pas un GPS. Nous choisissons de beaux itinéraires bien organisés, et la navigation reste dans l'appli que vous utilisez déjà.",
+      "step1Title": "Choisissez l'itinéraire",
+      "step1Desc": "Filtrez par pays, région, type de route (montagne, côte, panoramique) et difficulté. Chaque itinéraire indique distance, durée et dénivelé.",
+      "step2Title": "Voyez chaque détail",
+      "step2Desc": "Carte complète, arrêts recommandés, photos, la note MotoTrip avec points forts et mises en garde, et les avis de ceux qui l'ont fait.",
+      "step3Title": "Prenez la route",
+      "step3Desc": "Téléchargez le GPX gratuitement pour votre GPS ou votre appli, ou ouvrez l'itinéraire dans Google Maps en un geste. Sans inscription, sans rien payer."
+    },
+    "export": {
+      "eyebrow": "Toujours gratuit",
+      "title": "De l'écran à la route en un geste",
+      "description": "Chaque itinéraire a deux boutons : l'un télécharge le fichier GPX, l'autre ouvre le trajet dans Google Maps avec les points de passage déjà placés. Aucun compte n'est nécessaire.",
+      "gpxTitle": "Fichier GPX",
+      "gpxDesc": "Fonctionne avec Garmin, TomTom, Calimoto, OsmAnd et la plupart des GPS moto.",
+      "mapsTitle": "Google Maps",
+      "mapsDesc": "S'ouvre directement sur le téléphone, avec départ, arrivée et points de passage.",
+      "phoneGpx": "Télécharger le GPX gratuit",
+      "phoneMaps": "Ouvrir dans Google Maps"
+    },
+    "featured": {
+      "eyebrow": "À la une",
+      "title": "Des itinéraires pour commencer",
+      "viewAll": "Voir tous les itinéraires",
+      "freeGpx": "GPX gratuit"
+    },
+    "destinations": {
+      "title": "Destinations",
+      "routes": "{count, plural, one {# itinéraire} other {# itinéraires}}",
+      "all": "Toutes les destinations"
+    },
+    "cta": {
+      "title": "Prêt à prendre la route ?",
+      "subtitle": "Trouvez votre prochain itinéraire, téléchargez le GPX gratuitement et partez. Vous connaissez une route qui mérite d'être ici ? Partagez-la avec la communauté.",
+      "explore": "Commencer à explorer",
+      "submit": "Proposer votre itinéraire"
+    }
+  },
   "explore": {
     "title": "Explorer les Itinéraires",
     "subtitle": "Découvrez votre prochaine aventure parmi {count} itinéraires moto sélectionnés",

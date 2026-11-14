@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { useMemo } from "react";
 import { Download, MapIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { escapeXml } from "@/lib/utils";
+import { buildGpx, gpxFileName, googleMapsUrl } from "@/lib/route-export";
+import { trackEvent } from "@/lib/analytics";
 import { Map, type OsmMarker } from "@/components/features/maps/map";
 
 
@@ -85,7 +86,9 @@ export function RouteMap({ route }: RouteMapProps) {
     return markers;
   }, [route.stops, coordinates, t]);
 
-  // Function to generate and download GPX from route coordinates
+  const trackData = { route: route.slug || route.id };
+
+  // Generate and download the GPX of the route
   const handleDownloadGPX = () => {
     if (coordinates.length === 0) {
       alert(t("noCoordinates"));
@@ -93,87 +96,30 @@ export function RouteMap({ route }: RouteMapProps) {
     }
 
     try {
-      // Generate GPX content
-      const gpxContent = generateGPXFromCoordinates(
-        coordinates,
-        route.title,
-        route.description || "",
-      );
-
-      // Create blob and download
+      const gpxContent = buildGpx(coordinates, route.title, route.description || "");
       const blob = new Blob([gpxContent], { type: "application/gpx+xml" });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${route.title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.gpx`;
+      a.download = gpxFileName(route.title);
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
+      trackEvent("gpx_download", { ...trackData, from: "route" });
     } catch (error) {
       console.error("Error generating GPX:", error);
       alert(t("gpxFailed"));
     }
   };
 
-  // Helper function to generate GPX XML from coordinates
-  const generateGPXFromCoordinates = (
-    coords: Array<{ lat: number; lng: number }>,
-    title: string,
-    description: string,
-  ) => {
-    const gpxHeader = `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="MotoTrip" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata>
-    <name>${escapeXml(title)}</name>
-    <desc>${escapeXml(description)}</desc>
-  </metadata>
-  <trk>
-    <name>${escapeXml(title)}</name>
-    <trkseg>`;
-
-    const trackPoints = coords
-      .map(
-        (coord) =>
-          `      <trkpt lat="${coord.lat}" lon="${coord.lng}"></trkpt>`,
-      )
-      .join("\n");
-
-    const gpxFooter = `
-    </trkseg>
-  </trk>
-</gpx>`;
-
-    return gpxHeader + "\n" + trackPoints + gpxFooter;
-  };
-
-  // Function to open in Google Maps
   const handleOpenInGoogleMaps = () => {
-    if (coordinates.length === 0) {
+    const url = googleMapsUrl(coordinates);
+    if (!url) {
       alert(t("noCoordinates"));
       return;
     }
-
-    const start = coordinates[0];
-    const end = coordinates[coordinates.length - 1];
-
-    // pega alguns pontos intermediários
-    const sampled = coordinates.filter(
-      (_, i:number) => i % Math.ceil(coordinates.length / 8) === 0,
-    );
-
-    const waypoints = sampled
-      .slice(1, -1)
-      .map((p) => `${p.lat},${p.lng}`)
-      .join("|");
-
-    const url =
-      `https://www.google.com/maps/dir/?api=1` +
-      `&origin=${start.lat},${start.lng}` +
-      `&destination=${end.lat},${end.lng}` +
-      `&waypoints=${waypoints}` +
-      `&travelmode=driving`;
-
+    trackEvent("google_maps_open", { ...trackData, from: "route" });
     window.open(url, "_blank");
   };
 

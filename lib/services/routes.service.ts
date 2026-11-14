@@ -163,6 +163,19 @@ export class RoutesService {
   }
 
   /**
+   * Country and region of every published route (homepage destinations)
+   */
+  static async getPublishedPlaces() {
+    const { data, error } = await supabase
+      .from("routes")
+      .select("country, region")
+      .eq("published", true);
+
+    if (error) throw error;
+    return (data ?? []) as { country: string | null; region: string | null }[];
+  }
+
+  /**
    * Route authors ranked by number of published routes
    */
   static async getTopContributors(limit = 6) {
