@@ -730,7 +730,9 @@
       "actions": "Actions",
       "noRoutes": "Aucun itinéraire trouvé",
       "updated": "Mis à jour",
-      "curator": "MotoTrip"
+      "curator": "MotoTrip",
+      "by": "par {name}",
+      "details": "Voir les détails"
     },
     "categories": {
       "scenic": "Panoramique",
@@ -831,7 +833,8 @@
         "copyEmail": "Copier l’email",
         "history": "Voir l’historique",
         "hideContent": "Masquer le contenu",
-        "showContent": "Afficher le contenu"
+        "showContent": "Afficher le contenu",
+        "changeRole": "Changer le rôle…"
       },
       "moderation": {
         "suspendTitle": "Suspendre {name}",
@@ -880,7 +883,14 @@
         "withHiddenContent": "Avec contenu masqué"
       },
       "contentHidden": "Contenu masqué",
-      "adminOnly": "La gestion des utilisateurs est réservée aux admins."
+      "adminOnly": "La gestion des utilisateurs est réservée aux admins.",
+      "roleDialog": {
+        "title": "Changer le rôle",
+        "description": "Choisissez le nouveau rôle de {name}.",
+        "contributorHelp": "Envoie des itinéraires et modifie les siens.",
+        "curatorHelp": "Valide les itinéraires, modifie n’importe lequel et écrit sur le blog.",
+        "confirm": "Changer le rôle"
+      }
     },
     "review": {
       "approve": "Approuver",
@@ -1046,7 +1056,8 @@
         "altMissing": "Les images sans texte alternatif nuisent au SEO et à l’accessibilité.",
         "insert": "Insérer dans le texte",
         "dropHint": "Glissez ou collez des images dans le texte pour les insérer là où vous les déposez."
-      }
+      },
+      "editSeo": "Modifier le SEO"
     },
     "curatorFilter": {
       "label": "Note MotoTrip",

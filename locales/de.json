@@ -730,7 +730,9 @@
       "actions": "Aktionen",
       "noRoutes": "Keine Routen gefunden",
       "updated": "Aktualisiert",
-      "curator": "MotoTrip"
+      "curator": "MotoTrip",
+      "by": "von {name}",
+      "details": "Details ansehen"
     },
     "categories": {
       "scenic": "Malerisch",
@@ -831,7 +833,8 @@
         "copyEmail": "E-Mail kopieren",
         "history": "Verlauf anzeigen",
         "hideContent": "Inhalte ausblenden",
-        "showContent": "Inhalte einblenden"
+        "showContent": "Inhalte einblenden",
+        "changeRole": "Rolle ändern…"
       },
       "moderation": {
         "suspendTitle": "{name} sperren",
@@ -880,7 +883,14 @@
         "withHiddenContent": "Mit ausgeblendeten Inhalten"
       },
       "contentHidden": "Inhalte ausgeblendet",
-      "adminOnly": "Nutzerverwaltung ist nur für Admins."
+      "adminOnly": "Nutzerverwaltung ist nur für Admins.",
+      "roleDialog": {
+        "title": "Rolle ändern",
+        "description": "Wähle die neue Rolle für {name}.",
+        "contributorHelp": "Reicht Routen ein und bearbeitet die eigenen.",
+        "curatorHelp": "Prüft und gibt Routen frei, bearbeitet jede Route und schreibt im Blog.",
+        "confirm": "Rolle ändern"
+      }
     },
     "review": {
       "approve": "Freigeben",
@@ -1046,7 +1056,8 @@
         "altMissing": "Bilder ohne Alt-Text schaden SEO und Barrierefreiheit.",
         "insert": "In den Text einfügen",
         "dropHint": "Bilder in den Text ziehen oder einfügen, um sie an dieser Stelle einzusetzen."
-      }
+      },
+      "editSeo": "SEO bearbeiten"
     },
     "curatorFilter": {
       "label": "MotoTrip-Bewertung",

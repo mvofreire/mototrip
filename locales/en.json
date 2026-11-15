@@ -730,7 +730,9 @@
       "actions": "Actions",
       "noRoutes": "No routes found",
       "updated": "Updated",
-      "curator": "MotoTrip"
+      "curator": "MotoTrip",
+      "by": "by {name}",
+      "details": "View details"
     },
     "categories": {
       "scenic": "Scenic",
@@ -831,7 +833,8 @@
         "copyEmail": "Copy email",
         "history": "View history",
         "hideContent": "Hide content",
-        "showContent": "Show content"
+        "showContent": "Show content",
+        "changeRole": "Change role…"
       },
       "moderation": {
         "suspendTitle": "Suspend {name}",
@@ -880,7 +883,14 @@
         "withHiddenContent": "With content hidden"
       },
       "contentHidden": "Content hidden",
-      "adminOnly": "Managing users is for admins only."
+      "adminOnly": "Managing users is for admins only.",
+      "roleDialog": {
+        "title": "Change role",
+        "description": "Choose the new role for {name}.",
+        "contributorHelp": "Submits routes and edits their own.",
+        "curatorHelp": "Reviews and approves routes, edits any route and writes on the blog.",
+        "confirm": "Change role"
+      }
     },
     "review": {
       "approve": "Approve",
@@ -1046,7 +1056,8 @@
         "altMissing": "Images without alt text hurt SEO and accessibility.",
         "insert": "Insert into text",
         "dropHint": "Drag or paste images into the text to insert them where you drop."
-      }
+      },
+      "editSeo": "Edit SEO"
     },
     "curatorFilter": {
       "label": "MotoTrip rating",

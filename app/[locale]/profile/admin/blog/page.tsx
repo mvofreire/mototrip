@@ -3,7 +3,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
-import { Archive, ExternalLink, Eye, Pencil, Plus, RefreshCw, Search, Trash2 } from 'lucide-react'
+import { Archive, ExternalLink, Eye, MoreHorizontal, Pencil, Plus, RefreshCw, Search, SearchCheck, Trash2 } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { BlogAdminService } from '@/lib/services/blog-admin.service'
 import { coverOf, pickTranslation, type BlogPost } from '@/lib/blog/posts'
 import { seoChecks } from '@/lib/blog/seo'
@@ -125,17 +132,19 @@ export default function AdminBlogPage() {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border bg-card">
+      <div className="overflow-hidden rounded-xl border bg-card">
         <table className="w-full text-sm">
           <thead className="bg-muted/50 text-left text-muted-foreground">
             <tr>
               <th className="p-3 font-medium">{tb('columns.title')}</th>
               <th className="p-3 font-medium">{tb('columns.status')}</th>
-              <th className="p-3 font-medium">{tb('columns.languages')}</th>
+              <th className="hidden p-3 font-medium xl:table-cell">{tb('columns.languages')}</th>
               <th className="p-3 font-medium">{tb('columns.seo')}</th>
-              <th className="p-3 font-medium">{tb('columns.date')}</th>
-              <th className="p-3 font-medium">{tb('columns.updated')}</th>
-              <th className="p-3 text-right font-medium">{tb('columns.actions')}</th>
+              <th className="hidden whitespace-nowrap p-3 font-medium lg:table-cell">{tb('columns.date')}</th>
+              <th className="hidden whitespace-nowrap p-3 font-medium 2xl:table-cell">{tb('columns.updated')}</th>
+              <th className="w-[52px] p-3">
+                <span className="sr-only">{tb('columns.actions')}</span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -152,17 +161,17 @@ export default function AdminBlogPage() {
               const seoTr = post.translations.find((x) => x.locale === 'pt') ?? post.translations[0]
               return (
                 <tr key={post.id} className="border-t align-middle">
-                  <td className="p-3">
-                    <div className="flex min-w-[240px] items-center gap-3">
+                  <td className="w-full max-w-0 p-3">
+                    <div className="flex items-center gap-3">
                       <div className="h-10 w-16 shrink-0 overflow-hidden rounded-md border bg-muted">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         {cover && <img src={cover} alt="" className="h-full w-full object-cover" />}
                       </div>
                       <div className="min-w-0">
-                        <Link href={`/${locale}/profile/admin/blog/${post.id}`} className="font-medium hover:text-primary">
+                        <Link href={`/${locale}/profile/admin/blog/${post.id}`} className="block truncate font-medium hover:text-primary">
                           {tr?.title ?? post.slug}
                         </Link>
-                        <div className="text-xs text-muted-foreground">/blog/{post.slug}</div>
+                        <div className="truncate text-xs text-muted-foreground">/blog/{post.slug}</div>
                       </div>
                     </div>
                   </td>
@@ -171,7 +180,7 @@ export default function AdminBlogPage() {
                       {tb(`status.${post.status}`)}
                     </Badge>
                   </td>
-                  <td className="p-3 uppercase text-muted-foreground">
+                  <td className="hidden whitespace-nowrap p-3 uppercase text-muted-foreground xl:table-cell">
                     {post.translations.map((x) => x.locale).sort().join(' · ')}
                   </td>
                   <td className="p-3">
@@ -181,41 +190,58 @@ export default function AdminBlogPage() {
                       </Link>
                     )}
                   </td>
-                  <td className="whitespace-nowrap p-3">{fmt(post.published_at)}</td>
-                  <td className="whitespace-nowrap p-3 text-muted-foreground">{fmt(post.updated_at)}</td>
-                  <td className="p-3">
-                    <div className="flex justify-end gap-1">
-                      <Button asChild size="sm" variant="ghost" title={tb('edit')}>
-                        <Link href={`/${locale}/profile/admin/blog/${post.id}`}>
-                          <Pencil className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      {post.status === 'published' && (
-                        <Button asChild size="sm" variant="ghost" title={tb('view')}>
-                          <a href={`/${locale}/blog/${post.slug}`} target="_blank" rel="noreferrer">
-                            <ExternalLink className="h-4 w-4" />
-                          </a>
+                  <td className="hidden whitespace-nowrap p-3 lg:table-cell">{fmt(post.published_at)}</td>
+                  <td className="hidden whitespace-nowrap p-3 text-muted-foreground 2xl:table-cell">{fmt(post.updated_at)}</td>
+                  <td className="p-3 text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" aria-label={tb('columns.actions')}>
+                          <MoreHorizontal className="h-4 w-4" />
                         </Button>
-                      )}
-                      {post.status === 'published' ? (
-                        <Button size="sm" variant="ghost" title={tb('deactivate')} onClick={() => setStatus(post, 'archived')}>
-                          <Archive className="h-4 w-4" />
-                        </Button>
-                      ) : (
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          title={post.status === 'archived' ? tb('reactivate') : tb('publish')}
-                          onClick={() => setStatus(post, 'published')}
-                          disabled={!post.translations.some((x) => x.locale === 'pt')}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                      )}
-                      <Button size="sm" variant="ghost" title={tb('delete')} onClick={() => setToDelete(post)}>
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
-                    </div>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-48">
+                        <DropdownMenuItem asChild>
+                          <Link href={`/${locale}/profile/admin/blog/${post.id}`}>
+                            <Pencil className="mr-2 h-4 w-4" />
+                            {tb('edit')}
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/${locale}/profile/admin/blog/${post.id}?tab=seo`}>
+                            <SearchCheck className="mr-2 h-4 w-4" />
+                            {tb('editSeo')}
+                          </Link>
+                        </DropdownMenuItem>
+                        {post.status === 'published' && (
+                          <DropdownMenuItem asChild>
+                            <a href={`/${locale}/blog/${post.slug}`} target="_blank" rel="noreferrer">
+                              <ExternalLink className="mr-2 h-4 w-4" />
+                              {tb('view')}
+                            </a>
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuSeparator />
+                        {post.status === 'published' ? (
+                          <DropdownMenuItem onSelect={() => setStatus(post, 'archived')}>
+                            <Archive className="mr-2 h-4 w-4" />
+                            {tb('deactivate')}
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuItem
+                            onSelect={() => setStatus(post, 'published')}
+                            disabled={!post.translations.some((x) => x.locale === 'pt')}
+                          >
+                            <Eye className="mr-2 h-4 w-4" />
+                            {post.status === 'archived' ? tb('reactivate') : tb('publish')}
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="text-destructive focus:text-destructive" onSelect={() => setToDelete(post)}>
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          {tb('delete')}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </td>
                 </tr>
               )

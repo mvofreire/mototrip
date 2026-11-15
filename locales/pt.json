@@ -730,7 +730,9 @@
       "actions": "Ações",
       "noRoutes": "Nenhuma rota encontrada",
       "updated": "Atualizada",
-      "curator": "MotoTrip"
+      "curator": "MotoTrip",
+      "by": "por {name}",
+      "details": "Ver detalhes"
     },
     "categories": {
       "scenic": "Cênica",
@@ -831,7 +833,8 @@
         "copyEmail": "Copiar email",
         "history": "Ver histórico",
         "hideContent": "Ocultar conteúdo",
-        "showContent": "Mostrar conteúdo"
+        "showContent": "Mostrar conteúdo",
+        "changeRole": "Alterar função…"
       },
       "moderation": {
         "suspendTitle": "Suspender {name}",
@@ -880,7 +883,14 @@
         "withHiddenContent": "Com o conteúdo ocultado"
       },
       "contentHidden": "Conteúdo oculto",
-      "adminOnly": "Gerenciar usuários é exclusivo de admins."
+      "adminOnly": "Gerenciar usuários é exclusivo de admins.",
+      "roleDialog": {
+        "title": "Alterar função",
+        "description": "Escolha a nova função de {name}.",
+        "contributorHelp": "Envia rotas e edita as próprias.",
+        "curatorHelp": "Revisa e aprova rotas, edita qualquer rota e escreve no blog.",
+        "confirm": "Alterar função"
+      }
     },
     "review": {
       "approve": "Aprovar",
@@ -1046,7 +1056,8 @@
         "altMissing": "Imagens sem texto alternativo pioram o SEO e a acessibilidade.",
         "insert": "Inserir no texto",
         "dropHint": "Arraste ou cole imagens no texto para inserir onde soltar."
-      }
+      },
+      "editSeo": "Editar SEO"
     },
     "curatorFilter": {
       "label": "Avaliação MotoTrip",

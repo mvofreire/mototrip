@@ -730,7 +730,9 @@
       "actions": "Acciones",
       "noRoutes": "No se encontraron rutas",
       "updated": "Actualizada",
-      "curator": "MotoTrip"
+      "curator": "MotoTrip",
+      "by": "por {name}",
+      "details": "Ver detalles"
     },
     "categories": {
       "scenic": "Escénica",
@@ -831,7 +833,8 @@
         "copyEmail": "Copiar email",
         "history": "Ver historial",
         "hideContent": "Ocultar contenido",
-        "showContent": "Mostrar contenido"
+        "showContent": "Mostrar contenido",
+        "changeRole": "Cambiar función…"
       },
       "moderation": {
         "suspendTitle": "Suspender a {name}",
@@ -880,7 +883,14 @@
         "withHiddenContent": "Con el contenido ocultado"
       },
       "contentHidden": "Contenido oculto",
-      "adminOnly": "Gestionar usuarios es exclusivo de los admins."
+      "adminOnly": "Gestionar usuarios es exclusivo de los admins.",
+      "roleDialog": {
+        "title": "Cambiar función",
+        "description": "Elige la nueva función de {name}.",
+        "contributorHelp": "Envía rutas y edita las suyas.",
+        "curatorHelp": "Revisa y aprueba rutas, edita cualquier ruta y escribe en el blog.",
+        "confirm": "Cambiar función"
+      }
     },
     "review": {
       "approve": "Aprobar",
@@ -1046,7 +1056,8 @@
         "altMissing": "Las imágenes sin texto alternativo empeoran el SEO y la accesibilidad.",
         "insert": "Insertar en el texto",
         "dropHint": "Arrastra o pega imágenes en el texto para insertarlas donde las sueltes."
-      }
+      },
+      "editSeo": "Editar SEO"
     },
     "curatorFilter": {
       "label": "Valoración MotoTrip",

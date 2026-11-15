@@ -24,12 +24,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Check, ExternalLink, Pencil, Star, Trash2, X } from 'lucide-react'
+import { Check, ExternalLink, Loader2, MoreHorizontal, PanelRight, Pencil, Shield, Star, Trash2, X } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { formatDistanceToNow } from 'date-fns'
 import { de, enUS, es, fr, ptBR } from 'date-fns/locale'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RouteStatusBadge } from '@/components/features/routes/route-status-badge'
-import { getCategoryColor, getDifficultyColor } from '@/lib/utils'
+import { cn, getCategoryColor, getDifficultyColor } from '@/lib/utils'
 import { routePath } from '@/lib/route-url'
 
 const dateLocales = { pt: ptBR, en: enUS, es, fr, de } as const
@@ -142,7 +149,7 @@ export function AdminRoutesTable({
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-xl border bg-card">
+      <div className="overflow-hidden rounded-xl border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
@@ -154,20 +161,19 @@ export function AdminRoutesTable({
                 />
               </TableHead>
               <TableHead>{t('table.title')}</TableHead>
-              <TableHead>{t('table.user')}</TableHead>
-              <TableHead>{t('table.category')}</TableHead>
-              <TableHead className="text-right">{t('table.distance')}</TableHead>
+              <TableHead className="hidden xl:table-cell">{t('table.category')}</TableHead>
               <TableHead>{t('table.status')}</TableHead>
-              <TableHead className="whitespace-nowrap">{t('table.curator')}</TableHead>
-              <TableHead className="text-center">{t('table.featured')}</TableHead>
-              <TableHead>{t('table.updated')}</TableHead>
-              <TableHead className="text-right">{t('table.actions')}</TableHead>
+              <TableHead className="hidden whitespace-nowrap lg:table-cell">{t('table.curator')}</TableHead>
+              <TableHead className="hidden whitespace-nowrap 2xl:table-cell">{t('table.updated')}</TableHead>
+              <TableHead className="w-[52px]">
+                <span className="sr-only">{t('table.actions')}</span>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {routes.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={10} className="py-8 text-center text-muted-foreground">
+                <TableCell colSpan={7} className="py-8 text-center text-muted-foreground">
                   {t('table.noRoutes')}
                 </TableCell>
               </TableRow>
@@ -175,13 +181,10 @@ export function AdminRoutesTable({
               routes.map((route) => (
                 <TableRow key={route.id} data-state={selected.has(route.id) ? 'selected' : undefined}>
                   <TableCell>
-                    <Checkbox
-                      checked={selected.has(route.id)}
-                      onCheckedChange={() => toggleSelect(route.id)}
-                      aria-label={route.title}
-                    />
+                    <Checkbox checked={selected.has(route.id)} onCheckedChange={() => toggleSelect(route.id)} aria-label={route.title} />
                   </TableCell>
-                  <TableCell className="min-w-[240px] max-w-[320px]">
+                  {/* w-full + max-w-0 lets the title column take the free space and truncate instead of scrolling */}
+                  <TableCell className="w-full max-w-0">
                     <div className="flex items-center gap-3">
                       <button
                         type="button"
@@ -194,57 +197,50 @@ export function AdminRoutesTable({
                         {route.thumbnail_url && <img src={route.thumbnail_url} alt="" className="h-full w-full object-cover" />}
                       </button>
                       <div className="min-w-0">
-                        <button type="button" onClick={() => onOpen(route.id)} className="block max-w-full truncate text-left font-medium hover:underline">
-                          {route.title}
+                        <button
+                          type="button"
+                          onClick={() => onOpen(route.id)}
+                          className="flex max-w-full items-center gap-1.5 text-left font-medium hover:underline"
+                        >
+                          <span className="truncate">{route.title}</span>
+                          {route.featured && <Star className="h-3.5 w-3.5 shrink-0 fill-yellow-500 text-yellow-500" aria-label={t('table.featured')} />}
                         </button>
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <span className="truncate">{[route.region, route.country].filter(Boolean).join(', ')}</span>
-                          <Link href={routePath(locale, route)} target="_blank" title={t('drawer.viewOnSite')} aria-label={t('drawer.viewOnSite')} className="shrink-0 hover:text-foreground">
-                            <ExternalLink className="h-3 w-3" />
-                          </Link>
-                        </div>
+                        <p className="truncate text-xs text-muted-foreground">
+                          {[
+                            [route.region, route.country].filter(Boolean).join(', '),
+                            `${Number(route.distance_km).toFixed(0)} km`,
+                            route.user_name && t('table.by', { name: route.user_name }),
+                          ]
+                            .filter(Boolean)
+                            .join(' · ')}
+                        </p>
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium">{route.user_name || '—'}</span>
-                      {route.user_email && (
-                        <span className="text-xs text-muted-foreground">{route.user_email}</span>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden xl:table-cell">
                     <div className="flex flex-col items-start gap-1">
-                      <Badge className={getCategoryColor(route.category)} variant="outline">
+                      <Badge className={cn('whitespace-nowrap', getCategoryColor(route.category))} variant="outline">
                         {tAll(`categories.${route.category}`)}
                       </Badge>
-                      <Badge className={getDifficultyColor(route.difficulty)} variant="outline">
+                      <Badge className={cn('whitespace-nowrap', getDifficultyColor(route.difficulty))} variant="outline">
                         {tAll(`difficulty.${route.difficulty}`)}
                       </Badge>
                     </div>
                   </TableCell>
-                  <TableCell className="whitespace-nowrap text-right">
-                    {Number(route.distance_km).toFixed(1)} km
-                  </TableCell>
-                  <TableCell className="max-w-[220px]">
+                  <TableCell className="max-w-[200px]">
                     <RouteStatusBadge status={route.status} />
                     {route.status === 'rejected' && route.review_note && (
-                      <p className="mt-1 line-clamp-2 text-xs text-muted-foreground" title={route.review_note}>
+                      <p className="mt-1 truncate text-xs text-muted-foreground" title={route.review_note}>
                         {route.review_note}
                       </p>
                     )}
                   </TableCell>
-                  <TableCell className="whitespace-nowrap">
+                  <TableCell className="hidden whitespace-nowrap lg:table-cell">
                     {route.curator_rating != null ? (
                       <div className="flex flex-col">
                         <span className="font-semibold tabular-nums">{Number(route.curator_rating).toFixed(1)}</span>
                         {route.curator_confidence && (
-                          <span
-                            className={`text-xs ${
-                              route.curator_confidence === 'low' ? 'text-amber-600 font-medium' : 'text-muted-foreground'
-                            }`}
-                          >
+                          <span className={cn('text-xs', route.curator_confidence === 'low' ? 'font-medium text-amber-600' : 'text-muted-foreground')}>
                             {tAll(`curatorAdmin.confidenceLevels.${route.curator_confidence}`)}
                           </span>
                         )}
@@ -253,73 +249,72 @@ export function AdminRoutesTable({
                       <span className="text-sm text-muted-foreground">—</span>
                     )}
                   </TableCell>
-                  <TableCell className="text-center">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      disabled={busy === route.id}
-                      aria-label={t('table.featured')}
-                      onClick={() => run(route.id, () => onToggleFeatured(route.id, !route.featured))}
-                    >
-                      <Star
-                        className={`h-4 w-4 ${
-                          route.featured ? 'fill-yellow-500 text-yellow-500' : 'text-gray-500'
-                        }`}
-                      />
-                    </Button>
+                  <TableCell className="hidden whitespace-nowrap text-sm text-muted-foreground 2xl:table-cell">
+                    {formatDistanceToNow(new Date(route.updated_at ?? route.created_at), { addSuffix: true, locale: dateLocale })}
                   </TableCell>
-                  <TableCell className="whitespace-nowrap text-sm text-muted-foreground">
-                    {formatDistanceToNow(new Date(route.updated_at ?? route.created_at), {
-                      addSuffix: true,
-                      locale: dateLocale,
-                    })}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
-                      {route.status !== 'approved' && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          title={t('review.approve')}
-                          aria-label={t('review.approve')}
-                          disabled={busy === route.id}
-                          onClick={() => run(route.id, () => onApprove(route.id))}
-                        >
-                          <Check className="h-4 w-4 text-green-600" />
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" disabled={busy === route.id} aria-label={t('table.actions')}>
+                          {busy === route.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <MoreHorizontal className="h-4 w-4" />}
                         </Button>
-                      )}
-                      {route.status !== 'rejected' && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          title={t('review.reject')}
-                          aria-label={t('review.reject')}
-                          disabled={busy === route.id}
-                          onClick={() => {
-                            setRejectNote('')
-                            setRejectTarget(route)
-                          }}
-                        >
-                          <X className="h-4 w-4 text-amber-600" />
-                        </Button>
-                      )}
-                      <Button variant="ghost" size="sm" asChild title={t('review.edit')}>
-                        <Link href={`/${locale}/routes/${route.id}/edit`} aria-label={t('review.edit')}>
-                          <Pencil className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      {canDelete && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          title={t('deleteDialog.delete')}
-                          aria-label={t('deleteDialog.delete')}
-                          onClick={() => setDeleteTarget(route)}
-                        >
-                          <Trash2 className="h-4 w-4 text-red-500" />
-                        </Button>
-                      )}
-                    </div>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-52">
+                        <DropdownMenuItem onSelect={() => onOpen(route.id)}>
+                          <PanelRight className="mr-2 h-4 w-4" />
+                          {t('table.details')}
+                        </DropdownMenuItem>
+                        {route.status !== 'approved' && (
+                          <DropdownMenuItem onSelect={() => run(route.id, () => onApprove(route.id))}>
+                            <Check className="mr-2 h-4 w-4 text-green-600" />
+                            {t('review.approve')}
+                          </DropdownMenuItem>
+                        )}
+                        {route.status !== 'rejected' && (
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              setRejectNote('')
+                              setRejectTarget(route)
+                            }}
+                          >
+                            <X className="mr-2 h-4 w-4 text-amber-600" />
+                            {t('review.reject')}
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuItem onSelect={() => run(route.id, () => onToggleFeatured(route.id, !route.featured))}>
+                          <Star className={cn('mr-2 h-4 w-4', route.featured && 'fill-yellow-500 text-yellow-500')} />
+                          {route.featured ? t('bulk.unfeature') : t('bulk.feature')}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link href={`/${locale}/routes/${route.id}/edit`}>
+                            <Pencil className="mr-2 h-4 w-4" />
+                            {t('review.edit')}
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/${locale}/routes/${route.id}/edit#curator-review`}>
+                            <Shield className="mr-2 h-4 w-4" />
+                            {t('drawer.curatorReview')}
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={routePath(locale, route)} target="_blank">
+                            <ExternalLink className="mr-2 h-4 w-4" />
+                            {t('drawer.viewOnSite')}
+                          </Link>
+                        </DropdownMenuItem>
+                        {canDelete && (
+                          <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="text-destructive focus:text-destructive" onSelect={() => setDeleteTarget(route)}>
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              {t('deleteDialog.delete')}
+                            </DropdownMenuItem>
+                          </>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))
