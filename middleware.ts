@@ -26,7 +26,36 @@ const intlMiddleware = createMiddleware({
 
 const HOME = new RegExp(`^/(${locales.join('|')})/?$`)
 
+const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS'])
+
+// A API só aceita escritas vindas do próprio site. O navegador sempre manda
+// Origin (e Sec-Fetch-Site) em POST/PUT/PATCH/DELETE; se for outro site, o
+// pedido é recusado antes de chegar à rota. Sem CORS, outros sites também não
+// conseguem ler as respostas. Isto não barra scripts fora do navegador (curl),
+// que não têm a sessão do visitante: para esses valem a autenticação e os
+// limites de cada rota.
+function isCrossSiteApiWrite(request: NextRequest) {
+  if (SAFE_METHODS.has(request.method)) return false
+  const fetchSite = request.headers.get('sec-fetch-site')
+  if (fetchSite && fetchSite !== 'same-origin' && fetchSite !== 'none') return true
+  const origin = request.headers.get('origin')
+  if (!origin) return false
+  const host = request.headers.get('x-forwarded-host') ?? request.headers.get('host')
+  try {
+    return new URL(origin).host !== host
+  } catch {
+    return true
+  }
+}
+
 export default async function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    if (isCrossSiteApiWrite(request)) {
+      return NextResponse.json({ error: 'forbidden' }, { status: 403 })
+    }
+    return NextResponse.next()
+  }
+
   const response = intlMiddleware(request)
 
   const home = request.nextUrl.pathname.match(HOME)
@@ -90,6 +119,6 @@ export const config = {
   // Every page path, so unprefixed links (`/routes/x`) get redirected to
   // the visitor's locale instead of 404ing. Skips API routes, Next/Vercel
   // internals and anything with a file extension (robots.txt, sitemap.xml,
-  // icons, sw.js, /images/*).
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  // icons, sw.js, /images/*). API routes only get the cross-site check.
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)', '/api/:path*'],
 }
