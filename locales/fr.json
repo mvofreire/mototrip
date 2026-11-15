@@ -1194,7 +1194,27 @@
     "viewAll": "Voir tous les itinéraires : {name}",
     "footerTitle": "Destinations",
     "otherRegions": "Autres régions",
-    "indexCtaTitle": "Vous connaissez un itinéraire qui n'est pas encore ici ?"
+    "indexCtaTitle": "Vous connaissez un itinéraire qui n'est pas encore ici ?",
+    "all": "Tous",
+    "countryFilter": "Filtrer par pays",
+    "explore": "Voir les itinéraires",
+    "emptyShort": "Pas encore d'itinéraire ici.",
+    "destinationCount": "{count, plural, =0 {aucune région} one {# région} other {# régions}}",
+    "statRoutes": "Itinéraires",
+    "statKm": "Km de route",
+    "statDestinations": "Régions",
+    "statHours": "Heures de route",
+    "mapTitle": "Tous les itinéraires sur la carte",
+    "regionsIn": "Régions : {name}",
+    "introFallback": "Itinéraires moto : {name}, avec carte, arrêts et GPX gratuit, partagés par la communauté MotoTrip.",
+    "sortLabel": "Trier",
+    "sort": {
+      "featured": "À la une",
+      "shortest": "Plus courts",
+      "longest": "Plus longs",
+      "rating": "Mieux notés"
+    },
+    "difficultyLabel": "Difficulté"
   },
   "oauth": {
     "continueWithGoogle": "Continuer avec Google",

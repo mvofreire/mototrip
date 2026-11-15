@@ -1194,7 +1194,27 @@
     "viewAll": "Ver todas las rutas: {name}",
     "footerTitle": "Destinos",
     "otherRegions": "Otras regiones",
-    "indexCtaTitle": "¿Conoces una ruta que aún no está aquí?"
+    "indexCtaTitle": "¿Conoces una ruta que aún no está aquí?",
+    "all": "Todos",
+    "countryFilter": "Filtrar por país",
+    "explore": "Ver rutas",
+    "emptyShort": "Todavía no hay rutas aquí.",
+    "destinationCount": "{count, plural, =0 {ninguna región} one {# región} other {# regiones}}",
+    "statRoutes": "Rutas",
+    "statKm": "Km de carretera",
+    "statDestinations": "Regiones",
+    "statHours": "Horas de ruta",
+    "mapTitle": "Todas las rutas en el mapa",
+    "regionsIn": "Regiones: {name}",
+    "introFallback": "Rutas en moto por {name} con mapa, paradas y GPX gratis, compartidas por la comunidad MotoTrip.",
+    "sortLabel": "Ordenar",
+    "sort": {
+      "featured": "Destacadas",
+      "shortest": "Más cortas",
+      "longest": "Más largas",
+      "rating": "Mejor valoradas"
+    },
+    "difficultyLabel": "Dificultad"
   },
   "oauth": {
     "continueWithGoogle": "Continuar con Google",

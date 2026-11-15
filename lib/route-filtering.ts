@@ -6,7 +6,7 @@
  * Inside a group the options are OR (Montanha or Costeira), across groups AND.
  */
 
-import { REGIONS, routeInRegion, textFor } from '@/lib/regions'
+import { getRegions, routeInRegion, textFor } from '@/lib/regions'
 import type { RouteWithDetails } from '@/types'
 
 export type FilterGroup =
@@ -79,13 +79,13 @@ const fold = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCa
 
 /** Region slug (lib/regions) a route belongs to, if any */
 export function routeRegionSlug(route: RouteWithDetails) {
-  return REGIONS.find((r) => r.kind === 'region' && routeInRegion(route, r))?.slug
+  return getRegions().find((r) => r.kind === 'region' && routeInRegion(route, r))?.slug
 }
 
 function searchText(route: RouteWithDetails, locale: string) {
   const parts = [route.title, route.region ?? '']
   for (const t of Object.values(route.translations ?? {})) if (t?.title) parts.push(t.title)
-  const region = REGIONS.find((r) => r.kind === 'region' && routeInRegion(route, r))
+  const region = getRegions().find((r) => r.kind === 'region' && routeInRegion(route, r))
   if (region) parts.push(textFor(region.name, locale))
   return fold(parts.join(' '))
 }

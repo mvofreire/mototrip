@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import { ArrowRight, MapPin } from 'lucide-react'
-import { REGIONS, regionForRoute, regionLabel, textFor } from '@/lib/regions'
+import { countryOf, regionForRoute, regionLabel, textFor } from '@/lib/regions'
 import { googleMapsUrl, routePoints, sortStops } from '@/lib/route-export'
 import { formatDistance, formatDuration, formatElevation } from '@/lib/utils'
 import type { RouteWithDetails } from '@/types'
@@ -46,7 +46,7 @@ export function RouteDetail({
   const routeSlug = route.slug ?? route.id
 
   const region = regionForRoute(route)
-  const country = region && REGIONS.find((r) => r.kind === 'country' && r.country === region.country)
+  const country = region && countryOf(region)
   const regionName = regionLabel(route, locale)
   const place = [regionName, country && region?.kind === 'region' ? textFor(country.name, locale) : null]
     .filter(Boolean)

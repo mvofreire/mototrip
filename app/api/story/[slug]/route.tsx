@@ -2,6 +2,7 @@ import { ImageResponse } from 'next/og'
 import { createClient } from '@supabase/supabase-js'
 import { formatDuration } from '@/lib/utils'
 import { regionForRoute, textFor } from '@/lib/regions'
+import { loadRegions } from '@/lib/regions.server'
 import { getSiteUrl } from '@/lib/site-url'
 import { localizeRoute } from '@/lib/localize'
 import pt from '@/locales/pt.json'
@@ -83,6 +84,7 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
   const title = localizeRoute({ ...route, stops: null }, locale).title
   const [name, ...rest] = title.split('|').map((s: string) => s.trim())
   const subtitle = rest.join(' · ')
+  await loadRegions()
   const region = regionForRoute(route)
   const place = region ? textFor(region.name, locale) : route.region ?? ''
   const nameSize = name.length > 22 ? 96 : name.length > 14 ? 120 : 150

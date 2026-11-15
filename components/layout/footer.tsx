@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { MapPin, Instagram, Facebook } from "lucide-react"
 import { INSTAGRAM, FACEBOOK } from "@/lib/social"
-import { REGIONS, textFor } from "@/lib/regions"
+import { getRegions, textFor } from "@/lib/regions"
 import { Separator } from "@/components/ui/separator"
 import { useLocale, useTranslations } from 'next-intl'
 import { GTM_ID } from "@/lib/consent"
@@ -88,7 +88,7 @@ export function Footer() {
               </Link>
             </h3>
             <ul className="space-y-3 text-sm">
-              {REGIONS.filter((r) => ['portugal', 'norte', 'algarve', 'espanha', 'picos-de-europa', 'pireneus', 'franca', 'alpes-franceses'].includes(r.slug)).map((r) => (
+              {getRegions().filter((r) => ['portugal', 'norte', 'algarve', 'espanha', 'picos-de-europa', 'pireneus', 'franca', 'alpes-franceses'].includes(r.slug)).map((r) => (
                 <li key={r.slug}>
                   <Link href={`/${locale}/regions/${r.slug}`} className="text-muted-foreground hover:text-foreground transition-colors">
                     {textFor(r.name, locale)}

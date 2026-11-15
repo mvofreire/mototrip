@@ -2,19 +2,20 @@ import type { MetadataRoute } from 'next'
 import { getSiteUrl } from '@/lib/site-url'
 import { locales } from '@/i18n'
 import { supabase } from '@/lib/supabase/client'
-import { REGIONS } from '@/lib/regions'
+import { loadRegions } from '@/lib/regions.server'
 import { routePath } from '@/lib/route-url'
 import { languageAlternates } from '@/lib/seo'
 
 const BASE_URL = getSiteUrl()
 
-const STATIC_PAGES = ['', '/explore', '/regions', ...REGIONS.map((r) => `/regions/${r.slug}`), '/riders', '/about', '/contact', '/guidelines', '/blog', '/terms', '/privacy']
+const STATIC_PAGES = ['', '/explore', '/regions', '/riders', '/about', '/contact', '/guidelines', '/blog', '/terms', '/privacy']
 
 // Rebuild hourly so new routes show up
 export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const pages: MetadataRoute.Sitemap = STATIC_PAGES.flatMap((path) =>
+  const regionPages = (await loadRegions()).map((r) => `/regions/${r.slug}`)
+  const pages: MetadataRoute.Sitemap = [...STATIC_PAGES, ...regionPages].flatMap((path) =>
     locales.map((locale) => ({
       url: `${BASE_URL}/${locale}${path}`,
       changeFrequency: path === '' || path === '/explore' ? 'daily' : path.startsWith('/regions') ? 'weekly' : 'monthly',

@@ -1,7 +1,7 @@
 import type { RouteWithDetails } from '@/types'
 import { getSiteUrl } from '@/lib/site-url'
 import { routePath } from '@/lib/route-url'
-import { REGIONS, regionForRoute, textFor } from '@/lib/regions'
+import { countryOf, regionForRoute, textFor } from '@/lib/regions'
 
 type Labels = {
   destinations: string
@@ -26,7 +26,7 @@ export function routeStructuredData(route: RouteWithDetails, locale: string, lab
   const base = getSiteUrl()
   const url = `${base}${routePath(locale, route)}`
   const region = regionForRoute(route)
-  const country = region && REGIONS.find((r) => r.kind === 'country' && r.country === region.country)
+  const country = region && countryOf(region)
   const photos = [...(route.photos ?? [])].sort((a, b) => a.order_index - b.order_index).map((p) => p.url)
   const images = [...photos, route.thumbnail_url].filter((u): u is string => !!u)
   const stops = [...(route.stops ?? [])].sort((a, b) => a.order_index - b.order_index)

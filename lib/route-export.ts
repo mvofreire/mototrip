@@ -104,3 +104,34 @@ export function routeSvgPath(points: LatLng[], w: number, h: number, pad = 16, m
     })
     .join(' ')
 }
+
+/**
+ * Several routes drawn on one shared projection (a region's road network), so
+ * their relative positions are kept. Returns one SVG path per route with ≥ 2 points.
+ */
+export function routesNetworkSvg(routes: LatLng[][], w: number, h: number, pad = 16, maxPoints = 80) {
+  const lines = routes.filter((pts) => pts.length >= 2)
+  if (!lines.length) return []
+  const all = lines.flat()
+  const k = Math.cos((all.reduce((s, p) => s + p.lat, 0) / all.length) * (Math.PI / 180))
+  const xs = all.map((p) => p.lng * k)
+  const ys = all.map((p) => -p.lat)
+  const minX = Math.min(...xs)
+  const maxX = Math.max(...xs)
+  const minY = Math.min(...ys)
+  const maxY = Math.max(...ys)
+  const scale = Math.min((w - pad * 2) / (maxX - minX || 1), (h - pad * 2) / (maxY - minY || 1))
+  const offX = (w - (maxX - minX) * scale) / 2
+  const offY = (h - (maxY - minY) * scale) / 2
+  return lines.map((pts) => {
+    const step = Math.max(1, Math.ceil(pts.length / maxPoints))
+    return pts
+      .filter((_, i) => i % step === 0 || i === pts.length - 1)
+      .map((p, i) => {
+        const px = (offX + (p.lng * k - minX) * scale).toFixed(1)
+        const py = (offY + (-p.lat - minY) * scale).toFixed(1)
+        return `${i === 0 ? 'M' : 'L'}${px} ${py}`
+      })
+      .join(' ')
+  })
+}

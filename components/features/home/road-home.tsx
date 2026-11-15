@@ -12,7 +12,8 @@ import {
 } from 'lucide-react'
 import { RoutesService } from '@/lib/services/routes.service'
 import { localizeRoute } from '@/lib/localize'
-import { REGIONS, regionForRoute, regionLabel, textFor } from '@/lib/regions'
+import { regionForRoute, regionLabel, textFor } from '@/lib/regions'
+import { loadRegions } from '@/lib/regions.server'
 import { routePath } from '@/lib/route-url'
 import { googleMapsUrl, gpxFileName, routePoints, routeSvgPath } from '@/lib/route-export'
 import { formatDuration, formatRating } from '@/lib/utils'
@@ -28,6 +29,7 @@ const display = 'font-display font-extrabold uppercase leading-[0.95]'
 export async function RoadHome({ locale }: { locale: string }) {
   const t = await getTranslations({ locale, namespace: 'homeRoad' })
   const tAll = await getTranslations({ locale })
+  const catalog = await loadRegions()
 
   let featured: RouteWithDetails[] = []
   let stats = { routes: 0, km: 0, regions: 0 }
@@ -76,7 +78,7 @@ export async function RoadHome({ locale }: { locale: string }) {
     const region = regionForRoute(place)
     if (region) counts.set(region.slug, (counts.get(region.slug) ?? 0) + 1)
   }
-  const destinations = REGIONS.filter((r) => r.kind === 'region' && counts.has(r.slug))
+  const destinations = catalog.filter((r) => r.kind === 'region' && counts.has(r.slug))
     .sort((a, b) => counts.get(b.slug)! - counts.get(a.slug)!)
     .slice(0, 8)
 

@@ -7,6 +7,7 @@ import { RouteDetail } from '@/components/features/routes/route-detail'
 import { RelatedRoutes, RouteInPosts } from '@/components/features/routes/route-related'
 import { getPostsForRoute, getRelatedRoutes } from '@/lib/routes/related'
 import { regionForRoute } from '@/lib/regions'
+import { loadRegions } from '@/lib/regions.server'
 import { getSiteUrl } from '@/lib/site-url'
 import { PrivateRouteDetail } from '@/components/features/routes/private-route-detail'
 import { Metadata } from 'next'
@@ -98,6 +99,7 @@ export default async function RoutePage({ params }: RoutePageProps) {
     permanentRedirect(routePath(params.locale, route))
   }
 
+  await loadRegions()
   const [related, posts] = await Promise.all([
     getRelatedRoutes(route).catch(() => []),
     getPostsForRoute(route, params.locale).catch(() => []),
