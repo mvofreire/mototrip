@@ -6,6 +6,7 @@ import type { AuthUser } from '@/types/auth.types'
 import { supabase } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import { rememberAccountBlock } from '@/lib/auth/account-block'
+import { trackAuth } from '@/lib/auth/track-auth'
 
 interface AuthContextType {
   user: AuthUser | null
@@ -41,6 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
           // Fire and forget: only the auth emails depend on it
           void authService.syncLocale(authUser)
+          trackAuth(authUser)
         }
         const next = authUser ? await authService.toAuthUser(authUser) : null
         if (active) setUser(next)

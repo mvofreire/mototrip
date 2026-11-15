@@ -26,6 +26,7 @@ import { RouteBuilder } from "./route-builder/route-builder";
 import { useRouteBuilder } from "@/hooks/use-route-builder";
 import { useRouteBuilderAccess } from "@/hooks/use-route-builder-access";
 import { cn } from "@/lib/utils";
+import { trackEvent } from "@/lib/analytics";
 
 type RouteInsert = Database["public"]["Tables"]["routes"]["Insert"];
 
@@ -199,6 +200,13 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
       };
 
       const result = await createRouteMutation.mutateAsync(routeData);
+      // Created, not necessarily public: authors' routes wait for review (pending)
+      trackEvent("route_created_success", {
+        route: result.slug ?? result.id,
+        source,
+        status: result.status ?? null,
+        country: result.country ?? null,
+      });
       // Let the curators know there is a new route to review (fire-and-forget).
       fetch("/api/routes/notify-curator", {
         method: "POST",

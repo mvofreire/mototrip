@@ -2,6 +2,7 @@ import type { User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase/client'
 import type { AccountBlock, AuthUser, Profile } from '@/types/auth.types'
 import { authRedirectUrl, currentLocale } from '@/lib/auth/redirects'
+import { skipAuthTracking } from '@/lib/auth/track-auth'
 
 // Readable profile columns (email is intentionally not granted to clients)
 const PROFILE_COLUMNS = 'id, full_name, avatar_url, role, created_at, updated_at'
@@ -119,11 +120,13 @@ export const authService = {
     if (currentPassword !== undefined) {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user?.email) throw new Error('Not signed in')
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: user.email,
         password: currentPassword,
       })
       if (error) throw error
+      // Confirming the password is not a login for analytics
+      skipAuthTracking(data.user)
     }
     await this.updatePassword(newPassword)
   },
