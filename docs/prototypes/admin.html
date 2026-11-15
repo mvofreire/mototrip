@@ -1,0 +1,1536 @@
+<title>MotoTrip Admin Protótipos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Three admin/curator directions for MotoTrip. Dark-first, racing red on steel (same tokens as submit-route prototype). */
+:root{
+  --bg:#0d0f14; --surface:#151922; --surface-2:#1d222d; --surface-3:#242a37; --line:#2b313f; --line-soft:#222834;
+  --fg:#f6f7f9; --fg-2:#d5d9e2; --muted:#8592aa;
+  --brand:#f5293d; --brand-strong:#d90f25; --brand-soft:rgba(245,41,61,.14); --brand-text:#ff99a3;
+  --ok:#34d399; --ok-soft:rgba(52,211,153,.13); --warn:#fbbf24; --warn-soft:rgba(251,191,36,.13);
+  --bad:#f87171; --bad-soft:rgba(248,113,113,.13); --info:#7dd3fc; --info-soft:rgba(125,211,252,.12);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --grid:#232a37; --map-bg:#11141b; --contour:#1f2531;
+  --shadow:0 30px 60px -30px rgba(0,0,0,.8);
+  --display:"Barlow Condensed","Arial Narrow",ui-sans-serif,system-ui,sans-serif;
+  --body:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#f6f7f9; --surface:#ffffff; --surface-2:#eceef2; --surface-3:#e2e5eb; --line:#d5d9e2; --line-soft:#e4e7ed;
+  --fg:#0f1218; --fg-2:#2b313f; --muted:#515d77;
+  --brand:#d90f25; --brand-strong:#b50a1e; --brand-soft:rgba(217,15,37,.09); --brand-text:#b50a1e;
+  --ok:#047857; --ok-soft:rgba(5,150,105,.1); --warn:#b45309; --warn-soft:rgba(217,119,6,.12);
+  --bad:#b91c1c; --bad-soft:rgba(220,38,38,.09); --info:#0369a1; --info-soft:rgba(3,105,161,.09);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --grid:#e4e7ed; --map-bg:#eef0f4; --contour:#dde1e8;
+  --shadow:0 24px 50px -28px rgba(15,18,24,.35); color-scheme:light;
+}}
+:root[data-theme="light"]{
+  --bg:#f6f7f9; --surface:#ffffff; --surface-2:#eceef2; --surface-3:#e2e5eb; --line:#d5d9e2; --line-soft:#e4e7ed;
+  --fg:#0f1218; --fg-2:#2b313f; --muted:#515d77;
+  --brand:#d90f25; --brand-strong:#b50a1e; --brand-soft:rgba(217,15,37,.09); --brand-text:#b50a1e;
+  --ok:#047857; --ok-soft:rgba(5,150,105,.1); --warn:#b45309; --warn-soft:rgba(217,119,6,.12);
+  --bad:#b91c1c; --bad-soft:rgba(220,38,38,.09); --info:#0369a1; --info-soft:rgba(3,105,161,.09);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --grid:#e4e7ed; --map-bg:#eef0f4; --contour:#dde1e8;
+  --shadow:0 24px 50px -28px rgba(15,18,24,.35); color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;line-height:1.5;margin:0;
+  padding:20px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px));overflow-x:hidden}
+.wrap{max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3,h4{text-wrap:balance;margin:0}
+p{margin:0}
+.display{font-family:var(--display);font-weight:800;text-transform:uppercase;line-height:.95;letter-spacing:.005em}
+.eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--brand-text)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+svg.i{width:16px;height:16px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- page header ---------- */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.top h1{font-size:clamp(2rem,4.4vw,3.2rem)}
+.top h1 span{color:var(--brand)}
+.top p{margin-top:6px;color:var(--muted);max-width:70ch}
+.ctrls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:6px 11px;border-radius:7px;cursor:pointer;color:var(--muted);font-weight:600;font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 0 var(--line)}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tab{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 14px;cursor:pointer;text-align:left;display:flex;gap:10px;align-items:center;min-width:0}
+.tab b{font-family:var(--display);font-size:22px;line-height:1;width:32px;height:32px;border-radius:8px;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);flex:none}
+.tab span{display:flex;flex-direction:column;font-size:12.5px;color:var(--muted);min-width:0}
+.tab span strong{color:var(--fg);font-size:14px}
+.tab[aria-selected="true"]{border-color:var(--brand)}
+.tab[aria-selected="true"] b{background:var(--brand);color:#fff}
+@media (max-width:760px){.tabs{grid-template-columns:1fr}}
+
+.screen{background:var(--bg);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);min-height:760px;position:relative}
+
+/* ---------- shared atoms ---------- */
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:7px 12px;cursor:pointer;font-weight:600;font-size:13px;white-space:nowrap;color:var(--fg)}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.primary:hover{background:var(--brand-strong)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--muted)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--fg)}
+.btn.sm{padding:5px 9px;font-size:12px;border-radius:7px}
+.btn.icon{padding:6px;border-radius:8px}
+.btn.danger{color:var(--bad)}
+.btn.ok{color:var(--ok)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.input,.select,textarea.input{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13.5px;min-width:0}
+.input:focus,.select:focus,textarea.input:focus{outline:none;border-color:var(--brand)}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:600;color:var(--fg-2)}
+label.f small{font-weight:500;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:600;white-space:nowrap;border:1px solid transparent}
+.pill svg.i{width:12px;height:12px}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.info{background:var(--info-soft);color:var(--info)}
+.pill.neutral{background:var(--surface-2);color:var(--muted);border-color:var(--line)}
+.pill.brand{background:var(--brand-soft);color:var(--brand-text)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--muted);white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chip .n{font-variant-numeric:tabular-nums;opacity:.75}
+.chip.chip-attn{border-color:var(--warn)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.card h3{font-size:14px;font-weight:700}
+.card .hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.lang{display:inline-grid;place-items:center;font-size:10.5px;font-weight:700;letter-spacing:.04em;border-radius:5px;padding:1px 5px;background:var(--surface-2);color:var(--fg-2);border:1px solid var(--line)}
+.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:12px;color:#fff;flex:none}
+.stars{display:inline-flex;gap:1px;color:var(--warn);font-size:12px;letter-spacing:-1px}
+.stars .off{color:var(--line)}
+.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface)}
+table.t td{padding:10px 12px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+table.t tr.row{cursor:pointer}
+table.t tr.row:hover td{background:var(--surface-2)}
+table.t tr.sel td{background:var(--brand-soft)}
+.cell-title{display:flex;align-items:center;gap:10px;min-width:220px}
+.cell-title b{font-weight:600;display:block}
+.cell-title small{color:var(--muted);font-size:12px}
+.thumb{width:52px;height:36px;border-radius:7px;overflow:hidden;flex:none;background:var(--map-bg);border:1px solid var(--line)}
+.thumb svg{width:100%;height:100%;display:block}
+.toggle{border:0;background:transparent;cursor:pointer;padding:4px;border-radius:6px;color:var(--muted);display:inline-grid;place-items:center}
+.toggle:hover{background:var(--surface-3)}
+.toggle.on{color:var(--warn)}
+.toggle.on.eye{color:var(--ok)}
+.toggle.on svg.i{fill:currentColor}
+.toggle.eye.on svg.i{fill:none}
+.menu{position:relative;display:inline-block}
+.menu>summary{list-style:none;cursor:pointer}
+.menu>summary::-webkit-details-marker{display:none}
+.menu .pop{position:absolute;right:0;top:calc(100% + 4px);z-index:30;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:5px;min-width:210px;box-shadow:var(--shadow)}
+.menu .pop button{display:flex;width:100%;align-items:center;gap:8px;border:0;background:transparent;padding:7px 9px;border-radius:7px;font-size:13px;cursor:pointer;text-align:left;color:var(--fg)}
+.menu .pop button:hover{background:var(--surface-2)}
+.menu .pop hr{border:0;border-top:1px solid var(--line);margin:4px 0}
+.menu .pop .danger{color:var(--bad)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:10px;font-weight:600;font-size:13px;opacity:0;transition:.25s;pointer-events:none;z-index:200;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+.note{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;padding:9px 12px;border-radius:10px;background:var(--info-soft);color:var(--fg-2)}
+.note svg{color:var(--info);margin-top:2px}
+
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(5,6,9,.6);display:grid;place-items:center;z-index:100;padding:16px}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:16px;width:min(480px,100%);padding:20px;display:flex;flex-direction:column;gap:14px;max-height:90vh;overflow:auto}
+.modal h3{font-size:17px}
+.modal .acts{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+
+/* charts */
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;overflow:visible}
+.chart text{fill:var(--muted);font-size:11px;font-family:var(--body)}
+.tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:12px;box-shadow:var(--shadow);z-index:20;white-space:nowrap;opacity:0;transition:opacity .1s}
+.tip b{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-bottom:2px}
+.tip .r{display:flex;align-items:center;gap:6px;color:var(--fg)}
+.tip .sw{width:8px;height:8px;border-radius:2px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--fg-2);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.kpi{display:flex;flex-direction:column;gap:4px}
+.kpi .v{font-family:var(--display);font-weight:800;font-size:34px;line-height:1}
+.delta{font-size:12px;font-weight:600}
+.delta.up{color:var(--ok)} .delta.down{color:var(--bad)}
+.statusbar{display:flex;gap:2px;height:14px;border-radius:5px;overflow:hidden}
+.statusbar div{height:100%}
+.hbar{display:grid;grid-template-columns:96px 1fr 44px;align-items:center;gap:10px;font-size:12.5px;padding:3px 0}
+.hbar .track{height:10px;background:transparent;position:relative}
+.hbar .fill{height:100%;border-radius:0 4px 4px 0;background:var(--brand)}
+.hbar .val{text-align:right;font-variant-numeric:tabular-nums;color:var(--fg-2)}
+.hbar:hover .fill{filter:brightness(1.15)}
+
+/* editor: markdown preview / blocks (shared) */
+.prose{font-size:15.5px;line-height:1.7;color:var(--fg-2)}
+.prose h2{font-family:var(--display);text-transform:uppercase;font-size:26px;color:var(--fg);margin:26px 0 8px;line-height:1.05}
+.prose h3{font-size:17px;color:var(--fg);margin:20px 0 6px}
+.prose p{margin:0 0 12px}
+.prose blockquote{border-left:3px solid var(--brand);margin:12px 0;padding:2px 14px;color:var(--fg)}
+.prose figure{margin:18px 0}
+.prose figure img,.prose figure .ph{width:100%;border-radius:12px;display:block;aspect-ratio:16/9;object-fit:cover}
+.prose figure.wide{margin-left:-40px;margin-right:-40px}
+.prose figure.gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.prose figure.gallery figcaption{grid-column:1/-1}
+.prose figcaption{font-size:12.5px;color:var(--muted);margin-top:6px;text-align:center}
+.prose .tipbox{border:1px solid var(--warn);background:var(--warn-soft);border-radius:12px;padding:10px 14px;margin:14px 0;color:var(--fg)}
+.prose .tipbox::before{content:"Dica";display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--warn);margin-bottom:2px}
+.routecard{display:flex;gap:12px;align-items:center;border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:10px;margin:14px 0}
+.routecard .thumb{width:84px;height:58px}
+.routecard b{display:block;color:var(--fg);font-size:14px}
+.routecard small{color:var(--muted);font-size:12px}
+.serp{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-family:Arial,sans-serif}
+.serp .u{font-size:12px;color:var(--fg-2);display:flex;align-items:center;gap:6px}
+.serp .u i{width:18px;height:18px;border-radius:50%;background:var(--brand);display:inline-block}
+.serp .tt{color:#8ab4f8;font-size:18px;line-height:1.3;margin:4px 0 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+:root[data-theme="light"] .serp .tt{color:#1a0dab}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .serp .tt{color:#1a0dab}}
+.serp .dd{font-size:13px;color:var(--fg-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.counter{font-size:11.5px;font-weight:600;font-variant-numeric:tabular-nums}
+.counter.ok{color:var(--ok)} .counter.warn{color:var(--warn)} .counter.bad{color:var(--bad)}
+.meter{height:4px;border-radius:3px;background:var(--surface-3);overflow:hidden;margin-top:4px}
+.meter div{height:100%;border-radius:3px}
+.kw{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:1px solid var(--line);background:var(--surface-2);border-radius:9px;padding:6px}
+.kw span{display:inline-flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:2px 4px 2px 8px;font-size:12.5px}
+.kw span button{border:0;background:transparent;cursor:pointer;color:var(--muted);padding:0 3px;font-size:14px;line-height:1}
+.kw input{border:0;background:transparent;flex:1;min-width:110px;padding:3px;font-size:13px}
+.kw input:focus{outline:none}
+.checks{display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.checks div{display:flex;gap:8px;align-items:flex-start}
+.checks svg.i{width:14px;height:14px;margin-top:2px}
+.checks .y{color:var(--ok)} .checks .n{color:var(--warn)}
+.ring{--p:70;--c:var(--ok);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),var(--surface-3) 0);flex:none}
+.ring b{width:34px;height:34px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font-size:12.5px;font-variant-numeric:tabular-nums}
+.ring.sm{width:30px;height:30px}.ring.sm b{width:23px;height:23px;font-size:10.5px}
+.drop-hint{position:absolute;inset:0;border:2px dashed var(--brand);border-radius:10px;background:var(--brand-soft);display:none;place-items:center;font-weight:700;color:var(--brand-text);pointer-events:none;z-index:5}
+.dragging .drop-hint{display:grid}
+
+/* ====================== A — Cockpit ====================== */
+.A{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:760px}
+.A-side{background:var(--surface);border-right:1px solid var(--line);padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+.logo{display:flex;align-items:center;gap:8px;padding:4px 8px 16px}
+.logo b{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:.02em}
+.logo b span{color:var(--brand)}
+.logo small{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.A-nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;color:var(--muted);font-weight:600;cursor:pointer;border:0;background:transparent;text-align:left;width:100%}
+.A-nav:hover{background:var(--surface-2);color:var(--fg)}
+.A-nav[aria-current="page"]{background:var(--brand-soft);color:var(--fg)}
+.A-nav[aria-current="page"] svg{color:var(--brand)}
+.A-nav .badge{margin-left:auto;background:var(--warn-soft);color:var(--warn);font-size:11px;font-weight:700;border-radius:999px;padding:0 7px}
+.A-group{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);padding:14px 10px 4px}
+.A-me{margin-top:auto;display:flex;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:12px}
+.A-me small{display:block;color:var(--muted);font-size:11.5px}
+.A-main{display:flex;flex-direction:column;min-width:0}
+.A-top{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.A-top .crumb{font-weight:700;font-size:15px}
+.A-top .crumb span{color:var(--muted);font-weight:500}
+.A-top .search{margin-left:auto;position:relative;width:min(280px,100%)}
+.A-top .search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.A-top .search .input{padding-left:32px}
+.A-body{padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.A-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.A-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:12px}
+.A-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.spark{height:34px;margin-top:6px}
+.queue-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line-soft)}
+.queue-row:first-child{border-top:0}
+.queue-row .meta{flex:1;min-width:0}
+.queue-row .meta b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.queue-row .meta small{color:var(--muted);font-size:12px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.toolbar .sp{flex:1}
+.bulk{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--brand-soft);border:1px solid var(--brand);border-radius:10px;flex-wrap:wrap;font-weight:600;font-size:13px}
+.A-tablecard{padding:0;overflow:hidden}
+.drawer{position:absolute;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:var(--shadow);z-index:40;display:flex;flex-direction:column}
+.drawer .dh{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.drawer .db{padding:16px;overflow:auto;display:flex;flex-direction:column;gap:14px}
+.drawer .df{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap}
+.mapbig{height:170px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--map-bg)}
+.mapbig svg{width:100%;height:100%;display:block}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.facts div{background:var(--surface-2);border-radius:10px;padding:8px 10px}
+.facts b{display:block;font-size:16px;font-variant-numeric:tabular-nums}
+.facts small{color:var(--muted);font-size:11px}
+.score-row{display:grid;grid-template-columns:120px 1fr 30px;gap:10px;align-items:center;font-size:12.5px}
+.score-row input{width:100%;accent-color:var(--brand)}
+/* A editor */
+.A-ed{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.A-ed .langs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:12px}
+.A-ed .langs button{border:0;background:transparent;padding:8px 12px;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;font-weight:600;color:var(--muted);display:flex;gap:6px;align-items:center}
+.A-ed .langs button[aria-selected="true"]{border-color:var(--brand);color:var(--fg)}
+.A-ed .langs button .dot{width:6px;height:6px;border-radius:50%;background:var(--ok)}
+.A-ed .langs button .dot.miss{background:var(--warn)}
+.mdbar{display:flex;gap:2px;flex-wrap:wrap;padding:6px;border:1px solid var(--line);border-bottom:0;border-radius:10px 10px 0 0;background:var(--surface)}
+.mdbar .sep{width:1px;background:var(--line);margin:4px 4px}
+.mdbar .btn.icon{color:var(--fg-2)}
+.mdwrap{position:relative}
+.mdwrap textarea{width:100%;min-height:440px;resize:vertical;border-radius:0 0 10px 10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.65;padding:14px}
+.splitview{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.splitview.write{grid-template-columns:1fr}.splitview.write .pv{display:none}
+.splitview.preview{grid-template-columns:1fr}.splitview.preview .ed{display:none}
+.pv{border:1px solid var(--line);border-radius:10px;padding:18px 22px;background:var(--surface);max-height:532px;overflow:auto}
+.pv .prose figure.wide{margin-left:-22px;margin-right:-22px}
+.aside{display:flex;flex-direction:column;gap:12px;position:sticky;top:12px}
+.aside .tabsx{display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:10px;padding:3px;border:1px solid var(--line)}
+.aside .tabsx button{border:0;background:transparent;padding:7px;border-radius:7px;font-weight:600;font-size:13px;cursor:pointer;color:var(--muted);display:flex;gap:6px;justify-content:center;align-items:center}
+.aside .tabsx button[aria-selected="true"]{background:var(--surface);color:var(--fg)}
+.imgpop{position:absolute;z-index:30;top:46px;right:6px;width:min(320px,calc(100% - 12px));background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:14px;display:flex;flex-direction:column;gap:10px}
+.upl{border:1.5px dashed var(--line);border-radius:10px;padding:16px;text-align:center;color:var(--muted);cursor:pointer;font-size:12.5px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.upl:hover{border-color:var(--brand);color:var(--fg)}
+.upl img{max-width:100%;border-radius:8px;max-height:120px}
+@media (max-width:1100px){
+  .A-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .A-grid,.A-grid3{grid-template-columns:minmax(0,1fr)}
+  .A-ed{grid-template-columns:minmax(0,1fr)} .aside{position:static}
+  .splitview{grid-template-columns:1fr}
+}
+@media (max-width:820px){
+  .A{grid-template-columns:minmax(0,1fr)}
+  .A-side{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px;gap:2px}
+  .A-side .logo,.A-group,.A-me{display:none}
+  .A-nav{width:auto;white-space:nowrap}
+  .A-body{padding:14px}
+}
+
+/* ====================== B — Fila / Command ====================== */
+.B{display:flex;flex-direction:column;min-height:760px}
+.B-top{display:flex;align-items:center;gap:14px;padding:10px 18px;border-bottom:1px solid var(--line);background:var(--surface);flex-wrap:wrap}
+.B-nav{display:flex;gap:2px;flex-wrap:wrap}
+.B-nav button{border:0;background:transparent;padding:7px 12px;border-radius:8px;font-weight:600;color:var(--muted);cursor:pointer;display:flex;gap:7px;align-items:center}
+.B-nav button:hover{color:var(--fg)}
+.B-nav button[aria-current="page"]{background:var(--surface-2);color:var(--fg)}
+.B-nav .badge{background:var(--brand);color:#fff;font-size:10.5px;font-weight:700;border-radius:999px;padding:0 6px}
+.cmdk{margin-left:auto;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface-2);border-radius:9px;padding:6px 10px;color:var(--muted);cursor:pointer;min-width:220px;font-size:13px}
+.cmdk kbd{margin-left:auto;font-family:var(--body);font-size:11px;border:1px solid var(--line);border-radius:5px;padding:0 5px;background:var(--surface)}
+.B-body{padding:22px;display:flex;flex-direction:column;gap:18px;max-width:1240px;width:100%;margin:0 auto;min-width:0}
+.B-hello h2{font-family:var(--display);font-size:38px;text-transform:uppercase;font-weight:800;line-height:1}
+.B-attn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.attn{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-align:left;transition:border-color .15s,transform .15s}
+.attn:hover{border-color:var(--brand);transform:translateY(-1px)}
+.attn .n{font-family:var(--display);font-size:40px;font-weight:800;line-height:.9}
+.attn .ic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center}
+.attn .go{margin-top:auto;font-size:12.5px;font-weight:700;color:var(--brand-text);display:flex;gap:4px;align-items:center}
+.B-multi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.B-multi .card .v{font-family:var(--display);font-size:28px;font-weight:800;line-height:1}
+.B-two{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:12px}
+.kanban{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}
+.col{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:200px}
+.col.over{border-color:var(--brand);background:var(--brand-soft)}
+.col .ch{display:flex;align-items:center;gap:8px;padding:4px 4px 6px;font-weight:700}
+.col .ch .n{color:var(--muted);font-weight:600}
+.kcard{background:var(--surface-2);border:1px solid var(--line);border-radius:11px;overflow:hidden;cursor:grab;text-align:left;width:100%;padding:0}
+.kcard:hover{border-color:var(--muted)}
+.kcard.active{border-color:var(--brand)}
+.kcard .km{height:74px;background:var(--map-bg)}
+.kcard .km svg{width:100%;height:100%;display:block}
+.kcard .kb{padding:9px 11px;display:flex;flex-direction:column;gap:5px}
+.kcard .kb b{font-size:13px}
+.kcard .kb .row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:11.5px;color:var(--muted)}
+.B-split{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:14px;align-items:start}
+.B-split.users{grid-template-columns:340px minmax(0,1fr)}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;position:sticky;top:12px}
+.sheet .sb{padding:16px;display:flex;flex-direction:column;gap:12px}
+.ulist{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.ulist .uh{padding:10px;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--line)}
+.urow{display:flex;gap:10px;align-items:center;padding:10px 12px;border:0;border-bottom:1px solid var(--line-soft);background:transparent;width:100%;text-align:left;cursor:pointer}
+.urow:hover{background:var(--surface-2)}
+.urow[aria-selected="true"]{background:var(--brand-soft);box-shadow:inset 3px 0 0 var(--brand)}
+.urow .m{flex:1;min-width:0}
+.urow .m b{display:block;font-size:13px}
+.urow .m small{color:var(--muted);font-size:12px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.profile-hd{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.profile-hd .avatar{width:56px;height:56px;font-size:18px}
+.timeline{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--line);margin-left:6px}
+.timeline div{position:relative;padding:0 0 14px 16px;font-size:13px}
+.timeline div::before{content:"";position:absolute;left:-6px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--muted)}
+.timeline div.bad::before{border-color:var(--bad)} .timeline div.ok::before{border-color:var(--ok)}
+.timeline small{display:block;color:var(--muted);font-size:11.5px}
+.plist{display:flex;flex-direction:column;gap:6px}
+.prow{display:flex;gap:12px;align-items:center;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;cursor:pointer;flex-wrap:wrap}
+.prow:hover{border-color:var(--muted)}
+.prow .m{flex:1;min-width:200px}
+.prow .m b{display:block}
+.prow .m small{color:var(--muted);font-size:12px}
+/* B block editor */
+.B-ed{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+.blocks{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px 40px 40px;min-width:0}
+.blocks .ttl{font-family:var(--display);font-size:40px;font-weight:800;text-transform:uppercase;line-height:1;color:var(--fg);outline:none;margin-bottom:8px}
+.blocks .dsc{font-size:16px;color:var(--muted);outline:none;margin-bottom:18px}
+[contenteditable]:empty::before{content:attr(data-ph);color:var(--muted);opacity:.6}
+.blk{position:relative;border-radius:8px;margin:0 -10px;padding:0 10px}
+.blk:hover{background:color-mix(in oklab,var(--surface-2) 50%,transparent)}
+.blk .hdl{position:absolute;left:-30px;top:4px;display:flex;flex-direction:column;gap:2px;opacity:0;transition:opacity .12s}
+.blk:hover .hdl,.blk:focus-within .hdl{opacity:1}
+.blk .hdl button{border:0;background:transparent;color:var(--muted);cursor:pointer;padding:2px;border-radius:5px;display:grid;place-items:center}
+.blk .hdl button:hover{background:var(--surface-3);color:var(--fg)}
+.blk [contenteditable]{outline:none}
+.slash{position:absolute;z-index:30;left:10px;top:calc(100% + 2px);width:270px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:6px;max-height:320px;overflow:auto}
+.slash .lbl{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:6px 8px 4px}
+.slash button{display:flex;gap:10px;align-items:center;width:100%;border:0;background:transparent;padding:7px 8px;border-radius:8px;cursor:pointer;text-align:left;color:var(--fg)}
+.slash button:hover,.slash button.hl{background:var(--surface-2)}
+.slash button .ico{width:30px;height:30px;border-radius:7px;border:1px solid var(--line);display:grid;place-items:center;background:var(--surface-2);flex:none}
+.slash button small{display:block;color:var(--muted);font-size:11.5px}
+.imgblk{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--surface-2);margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.imgblk .ph,.imgblk img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:9px;display:block}
+.imgblk .gal{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.imgblk .gal .ph,.imgblk .gal img{aspect-ratio:4/3}
+.imgblk .bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.imgblk .bar .input{flex:1;min-width:140px;padding:6px 8px;font-size:12.5px;background:var(--surface)}
+.imgblk .warnalt{font-size:11.5px;color:var(--warn);display:flex;gap:5px;align-items:center}
+.imgblk.wide{margin-left:-30px;margin-right:-30px}
+.acc{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.acc>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;font-weight:700}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary .chev{margin-left:auto;transition:transform .15s;color:var(--muted)}
+.acc[open]>summary .chev{transform:rotate(180deg)}
+.acc .ab{padding:0 14px 14px;display:flex;flex-direction:column;gap:12px}
+.palette{position:fixed;inset:0;background:rgba(5,6,9,.55);z-index:120;display:flex;justify-content:center;padding:12vh 16px 16px}
+.palette .box{width:min(560px,100%);background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;align-self:flex-start}
+.palette input{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;padding:14px 16px;font-size:15px}
+.palette input:focus{outline:none}
+.palette .res{max-height:50vh;overflow:auto;padding:6px}
+.palette .res button{display:flex;gap:10px;align-items:center;width:100%;border:0;background:transparent;padding:9px 10px;border-radius:8px;cursor:pointer;text-align:left;color:var(--fg)}
+.palette .res button:hover,.palette .res button.hl{background:var(--surface-2)}
+.palette .res small{margin-left:auto;color:var(--muted);font-size:11.5px}
+@media (max-width:1100px){
+  .B-attn,.B-multi{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .B-two,.B-split,.B-split.users,.B-ed{grid-template-columns:minmax(0,1fr)}
+  .sheet{position:static}
+}
+@media (max-width:760px){
+  .kanban{grid-template-columns:minmax(0,1fr)}
+  .B-body{padding:14px}
+  .blocks{padding:20px 18px 28px}
+  .blk .hdl{position:static;flex-direction:row;opacity:1;margin-bottom:2px}
+  .cmdk{min-width:0;flex:1}
+  .imgblk.wide{margin-left:0;margin-right:0}
+}
+
+/* ====================== C — Editorial ====================== */
+.C{display:grid;grid-template-columns:72px minmax(0,1fr);min-height:760px}
+.C-rail{background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 0}
+.C-rail .mk{font-family:var(--display);font-weight:800;font-size:22px;color:#fff;background:var(--brand);width:40px;height:40px;border-radius:11px;display:grid;place-items:center;margin-bottom:12px}
+.C-rail button{width:48px;height:48px;border-radius:12px;border:0;background:transparent;color:var(--muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9.5px;font-weight:700;position:relative}
+.C-rail button svg.i{width:19px;height:19px}
+.C-rail button:hover{background:var(--surface-2);color:var(--fg)}
+.C-rail button[aria-current="page"]{background:var(--fg);color:var(--bg)}
+.C-rail button .dot{position:absolute;top:8px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--brand);border:2px solid var(--surface)}
+.C-main{min-width:0;display:flex;flex-direction:column}
+.C-head{padding:26px 28px 6px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.C-head h2{font-family:var(--display);font-size:clamp(34px,5vw,54px);font-weight:800;text-transform:uppercase;line-height:.92}
+.C-head h2 span{color:var(--brand)}
+.C-body{padding:18px 28px 32px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.C-hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px}
+.C-big{background:linear-gradient(140deg,var(--brand-strong),#5d0712 80%);color:#fff;border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;min-height:250px}
+:root[data-theme="light"] .C-big{background:linear-gradient(140deg,#d90f25,#7a0a17 85%)}
+.C-big .v{font-family:var(--display);font-size:clamp(70px,9vw,120px);font-weight:800;line-height:.82}
+.C-big .lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;opacity:.8}
+.C-big .row{display:flex;gap:22px;flex-wrap:wrap;margin-top:auto}
+.C-big .row div b{display:block;font-family:var(--display);font-size:28px;line-height:1}
+.C-big .row div small{opacity:.8;font-size:12px}
+.C-big svg.bg{position:absolute;right:-20px;bottom:-30px;width:60%;opacity:.25}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.tile{border-radius:10px;padding:10px;min-height:66px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid var(--line);cursor:default}
+.tile b{font-family:var(--display);font-size:24px;line-height:1}
+.tile small{font-size:11.5px;font-weight:600}
+.C-three{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px}
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px}
+.heat div{aspect-ratio:1;border-radius:3px;min-width:0}
+.lead{display:flex;flex-direction:column}
+.lead .lr{display:grid;grid-template-columns:26px 64px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line-soft)}
+.lead .lr:first-child{border-top:0}
+.lead .lr .rk{font-family:var(--display);font-size:22px;color:var(--muted);font-weight:800}
+.lead .lr .thumb{width:64px;height:42px}
+.lead .lr b{display:block;font-size:13px}
+.lead .lr small{color:var(--muted);font-size:11.5px}
+.C-filter{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.gcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.gcard .gm{height:150px;background:var(--map-bg);position:relative}
+.gcard .gm>svg{width:100%;height:100%;display:block}
+.gcard .gm .pill{position:absolute;left:10px;top:10px;backdrop-filter:blur(6px)}
+.gcard .gm .feat{position:absolute;right:10px;top:10px}
+.gcard .gb{padding:12px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.gcard .gb b{font-size:15px}
+.gcard .gb .row{display:flex;gap:10px;color:var(--muted);font-size:12px;flex-wrap:wrap;align-items:center}
+.gcard .ga{display:flex;gap:4px;padding:8px 10px;border-top:1px solid var(--line);flex-wrap:wrap}
+.gcard .ga .btn{flex:1;justify-content:center}
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.person{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.person .ph{display:flex;gap:12px;align-items:center}
+.person .ph .avatar{width:46px;height:46px;font-size:15px}
+.person .ph b{display:block}
+.person .ph small{color:var(--muted);font-size:12px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.person .st{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center}
+.person .st div{background:var(--surface-2);border-radius:9px;padding:6px}
+.person .st b{display:block;font-family:var(--display);font-size:20px;line-height:1}
+.person .st small{font-size:10.5px;color:var(--muted)}
+.person .pa{display:flex;gap:6px;align-items:center;margin-top:auto}
+.mag{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.mag .post{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column}
+.mag .post:hover{border-color:var(--muted)}
+.mag .post .cv{aspect-ratio:16/9;position:relative}
+.mag .post .cv>svg{width:100%;height:100%;display:block}
+.mag .post .cv .pill{position:absolute;left:10px;top:10px}
+.mag .post .cv .ring{position:absolute;right:10px;top:10px}
+.mag .post .pb{padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.mag .post .pb b{font-size:15.5px;line-height:1.3}
+.mag .post.hero{grid-column:span 2;flex-direction:row}
+.mag .post.hero .cv{aspect-ratio:auto;flex:1.3;min-height:240px}
+.mag .post.hero .pb{flex:1;justify-content:center;padding:22px}
+.mag .post.hero .pb b{font-family:var(--display);font-size:32px;text-transform:uppercase;line-height:1}
+/* C full page editor */
+.C-ed{position:relative;min-height:760px;background:var(--bg)}
+.C-edtop{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:color-mix(in oklab,var(--bg) 85%,transparent);backdrop-filter:blur(8px);z-index:10;flex-wrap:wrap}
+.C-cover{position:relative;height:300px;max-width:1000px;margin:20px auto 0;border-radius:18px;overflow:hidden}
+.C-cover>svg,.C-cover>img{width:100%;height:100%;display:block;object-fit:cover}
+.C-cover .ov{position:absolute;right:12px;bottom:12px;display:flex;gap:6px}
+.C-cover .credit{position:absolute;left:12px;bottom:12px;font-size:11.5px;background:rgba(0,0,0,.55);color:#fff;border-radius:6px;padding:3px 8px}
+.C-page{max-width:720px;margin:0 auto;padding:28px 20px 160px}
+.C-page .ttl{font-family:var(--display);font-size:clamp(36px,5vw,54px);font-weight:800;text-transform:uppercase;line-height:.95;outline:none;color:var(--fg)}
+.C-page .dsc{font-size:18px;color:var(--muted);outline:none;margin:10px 0 24px}
+.gut{height:14px;position:relative;margin:0 -10px}
+.gut button.plus{position:absolute;left:-26px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);display:grid;place-items:center;cursor:pointer;opacity:0;transition:opacity .12s}
+.gut::after{content:"";position:absolute;left:10px;right:10px;top:50%;border-top:1px dashed transparent}
+.gut:hover button.plus,.gut.open button.plus{opacity:1}
+.gut:hover::after,.gut.open::after{border-color:var(--line)}
+.gut .ins{position:absolute;left:6px;top:50%;transform:translateY(-50%);display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px;box-shadow:var(--shadow);z-index:12;flex-wrap:wrap}
+.gut .ins button{border:0;background:transparent;padding:5px 9px;border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:600;display:flex;gap:6px;align-items:center;color:var(--fg)}
+.gut .ins button:hover{background:var(--surface-2)}
+.dock{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px;box-shadow:var(--shadow);z-index:15;flex-wrap:wrap;justify-content:center;max-width:calc(100% - 24px)}
+.dock .ln{border:0;background:transparent;border-radius:8px;padding:6px 9px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted)}
+.dock .ln[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.dock .sep{width:1px;height:22px;background:var(--line)}
+.sheetb{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -30px 60px -30px rgba(0,0,0,.7);z-index:20;max-height:82%;overflow:auto}
+.sheetb .grab{width:44px;height:4px;border-radius:3px;background:var(--line);margin:10px auto 0}
+.sheetb .sh{display:flex;align-items:center;gap:12px;padding:10px 22px 0;flex-wrap:wrap}
+.sheetb .sg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,.9fr);gap:18px;padding:16px 22px 22px}
+.og{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface-2)}
+.og .oi{aspect-ratio:1.91/1}
+.og .oi svg,.og .oi img{width:100%;height:100%;display:block;object-fit:cover}
+.og .ot{padding:9px 12px;font-size:12px}
+.og .ot small{color:var(--muted);text-transform:uppercase;font-size:10.5px;letter-spacing:.04em}
+.og .ot b{display:block;font-size:13.5px;margin:2px 0;color:var(--fg)}
+.og .ot span{color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media (max-width:1100px){
+  .C-hero,.C-three{grid-template-columns:minmax(0,1fr)}
+  .mag{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sheetb .sg{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:760px){
+  .C{grid-template-columns:minmax(0,1fr)}
+  .C-rail{flex-direction:row;border-right:0;border-bottom:1px solid var(--line);padding:6px 8px;overflow-x:auto;justify-content:flex-start}
+  .C-rail .mk{margin:0 6px 0 0;flex:none}
+  .C-rail button{flex:none}
+  .C-head,.C-body{padding-left:14px;padding-right:14px}
+  .mag{grid-template-columns:minmax(0,1fr)}
+  .mag .post.hero{grid-column:auto;flex-direction:column}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .C-cover{height:200px;margin:12px 12px 0}
+  .gut button.plus{left:-4px;opacity:.6}
+  .prose figure.wide{margin-left:0;margin-right:0}
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Protótipos · Admin &amp; Curadoria</div>
+      <h1 class="display">Painel <span>MotoTrip</span></h1>
+      <p>Três direções para o novo admin: dashboard com gráficos, rotas, usuários e blog (com SEO por idioma e imagens no meio do texto). Tudo é clicável — dados fictícios, nada é salvo.</p>
+    </div>
+    <div class="ctrls">
+      <div class="seg" role="group" aria-label="Papel">
+        <button data-role="admin" aria-pressed="true">Admin</button>
+        <button data-role="curator" aria-pressed="false">Curador</button>
+      </div>
+      <div class="seg" role="group" aria-label="Tema">
+        <button data-theme-btn="dark" aria-pressed="true">Escuro</button>
+        <button data-theme-btn="light" aria-pressed="false">Claro</button>
+      </div>
+    </div>
+  </header>
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" data-proto="A" aria-selected="true"><b>A</b><span><strong>Cockpit</strong>Sidebar, tabelas densas, gaveta de detalhes, editor Markdown com painel SEO</span></button>
+    <button class="tab" role="tab" data-proto="B" aria-selected="false"><b>B</b><span><strong>Fila de trabalho</strong>Foco no que precisa de ação, ⌘K, quadro kanban, editor em blocos com “/”</span></button>
+    <button class="tab" role="tab" data-proto="C" aria-selected="false"><b>C</b><span><strong>Editorial</strong>Visual e espaçoso, galerias, editor de página inteira com prévia social</span></button>
+  </nav>
+  <section class="screen" id="stage" aria-live="polite"></section>
+</div>
+<div class="toast" id="toast"></div>
+<input type="file" id="filepick" accept="image/jpeg,image/png,image/webp" hidden multiple>
+
+<script>
+/* ================================================================ helpers */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = n => n.toLocaleString('pt-PT');
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296 } }
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2200) }
+const ICONS = {
+  dash: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+  map: '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.6c1.8.7 3 2.4 3.5 5.4"/>',
+  file: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+  eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  eyeoff: '<path d="M3 3l18 18M10.6 5.1C11 5 11.5 5 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.6 6.6C3.9 8.4 2 12 2 12s3.6 7 10 7c1.9 0 3.5-.6 4.9-1.4M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
+  trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+  more: '<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>',
+  image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.8"/><path d="m21 16-5-5-9 9"/>',
+  gallery: '<rect x="3" y="5" width="8" height="14" rx="1.5"/><rect x="13" y="5" width="8" height="14" rx="1.5"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/>',
+  back: '<path d="M15 5l-7 7 7 7"/>',
+  chev: '<path d="m6 9 6 6 6-6"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  bold: '<path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z"/>',
+  italic: '<path d="M14 5h-4M14 19h-4M14 5l-4 14"/>',
+  h2: '<path d="M4 6v12M12 6v12M4 12h8M16 10a2.5 2.5 0 1 1 4 2l-4 6h4.5"/>',
+  h3: '<path d="M4 6v12M12 6v12M4 12h8M16.5 8h3.5l-2 3a2.5 2.5 0 1 1-2 4"/>',
+  list: '<path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/>',
+  quote: '<path d="M7 7h4v5c0 3-2 5-4 5M14 7h4v5c0 3-2 5-4 5"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>',
+  pin: '<path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+  up: '<path d="m6 15 6-6 6 6"/>', down: '<path d="m6 9 6 6 6-6"/>',
+  shield: '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/>',
+  alert: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
+  ban: '<circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/>',
+  pause: '<circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6"/>',
+  history: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  rows: '<path d="M3 6h18M3 12h18M3 18h18"/>',
+  sparkle: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
+  drag: '<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',
+  ext: '<path d="M14 4h6v6M20 4 11 13M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  upload: '<path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>',
+  seo: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8 11h6M11 8v6"/>',
+};
+const ic = (n, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n] || ''}</svg>`;
+
+/* ================================================================ data */
+const COLORS = ['#e34948', '#3987e5', '#199e70', '#c98500', '#9085e9', '#d55181', '#d95926', '#0ca30c'];
+const CATS = ['Curvas', 'Serra', 'Costa', 'Off-road'];
+const ROUTES = [
+  { id: 1, title: 'N222 — Peso da Régua ao Pinhão', region: 'Douro', country: 'Portugal', cat: 'Curvas', diff: 'Fácil', km: 27, status: 'approved', featured: true, published: true, rating: 4.8, conf: 'high', author: 'Rita Moura', updated: 'há 2 h', views: 18420, slug: 'n222-peso-da-regua-pinhao' },
+  { id: 2, title: 'Serra da Estrela pela N339', region: 'Beira Interior', country: 'Portugal', cat: 'Serra', diff: 'Média', km: 46, status: 'approved', featured: true, published: true, rating: 4.6, conf: 'high', author: 'Tiago Lopes', updated: 'ontem', views: 12890, slug: 'serra-da-estrela-n339' },
+  { id: 3, title: 'Gerês: Portela do Homem', region: 'Minho', country: 'Portugal', cat: 'Off-road', diff: 'Difícil', km: 38, status: 'pending', featured: false, published: false, rating: null, author: 'João Silva', updated: 'há 20 min', views: 0, slug: 'geres-portela-do-homem' },
+  { id: 4, title: 'Passo dello Stelvio', region: 'Lombardia', country: 'Itália', cat: 'Serra', diff: 'Difícil', km: 49, status: 'approved', featured: false, published: true, rating: 4.9, conf: 'high', author: 'Marco Bellini', updated: 'há 3 dias', views: 15200, slug: 'passo-dello-stelvio' },
+  { id: 5, title: 'Col de Turini', region: 'Alpes-Maritimes', country: 'França', cat: 'Curvas', diff: 'Média', km: 31, status: 'pending', featured: false, published: false, rating: 4.1, conf: 'low', author: 'Sophie Laurent', updated: 'há 1 h', views: 0, slug: 'col-de-turini' },
+  { id: 6, title: 'Picos de Europa: Desfiladero de la Hermida', region: 'Cantábria', country: 'Espanha', cat: 'Serra', diff: 'Média', km: 64, status: 'approved', featured: false, published: true, rating: 4.4, conf: 'low', author: 'Javier Ortega', updated: 'há 5 dias', views: 7340, slug: 'picos-de-europa-hermida' },
+  { id: 7, title: 'Costa Vicentina pela N120', region: 'Alentejo', country: 'Portugal', cat: 'Costa', diff: 'Fácil', km: 112, status: 'approved', featured: false, published: true, rating: null, author: 'Rita Moura', updated: 'há 1 semana', views: 5210, slug: 'costa-vicentina-n120' },
+  { id: 8, title: 'Tizi n’Tichka', region: 'Alto Atlas', country: 'Marrocos', cat: 'Serra', diff: 'Difícil', km: 98, status: 'pending', featured: false, published: false, rating: null, author: 'Karim Benali', updated: 'há 3 h', views: 0, slug: 'tizi-n-tichka' },
+  { id: 9, title: 'Sierra de Grazalema', region: 'Andaluzia', country: 'Espanha', cat: 'Curvas', diff: 'Média', km: 72, status: 'rejected', featured: false, published: false, rating: null, author: 'Lucía Fernández', updated: 'há 2 dias', views: 0, slug: 'sierra-de-grazalema' },
+  { id: 10, title: 'Serra do Rio do Rastro', region: 'Santa Catarina', country: 'Brasil', cat: 'Serra', diff: 'Média', km: 34, status: 'approved', featured: true, published: true, rating: 4.7, conf: 'high', author: 'Ana Beatriz Costa', updated: 'há 4 dias', views: 11030, slug: 'serra-do-rio-do-rastro' },
+  { id: 11, title: 'Costiera Amalfitana', region: 'Campânia', country: 'Itália', cat: 'Costa', diff: 'Média', km: 51, status: 'pending', featured: false, published: false, rating: null, author: 'Marco Bellini', updated: 'há 5 h', views: 0, slug: 'costiera-amalfitana' },
+  { id: 12, title: 'Furka & Grimsel', region: 'Valais', country: 'Suíça', cat: 'Serra', diff: 'Difícil', km: 88, status: 'approved', featured: false, published: true, rating: 4.5, conf: 'high', author: 'Sophie Laurent', updated: 'há 2 semanas', views: 6420, slug: 'furka-grimsel' },
+  { id: 13, title: 'Estrada Real: Ouro Preto a Tiradentes', region: 'Minas Gerais', country: 'Brasil', cat: 'Off-road', diff: 'Média', km: 140, status: 'rejected', featured: false, published: false, rating: null, author: 'Pedro Nunes', updated: 'há 6 dias', views: 0, slug: 'estrada-real-ouro-preto' },
+  { id: 14, title: 'Rota do Xisto: Piódão', region: 'Beira Interior', country: 'Portugal', cat: 'Off-road', diff: 'Média', km: 58, status: 'pending', featured: false, published: false, rating: null, author: 'Tiago Lopes', updated: 'há 40 min', views: 0, slug: 'rota-do-xisto-piodao' },
+];
+const USERS = [
+  { id: 1, name: 'Equipe MotoTrip', email: 'equipe@mototrip.pt', role: 'admin', status: 'active', routes: 41, comments: 120, created: 'jan 2025', last: 'agora', you: true },
+  { id: 2, name: 'Tiago Lopes', email: 'tiago.lopes@example.com', role: 'curator', status: 'active', routes: 18, comments: 64, created: 'mar 2025', last: 'há 40 min' },
+  { id: 3, name: 'Rita Moura', email: 'rita.moura@example.com', role: 'contributor', status: 'active', routes: 12, comments: 33, created: 'abr 2025', last: 'há 2 h' },
+  { id: 4, name: 'Marco Bellini', email: 'marco.b@example.it', role: 'contributor', status: 'active', routes: 9, comments: 12, created: 'jun 2025', last: 'há 5 h' },
+  { id: 5, name: 'Sophie Laurent', email: 'sophie.l@example.fr', role: 'contributor', status: 'active', routes: 7, comments: 21, created: 'ago 2025', last: 'ontem' },
+  { id: 6, name: 'Ana Beatriz Costa', email: 'anabia@example.com.br', role: 'contributor', status: 'active', routes: 5, comments: 9, created: 'set 2025', last: 'há 3 dias' },
+  { id: 7, name: 'Pedro Nunes', email: 'pnunes@example.com', role: 'contributor', status: 'suspended', until: 'termina em 5 dias', routes: 3, comments: 48, created: 'out 2025', last: 'há 1 semana', hidden: true },
+  { id: 8, name: 'Javier Ortega', email: 'jortega@example.es', role: 'contributor', status: 'active', routes: 6, comments: 4, created: 'jan 2026', last: 'há 5 dias' },
+  { id: 9, name: 'Karim Benali', email: 'karim.b@example.ma', role: 'contributor', status: 'active', routes: 1, comments: 2, created: 'nov 2026', last: 'há 3 h' },
+  { id: 10, name: 'Lucía Fernández', email: 'lucia.f@example.es', role: 'contributor', status: 'banned', routes: 2, comments: 17, created: 'mai 2026', last: 'há 1 mês' },
+  { id: 11, name: 'João Silva', email: 'joao.silva@example.com', role: 'contributor', status: 'active', unconfirmed: true, routes: 1, comments: 0, created: 'há 2 dias', last: 'nunca' },
+];
+const POSTS = [
+  { id: 1, title: 'As 10 melhores estradas de moto em Portugal', slug: 'melhores-estradas-de-moto-portugal', status: 'published', langs: ['pt', 'en', 'es'], date: '02 nov 2026', updated: 'há 1 h', views: 6420, seed: 2,
+    seo: { title: 'Melhores estradas de moto em Portugal (2026) | MotoTrip', desc: 'As 10 estradas de moto mais bonitas de Portugal, do Douro ao Algarve: curvas, paisagens, quando ir e onde parar para comer.', keywords: ['estradas de moto', 'portugal de moto', 'N222', 'roteiro moto'] } },
+  { id: 2, title: 'N222 no outono: guia completo', slug: 'n222-outono-guia', status: 'published', langs: ['pt', 'en'], date: '18 out 2026', updated: 'há 3 dias', views: 3180, seed: 5,
+    seo: { title: 'N222 no outono', desc: 'Guia da N222 no outono.', keywords: [] } },
+  { id: 3, title: 'Stelvio de moto: quando ir e onde parar', slug: 'stelvio-de-moto', status: 'draft', langs: ['pt'], date: '', updated: 'há 20 min', views: 0, seed: 8, seo: { title: '', desc: '', keywords: [] } },
+  { id: 4, title: 'Equipamento para chuva: o que levar', slug: 'equipamento-chuva-moto', status: 'published', langs: ['pt', 'en', 'es', 'fr'], date: '05 set 2026', updated: 'há 2 semanas', views: 4870, seed: 11,
+    seo: { title: 'Equipamento de chuva para moto: guia 2026 | MotoTrip', desc: 'O que levar para viajar de moto com chuva: casaco, luvas, botas e truques para manter tudo seco em viagens longas.', keywords: ['equipamento moto', 'chuva', 'viagem de moto'] } },
+  { id: 5, title: 'Marrocos em duas rodas: Atlas e deserto', slug: 'marrocos-de-moto', status: 'draft', langs: ['pt', 'es'], date: '', updated: 'ontem', views: 0, seed: 14, seo: { title: 'Marrocos de moto | MotoTrip', desc: '', keywords: ['marrocos de moto'] } },
+  { id: 6, title: 'Rotas de inverno no sul da Europa', slug: 'rotas-inverno-sul-europa', status: 'archived', langs: ['pt'], date: '12 jan 2026', updated: 'há 6 meses', views: 1920, seed: 17,
+    seo: { title: 'Rotas de moto para o inverno no sul da Europa', desc: 'Onde andar de moto no inverno: estradas no sul de Portugal, Espanha e Itália com bom tempo entre dezembro e fevereiro.', keywords: ['inverno', 'rotas de moto'] } },
+];
+function series(n, base, amp, seed, trend = 0) { const r = rng(seed); return Array.from({ length: n }, (_, i) => Math.max(0, Math.round(base + trend * i + Math.sin(i / 2.3) * amp * .5 + (r() - .5) * amp))) }
+function days(n) { const out = []; const end = new Date('2026-11-15'); for (let i = n - 1; i >= 0; i--) { const d = new Date(end); d.setDate(d.getDate() - i); out.push(d.toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' }).replace('.', '')) } return out }
+const MONTHS = ['jun', 'jul', 'ago', 'set', 'out', 'nov'];
+const CAT_MONTHLY = [[14, 18, 22, 17, 12, 9], [9, 13, 16, 12, 11, 8], [6, 11, 14, 8, 4, 3], [3, 5, 6, 7, 5, 4]];
+const COUNTRIES = [['Portugal', 148], ['Espanha', 96], ['Itália', 54], ['França', 41], ['Brasil', 33], ['Marrocos', 18], ['Suíça', 12], ['Alemanha', 10]];
+
+/* ================================================================ state */
+const S = {
+  proto: 'A', role: 'admin',
+  screen: { A: 'dash', B: 'dash', C: 'dash' },
+  range: 30, routeFilter: 'all', curatorFilter: 'any', routeQ: '', selected: new Set(), drawer: null,
+  userFilter: 'all', userQ: '', userSel: 3, postFilter: 'all', routeView: 'board', routeSel: 3, cRouteFilter: 'all',
+  editor: null, edLang: 'pt', aView: 'split', aAside: 'seo', imgPop: false, cSheet: false, slash: null, gut: null, palette: false,
+};
+const isAdmin = () => S.role === 'admin';
+const pending = () => ROUTES.filter(r => r.status === 'pending');
+
+/* ================================================================ editor model (shared) */
+const IMG = {}; let imgSeq = 0;
+function newPost(p) {
+  const seed = p?.seed ?? 3;
+  const base = {
+    id: p?.id ?? null, status: p?.status ?? 'draft', slug: p?.slug ?? '', date: p?.date ?? '', cover: { kind: 'img', seed, credit: 'Foto: Rita Moura' },
+    langs: {}
+  };
+  const pt = {
+    title: p?.title ?? '', desc: p?.id === 1 ? 'Do Douro ao Algarve: as estradas com mais curvas, as melhores paisagens e onde parar para comer.' : '',
+    seo: JSON.parse(JSON.stringify(p?.seo ?? { title: '', desc: '', keywords: [] })),
+    blocks: p?.id === 1 ? [
+      { t: 'p', text: 'Portugal é pequeno no mapa e enorme em curvas. Juntámos as dez estradas que a comunidade MotoTrip mais percorre — com o que ver, quando ir e onde parar.' },
+      { t: 'h2', text: '1. N222 — Peso da Régua ao Pinhão' },
+      { t: 'p', text: 'Considerada uma das melhores estradas do mundo para conduzir, a N222 acompanha o Douro entre socalcos de vinha. São 27 km de curvas perfeitas.' },
+      { t: 'route', slug: 'n222-peso-da-regua-pinhao' },
+      { t: 'img', seeds: [2], caption: 'A N222 junto ao Douro no fim da tarde', alt: 'Estrada sinuosa ao longo do rio Douro com vinhas em socalcos', layout: 'text' },
+      { t: 'h2', text: '2. Serra da Estrela pela N339' },
+      { t: 'p', text: 'Subida até à Torre, o ponto mais alto de Portugal continental. Asfalto bom, paisagem lunar no topo e temperatura a cair a cada curva.' },
+      { t: 'tip', text: 'Abasteça em Seia: não há bombas até à Covilhã.' },
+      { t: 'img', seeds: [8, 9], caption: 'Lagoa Comprida e a descida para Manteigas', alt: '', layout: 'gallery' },
+      { t: 'h2', text: '3. Costa Vicentina' },
+      { t: 'p', text: 'Falésias, vento atlântico e praias quase desertas. Ideal para quem prefere ritmo calmo e paragens longas.' },
+    ] : [{ t: 'p', text: '' }],
+  };
+  base.langs.pt = pt;
+  (p?.langs ?? ['pt']).filter(l => l !== 'pt').forEach(l => {
+    base.langs[l] = { title: l === 'en' ? 'The 10 best motorcycle roads in Portugal' : l === 'es' ? 'Las 10 mejores carreteras en moto de Portugal' : 'Les 10 plus belles routes à moto du Portugal', desc: '', seo: { title: '', desc: '', keywords: [] }, blocks: JSON.parse(JSON.stringify(pt.blocks)) };
+  });
+  return base;
+}
+function openEditor(p) { S.editor = newPost(p); S.edLang = 'pt'; S.imgPop = false; S.cSheet = false; S.slash = null; S.gut = null; S.screen[S.proto] = 'editor'; render() }
+const L = () => S.editor.langs[S.edLang];
+
+function seoChecks(lang, slug) {
+  const s = lang.seo, kw = (s.keywords[0] || '').toLowerCase();
+  const t = s.title || lang.title, d = s.desc || lang.desc;
+  const imgs = lang.blocks.filter(b => b.t === 'img');
+  const checks = [
+    [t.length >= 30 && t.length <= 60, `Meta title entre 30 e 60 caracteres (${t.length})`],
+    [d.length >= 120 && d.length <= 160, `Meta description entre 120 e 160 caracteres (${d.length})`],
+    [s.keywords.length >= 3 && s.keywords.length <= 8, `3 a 8 palavras-chave (${s.keywords.length})`],
+    [!!kw && t.toLowerCase().includes(kw.split(' ')[0]), 'Palavra-chave principal no título'],
+    [!!kw && d.toLowerCase().includes(kw.split(' ')[0]), 'Palavra-chave principal na descrição'],
+    [lang.blocks.some(b => b.t === 'h2'), 'Conteúdo tem subtítulos (H2)'],
+    [imgs.length > 0 && imgs.every(b => b.alt.trim()), imgs.length ? `Todas as imagens com texto alternativo (${imgs.filter(b => b.alt.trim()).length}/${imgs.length})` : 'Pelo menos uma imagem no conteúdo'],
+    [!!slug && slug.length <= 60, 'Slug curto e legível'],
+  ];
+  return { checks, score: Math.round(checks.filter(c => c[0]).length / checks.length * 100) };
+}
+function postScore(p) { return seoChecks(newPost(p).langs.pt, p.slug).score }
+const scoreColor = s => s >= 75 ? 'var(--ok)' : s >= 45 ? 'var(--warn)' : 'var(--bad)';
+const ring = (s, sm) => `<span class="ring ${sm ? 'sm' : ''}" style="--p:${s};--c:${scoreColor(s)}" title="SEO ${s}/100"><b>${s}</b></span>`;
+function counter(len, lo, hi) { const c = len === 0 ? 'bad' : len < lo || len > hi ? 'warn' : 'ok'; return `<span class="counter ${c}">${len}/${hi}</span>` }
+function meter(len, hi) { const p = Math.min(100, len / hi * 100); const c = len > hi ? 'var(--bad)' : len >= hi * .6 ? 'var(--ok)' : 'var(--warn)'; return `<div class="meter"><div style="width:${p}%;background:${c}"></div></div>` }
+
+/* ---- block <-> markdown (for prototype A) */
+function imgSrc(seed) { return IMG[seed] || null }
+function toMd(blocks) {
+  return blocks.map(b => {
+    if (b.t === 'p') return b.text; if (b.t === 'h2') return '## ' + b.text; if (b.t === 'h3') return '### ' + b.text;
+    if (b.t === 'quote') return '> ' + b.text; if (b.t === 'tip') return ':::tip\n' + b.text + '\n:::';
+    if (b.t === 'route') return `::route{slug="${b.slug}"}`;
+    if (b.t === 'img') return b.seeds.map(s => `![${b.alt}](${IMG[s] ? 'upload://' + s : 'img://' + s} "${b.caption}"){${b.layout}}`).join('\n');
+    return '';
+  }).join('\n\n');
+}
+function fromMd(md) {
+  const out = []; const parts = md.split(/\n{2,}/);
+  for (const raw of parts) {
+    const p = raw.trim(); if (!p) continue;
+    let m;
+    if (p.startsWith(':::tip')) { out.push({ t: 'tip', text: p.replace(/^:::tip\n?/, '').replace(/\n?:::$/, '') }); continue }
+    if ((m = p.match(/^::route\{slug="([^"]+)"\}$/))) { out.push({ t: 'route', slug: m[1] }); continue }
+    const imgs = [...p.matchAll(/!\[([^\]]*)\]\((?:img|upload):\/\/([\w-]+)(?: "([^"]*)")?\)(?:\{(\w+)\})?/g)];
+    if (imgs.length) { out.push({ t: 'img', seeds: imgs.map(x => isNaN(+x[2]) ? x[2] : +x[2]), alt: imgs[0][1], caption: imgs[0][3] || '', layout: imgs[0][4] || (imgs.length > 1 ? 'gallery' : 'text') }); continue }
+    if (p.startsWith('### ')) out.push({ t: 'h3', text: p.slice(4) });
+    else if (p.startsWith('## ')) out.push({ t: 'h2', text: p.slice(3) });
+    else if (p.startsWith('> ')) out.push({ t: 'quote', text: p.slice(2) });
+    else out.push({ t: 'p', text: p });
+  }
+  return out;
+}
+const inline = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/_(.+?)_/g, '<em>$1</em>').replace(/\[(.+?)\]\((.+?)\)/g, '<a href="#">$1</a>');
+function picture(seed) { return IMG[seed] ? `<img src="${IMG[seed]}" alt="">` : `<div class="ph">${landscape(seed)}</div>` }
+function renderProse(blocks) {
+  return blocks.map(b => {
+    if (b.t === 'p') return b.text ? `<p>${inline(b.text)}</p>` : '';
+    if (b.t === 'h2') return `<h2>${inline(b.text)}</h2>`; if (b.t === 'h3') return `<h3>${inline(b.text)}</h3>`;
+    if (b.t === 'quote') return `<blockquote>${inline(b.text)}</blockquote>`;
+    if (b.t === 'tip') return `<div class="tipbox">${inline(b.text)}</div>`;
+    if (b.t === 'route') return routeCard(b.slug);
+    if (b.t === 'img') return `<figure class="${b.layout}">${b.seeds.map(picture).join('')}${b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : ''}</figure>`;
+    return '';
+  }).join('');
+}
+function routeCard(slug) {
+  const r = ROUTES.find(x => x.slug === slug);
+  if (!r) return `<div class="routecard"><span class="pill warn">${ic('alert')} Rota “${esc(slug)}” não encontrada</span></div>`;
+  return `<div class="routecard"><div class="thumb">${routeSvg(r.id, 84, 58)}</div><div><b>${esc(r.title)}</b><small>${esc(r.region)}, ${esc(r.country)} · ${r.km} km · ${r.cat}</small></div></div>`;
+}
+
+/* ================================================================ illustrations */
+function routeSvg(seed, w = 120, h = 80, big) {
+  const r = rng(seed * 97 + 3); const pts = []; let x = w * .1, y = h * (.3 + r() * .4);
+  const steps = 9; for (let i = 0; i <= steps; i++) { pts.push([x, y]); x += (w * .8) / steps; y = Math.min(h * .88, Math.max(h * .12, y + (r() - .5) * h * .5)) }
+  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+  for (let i = 1; i < pts.length; i++) { const [px, py] = pts[i - 1], [cx, cy] = pts[i]; d += ` Q${px.toFixed(1)},${py.toFixed(1)} ${((px + cx) / 2).toFixed(1)},${((py + cy) / 2).toFixed(1)}` }
+  d += ` T${pts[pts.length - 1][0].toFixed(1)},${pts[pts.length - 1][1].toFixed(1)}`;
+  let cont = ''; for (let i = 0; i < 5; i++) { const cy = h * (i + .5) / 5 + (r() - .5) * 8; cont += `<path d="M0,${cy.toFixed(1)} C${w * .3},${(cy - 10 + r() * 20).toFixed(1)} ${w * .6},${(cy - 10 + r() * 20).toFixed(1)} ${w},${cy.toFixed(1)}" stroke="var(--contour)" fill="none" stroke-width="1"/>` }
+  const sw = big ? 4 : Math.min(3, Math.max(2, w / 45));
+  const [sx, sy] = pts[0], [ex, ey] = pts[pts.length - 1];
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="${w}" height="${h}" fill="var(--map-bg)"/>${cont}<path d="${d}" stroke="var(--brand)" stroke-opacity=".25" stroke-width="${sw * 3}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="var(--brand)" stroke-width="${sw}" fill="none" stroke-linecap="round"/><circle cx="${sx}" cy="${sy}" r="${sw * 1.3}" fill="var(--surface)" stroke="var(--brand)" stroke-width="${sw * .7}"/><circle cx="${ex}" cy="${ey}" r="${sw * 1.3}" fill="var(--brand)"/></svg>`;
+}
+function landscape(seed) {
+  const r = rng(seed * 31 + 7); const hue = [12, 28, 200, 260, 340, 160][seed % 6];
+  const sky1 = `hsl(${hue},55%,${58 + r() * 10}%)`, sky2 = `hsl(${(hue + 30) % 360},45%,${28 + r() * 8}%)`;
+  let layers = ''; for (let i = 0; i < 4; i++) {
+    const base = 120 + i * 40; let d = `M0,${base}`; for (let x = 0; x <= 400; x += 40) d += ` L${x},${(base - 30 - r() * 60 + i * 6).toFixed(0)}`; d += ` L400,${base} L400,225 L0,225 Z`;
+    layers += `<path d="${d}" fill="hsl(${(hue + 200) % 360},${25 - i * 4}%,${30 - i * 6}%)" opacity="${.55 + i * .15}"/>`
+  }
+  const road = `<path d="M200,225 C ${170 + r() * 40},200 ${120 + r() * 60},185 ${180 + r() * 40},165 S ${230 + r() * 40},140 ${190 + r() * 30},128" stroke="#f6f7f9" stroke-opacity=".75" stroke-width="3" fill="none" stroke-dasharray="7 6"/>`;
+  return `<svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="g${seed}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky1}"/><stop offset="1" stop-color="${sky2}"/></linearGradient></defs><rect width="400" height="225" fill="url(#g${seed})"/><circle cx="${80 + r() * 240}" cy="${45 + r() * 30}" r="18" fill="#fff" opacity=".55"/>${layers}${road}</svg>`;
+}
+const AV_COLORS = ['#3987e5', '#d95926', '#199e70', '#c98500', '#9085e9', '#d55181'];
+const initials = n => n.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+const avatar = u => `<span class="avatar" style="background:${u.you ? 'var(--brand)' : AV_COLORS[u.id % 6]}">${initials(u.name)}</span>`;
+const stars = v => v == null ? '<span class="muted" style="font-size:12px">—</span>' : `<span class="stars" title="${v}/5">${[1, 2, 3, 4, 5].map(i => `<span class="${i <= Math.round(v) ? '' : 'off'}">★</span>`).join('')}</span> <span class="num" style="font-size:12px;color:var(--fg-2)">${v.toFixed(1)}</span>`;
+const ROUTE_STATUS = { pending: ['warn', 'clock', 'Pendente'], approved: ['ok', 'check', 'Aprovada'], rejected: ['bad', 'x', 'Rejeitada'] };
+const rstatus = s => { const [c, i, l] = ROUTE_STATUS[s]; return `<span class="pill ${c}">${ic(i)}${l}</span>` };
+const USTATUS = { active: ['ok', 'check', 'Ativo'], suspended: ['warn', 'pause', 'Suspenso'], banned: ['bad', 'ban', 'Banido'] };
+const ustatus = u => { const [c, i, l] = USTATUS[u.status]; return `<span class="pill ${c}">${ic(i)}${l}</span>${u.unconfirmed ? ' <span class="pill neutral">' + ic('mail') + 'Não confirmado</span>' : ''}` };
+const ROLE = { admin: 'Admin', curator: 'Curador', contributor: 'Colaborador' };
+const PSTATUS = { draft: ['neutral', 'edit', 'Rascunho'], published: ['ok', 'globe', 'Publicado'], archived: ['warn', 'eyeoff', 'Desativado'] };
+const pstatus = s => { const [c, i, l] = PSTATUS[s]; return `<span class="pill ${c}">${ic(i)}${l}</span>` };
+const langs = ls => ls.map(l => `<span class="lang">${l.toUpperCase()}</span>`).join(' ');
+const curatorNote = r => r.rating == null ? '<span class="pill neutral">Sem avaliação</span>' : r.conf === 'low' ? `${stars(r.rating)} <span class="pill warn" title="Baixa confiança">baixa conf.</span>` : stars(r.rating);
+
+/* ================================================================ charts */
+const CH = {}; // registry id -> render fn
+let chartSeq = 0;
+function chart(fn, h) { const id = 'c' + (++chartSeq); CH[id] = fn; return `<div class="chart" id="${id}" style="height:${h}px"></div>` }
+function tipEl(el) { let t = el.querySelector('.tip'); if (!t) { t = document.createElement('div'); t.className = 'tip'; el.appendChild(t) } return t }
+function placeTip(el, t, x, y) { const w = el.clientWidth; t.style.opacity = 1; const tw = t.offsetWidth; t.style.left = Math.min(Math.max(0, x - tw / 2), w - tw) + 'px'; t.style.top = (y - t.offsetHeight - 10) + 'px' }
+const RO = new ResizeObserver(entries => entries.forEach(en => { const el = en.target; const w = Math.round(el.clientWidth); if (!w || el._w === w || !CH[el.id]) return; el._w = w; el.querySelector('svg')?.remove(); CH[el.id](el) }));
+function hydrateCharts() { RO.disconnect(); for (const id in CH) { const el = document.getElementById(id); if (el) RO.observe(el); else delete CH[id] } }
+function niceMax(v) { const p = Math.pow(10, Math.floor(Math.log10(v || 1))); return Math.ceil(v / p / (v / p > 5 ? 2 : 1)) * p * (v / p > 5 ? 2 : 1) }
+
+/* line/area chart: one axis; series share one unit */
+function lineChart({ labels, series: ss, area = ss.length === 1, yTicks = 4, compact }) {
+  return el => {
+    const W = el.clientWidth, H = el.clientHeight, padL = compact ? 4 : 34, padR = compact ? 4 : 10, padT = 8, padB = compact ? 4 : 22;
+    const max = niceMax(Math.max(...ss.flatMap(s => s.data)) * 1.08);
+    const x = i => padL + i * (W - padL - padR) / (labels.length - 1), y = v => padT + (H - padT - padB) * (1 - v / max);
+    let g = '';
+    if (!compact) for (let i = 0; i <= yTicks; i++) { const v = max * i / yTicks, yy = y(v); g += `<line x1="${padL}" x2="${W - padR}" y1="${yy}" y2="${yy}" stroke="var(--grid)" stroke-width="1"/><text x="${padL - 6}" y="${yy + 4}" text-anchor="end">${v >= 1000 ? (v / 1000).toFixed(v % 1000 ? 1 : 0) + 'k' : Math.round(v)}</text>` }
+    if (!compact) { const step = Math.ceil(labels.length / 6); labels.forEach((l, i) => { if (i % step === 0 || i === labels.length - 1) g += `<text x="${x(i)}" y="${H - 5}" text-anchor="middle">${l}</text>` }) }
+    let paths = '';
+    ss.forEach(s => {
+      const d = s.data.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+      if (area) paths += `<path d="${d} L${x(s.data.length - 1)},${y(0)} L${x(0)},${y(0)} Z" fill="${s.color}" opacity=".13"/>`;
+      paths += `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+      if (!compact && ss.length > 1) { const lv = s.data[s.data.length - 1]; paths += `<text x="${x(s.data.length - 1) - 4}" y="${y(lv) - 8}" text-anchor="end" style="fill:var(--fg-2);font-weight:600">${s.name}</text>` }
+    });
+    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" height="${H}">${g}${paths}<line class="xh" x1="0" x2="0" y1="${padT}" y2="${H - padB}" stroke="var(--muted)" stroke-dasharray="3 3" opacity="0"/>${ss.map((s, k) => `<circle class="dot${k}" r="4" fill="${s.color}" stroke="var(--surface)" stroke-width="2" opacity="0"/>`).join('')}<rect x="${padL}" y="0" width="${W - padL - padR}" height="${H}" fill="transparent" class="hit"/></svg>`;
+    const svg = el.querySelector('svg'), t = tipEl(el), xh = svg.querySelector('.xh');
+    svg.querySelector('.hit').addEventListener('pointermove', e => {
+      const bx = e.offsetX; const i = Math.max(0, Math.min(labels.length - 1, Math.round((bx - padL) / ((W - padL - padR) / (labels.length - 1)))));
+      xh.setAttribute('x1', x(i)); xh.setAttribute('x2', x(i)); xh.setAttribute('opacity', 1);
+      ss.forEach((s, k) => { const c = svg.querySelector('.dot' + k); c.setAttribute('cx', x(i)); c.setAttribute('cy', y(s.data[i])); c.setAttribute('opacity', 1) });
+      t.innerHTML = `<b>${labels[i]}</b>${ss.map(s => `<div class="r"><span class="sw" style="background:${s.color}"></span>${s.name}: <strong class="num">${fmt(s.data[i])}</strong></div>`).join('')}`;
+      placeTip(el, t, x(i), Math.min(...ss.map(s => y(s.data[i]))));
+    });
+    svg.querySelector('.hit').addEventListener('pointerleave', () => { t.style.opacity = 0; xh.setAttribute('opacity', 0); svg.querySelectorAll('circle').forEach(c => c.setAttribute('opacity', 0)) });
+  };
+}
+/* stacked columns by category */
+function stackChart({ labels, groups, names, colors }) {
+  return el => {
+    const W = el.clientWidth, H = el.clientHeight, padL = 30, padB = 22, padT = 6;
+    const tot = labels.map((_, i) => groups.reduce((a, g) => a + g[i], 0)); const max = niceMax(Math.max(...tot) * 1.05);
+    const bw = Math.min(46, (W - padL) / labels.length * .55), step = (W - padL) / labels.length;
+    const y = v => padT + (H - padT - padB) * (1 - v / max);
+    let g = ''; for (let i = 0; i <= 4; i++) { const v = max * i / 4; g += `<line x1="${padL}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${padL - 6}" y="${y(v) + 4}" text-anchor="end">${Math.round(v)}</text>` }
+    let bars = '';
+    labels.forEach((l, i) => {
+      let acc = 0; const cx = padL + step * i + step / 2;
+      groups.forEach((gr, k) => {
+        const v = gr[i]; const y0 = y(acc), y1 = y(acc + v); const top = k === groups.length - 1;
+        const hgt = Math.max(0, y0 - y1 - 2);
+        bars += top ? `<path d="M${cx - bw / 2},${y0 - 2} V${y1 + 4} Q${cx - bw / 2},${y1} ${cx - bw / 2 + 4},${y1} H${cx + bw / 2 - 4} Q${cx + bw / 2},${y1} ${cx + bw / 2},${y1 + 4} V${y0 - 2} Z" fill="${colors[k]}" data-i="${i}" data-k="${k}"/>`
+          : `<rect x="${cx - bw / 2}" y="${y1}" width="${bw}" height="${hgt}" fill="${colors[k]}" data-i="${i}" data-k="${k}"/>`;
+        acc += v;
+      });
+      bars += `<text x="${cx}" y="${H - 5}" text-anchor="middle">${l}</text><rect x="${cx - step / 2}" y="0" width="${step}" height="${H - padB}" fill="transparent" class="col-hit" data-i="${i}"/>`;
+    });
+    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" height="${H}">${g}${bars}</svg>`;
+    const t = tipEl(el);
+    el.querySelectorAll('.col-hit').forEach(r => {
+      r.addEventListener('pointerenter', () => { const i = +r.dataset.i; t.innerHTML = `<b>${labels[i]} · ${tot[i]} rotas</b>` + names.map((n, k) => ({ n, k })).reverse().map(({ n, k }) => `<div class="r"><span class="sw" style="background:${colors[k]}"></span>${n}: <strong class="num">${groups[k][i]}</strong></div>`).join(''); placeTip(el, t, padL + step * i + step / 2, y(tot[i])) });
+      r.addEventListener('pointerleave', () => t.style.opacity = 0);
+    });
+  };
+}
+const catColors = () => ['var(--s1)', 'var(--s2)', 'var(--s3)', 'var(--s4)'];
+const catLegend = () => `<div class="legend">${CATS.map((c, i) => `<span><i style="background:${catColors()[i]}"></i>${c}</span>`).join('')}</div>`;
+function hbars(data, color = 'var(--brand)', unit = '') {
+  const max = Math.max(...data.map(d => d[1]));
+  return data.map(([l, v]) => `<div class="hbar" title="${esc(l)}: ${fmt(v)}${unit}"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(l)}</span><div class="track"><div class="fill" style="width:${v / max * 100}%;background:${color}"></div></div><span class="val">${fmt(v)}</span></div>`).join('');
+}
+function statusBar() {
+  const c = { approved: 0, pending: 0, rejected: 0 }; ROUTES.forEach(r => c[r.status]++);
+  const real = { approved: 412, pending: c.pending + 2, rejected: 37 }; const tot = real.approved + real.pending + real.rejected;
+  const col = { approved: 'var(--ok)', pending: 'var(--warn)', rejected: 'var(--bad)' };
+  return `<div class="statusbar" role="img" aria-label="Rotas por status">${Object.keys(real).map(k => `<div title="${ROUTE_STATUS[k][2]}: ${real[k]}" style="width:${real[k] / tot * 100}%;background:${col[k]}"></div>`).join('')}</div>
+  <div class="legend">${Object.keys(real).map(k => `<span>${ic(ROUTE_STATUS[k][1])}<i style="background:${col[k]}"></i>${ROUTE_STATUS[k][2]} <strong class="num">${real[k]}</strong></span>`).join('')}</div>`;
+}
+const R30 = n => ({ labels: days(n), signups: series(n, 22, 14, 11, .25), routes: series(n, 6, 6, 5, .05), views: series(n, 540, 260, 9, 4), approvals: series(n, 4, 4, 21) });
+function spark(data, color = 'var(--brand)') { return chart(lineChart({ labels: data.map((_, i) => i), series: [{ name: '', data, color }], compact: true }), 34) }
+
+/* ================================================================ shared modals */
+function modal(html, onMount) {
+  const bg = document.createElement('div'); bg.className = 'modal-bg'; bg.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}</div>`;
+  document.body.appendChild(bg); const close = () => bg.remove();
+  bg.addEventListener('click', e => { if (e.target === bg || e.target.closest('[data-close]')) close() });
+  onMount?.(bg, close); bg.querySelector('input,textarea,select,button')?.focus();
+}
+function rejectRoute(r) {
+  modal(`<h3>Rejeitar “${esc(r.title)}”</h3><p class="muted">O autor recebe o motivo por email e pode corrigir e reenviar.</p>
+  <label class="f">Motivo<textarea class="input" rows="3" placeholder="Ex.: traçado passa por estrada privada entre o km 12 e 15."></textarea></label>
+  <div class="acts"><button class="btn" data-close>Cancelar</button><button class="btn primary" id="do">Rejeitar rota</button></div>`, (bg, close) => {
+    bg.querySelector('#do').onclick = () => { r.status = 'rejected'; r.published = false; close(); toast('Rota rejeitada e autor notificado'); render() };
+  });
+}
+function approveRoute(r) { r.status = 'approved'; r.published = true; toast(`“${r.title}” aprovada e publicada`); render() }
+function deleteRoute(ids) {
+  modal(`<h3>Excluir ${ids.length > 1 ? ids.length + ' rotas' : 'rota'}?</h3><p class="muted">Isto remove a rota, fotos e comentários. Não dá para desfazer.</p><div class="acts"><button class="btn" data-close>Cancelar</button><button class="btn primary" id="do">${ic('trash')}Excluir</button></div>`, (bg, close) => {
+    bg.querySelector('#do').onclick = () => { ids.forEach(id => { const i = ROUTES.findIndex(r => r.id === id); if (i >= 0) ROUTES.splice(i, 1) }); S.selected.clear(); S.drawer = null; close(); toast('Excluído'); render() };
+  });
+}
+function moderate(u, kind) {
+  if (kind === 'reactivate') { u.status = 'active'; delete u.until; toast(`${u.name} reativado`); return render() }
+  const ban = kind === 'ban';
+  modal(`<h3>${ban ? 'Banir' : 'Suspender'} ${esc(u.name)}</h3><p class="muted">${ban ? 'A conta perde o acesso de forma permanente até ser reativada.' : 'A conta não consegue entrar nem publicar durante o período.'}</p>
+  ${ban ? '' : `<label class="f">Duração<div class="seg" id="dur"><button aria-pressed="false">1 dia</button><button aria-pressed="true">7 dias</button><button aria-pressed="false">30 dias</button><button aria-pressed="false">Personalizado</button></div></label>`}
+  <label class="f">Motivo <small>Enviado ao usuário e guardado no histórico</small><textarea class="input" rows="3" placeholder="Ex.: spam repetido nos comentários"></textarea></label>
+  <label style="display:flex;gap:8px;align-items:flex-start;font-size:13px"><input type="checkbox" checked style="accent-color:var(--brand);margin-top:3px"> <span>Ocultar rotas, fotos e comentários deste usuário<br><small class="muted">Pode ser revertido depois</small></span></label>
+  <div class="acts"><button class="btn" data-close>Cancelar</button><button class="btn primary" id="do">${ban ? ic('ban') + 'Banir' : ic('pause') + 'Suspender'}</button></div>`, (bg, close) => {
+    bg.querySelectorAll('#dur button').forEach(b => b.onclick = () => bg.querySelectorAll('#dur button').forEach(x => x.setAttribute('aria-pressed', x === b)));
+    bg.querySelector('#do').onclick = () => { u.status = ban ? 'banned' : 'suspended'; u.until = ban ? null : 'termina em 7 dias'; u.hidden = true; close(); toast(ban ? 'Usuário banido' : 'Usuário suspenso'); render() };
+  });
+}
+function userHistory(u) {
+  modal(`<h3>Histórico de moderação · ${esc(u.name)}</h3>
+  <div class="timeline">
+    ${u.status !== 'active' ? `<div class="bad"><b>${u.status === 'banned' ? 'Banido' : 'Suspenso por 7 dias'}</b> por Equipe MotoTrip<small>há 2 dias · “spam repetido nos comentários”</small></div>` : ''}
+    <div><b>Papel alterado para ${ROLE[u.role]}</b><small>${u.created}</small></div>
+    <div class="ok"><b>Conta criada</b><small>${u.created}</small></div>
+  </div><div class="acts"><button class="btn" data-close>Fechar</button></div>`);
+}
+function userActionsMenu(u) {
+  if (u.you) return '<span class="pill neutral">você</span>';
+  return `<details class="menu"><summary class="btn icon ghost" aria-label="Ações">${ic('more')}</summary><div class="pop">
+    <button data-uact="history" data-id="${u.id}">${ic('history')}Histórico</button>
+    <button data-uact="copy" data-id="${u.id}">${ic('copy')}Copiar email</button>
+    ${u.unconfirmed ? `<button data-uact="resend" data-id="${u.id}">${ic('mail')}Reenviar confirmação</button>` : ''}
+    <button data-uact="hide" data-id="${u.id}">${ic(u.hidden ? 'eye' : 'eyeoff')}${u.hidden ? 'Mostrar conteúdo' : 'Ocultar conteúdo'}</button><hr>
+    ${u.status === 'active' ? `<button data-uact="suspend" data-id="${u.id}">${ic('pause')}Suspender…</button><button class="danger" data-uact="ban" data-id="${u.id}">${ic('ban')}Banir…</button>` : `<button data-uact="reactivate" data-id="${u.id}">${ic('check')}Reativar</button>${u.status === 'suspended' ? `<button data-uact="suspend" data-id="${u.id}">${ic('clock')}Alterar suspensão…</button>` : ''}`}
+  </div></details>`;
+}
+function roleSelect(u) {
+  if (u.you) return `<span class="pill brand">${ic('shield')}${ROLE[u.role]}</span>`;
+  return `<select class="select" data-role-of="${u.id}" style="width:auto;padding:5px 8px;font-size:12.5px">${Object.keys(ROLE).map(k => `<option value="${k}" ${u.role === k ? 'selected' : ''}>${ROLE[k]}</option>`).join('')}</select>`;
+}
+function filteredUsers() {
+  const q = S.userQ.toLowerCase();
+  return USERS.filter(u => (S.userFilter === 'all' || (S.userFilter === 'unconfirmed' ? u.unconfirmed : u.status === S.userFilter)) && (!q || (u.name + u.email).toLowerCase().includes(q)));
+}
+const userCounts = () => ({ all: USERS.length, active: USERS.filter(u => u.status === 'active').length, suspended: USERS.filter(u => u.status === 'suspended').length, banned: USERS.filter(u => u.status === 'banned').length, unconfirmed: USERS.filter(u => u.unconfirmed).length });
+const UF = { all: 'Todos', active: 'Ativos', suspended: 'Suspensos', banned: 'Banidos', unconfirmed: 'Não confirmados' };
+function userChips() { const c = userCounts(); return Object.keys(UF).map(k => `<button class="chip" data-ufilter="${k}" aria-pressed="${S.userFilter === k}">${UF[k]} <span class="n">${c[k]}</span></button>`).join('') }
+function filteredRoutes() {
+  const q = S.routeQ.toLowerCase();
+  return ROUTES.filter(r => (S.routeFilter === 'all' || r.status === S.routeFilter) && (S.curatorFilter === 'any' || (S.curatorFilter === 'missing' ? r.rating == null : r.conf === 'low' && r.rating != null)) && (!q || (r.title + r.author + r.region + r.country).toLowerCase().includes(q)))
+    .sort((a, b) => (a.status === 'pending' ? -1 : 0) - (b.status === 'pending' ? -1 : 0));
+}
+const RF = { all: 'Todas', pending: 'Pendentes', approved: 'Aprovadas', rejected: 'Rejeitadas' };
+function routeChips() { return Object.keys(RF).map(k => { const n = k === 'all' ? ROUTES.length : ROUTES.filter(r => r.status === k).length; return `<button class="chip ${k === 'pending' && n && S.routeFilter !== k ? 'chip-attn' : ''}" data-rfilter="${k}" aria-pressed="${S.routeFilter === k}">${RF[k]} <span class="n">${n}</span></button>` }).join('') }
+function curatorChips() { const CF = { any: 'Qualquer', missing: 'Sem avaliação', low: 'Baixa confiança' }; return `<span class="muted" style="font-size:12px;font-weight:600">Curadoria:</span>` + Object.keys(CF).map(k => `<button class="chip" data-cfilter="${k}" aria-pressed="${S.curatorFilter === k}">${CF[k]}</button>`).join('') }
+function filteredPosts() { return POSTS.filter(p => S.postFilter === 'all' || p.status === S.postFilter) }
+function postChips() { const PF = { all: 'Todos', draft: 'Rascunhos', published: 'Publicados', archived: 'Desativados' }; return Object.keys(PF).map(k => `<button class="chip" data-pfilter="${k}" aria-pressed="${S.postFilter === k}">${PF[k]} <span class="n">${k === 'all' ? POSTS.length : POSTS.filter(p => p.status === k).length}</span></button>`).join('') }
+
+/* curator review form (existing feature, shared) */
+function curatorForm(r) {
+  const sc = [['Asfalto', 4], ['Paisagem', 5], ['Curvas', 5], ['Segurança', 4], ['Infraestrutura', 3]];
+  return `<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:10px">
+    <div class="hd" style="margin:0"><h3>${ic('shield')} Avaliação MotoTrip</h3>${r.rating ? `<span class="pill ${r.conf === 'low' ? 'warn' : 'ok'}">${r.conf === 'low' ? 'Baixa confiança' : 'Alta confiança'}</span>` : '<span class="pill neutral">Nova</span>'}</div>
+    ${sc.map(([n, v]) => `<div class="score-row"><span>${n}</span><input type="range" min="1" max="5" value="${r.rating ? v : 3}" oninput="this.nextElementSibling.textContent=this.value"><b class="num">${r.rating ? v : 3}</b></div>`).join('')}
+    <label class="f">Veredito<textarea class="input" rows="2" placeholder="Resumo em uma frase">${r.rating ? 'Um clássico: curvas fluídas, asfalto bom e vistas em todo o percurso.' : ''}</textarea></label>
+    <label class="f">Fontes <small>Uma URL por linha</small><textarea class="input" rows="2" placeholder="https://…"></textarea></label>
+    <div style="display:flex;justify-content:flex-end;gap:6px"><button class="btn sm" onclick="toast('Avaliação guardada')">Guardar avaliação</button></div>
+  </div>`;
+}
+
+/* ================================================================ PROTOTYPE A — Cockpit */
+const A_NAV = [['dash', 'dash', 'Visão geral'], ['routes', 'map', 'Rotas'], ['users', 'users', 'Usuários', true], ['blog', 'file', 'Blog']];
+function protoA() {
+  const scr = S.screen.A; const cur = scr === 'editor' ? 'blog' : scr;
+  const side = `<aside class="A-side"><div class="logo"><b>MOTO<span>TRIP</span></b><small>admin</small></div>
+    <div class="A-group">Geral</div>
+    ${A_NAV.filter(n => !n[3] || isAdmin()).map(([k, i, l]) => `<button class="A-nav" data-go="${k}" ${cur === k ? 'aria-current="page"' : ''}>${ic(i)}${l}${k === 'routes' && pending().length ? `<span class="badge">${pending().length}</span>` : ''}</button>`).join('')}
+    <div class="A-group">Atalhos</div>
+    <button class="A-nav" data-go="routes" data-preset="pending">${ic('clock')}Fila de revisão</button>
+    <button class="A-nav" data-new-post>${ic('plus')}Novo post</button>
+    <div class="A-me">${avatar(USERS[0])}<div><b style="font-size:13px">Equipe MotoTrip</b><small>${isAdmin() ? 'Admin' : 'Curador'}</small></div></div></aside>`;
+  const title = { dash: 'Visão geral', routes: 'Rotas', users: 'Usuários', blog: 'Blog', editor: 'Blog <span>/ Editar post</span>' }[scr];
+  const top = `<div class="A-top"><div class="crumb">${title}</div>${scr !== 'editor' ? `<div class="search">${ic('search')}<input class="input" placeholder="Buscar rotas, pessoas, posts…" data-asearch></div>` : ''}</div>`;
+  const body = { dash: aDash, routes: aRoutes, users: aUsers, blog: aBlog, editor: aEditor }[scr]();
+  return `<div class="A">${side}<main class="A-main">${top}<div class="A-body">${body}</div></main>${S.drawer ? aDrawer() : ''}</div>`;
+}
+function aDash() {
+  const d = R30(S.range);
+  const kpi = (l, v, delta, data, up = true) => `<div class="card kpi"><span class="eyebrow">${l}</span><span class="v num">${v}</span><span class="delta ${up ? 'up' : 'down'}">${up ? '▲' : '▼'} ${delta} <span class="muted" style="font-weight:500">vs. ${S.range} dias anteriores</span></span><div class="spark">${spark(data)}</div></div>`;
+  return `<div class="A-kpis">
+      ${kpi('Usuários', '2.384', '12%', d.signups)}
+      ${kpi('Rotas publicadas', '412', '8%', d.routes)}
+      ${kpi('Leituras do blog', '18,2k', '23%', d.views)}
+      <div class="card kpi" style="border-color:var(--warn)"><span class="eyebrow">Aguardando revisão</span><span class="v num">${pending().length}</span><span class="delta" style="color:var(--warn)">${ic('clock')} mais antiga há 5 h</span><button class="btn sm" style="margin-top:auto;align-self:flex-start" data-go="routes" data-preset="pending">Revisar agora ${ic('arrow')}</button></div>
+    </div>
+    <div class="A-grid">
+      <div class="card"><div class="hd"><h3>Cadastros e rotas enviadas por dia</h3><div class="seg">${[7, 30, 90].map(n => `<button data-range="${n}" aria-pressed="${S.range === n}">${n}d</button>`).join('')}</div></div>
+        ${chart(lineChart({ labels: d.labels, series: [{ name: 'Cadastros', data: d.signups, color: 'var(--s1)' }, { name: 'Rotas enviadas', data: d.routes, color: 'var(--s2)' }] }), 230)}
+        <div class="legend"><span><i style="background:var(--s1)"></i>Cadastros</span><span><i style="background:var(--s2)"></i>Rotas enviadas</span></div></div>
+      <div class="card"><div class="hd"><h3>Fila de revisão</h3><button class="btn sm ghost" data-go="routes" data-preset="pending">Ver todas</button></div>
+        ${pending().slice(0, 5).map(r => `<div class="queue-row"><div class="thumb">${routeSvg(r.id, 52, 36)}</div><div class="meta"><b>${esc(r.title)}</b><small>${esc(r.author)} · ${r.updated}</small></div><button class="btn icon sm ok" title="Aprovar" data-approve="${r.id}">${ic('check')}</button><button class="btn icon sm danger" title="Rejeitar" data-reject="${r.id}">${ic('x')}</button></div>`).join('') || '<p class="muted">Nada pendente 🎉</p>'}
+      </div>
+    </div>
+    <div class="A-grid3">
+      <div class="card"><div class="hd"><h3>Rotas por status</h3></div>${statusBar()}</div>
+      <div class="card"><div class="hd"><h3>Rotas por país</h3><span class="muted" style="font-size:12px">publicadas</span></div>${hbars(COUNTRIES.slice(0, 6))}</div>
+      <div class="card"><div class="hd"><h3>Novas rotas por tipo</h3><span class="muted" style="font-size:12px">últimos 6 meses</span></div>${chart(stackChart({ labels: MONTHS, groups: CAT_MONTHLY, names: CATS, colors: catColors() }), 160)}${catLegend()}</div>
+    </div>
+    <div class="A-grid">
+      <div class="card"><div class="hd"><h3>Leituras do blog por dia</h3></div>${chart(lineChart({ labels: d.labels, series: [{ name: 'Leituras', data: d.views, color: 'var(--brand)' }] }), 170)}</div>
+      <div class="card"><div class="hd"><h3>Posts mais lidos</h3></div>${hbars(POSTS.filter(p => p.views).sort((a, b) => b.views - a.views).slice(0, 5).map(p => [p.title, p.views]), 'var(--s1)')}</div>
+    </div>`;
+}
+function aRoutes() {
+  const list = filteredRoutes();
+  return `<div class="toolbar">${routeChips()}<span class="sp"></span><input class="input" style="width:220px" placeholder="Título, autor, região…" value="${esc(S.routeQ)}" data-rq></div>
+  <div class="toolbar">${curatorChips()}</div>
+  ${S.selected.size ? `<div class="bulk">${S.selected.size} selecionada(s)<span style="flex:1"></span><button class="btn sm ok" data-bulk="approve">${ic('check')}Aprovar</button><button class="btn sm" data-bulk="feature">${ic('star')}Destacar</button><button class="btn sm" data-bulk="unpublish">${ic('eyeoff')}Despublicar</button>${isAdmin() ? `<button class="btn sm danger" data-bulk="delete">${ic('trash')}Excluir</button>` : ''}<button class="btn sm ghost" data-bulk="clear">Limpar</button></div>` : ''}
+  <div class="card A-tablecard"><div class="scroll-x"><table class="t"><thead><tr><th style="width:30px"><input type="checkbox" data-selall ${list.length && list.every(r => S.selected.has(r.id)) ? 'checked' : ''}></th><th>Rota</th><th>Autor</th><th>Tipo</th><th>Distância</th><th>Status</th><th>Curadoria</th><th title="Destaque">★</th><th title="Publicada">Pub.</th><th>Atualizada</th><th></th></tr></thead><tbody>
+  ${list.map(r => `<tr class="row ${S.selected.has(r.id) ? 'sel' : ''}" data-open-route="${r.id}">
+    <td onclick="event.stopPropagation()"><input type="checkbox" data-sel="${r.id}" ${S.selected.has(r.id) ? 'checked' : ''}></td>
+    <td><div class="cell-title"><div class="thumb">${routeSvg(r.id, 52, 36)}</div><div><b>${esc(r.title)}</b><small>${esc(r.region)}, ${esc(r.country)}</small></div></div></td>
+    <td>${esc(r.author)}</td><td>${r.cat}</td><td class="num">${r.km} km</td><td>${rstatus(r.status)}</td><td style="white-space:nowrap">${curatorNote(r)}</td>
+    <td onclick="event.stopPropagation()"><button class="toggle ${r.featured ? 'on' : ''}" data-feat="${r.id}" title="Destacar">${ic('star')}</button></td>
+    <td onclick="event.stopPropagation()"><button class="toggle eye ${r.published ? 'on' : ''}" data-pub="${r.id}" title="Publicar/despublicar">${ic(r.published ? 'eye' : 'eyeoff')}</button></td>
+    <td class="muted" style="white-space:nowrap">${r.updated}</td>
+    <td onclick="event.stopPropagation()" style="white-space:nowrap">${r.status === 'pending' ? `<button class="btn icon sm ok" title="Aprovar" data-approve="${r.id}">${ic('check')}</button> <button class="btn icon sm danger" title="Rejeitar" data-reject="${r.id}">${ic('x')}</button>` : `<button class="btn icon sm ghost" title="Editar" data-open-route="${r.id}">${ic('edit')}</button>`}</td>
+  </tr>`).join('') || `<tr><td colspan="11" class="empty">Nenhuma rota com estes filtros</td></tr>`}
+  </tbody></table></div></div>`;
+}
+function aDrawer() {
+  const r = ROUTES.find(x => x.id === S.drawer); if (!r) return '';
+  return `<div class="drawer"><div class="dh"><button class="btn icon ghost" data-close-drawer>${ic('x')}</button><b style="flex:1">${esc(r.title)}</b>${rstatus(r.status)}</div>
+  <div class="db"><div class="mapbig">${routeSvg(r.id, 440, 170, true)}</div>
+    <div class="facts"><div><b>${r.km} km</b><small>Distância</small></div><div><b>${r.diff}</b><small>Dificuldade</small></div><div><b>${r.cat}</b><small>Tipo</small></div></div>
+    <label class="f">Título<input class="input" value="${esc(r.title)}"></label>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><label class="f">Região<input class="input" value="${esc(r.region)}"></label><label class="f">Tipo<select class="select">${CATS.map(c => `<option ${c === r.cat ? 'selected' : ''}>${c}</option>`).join('')}</select></label></div>
+    <label class="f">Descrição<textarea class="input" rows="3">Percurso enviado por ${esc(r.author)}. Paragens sugeridas e pontos de interesse ao longo da estrada.</textarea></label>
+    ${curatorForm(r)}
+  </div>
+  <div class="df">${r.status === 'pending' ? `<button class="btn primary" data-approve="${r.id}">${ic('check')}Aprovar e publicar</button><button class="btn" data-reject="${r.id}">Rejeitar…</button>` : `<button class="btn primary" onclick="toast('Alterações guardadas')">Guardar</button><button class="btn" data-feat="${r.id}">${ic('star')}${r.featured ? 'Remover destaque' : 'Destacar'}</button>`}<span style="flex:1"></span>${isAdmin() ? `<button class="btn ghost danger" data-del="${r.id}">${ic('trash')}Excluir</button>` : ''}</div></div>`;
+}
+function aUsers() {
+  if (!isAdmin()) return curatorNoUsers();
+  const list = filteredUsers();
+  return `<div class="toolbar">${userChips()}<span class="sp"></span><select class="select" style="width:auto" data-urole><option value="">Todos os papéis</option>${Object.keys(ROLE).map(k => `<option value="${k}">${ROLE[k]}</option>`).join('')}</select><input class="input" style="width:220px" placeholder="Nome ou email" value="${esc(S.userQ)}" data-uq></div>
+  <div class="card A-tablecard"><div class="scroll-x"><table class="t"><thead><tr><th>Usuário</th><th>Papel</th><th>Status</th><th>Atividade</th><th>Criado</th><th>Último acesso</th><th></th></tr></thead><tbody>
+  ${list.map(u => `<tr><td><div class="cell-title" style="min-width:240px">${avatar(u)}<div><b>${esc(u.name)}</b><small>${esc(u.email)}</small></div></div></td><td>${roleSelect(u)}</td>
+    <td style="white-space:nowrap">${ustatus(u)}${u.until ? `<div class="muted" style="font-size:11.5px">${u.until}</div>` : ''}${u.hidden ? `<div class="muted" style="font-size:11.5px">conteúdo oculto</div>` : ''}</td>
+    <td class="num" style="white-space:nowrap">${u.routes} rotas · ${u.comments} coment.</td><td class="muted">${u.created}</td><td class="muted">${u.last}</td><td>${userActionsMenu(u)}</td></tr>`).join('') || `<tr><td colspan="7" class="empty">Ninguém encontrado</td></tr>`}
+  </tbody></table></div></div>`;
+}
+function curatorNoUsers() { return `<div class="card empty" style="display:flex;flex-direction:column;align-items:center;gap:10px">${ic('lock')}<b>Usuários é exclusivo de admins</b><span>Curadores revisam rotas e escrevem no blog. Troque para “Admin” no topo para ver esta tela.</span></div>` }
+function aBlog() {
+  const list = filteredPosts();
+  return `<div class="toolbar">${postChips()}<span class="sp"></span><button class="btn primary" data-new-post>${ic('plus')}Novo post</button></div>
+  <div class="card A-tablecard"><div class="scroll-x"><table class="t"><thead><tr><th>Título</th><th>Status</th><th>Idiomas</th><th>SEO</th><th>Leituras</th><th>Data</th><th>Atualizado</th><th></th></tr></thead><tbody>
+  ${list.map(p => `<tr class="row" data-edit-post="${p.id}"><td><div class="cell-title"><div class="thumb">${landscape(p.seed)}</div><div><b>${esc(p.title)}</b><small>/blog/${p.slug}</small></div></div></td><td>${pstatus(p.status)}</td><td style="white-space:nowrap">${langs(p.langs)}</td><td>${ring(postScore(p), true)}</td><td class="num">${p.views ? fmt(p.views) : '—'}</td><td class="muted" style="white-space:nowrap">${p.date || '—'}</td><td class="muted" style="white-space:nowrap">${p.updated}</td>
+    <td onclick="event.stopPropagation()"><details class="menu"><summary class="btn icon ghost">${ic('more')}</summary><div class="pop"><button data-edit-post="${p.id}">${ic('edit')}Editar</button>${p.status === 'published' ? `<button onclick="toast('Abre /blog/${p.slug}')">${ic('ext')}Ver no site</button><button data-post-status="${p.id}:archived">${ic('eyeoff')}Desativar</button>` : `<button data-post-status="${p.id}:published">${ic('globe')}${p.status === 'archived' ? 'Reativar' : 'Publicar'}</button>`}<hr><button class="danger" data-del-post="${p.id}">${ic('trash')}Excluir</button></div></details></td></tr>`).join('')}
+  </tbody></table></div></div>`;
+}
+function langTabs(cls = '') {
+  const e = S.editor, all = ['pt', 'en', 'es', 'fr', 'de'];
+  return `<div class="langs ${cls}" role="tablist">${Object.keys(e.langs).map(l => { const sc = seoChecks(e.langs[l], e.slug).score; return `<button data-lang="${l}" aria-selected="${S.edLang === l}"><span class="dot ${sc < 60 ? 'miss' : ''}" title="SEO ${sc}"></span>${l.toUpperCase()}</button>` }).join('')}
+    <details class="menu"><summary class="btn sm ghost" style="margin-top:4px">${ic('plus')}Idioma</summary><div class="pop" style="left:0;right:auto;min-width:160px">${all.filter(l => !e.langs[l]).map(l => `<button data-add-lang="${l}">${{ en: 'Inglês', es: 'Espanhol', fr: 'Francês', de: 'Alemão', pt: 'Português' }[l]}</button>`).join('') || '<span class="muted" style="padding:6px;display:block">Todos adicionados</span>'}</div></details></div>`;
+}
+function edHeader(extra = '') {
+  const e = S.editor;
+  return `<div class="toolbar"><button class="btn ghost" data-go="blog">${ic('back')}Blog</button><h3 style="font-size:16px">${e.id ? 'Editar post' : 'Novo post'}</h3>${pstatus(e.status)}<span class="muted" style="font-size:12px;display:inline-flex;gap:4px;align-items:center">${ic('check')}Guardado automaticamente</span><span class="sp"></span>${extra}
+  <button class="btn" onclick="toast('Rascunho guardado')">${e.status === 'draft' ? 'Guardar rascunho' : 'Guardar'}</button>${e.status === 'published' ? `<button class="btn" data-ed-status="archived">Desativar</button>` : `<button class="btn primary" data-ed-status="published" ${!e.langs.pt.title ? 'disabled title="Precisa de título em português"' : ''}>${ic('globe')}${e.status === 'archived' ? 'Reativar' : 'Publicar'}</button>`}</div>`;
+}
+function seoPanel({ og } = {}) {
+  const l = L(), e = S.editor, { checks, score } = seoChecks(l, e.slug); const t = l.seo.title, d = l.seo.desc;
+  return `<div style="display:flex;gap:12px;align-items:center">${ring(score)}<div><b>Pontuação SEO · ${S.edLang.toUpperCase()}</b><div class="muted" style="font-size:12px">Cada idioma tem as suas próprias meta tags</div></div></div>
+    <label class="f"><span style="display:flex;justify-content:space-between">Meta title ${counter(t.length, 30, 60)}</span><input class="input" data-seo="title" value="${esc(t)}" placeholder="${esc(l.title || 'Título que aparece no Google')}">${meter(t.length, 60)}<small>Vazio = usa o título do post</small></label>
+    <label class="f"><span style="display:flex;justify-content:space-between">Meta description ${counter(d.length, 120, 160)}</span><textarea class="input" rows="3" data-seo="desc" placeholder="${esc(l.desc || 'Resumo que aparece no Google')}">${esc(d)}</textarea>${meter(d.length, 160)}</label>
+    <label class="f">Palavras-chave <small>Enter para adicionar · a primeira é a principal</small><div class="kw" data-kw>${l.seo.keywords.map((k, i) => `<span>${i === 0 ? '★ ' : ''}${esc(k)}<button data-kw-rm="${i}" aria-label="Remover">×</button></span>`).join('')}<input placeholder="${l.seo.keywords.length ? '' : 'ex.: estradas de moto'}" data-kw-in></div></label>
+    <div><div class="eyebrow" style="margin-bottom:6px">Prévia no Google</div><div class="serp" data-serp>${serpInner()}</div></div>
+    ${og ? `<div><div class="eyebrow" style="margin-bottom:6px">Prévia ao partilhar</div><div class="og" data-og>${ogInner()}</div></div>` : ''}
+    <div class="checks" data-checks>${checksInner(checks)}</div>`;
+}
+function serpInner() { const l = L(), e = S.editor; const t = l.seo.title || l.title || 'Título do post', d = l.seo.desc || l.desc || 'Adicione uma meta description para controlar este texto.'; return `<div class="u"><i></i>mototrip.pt › ${S.edLang} › blog › ${esc(e.slug || 'slug')}</div><div class="tt">${esc(t)}</div><div class="dd">${esc(d)}</div>` }
+function ogInner() { const l = L(), e = S.editor; return `<div class="oi">${IMG[e.cover.seed] ? `<img src="${IMG[e.cover.seed]}" alt="">` : landscape(e.cover.seed)}</div><div class="ot"><small>mototrip.pt</small><b>${esc(l.seo.title || l.title || 'Título do post')}</b><span>${esc(l.seo.desc || l.desc || '')}</span></div>` }
+function checksInner(checks) { return checks.map(([ok, l]) => `<div class="${ok ? 'y' : 'n'}">${ic(ok ? 'check' : 'alert')}<span>${esc(l)}</span></div>`).join('') }
+function refreshSeo(root = document) {
+  const l = L(); const { checks, score } = seoChecks(l, S.editor.slug);
+  root.querySelectorAll('[data-serp]').forEach(x => x.innerHTML = serpInner());
+  root.querySelectorAll('[data-og]').forEach(x => x.innerHTML = ogInner());
+  root.querySelectorAll('[data-checks]').forEach(x => x.innerHTML = checksInner(checks));
+  root.querySelectorAll('.ring:not(.sm)').forEach(x => { x.style.setProperty('--p', score); x.style.setProperty('--c', scoreColor(score)); x.querySelector('b').textContent = score });
+  root.querySelectorAll('[data-seo-score]').forEach(x => x.textContent = score);
+  const t = root.querySelector('[data-seo="title"]'), d = root.querySelector('[data-seo="desc"]');
+  if (t) { const lab = t.closest('label'); lab.querySelector('.counter').outerHTML = counter(l.seo.title.length, 30, 60); lab.querySelector('.meter').outerHTML = meter(l.seo.title.length, 60) }
+  if (d) { const lab = d.closest('label'); lab.querySelector('.counter').outerHTML = counter(l.seo.desc.length, 120, 160); lab.querySelector('.meter').outerHTML = meter(l.seo.desc.length, 160) }
+}
+function publishPanel() {
+  const e = S.editor; const locked = e.status !== 'draft';
+  return `<label class="f">Slug <div style="position:relative"><input class="input" value="${esc(e.slug)}" ${locked ? 'disabled' : ''} data-slug style="${locked ? 'padding-right:30px' : ''}">${locked ? `<span style="position:absolute;right:9px;top:50%;transform:translateY(-50%);color:var(--muted)">${ic('lock')}</span>` : ''}</div><small>${locked ? 'Bloqueado depois de publicado para não quebrar links' : 'mototrip.pt/blog/' + esc(e.slug || '…')}</small></label>
+    <label class="f">Capa<div style="display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:6px;background:var(--surface-2)"><div class="thumb" style="width:64px;height:40px">${IMG[e.cover.seed] ? `<img src="${IMG[e.cover.seed]}" style="width:100%;height:100%;object-fit:cover">` : landscape(e.cover.seed)}</div><span style="flex:1;font-size:12.5px">Imagem enviada</span><button class="btn sm ghost" data-cover-upload>Trocar</button></div>
+    <div style="display:flex;gap:6px"><button class="btn sm" style="flex:1" onclick="toast('Abre o seletor de rotas (já existe hoje)')">${ic('map')}Usar capa de uma rota</button></div>
+    <input class="input" placeholder="Crédito da foto" value="${esc(e.cover.credit)}"></label>
+    <label class="f">Data de publicação<input class="input" type="date" value="2026-11-02"><small>Vazio = data em que publicar</small></label>
+    <label class="f">Título (${S.edLang.toUpperCase()})<input class="input" data-ltitle value="${esc(L().title)}"></label>
+    <label class="f">Descrição (${S.edLang.toUpperCase()}) <small>Aparece no topo do post e na listagem</small><textarea class="input" rows="2" data-ldesc>${esc(L().desc)}</textarea></label>
+    ${S.edLang !== 'pt' ? `<button class="btn sm ghost danger" data-rm-lang="${S.edLang}">${ic('trash')}Remover ${S.edLang.toUpperCase()}</button>` : ''}`;
+}
+function aEditor() {
+  const l = L(); const md = toMd(l.blocks);
+  const tb = [['bold', 'Negrito', 'wrap', '**'], ['italic', 'Itálico', 'wrap', '_'], 0, ['h2', 'Título', 'pre', '## '], ['h3', 'Subtítulo', 'pre', '### '], ['list', 'Lista', 'pre', '- '], ['quote', 'Citação', 'pre', '> '], ['link', 'Link', 'link'], 0, ['bulb', 'Dica', 'tip'], ['map', 'Card de rota', 'route']];
+  return `${edHeader()}
+  <div class="A-ed"><div style="min-width:0">${langTabs()}
+    <div class="toolbar" style="margin-bottom:8px"><input class="input" data-ltitle value="${esc(l.title)}" placeholder="Título do post" style="font-size:18px;font-weight:700;flex:1"></div>
+    <div class="toolbar" style="margin-bottom:8px;justify-content:flex-end"><div class="seg">${[['write', 'Escrever'], ['split', 'Lado a lado'], ['preview', 'Pré-visualizar']].map(([k, n]) => `<button data-aview="${k}" aria-pressed="${S.aView === k}">${n}</button>`).join('')}</div></div>
+    <div class="splitview ${S.aView}"><div class="ed" style="min-width:0">
+      <div class="mdbar">${tb.map(b => b ? `<button class="btn icon ghost" title="${b[1]}" data-md="${b[2]}" data-arg="${b[3] || ''}">${ic(b[0])}</button>` : '<span class="sep"></span>').join('')}<span style="flex:1"></span><button class="btn sm primary" data-imgpop>${ic('image')}Imagem</button></div>
+      <div class="mdwrap" data-drop>${S.imgPop ? imgPopover() : ''}<textarea class="input" data-md-area spellcheck="false">${esc(md)}</textarea><div class="drop-hint">${ic('upload')} Solte para inserir a imagem aqui</div></div>
+      <div class="muted" style="font-size:12px;margin-top:6px">Arraste imagens para o texto ou cole com ⌘V — entram onde está o cursor.</div>
+    </div><div class="pv prose" data-preview>${renderProse(l.blocks)}</div></div>
+  </div>
+  <aside class="aside"><div class="tabsx"><button data-aaside="seo" aria-selected="${S.aAside === 'seo'}">${ic('seo')}SEO <span class="pill ${seoChecks(l, S.editor.slug).score >= 75 ? 'ok' : 'warn'}" style="padding:0 6px" data-seo-score>${seoChecks(l, S.editor.slug).score}</span></button><button data-aaside="pub" aria-selected="${S.aAside === 'pub'}">${ic('globe')}Publicação</button></div>
+    <div class="card" style="display:flex;flex-direction:column;gap:14px">${S.aAside === 'seo' ? seoPanel() : publishPanel()}</div></aside></div>`;
+}
+function imgPopover() {
+  return `<div class="imgpop" data-imgpop-box><b>Inserir imagem no texto</b>
+    <div class="upl" data-pick>${S.pendingImg ? `<img src="${IMG[S.pendingImg]}">` : `${ic('upload')}<span>Clique ou arraste JPG, PNG ou WebP</span><small>Redimensionada e convertida para WebP no envio</small>`}</div>
+    <label class="f">Texto alternativo <small>Descreve a imagem — conta para SEO e acessibilidade</small><input class="input" data-pi-alt placeholder="Ex.: curva da N222 com o Douro ao fundo"></label>
+    <label class="f">Legenda<input class="input" data-pi-cap placeholder="Opcional"></label>
+    <label class="f">Largura<div class="seg" data-pi-layout><button aria-pressed="true" data-v="text">Texto</button><button aria-pressed="false" data-v="wide">Larga</button><button aria-pressed="false" data-v="gallery">Galeria 2</button></div></label>
+    <div style="display:flex;justify-content:flex-end;gap:6px"><button class="btn sm" data-imgpop>Cancelar</button><button class="btn sm primary" data-pi-insert>Inserir no cursor</button></div></div>`;
+}
+
+/* ================================================================ PROTOTYPE B — Fila de trabalho */
+function protoB() {
+  const scr = S.screen.B; const cur = scr === 'editor' ? 'blog' : scr;
+  const nav = [['dash', 'dash', 'Início'], ['routes', 'map', 'Rotas'], ...(isAdmin() ? [['users', 'users', 'Usuários']] : []), ['blog', 'file', 'Blog']];
+  const top = `<div class="B-top"><div class="logo" style="padding:0"><b>MOTO<span>TRIP</span></b></div><nav class="B-nav">${nav.map(([k, i, l]) => `<button data-go="${k}" ${cur === k ? 'aria-current="page"' : ''}>${ic(i)}${l}${k === 'routes' && pending().length ? `<span class="badge">${pending().length}</span>` : ''}</button>`).join('')}</nav>
+    <button class="cmdk" data-palette>${ic('search')}Buscar ou executar…<kbd>⌘K</kbd></button>${avatar(USERS[0])}</div>`;
+  const body = { dash: bDash, routes: bRoutes, users: bUsers, blog: bBlog, editor: bEditor }[scr]();
+  return `<div class="B">${top}<div class="B-body" ${scr === 'editor' ? 'style="max-width:1320px"' : ''}>${body}</div></div>${S.palette ? paletteHtml() : ''}`;
+}
+function bDash() {
+  const d = R30(30); const noSeo = POSTS.filter(p => postScore(p) < 60).length; const noRating = ROUTES.filter(r => r.status === 'approved' && r.rating == null).length + 4;
+  const attn = (n, icn, color, title, desc, go, preset) => `<button class="attn" data-go="${go}" ${preset ? `data-preset="${preset}"` : ''}><span class="ic" style="background:${color}-soft;color:${color}">${ic(icn)}</span><span class="n num">${n}</span><b>${title}</b><span class="muted" style="font-size:12.5px">${desc}</span><span class="go">Abrir ${ic('arrow')}</span></button>`;
+  const mini = (title, v, delta, data, color) => `<div class="card"><span class="eyebrow">${title}</span><div style="display:flex;align-items:baseline;gap:8px;margin:4px 0 8px"><span class="v num">${v}</span><span class="delta up">▲ ${delta}</span></div>${chart(lineChart({ labels: d.labels, series: [{ name: title, data, color }], compact: true }), 60)}<div class="muted" style="font-size:11px;display:flex;justify-content:space-between;margin-top:4px"><span>${d.labels[0]}</span><span>hoje</span></div></div>`;
+  return `<div class="B-hello"><div class="eyebrow">domingo, 15 de novembro</div><h2>Bom dia. <span style="color:var(--brand)">${pending().length + noSeo + (isAdmin() ? 1 : 0)} coisas</span> precisam de você.</h2></div>
+  <div class="B-attn">
+    ${attn(pending().length, 'clock', 'var(--warn)', 'Rotas para revisar', 'A mais antiga espera há 5 h', 'routes', 'pending')}
+    ${attn(noRating, 'shield', 'var(--info)', 'Sem Avaliação MotoTrip', 'Aprovadas, mas sem nota do curador', 'routes', 'missing')}
+    ${attn(noSeo, 'seo', 'var(--bad)', 'Posts com SEO fraco', 'Sem meta description ou palavras-chave', 'blog')}
+    ${isAdmin() ? attn(1, 'pause', 'var(--brand)', 'Suspensão a terminar', 'Pedro Nunes volta em 5 dias', 'users') : attn(3, 'file', 'var(--brand)', 'Rascunhos parados', 'Sem edição há mais de 7 dias', 'blog')}
+  </div>
+  <div><div class="eyebrow" style="margin-bottom:8px">Pulso dos últimos 30 dias</div>
+  <div class="B-multi">${mini('Cadastros', fmt(d.signups.reduce((a, b) => a + b)), '12%', d.signups, 'var(--s1)')}${mini('Rotas enviadas', fmt(d.routes.reduce((a, b) => a + b)), '8%', d.routes, 'var(--s2)')}${mini('Aprovações', fmt(d.approvals.reduce((a, b) => a + b)), '5%', d.approvals, 'var(--s3)')}${mini('Leituras do blog', fmt(d.views.reduce((a, b) => a + b)), '23%', d.views, 'var(--brand)')}</div></div>
+  <div class="B-two"><div class="card"><div class="hd"><h3>Novas rotas por tipo</h3><span class="muted" style="font-size:12px">por mês</span></div>${chart(stackChart({ labels: MONTHS, groups: CAT_MONTHLY, names: CATS, colors: catColors() }), 210)}${catLegend()}</div>
+  <div class="card"><div class="hd"><h3>Onde estão as rotas</h3></div>${hbars(COUNTRIES)}<div style="margin-top:14px">${statusBar()}</div></div></div>`;
+}
+function bRoutes() {
+  const list = filteredRoutes(); const sel = ROUTES.find(r => r.id === S.routeSel) || list[0];
+  const view = S.routeView === 'board'
+    ? `<div class="kanban">${['pending', 'approved', 'rejected'].map(st => { const items = list.filter(r => r.status === st); const [c, i, l] = ROUTE_STATUS[st]; return `<div class="col" data-col="${st}"><div class="ch"><span class="pill ${c}">${ic(i)}${l}</span><span class="n">${items.length}</span></div>${items.map(r => `<button class="kcard ${sel && sel.id === r.id ? 'active' : ''}" draggable="true" data-kcard="${r.id}"><div class="km">${routeSvg(r.id, 260, 74)}</div><div class="kb"><b>${esc(r.title)}</b><div class="row">${esc(r.country)} · ${r.km} km · ${esc(r.author)}</div><div class="row">${curatorNote(r)}${r.featured ? `<span class="pill warn">${ic('star')}Destaque</span>` : ''}</div></div></button>`).join('') || '<div class="muted" style="font-size:12px;padding:8px">Arraste uma rota para cá</div>'}</div>` }).join('')}</div>`
+    : `<div class="card A-tablecard"><div class="scroll-x"><table class="t"><thead><tr><th>Rota</th><th>Status</th><th>Curadoria</th><th>Autor</th></tr></thead><tbody>${list.map(r => `<tr class="row ${sel && sel.id === r.id ? 'sel' : ''}" data-kcard="${r.id}"><td><div class="cell-title"><div class="thumb">${routeSvg(r.id, 52, 36)}</div><div><b>${esc(r.title)}</b><small>${esc(r.region)}, ${esc(r.country)}</small></div></div></td><td>${rstatus(r.status)}</td><td style="white-space:nowrap">${curatorNote(r)}</td><td>${esc(r.author)}</td></tr>`).join('')}</tbody></table></div></div>`;
+  return `<div class="toolbar">${routeChips()}<span class="sp"></span><div class="seg"><button data-rview="board" aria-pressed="${S.routeView === 'board'}">${ic('grid')} Quadro</button><button data-rview="list" aria-pressed="${S.routeView === 'list'}">${ic('rows')} Lista</button></div></div>
+  <div class="toolbar">${curatorChips()}<span class="sp"></span><input class="input" style="width:220px" placeholder="Filtrar…" value="${esc(S.routeQ)}" data-rq></div>
+  ${S.routeView === 'board' ? '<div class="note">' + ic('sparkle') + '<span>Arraste um card entre colunas para aprovar ou rejeitar. Rejeitar sempre pede o motivo.</span></div>' : ''}
+  <div class="B-split"><div style="min-width:0">${view}</div>${sel ? `<div class="sheet"><div class="mapbig" style="border-radius:0;border:0;height:180px">${routeSvg(sel.id, 400, 180, true)}</div><div class="sb">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${rstatus(sel.status)}${sel.published ? '<span class="pill ok">' + ic('eye') + 'Publicada</span>' : '<span class="pill neutral">' + ic('eyeoff') + 'Oculta</span>'}</div>
+    <h3 style="font-size:20px">${esc(sel.title)}</h3><span class="muted">${esc(sel.region)}, ${esc(sel.country)} · enviada por <b style="color:var(--fg-2)">${esc(sel.author)}</b> ${sel.updated}</span>
+    <div class="facts"><div><b>${sel.km} km</b><small>Distância</small></div><div><b>${sel.diff}</b><small>Dificuldade</small></div><div><b>${sel.cat}</b><small>Tipo</small></div></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${sel.status === 'pending' ? `<button class="btn primary" data-approve="${sel.id}">${ic('check')}Aprovar</button><button class="btn" data-reject="${sel.id}">${ic('x')}Rejeitar…</button>` : ''}<button class="btn" data-feat="${sel.id}">${ic('star')}${sel.featured ? 'Tirar destaque' : 'Destacar'}</button><button class="btn" data-pub="${sel.id}">${ic(sel.published ? 'eyeoff' : 'eye')}${sel.published ? 'Despublicar' : 'Publicar'}</button><button class="btn ghost" onclick="toast('Abre o editor da rota')">${ic('edit')}Editar</button>${isAdmin() ? `<button class="btn ghost danger" data-del="${sel.id}">${ic('trash')}</button>` : ''}</div>
+    ${curatorForm(sel)}</div></div>` : ''}</div>`;
+}
+function bUsers() {
+  if (!isAdmin()) return curatorNoUsers();
+  const list = filteredUsers(); const u = USERS.find(x => x.id === S.userSel) || list[0];
+  return `<div class="B-split users"><div class="ulist"><div class="uh"><input class="input" placeholder="Nome ou email" value="${esc(S.userQ)}" data-uq><div style="display:flex;gap:4px;flex-wrap:wrap">${userChips()}</div></div>
+    ${list.map(x => `<button class="urow" data-usel="${x.id}" aria-selected="${u && u.id === x.id}">${avatar(x)}<span class="m"><b>${esc(x.name)}</b><small>${ROLE[x.role]} · ${esc(x.email)}</small></span>${x.status !== 'active' ? `<span class="pill ${USTATUS[x.status][0]}">${USTATUS[x.status][2]}</span>` : x.unconfirmed ? '<span class="pill neutral">' + ic('mail') + '</span>' : ''}</button>`).join('') || '<div class="empty">Ninguém encontrado</div>'}</div>
+    ${u ? `<div class="card" style="display:flex;flex-direction:column;gap:16px;padding:20px">
+      <div class="profile-hd">${avatar(u)}<div style="flex:1;min-width:180px"><h3 style="font-size:20px">${esc(u.name)}</h3><span class="muted">${esc(u.email)} <button class="btn icon sm ghost" data-uact="copy" data-id="${u.id}" title="Copiar email">${ic('copy')}</button></span></div>${roleSelect(u)}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${ustatus(u)}${u.until ? `<span class="pill warn">${ic('clock')}${u.until}</span>` : ''}${u.hidden ? `<span class="pill neutral">${ic('eyeoff')}Conteúdo oculto</span>` : ''}</div>
+      <div class="facts"><div><b>${u.routes}</b><small>Rotas</small></div><div><b>${u.comments}</b><small>Comentários</small></div><div><b style="font-size:13px">${u.last}</b><small>Último acesso</small></div></div>
+      ${u.you ? '<div class="note">' + ic('shield') + '<span>Esta é a sua conta. Não é possível alterar o seu próprio papel ou status.</span></div>' : `<div style="display:flex;gap:6px;flex-wrap:wrap">${u.status === 'active' ? `<button class="btn" data-uact="suspend" data-id="${u.id}">${ic('pause')}Suspender…</button><button class="btn danger" data-uact="ban" data-id="${u.id}">${ic('ban')}Banir…</button>` : `<button class="btn primary" data-uact="reactivate" data-id="${u.id}">${ic('check')}Reativar</button>`}<button class="btn" data-uact="hide" data-id="${u.id}">${ic(u.hidden ? 'eye' : 'eyeoff')}${u.hidden ? 'Mostrar conteúdo' : 'Ocultar conteúdo'}</button>${u.unconfirmed ? `<button class="btn" data-uact="resend" data-id="${u.id}">${ic('mail')}Reenviar confirmação</button>` : ''}</div>`}
+      <div><div class="eyebrow" style="margin-bottom:10px">Atividade e moderação</div><div class="timeline">
+        ${u.status !== 'active' ? `<div class="bad"><b>${u.status === 'banned' ? 'Banido' : 'Suspenso por 7 dias'}</b> por Equipe MotoTrip<small>há 2 dias · “spam repetido nos comentários”</small></div>` : ''}
+        ${u.routes ? `<div><b>Enviou “${esc(ROUTES.find(r => r.author === u.name)?.title || 'Rota')}”</b><small>${u.last}</small></div>` : ''}
+        ${u.comments ? `<div><b>Comentou em 3 rotas</b><small>esta semana</small></div>` : ''}
+        <div class="ok"><b>Conta criada</b><small>${u.created}</small></div></div></div>
+    </div>` : ''}</div>`;
+}
+function bBlog() {
+  const groups = [['draft', 'Rascunhos'], ['published', 'Publicados'], ['archived', 'Desativados']];
+  return `<div class="toolbar"><h3 style="font-size:20px">Blog</h3><span class="sp"></span><button class="btn primary" data-new-post>${ic('plus')}Novo post</button></div>
+  ${groups.map(([k, n]) => { const ps = POSTS.filter(p => p.status === k); return ps.length ? `<div><div class="eyebrow" style="margin:6px 0 8px">${n} · ${ps.length}</div><div class="plist">${ps.map(p => { const sc = postScore(p); return `<div class="prow" data-edit-post="${p.id}"><div class="thumb" style="width:72px;height:46px">${landscape(p.seed)}</div><div class="m"><b>${esc(p.title)}</b><small>${p.date || 'sem data'} · atualizado ${p.updated}${p.views ? ' · ' + fmt(p.views) + ' leituras' : ''}</small></div><span>${langs(p.langs)}</span>${ring(sc, true)}${sc < 60 ? '<span class="pill warn">' + ic('alert') + 'SEO incompleto</span>' : ''}<button class="btn sm ghost">${ic('edit')}Editar</button></div>` }).join('')}</div></div>` : '' }).join('')}`;
+}
+/* --- block editor shared by B and C */
+const BLOCK_TYPES = [['p', 'rows', 'Parágrafo', 'Texto simples'], ['h2', 'h2', 'Título', 'Secção do artigo'], ['h3', 'h3', 'Subtítulo', ''], ['quote', 'quote', 'Citação', ''], ['tip', 'bulb', 'Dica', 'Caixa de destaque'], ['img', 'image', 'Imagem', 'Enviar ou arrastar'], ['gallery', 'gallery', 'Galeria', 'Duas imagens lado a lado'], ['route', 'map', 'Card de rota', 'Liga a uma rota publicada']];
+function makeBlock(t) { if (t === 'img') return { t: 'img', seeds: [], alt: '', caption: '', layout: 'text' }; if (t === 'gallery') return { t: 'img', seeds: [], alt: '', caption: '', layout: 'gallery' }; if (t === 'route') return { t: 'route', slug: 'serra-da-estrela-n339' }; return { t, text: '' } }
+function blockHtml(b, i, mode) {
+  const hdl = mode === 'B' ? `<div class="hdl"><button data-bmove="${i}:-1" title="Subir">${ic('up')}</button><button data-bmove="${i}:1" title="Descer">${ic('down')}</button><button data-bdel="${i}" title="Remover">${ic('trash')}</button></div>` : `<div class="hdl"><button data-bmove="${i}:-1" title="Subir">${ic('up')}</button><button data-bmove="${i}:1" title="Descer">${ic('down')}</button><button data-bdel="${i}" title="Remover">${ic('trash')}</button></div>`;
+  let inner = '';
+  if (['p', 'h2', 'h3', 'quote', 'tip'].includes(b.t)) {
+    const tag = { p: 'p', h2: 'h2', h3: 'h3', quote: 'blockquote', tip: 'div' }[b.t];
+    inner = `<${tag} ${b.t === 'tip' ? 'class="tipbox"' : ''} contenteditable="true" data-btext="${i}" data-ph="${b.t === 'p' ? (mode === 'B' ? 'Escreva, ou digite / para inserir imagem, rota, dica…' : 'Escreva aqui…') : b.t === 'h2' ? 'Título da secção' : 'Escreva…'}">${esc(b.text)}</${tag}>`;
+  } else if (b.t === 'route') {
+    inner = `<div style="position:relative">${routeCard(b.slug)}<select class="select" data-broute="${i}" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);width:auto;font-size:12px;padding:4px 6px">${ROUTES.filter(r => r.status === 'approved').map(r => `<option value="${r.slug}" ${r.slug === b.slug ? 'selected' : ''}>${esc(r.title)}</option>`).join('')}</select></div>`;
+  } else if (b.t === 'img') {
+    const need = b.layout === 'gallery' ? 2 : 1; const slots = Array.from({ length: need }, (_, k) => b.seeds[k]);
+    const pics = slots.map((s, k) => s != null ? picture(s) : `<div class="upl" data-bpick="${i}:${k}" style="aspect-ratio:${b.layout === 'gallery' ? '4/3' : '16/9'};justify-content:center">${ic('upload')}<span>Clique ou arraste uma imagem</span></div>`).join('');
+    inner = `<figure class="imgblk ${b.layout === 'wide' ? 'wide' : ''}" data-bdrop="${i}" style="position:relative">${b.layout === 'gallery' ? `<div class="gal">${pics}</div>` : pics}<div class="drop-hint">${ic('upload')} Solte para substituir</div>
+      <div class="bar"><div class="seg">${[['text', 'Texto'], ['wide', 'Larga'], ['gallery', 'Galeria']].map(([k, n]) => `<button data-blayout="${i}:${k}" aria-pressed="${b.layout === k}">${n}</button>`).join('')}</div><input class="input" placeholder="Legenda (opcional)" value="${esc(b.caption)}" data-bcap="${i}"></div>
+      <div class="bar"><input class="input" placeholder="Texto alternativo — o que aparece na imagem?" value="${esc(b.alt)}" data-balt="${i}"></div>
+      ${b.alt.trim() ? '' : `<div class="warnalt">${ic('alert')}Sem texto alternativo: pior para SEO e leitores de ecrã</div>`}</figure>`;
+  }
+  return `<div class="blk" data-blk="${i}">${hdl}${inner}${S.slash === i && mode === 'B' ? slashMenu() : ''}</div>`;
+}
+function slashMenu() { return `<div class="slash" role="menu"><div class="lbl">Inserir bloco</div>${BLOCK_TYPES.map(([t, icn, n, d], k) => `<button data-slash="${t}" class="${k === 0 ? 'hl' : ''}"><span class="ico">${ic(icn)}</span><span>${n}${d ? `<small>${d}</small>` : ''}</span></button>`).join('')}</div>` }
+function bEditor() {
+  const e = S.editor, l = L(); const { score } = seoChecks(l, e.slug);
+  const lsel = `<div class="seg">${Object.keys(e.langs).map(k => `<button data-lang="${k}" aria-pressed="${S.edLang === k}">${k.toUpperCase()}</button>`).join('')}</div><details class="menu"><summary class="btn sm ghost">${ic('plus')}</summary><div class="pop">${['en', 'es', 'fr', 'de'].filter(k => !e.langs[k]).map(k => `<button data-add-lang="${k}">${ic('globe')}Adicionar ${k.toUpperCase()}</button>`).join('') || '<span class="muted" style="padding:6px;display:block">Todos adicionados</span>'}</div></details>`;
+  return `${edHeader(lsel)}
+  <div class="B-ed"><div class="blocks" data-blocks>
+    <div class="ttl" contenteditable="true" data-ltitle-ce data-ph="Título do post">${esc(l.title)}</div>
+    <div class="dsc" contenteditable="true" data-ldesc-ce data-ph="Descrição curta, aparece no topo e na listagem">${esc(l.desc)}</div>
+    <div class="prose">${l.blocks.map((b, i) => blockHtml(b, i, 'B')).join('')}</div>
+    <button class="btn ghost" data-badd style="margin-top:10px">${ic('plus')}Adicionar bloco <kbd style="font-size:11px;border:1px solid var(--line);border-radius:4px;padding:0 4px">/</kbd></button>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;position:sticky;top:12px">
+    <details class="acc" open><summary>${ic('seo')}SEO · ${S.edLang.toUpperCase()}<span class="pill ${score >= 75 ? 'ok' : 'warn'}" data-seo-score>${score}</span>${ic('chev', 'chev')}</summary><div class="ab">${seoPanel()}</div></details>
+    <details class="acc"><summary>${ic('globe')}Publicação${ic('chev', 'chev')}</summary><div class="ab">${publishPanel()}</div></details>
+  </div></div>`;
+}
+function paletteHtml() {
+  return `<div class="palette" data-palette-bg><div class="box"><input placeholder="Buscar rotas, pessoas, posts ou ações…" data-palette-q><div class="res" data-palette-res>${paletteResults('')}</div></div></div>`;
+}
+function paletteResults(q) {
+  q = q.toLowerCase();
+  const acts = [['Novo post', 'plus', 'new-post'], ['Revisar rotas pendentes', 'clock', 'go:routes:pending'], ['Ir para Usuários', 'users', 'go:users'], ['Ir para Blog', 'file', 'go:blog']].filter(a => isAdmin() || !a[2].includes('users'));
+  const items = [
+    ...acts.map(([n, i, a]) => ({ n, i, a, k: 'Ação' })),
+    ...ROUTES.map(r => ({ n: r.title, i: 'map', a: 'route:' + r.id, k: ROUTE_STATUS[r.status][2] })),
+    ...(isAdmin() ? USERS.map(u => ({ n: u.name, i: 'users', a: 'user:' + u.id, k: ROLE[u.role] })) : []),
+    ...POSTS.map(p => ({ n: p.title, i: 'file', a: 'post:' + p.id, k: 'Post' })),
+  ].filter(x => !q || x.n.toLowerCase().includes(q)).slice(0, 9);
+  return items.map((x, k) => `<button data-pal="${x.a}" class="${k === 0 ? 'hl' : ''}">${ic(x.i)}${esc(x.n)}<small>${x.k}</small></button>`).join('') || '<div class="empty">Nada encontrado</div>';
+}
+
+/* ================================================================ PROTOTYPE C — Editorial */
+function protoC() {
+  const scr = S.screen.C; const cur = scr === 'editor' ? 'blog' : scr;
+  const nav = [['dash', 'dash', 'Início'], ['routes', 'map', 'Rotas'], ...(isAdmin() ? [['users', 'users', 'Pessoas']] : []), ['blog', 'file', 'Blog']];
+  const rail = `<nav class="C-rail"><div class="mk">M</div>${nav.map(([k, i, l]) => `<button data-go="${k}" ${cur === k ? 'aria-current="page"' : ''} title="${l}">${ic(i)}${l}${k === 'routes' && pending().length ? '<span class="dot"></span>' : ''}</button>`).join('')}</nav>`;
+  if (scr === 'editor') return `<div class="C">${rail}<main class="C-main">${cEditor()}</main></div>`;
+  const head = {
+    dash: ['Visão <span>geral</span>', 'Novembro de 2026', ''],
+    routes: ['Rotas', `${ROUTES.length} no total · ${pending().length} esperando revisão`, ''],
+    users: ['Pessoas', `${USERS.length} contas · ${USERS.filter(u => u.role !== 'contributor').length} na equipe`, ''],
+    blog: ['Blog', `${POSTS.length} posts em ${new Set(POSTS.flatMap(p => p.langs)).size} idiomas`, `<button class="btn primary" data-new-post>${ic('plus')}Novo post</button>`],
+  }[scr];
+  return `<div class="C">${rail}<main class="C-main"><div class="C-head"><div><div class="eyebrow">${head[1]}</div><h2>${head[0]}</h2></div>${head[2]}</div><div class="C-body">${{ dash: cDash, routes: cRoutes, users: cUsers, blog: cBlog }[scr]()}</div></main></div>`;
+}
+function cDash() {
+  const max = COUNTRIES[0][1];
+  const tile = ([n, v]) => { const t = v / max; const bg = `color-mix(in oklab, var(--brand) ${Math.round(12 + t * 78)}%, var(--surface))`; const fg = t > .45 ? '#fff' : 'var(--fg)'; return `<div class="tile" style="background:${bg};color:${fg}" title="${n}: ${v} rotas"><small>${n}</small><b class="num">${v}</b></div>` };
+  const r = rng(4); const heat = Array.from({ length: 7 * 22 }, (_, i) => Math.max(0, Math.round((r() * 9) * (0.5 + Math.sin(i / 30) * .5 + (i > 120 ? .4 : 0)))));
+  const hmax = Math.max(...heat); const end = new Date('2026-11-15');
+  const top = ROUTES.filter(x => x.views).sort((a, b) => b.views - a.views).slice(0, 5);
+  return `<div class="C-hero"><div class="C-big"><span class="lbl">Rotas publicadas</span><span class="v num">412</span><span style="opacity:.85">+31 este mês · a maior subida desde junho</span>
+    <div class="row"><div><b class="num">2.384</b><small>usuários</small></div><div><b class="num">18,2k</b><small>leituras do blog</small></div><div><b class="num">${pending().length}</b><small>para revisar</small></div></div>
+    <svg class="bg" viewBox="0 0 200 100"><path d="M0,80 C30,20 60,90 90,40 S150,10 200,50" stroke="#fff" stroke-width="6" fill="none"/></svg></div>
+    <div class="card"><div class="hd"><h3>Rotas por país</h3><span class="muted" style="font-size:12px">mais escuro = mais rotas</span></div><div class="tiles">${COUNTRIES.map(tile).join('')}</div>
+      <div style="margin-top:14px">${statusBar()}</div></div></div>
+  <div class="C-three"><div class="card"><div class="hd"><h3>Atividade da comunidade</h3><span class="muted" style="font-size:12px">rotas + comentários por dia · 22 semanas</span></div>
+    <div class="heat" data-heat>${heat.map((v, i) => { const d = new Date(end); d.setDate(d.getDate() - (heat.length - 1 - i)); return `<div style="background:${v ? `color-mix(in oklab, var(--brand) ${Math.round(15 + v / hmax * 85)}%, var(--surface-2))` : 'var(--surface-2)'}" title="${d.toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' })}: ${v} ações"></div>` }).join('')}</div>
+    <div class="legend" style="justify-content:flex-end">Menos ${[0, .3, .6, 1].map(t => `<i style="background:${t ? `color-mix(in oklab, var(--brand) ${Math.round(15 + t * 85)}%, var(--surface-2))` : 'var(--surface-2)'}"></i>`).join('')} Mais</div>
+    <div class="hd" style="margin-top:18px"><h3>Leituras do blog</h3></div>${chart(lineChart({ labels: R30(30).labels, series: [{ name: 'Leituras', data: R30(30).views, color: 'var(--brand)' }] }), 150)}</div>
+  <div class="card"><div class="hd"><h3>Rotas mais vistas</h3><span class="muted" style="font-size:12px">30 dias</span></div><div class="lead">${top.map((x, i) => `<div class="lr"><span class="rk">${i + 1}</span><div class="thumb">${routeSvg(x.id, 64, 42)}</div><div><b>${esc(x.title)}</b><small>${esc(x.country)} · ${stars(x.rating)}</small></div><span class="num" style="font-weight:700">${fmt(x.views)}</span></div>`).join('')}</div>
+    <div class="hd" style="margin-top:16px"><h3>Novas rotas por tipo</h3></div>${chart(stackChart({ labels: MONTHS, groups: CAT_MONTHLY, names: CATS, colors: catColors() }), 150)}${catLegend()}</div></div>`;
+}
+function cRoutes() {
+  const list = filteredRoutes();
+  return `<div class="C-filter">${routeChips()}<span style="flex:1"></span><input class="input" style="width:220px" placeholder="Buscar rota…" value="${esc(S.routeQ)}" data-rq></div><div class="C-filter">${curatorChips()}</div>
+  <div class="gallery">${list.map(r => `<article class="gcard"><div class="gm">${routeSvg(r.id, 300, 150, true)}${rstatus(r.status)}<button class="toggle feat ${r.featured ? 'on' : ''}" data-feat="${r.id}" title="Destacar" style="background:var(--surface)">${ic('star')}</button></div>
+    <div class="gb"><b>${esc(r.title)}</b><div class="row">${ic('pin')}${esc(r.region)}, ${esc(r.country)}</div><div class="row"><span class="num">${r.km} km</span>·<span>${r.cat}</span>·<span>${r.diff}</span></div><div class="row">${curatorNote(r)}<span style="margin-left:auto">por ${esc(r.author)}</span></div></div>
+    <div class="ga">${r.status === 'pending' ? `<button class="btn sm ok" data-approve="${r.id}">${ic('check')}Aprovar</button><button class="btn sm danger" data-reject="${r.id}">${ic('x')}Rejeitar</button>` : `<button class="btn sm" data-pub="${r.id}">${ic(r.published ? 'eye' : 'eyeoff')}${r.published ? 'Publicada' : 'Oculta'}</button><button class="btn sm" onclick="toast('Abre a revisão do curador')">${ic('shield')}Avaliar</button>`}<button class="btn sm ghost" style="flex:0" onclick="toast('Abre o editor da rota')" title="Editar">${ic('edit')}</button>${isAdmin() ? `<button class="btn sm ghost danger" style="flex:0" data-del="${r.id}" title="Excluir">${ic('trash')}</button>` : ''}</div></article>`).join('') || '<div class="empty">Nenhuma rota</div>'}</div>`;
+}
+function cUsers() {
+  if (!isAdmin()) return curatorNoUsers();
+  const list = filteredUsers();
+  return `<div class="C-filter">${userChips()}<span style="flex:1"></span><input class="input" style="width:220px" placeholder="Nome ou email" value="${esc(S.userQ)}" data-uq></div>
+  <div class="people">${list.map(u => `<article class="person"><div class="ph">${avatar(u)}<div style="min-width:0;flex:1"><b>${esc(u.name)}</b><small>${esc(u.email)}</small></div>${userActionsMenu(u)}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${ustatus(u)}${u.until ? `<span class="pill warn">${u.until}</span>` : ''}</div>
+    <div class="st"><div><b class="num">${u.routes}</b><small>rotas</small></div><div><b class="num">${u.comments}</b><small>coment.</small></div><div><b style="font-size:13px;line-height:1.5">${u.last}</b><small>acesso</small></div></div>
+    <div>${spark(series(12, u.routes + 2, u.routes + 3, u.id), AV_COLORS[u.id % 6])}</div>
+    <div class="pa">${roleSelect(u)}<span class="muted" style="font-size:11.5px;margin-left:auto">desde ${u.created}</span></div></article>`).join('') || '<div class="empty">Ninguém encontrado</div>'}</div>`;
+}
+function cBlog() {
+  const list = filteredPosts();
+  return `<div class="C-filter">${postChips()}</div><div class="mag">${list.map((p, i) => { const sc = postScore(p); return `<article class="post ${i === 0 && S.postFilter === 'all' ? 'hero' : ''}" data-edit-post="${p.id}"><div class="cv">${landscape(p.seed)}${pstatus(p.status)}${ring(sc, true)}</div><div class="pb"><b>${esc(p.title)}</b><span class="muted" style="font-size:12px">${p.date || 'Rascunho'} · ${p.views ? fmt(p.views) + ' leituras' : 'sem leituras'}</span><span>${langs(p.langs)}</span></div></article>` }).join('')}</div>`;
+}
+function cEditor() {
+  const e = S.editor, l = L(); const { score } = seoChecks(l, e.slug);
+  const ins = i => `<div class="gut ${S.gut === i ? 'open' : ''}"><button class="plus" data-gut="${i}" title="Inserir aqui">${ic('plus')}</button>${S.gut === i ? `<div class="ins">${[['img', 'image', 'Imagem'], ['gallery', 'gallery', 'Galeria'], ['route', 'map', 'Rota'], ['tip', 'bulb', 'Dica'], ['h2', 'h2', 'Título'], ['p', 'rows', 'Texto'], ['quote', 'quote', 'Citação']].map(([t, icn, n]) => `<button data-gins="${i}:${t}">${ic(icn)}${n}</button>`).join('')}<button data-gut="-1" title="Fechar">${ic('x')}</button></div>` : ''}</div>`;
+  return `<div class="C-ed" data-ced><div class="C-edtop"><button class="btn ghost" data-go="blog">${ic('back')}Blog</button>${pstatus(e.status)}<span class="muted" style="font-size:12px">Guardado há instantes</span><span style="flex:1"></span><button class="btn" onclick="toast('Abre a pré-visualização em nova aba')">${ic('eye')}Pré-visualizar</button>${e.status === 'published' ? `<button class="btn" data-ed-status="archived">Desativar</button>` : `<button class="btn primary" data-ed-status="published">${ic('globe')}${e.status === 'archived' ? 'Reativar' : 'Publicar'}</button>`}</div>
+    <div class="C-cover">${IMG[e.cover.seed] ? `<img src="${IMG[e.cover.seed]}" alt="">` : landscape(e.cover.seed)}<span class="credit">${esc(e.cover.credit)}</span><div class="ov"><button class="btn sm" data-cover-upload>${ic('image')}Trocar capa</button><button class="btn sm" onclick="toast('Abre o seletor de rotas')">${ic('map')}Capa de rota</button></div></div>
+    <div class="C-page"><div class="ttl" contenteditable="true" data-ltitle-ce data-ph="Título">${esc(l.title)}</div><div class="dsc" contenteditable="true" data-ldesc-ce data-ph="Descrição curta">${esc(l.desc)}</div>
+      <div class="prose">${ins(0)}${l.blocks.map((b, i) => blockHtml(b, i, 'C') + ins(i + 1)).join('')}</div></div>
+    <div class="dock">${Object.keys(e.langs).map(k => `<button class="ln" data-lang="${k}" aria-pressed="${S.edLang === k}">${k.toUpperCase()}</button>`).join('')}<details class="menu" style="display:inline-block"><summary class="ln">+</summary><div class="pop" style="bottom:calc(100% + 6px);top:auto">${['en', 'es', 'fr', 'de'].filter(k => !e.langs[k]).map(k => `<button data-add-lang="${k}">${ic('globe')}Adicionar ${k.toUpperCase()}</button>`).join('') || '<span class="muted" style="padding:6px;display:block">Todos</span>'}</div></details><span class="sep"></span>
+      <button class="btn sm" data-csheet>${ic('seo')}SEO <span class="pill ${score >= 75 ? 'ok' : 'warn'}" style="padding:0 6px" data-seo-score>${score}</span></button><button class="btn sm" data-csheet="pub">${ic('globe')}Publicação</button></div>
+    ${S.cSheet ? `<div class="sheetb"><div class="grab"></div><div class="sh"><b style="font-size:16px">${S.cSheet === 'pub' ? 'Publicação' : 'SEO e partilha'} · ${S.edLang.toUpperCase()}</b><span style="flex:1"></span><button class="btn icon ghost" data-csheet="close">${ic('x')}</button></div>
+      ${S.cSheet === 'pub' ? `<div class="sg" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">${publishPanel().split('</label>').filter(Boolean).map(x => `<div>${x}</label></div>`).join('')}</div>` : cSeoSheet()}</div>` : ''}
+  </div>`;
+}
+function cSeoSheet() {
+  const l = L(), { checks, score } = seoChecks(l, S.editor.slug);
+  const p = seoPanel().split('<div><div class="eyebrow" style="margin-bottom:6px">Prévia no Google</div>')[0];
+  return `<div class="sg"><div style="display:flex;flex-direction:column;gap:14px">${p}</div>
+    <div style="display:flex;flex-direction:column;gap:14px"><div><div class="eyebrow" style="margin-bottom:6px">Google</div><div class="serp" data-serp>${serpInner()}</div></div><div><div class="eyebrow" style="margin-bottom:6px">WhatsApp, Facebook, LinkedIn</div><div class="og" data-og>${ogInner()}</div></div></div>
+    <div style="display:flex;flex-direction:column;gap:12px"><div class="eyebrow">Checklist</div><div class="checks" data-checks>${checksInner(checks)}</div><button class="btn sm" onclick="toast('Sugestão: gera meta title/description a partir do conteúdo')">${ic('sparkle')}Sugerir a partir do texto</button></div></div>`;
+}
+
+/* ================================================================ render + events */
+function render() {
+  for (const k in CH) delete CH[k];
+  const stage = $('#stage');
+  const fe = document.activeElement; const keep = fe && stage.contains(fe) && (fe.dataset.rq !== undefined || fe.dataset.uq !== undefined) ? Object.keys(fe.dataset)[0] : null;
+  stage.innerHTML = { A: protoA, B: protoB, C: protoC }[S.proto]();
+  $$('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.proto === S.proto));
+  $$('[data-role]').forEach(b => b.setAttribute('aria-pressed', b.dataset.role === S.role));
+  hydrateCharts();
+  if (keep) { const el = stage.querySelector(`[data-${keep}]`); if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length) } }
+  if (S.palette) setTimeout(() => $('[data-palette-q]')?.focus());
+}
+function hydrateChartsAgain() { for (const id in CH) { const el = document.getElementById(id); if (el && el.clientWidth) { el.innerHTML = ''; CH[id](el) } } }
+
+function go(screen, preset) {
+  if (screen === 'users' && !isAdmin()) screen = 'users';
+  S.screen[S.proto] = screen; S.drawer = null; S.selected.clear(); S.palette = false;
+  if (preset === 'pending') { S.routeFilter = 'pending'; S.curatorFilter = 'any' }
+  else if (preset === 'missing') { S.routeFilter = 'approved'; S.curatorFilter = 'missing' }
+  else if (screen === 'routes' && preset === undefined) { }
+  render(); $('#stage').scrollIntoView({ block: 'nearest' });
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('button,[data-open-route],[data-edit-post],[data-kcard],[data-pick],[data-bpick]');
+  // close open menus when clicking elsewhere
+  $$('details.menu[open]').forEach(d => { if (!d.contains(e.target)) d.open = false });
+  if (!t) return;
+  const d = t.dataset;
+  if (d.proto) { S.proto = d.proto; S.palette = false; return render() }
+  if (d.role) { S.role = d.role; if (!isAdmin() && S.screen[S.proto] === 'users') S.screen[S.proto] = 'dash'; return render() }
+  if (d.themeBtn) { document.documentElement.dataset.theme = d.themeBtn; $$('[data-theme-btn]').forEach(b => b.setAttribute('aria-pressed', b === t)); return hydrateChartsAgain() }
+  if (d.go) { if (S.screen[S.proto] === 'editor' && d.go !== 'editor') S.editor = null; return go(d.go, d.preset) }
+  if (d.newPost !== undefined) return openEditor(null);
+  if (d.editPost) { e.stopPropagation(); $$('details.menu[open]').forEach(x => x.open = false); return openEditor(POSTS.find(p => p.id === +d.editPost)) }
+  if (d.range) { S.range = +d.range; return render() }
+  if (d.rfilter) { S.routeFilter = d.rfilter; return render() }
+  if (d.cfilter) { S.curatorFilter = d.cfilter; return render() }
+  if (d.ufilter) { S.userFilter = d.ufilter; return render() }
+  if (d.pfilter) { S.postFilter = d.pfilter; return render() }
+  if (d.approve) { e.stopPropagation(); return approveRoute(ROUTES.find(r => r.id === +d.approve)) }
+  if (d.reject) { e.stopPropagation(); return rejectRoute(ROUTES.find(r => r.id === +d.reject)) }
+  if (d.feat) { e.stopPropagation(); const r = ROUTES.find(r => r.id === +d.feat); r.featured = !r.featured; toast(r.featured ? 'Destacada na página inicial' : 'Destaque removido'); return render() }
+  if (d.pub) { e.stopPropagation(); const r = ROUTES.find(r => r.id === +d.pub); r.published = !r.published; toast(r.published ? 'Publicada' : 'Despublicada'); return render() }
+  if (d.del) return deleteRoute([+d.del]);
+  if (d.openRoute) { if (S.proto === 'A') { S.drawer = +d.openRoute; return render() } }
+  if (d.closeDrawer !== undefined) { S.drawer = null; return render() }
+  if (d.kcard) { S.routeSel = +d.kcard; return render() }
+  if (d.rview) { S.routeView = d.rview; return render() }
+  if (d.bulk) {
+    const ids = [...S.selected]; const rs = ROUTES.filter(r => ids.includes(r.id));
+    if (d.bulk === 'delete') return deleteRoute(ids);
+    if (d.bulk === 'approve') rs.forEach(r => { r.status = 'approved'; r.published = true });
+    if (d.bulk === 'feature') rs.forEach(r => r.featured = true);
+    if (d.bulk === 'unpublish') rs.forEach(r => r.published = false);
+    if (d.bulk !== 'clear') toast(`${rs.length} rota(s) atualizada(s)`);
+    S.selected.clear(); return render();
+  }
+  if (d.uact) {
+    const u = USERS.find(x => x.id === +d.id); $$('details.menu[open]').forEach(x => x.open = false);
+    if (d.uact === 'history') return userHistory(u);
+    if (d.uact === 'copy') return toast('Email copiado');
+    if (d.uact === 'resend') return toast('Email de confirmação reenviado');
+    if (d.uact === 'hide') { u.hidden = !u.hidden; toast(u.hidden ? 'Conteúdo ocultado' : 'Conteúdo visível de novo'); return render() }
+    return moderate(u, d.uact);
+  }
+  if (d.usel) { S.userSel = +d.usel; return render() }
+  if (d.postStatus) { const [id, st] = d.postStatus.split(':'); POSTS.find(p => p.id === +id).status = st; toast(st === 'published' ? 'Post publicado' : 'Post desativado'); return render() }
+  if (d.delPost) { const p = POSTS.find(x => x.id === +d.delPost); return modal(`<h3>Excluir “${esc(p.title)}”?</h3><p class="muted">Remove todas as traduções. Não dá para desfazer.</p><div class="acts"><button class="btn" data-close>Cancelar</button><button class="btn primary" id="do">Excluir</button></div>`, (bg, close) => bg.querySelector('#do').onclick = () => { POSTS.splice(POSTS.indexOf(p), 1); close(); render() }) }
+  if (d.palette !== undefined) { S.palette = true; return render() }
+  if (d.pal) { const [k, a, b] = d.pal.split(':'); S.palette = false; if (k === 'go') return go(a, b); if (k === 'new-post') return openEditor(null); if (k === 'route') { S.screen.B = 'routes'; S.routeFilter = 'all'; S.routeSel = +a; return render() } if (k === 'user') { S.screen.B = 'users'; S.userSel = +a; return render() } if (k === 'post') return openEditor(POSTS.find(p => p.id === +a)) }
+  // ---- editor
+  if (d.lang) { S.edLang = d.lang; S.slash = null; S.gut = null; return render() }
+  if (d.addLang) { const e2 = S.editor; e2.langs[d.addLang] = { title: '', desc: '', seo: { title: '', desc: '', keywords: [] }, blocks: [{ t: 'p', text: '' }] }; S.edLang = d.addLang; toast('Idioma adicionado — escreva a tradução'); return render() }
+  if (d.rmLang) { if (confirm('Remover ' + d.rmLang.toUpperCase() + '?')) { delete S.editor.langs[d.rmLang]; S.edLang = 'pt'; render() } return }
+  if (d.edStatus) { S.editor.status = d.edStatus; const p = POSTS.find(p => p.id === S.editor.id); if (p) p.status = d.edStatus; toast(d.edStatus === 'published' ? 'Publicado em mototrip.pt/blog/' + (S.editor.slug || 'novo-post') : 'Post desativado'); return render() }
+  if (d.aview) { S.aView = d.aview; return render() }
+  if (d.aaside) { S.aAside = d.aaside; return render() }
+  if (d.imgpop !== undefined) { S.imgPop = !S.imgPop; S.pendingImg = null; return render() }
+  if (d.pick !== undefined) return pickFiles(f => { const k = storeImg(f[0]); S.pendingImg = k; const box = $('[data-pick]'); box.innerHTML = `<img src="${IMG[k]}">` });
+  if (t.closest('[data-pi-layout]')) { $$('[data-pi-layout] button').forEach(b => b.setAttribute('aria-pressed', b === t)); return }
+  if (d.piInsert !== undefined) {
+    const alt = $('[data-pi-alt]').value, cap = $('[data-pi-cap]').value, layout = $('[data-pi-layout] [aria-pressed="true"]').dataset.v;
+    const seeds = S.pendingImg ? [S.pendingImg] : [20 + (++imgSeq)]; if (layout === 'gallery') seeds.push(30 + imgSeq);
+    insertMdAtCursor(seeds.map(s => `![${alt}](${IMG[s] ? 'upload://' : 'img://'}${s} "${cap}"){${layout}}`).join('\n'));
+    S.imgPop = false; S.pendingImg = null; toast('Imagem inserida no texto'); return render();
+  }
+  if (d.md) return mdAction(d.md, d.arg);
+  if (d.kwRm !== undefined) { L().seo.keywords.splice(+d.kwRm, 1); return render() }
+  if (d.coverUpload !== undefined) return pickFiles(f => { S.editor.cover.seed = storeImg(f[0]); render() });
+  if (d.bpick) { const [i, k] = d.bpick.split(':').map(Number); return pickFiles(f => { const b = L().blocks[i]; [...f].forEach((file, j) => b.seeds[k + j] = storeImg(file)); render() }, true) }
+  if (d.blayout) { const [i, v] = d.blayout.split(':'); const b = L().blocks[+i]; b.layout = v; if (v !== 'gallery') b.seeds = b.seeds.slice(0, 1); return render() }
+  if (d.bmove) { const [i, dir] = d.bmove.split(':').map(Number); const bl = L().blocks; const j = i + dir; if (j < 0 || j >= bl.length) return; [bl[i], bl[j]] = [bl[j], bl[i]]; return render() }
+  if (d.bdel) { L().blocks.splice(+d.bdel, 1); if (!L().blocks.length) L().blocks.push({ t: 'p', text: '' }); return render() }
+  if (d.badd !== undefined) { L().blocks.push({ t: 'p', text: '' }); S.slash = L().blocks.length - 1; render(); return focusBlock(S.slash) }
+  if (d.slash) { const i = S.slash; const nb = makeBlock(d.slash); L().blocks[i] = (['p', 'h2', 'h3', 'quote', 'tip'].includes(nb.t) ? { t: nb.t, text: (L().blocks[i].text || '').replace(/^\//, '') } : nb); S.slash = null; render(); if (nb.text !== undefined) focusBlock(i); return }
+  if (d.gut) { S.gut = +d.gut === -1 ? null : +d.gut; return render() }
+  if (d.gins) { const [i, ty] = d.gins.split(':'); L().blocks.splice(+i, 0, makeBlock(ty)); S.gut = null; render(); if (['p', 'h2', 'quote', 'tip'].includes(ty)) focusBlock(+i); return }
+  if (d.csheet !== undefined) { S.cSheet = d.csheet === 'close' ? false : (d.csheet || 'seo'); return render() }
+});
+function focusBlock(i) { const el = $(`[data-btext="${i}"]`); if (el) { el.focus(); const r = document.createRange(); r.selectNodeContents(el); r.collapse(false); const s = getSelection(); s.removeAllRanges(); s.addRange(r) } }
+
+document.addEventListener('input', e => {
+  const t = e.target, d = t.dataset;
+  if (d.rq !== undefined) { S.routeQ = t.value; return render() }
+  if (d.uq !== undefined) { S.userQ = t.value; return render() }
+  if (!S.editor) return;
+  if (d.seo) { L().seo[d.seo] = t.value; return refreshSeo() }
+  if (d.ltitle !== undefined) { L().title = t.value; if (S.edLang === 'pt' && S.editor.status === 'draft' && !S.editor.id) { S.editor.slug = slugify(t.value); const sl = $('[data-slug]'); if (sl) sl.value = S.editor.slug } return refreshSeo() }
+  if (d.ldesc !== undefined) { L().desc = t.value; return refreshSeo() }
+  if (d.ltitleCe !== undefined) { L().title = t.textContent; if (S.edLang === 'pt' && !S.editor.id) S.editor.slug = slugify(t.textContent); return refreshSeo() }
+  if (d.ldescCe !== undefined) { L().desc = t.textContent; return refreshSeo() }
+  if (d.slug !== undefined) { S.editor.slug = t.value; return refreshSeo() }
+  if (d.mdArea !== undefined) { L().blocks = fromMd(t.value); $('[data-preview]').innerHTML = renderProse(L().blocks); return refreshSeo() }
+  if (d.btext !== undefined) {
+    const i = +d.btext; const b = L().blocks[i]; b.text = t.textContent;
+    if (S.proto === 'B' && b.t === 'p' && t.textContent === '/') { S.slash = i; render(); return focusBlock(i) }
+    if (S.slash === i && !t.textContent.startsWith('/')) { S.slash = null; render(); return focusBlock(i) }
+    return refreshSeo();
+  }
+  if (d.bcap !== undefined) { L().blocks[+d.bcap].caption = t.value; return }
+  if (d.balt !== undefined) { L().blocks[+d.balt].alt = t.value; const w = t.closest('figure').querySelector('.warnalt'); if (w) w.style.display = t.value.trim() ? 'none' : ''; return refreshSeo() }
+  if (d.paletteQ !== undefined) { $('[data-palette-res]').innerHTML = paletteResults(t.value); return }
+});
+document.addEventListener('change', e => {
+  const t = e.target, d = t.dataset;
+  if (d.sel) { t.checked ? S.selected.add(+d.sel) : S.selected.delete(+d.sel); return render() }
+  if (d.selall !== undefined) { filteredRoutes().forEach(r => t.checked ? S.selected.add(r.id) : S.selected.delete(r.id)); return render() }
+  if (d.roleOf) { const u = USERS.find(x => x.id === +d.roleOf); u.role = t.value; toast(`${u.name} agora é ${ROLE[u.role]}`); return render() }
+  if (d.urole !== undefined) { toast('Filtro por papel'); return }
+  if (d.broute) { L().blocks[+d.broute].slug = t.value; return render() }
+});
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k' && S.proto === 'B') { e.preventDefault(); S.palette = !S.palette; return render() }
+  if (e.key === 'Escape') { if (S.palette) { S.palette = false; return render() } if (S.slash != null) { S.slash = null; return render() } if (S.drawer) { S.drawer = null; return render() } if (S.cSheet) { S.cSheet = false; return render() } if (S.gut != null) { S.gut = null; return render() } }
+  const t = e.target;
+  if (t.dataset?.kwIn !== undefined && (e.key === 'Enter' || e.key === ',') && t.value.trim()) { e.preventDefault(); L().seo.keywords.push(t.value.trim().replace(/,$/, '')); render(); $('[data-kw-in]')?.focus(); return }
+  if (t.dataset?.kwIn !== undefined && e.key === 'Backspace' && !t.value && L().seo.keywords.length) { L().seo.keywords.pop(); render(); $('[data-kw-in]')?.focus(); return }
+  if (S.slash != null && e.key === 'Enter') { e.preventDefault(); const hl = $('.slash button.hl'); hl?.click(); return }
+  if (S.slash != null && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) { e.preventDefault(); const bs = $$('.slash button'); let k = bs.findIndex(b => b.classList.contains('hl')); bs[k]?.classList.remove('hl'); k = (k + (e.key === 'ArrowDown' ? 1 : -1) + bs.length) % bs.length; bs[k].classList.add('hl'); bs[k].scrollIntoView({ block: 'nearest' }); return }
+  if (t.dataset?.btext !== undefined && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); const i = +t.dataset.btext; L().blocks.splice(i + 1, 0, { t: 'p', text: '' }); render(); return focusBlock(i + 1) }
+  if (S.palette && e.key === 'Enter') { $('.palette .res button.hl')?.click() }
+});
+document.addEventListener('click', e => { if (e.target.matches('[data-palette-bg]')) { S.palette = false; render() } });
+
+/* drag & drop: images into markdown / image blocks, kanban cards between columns */
+document.addEventListener('dragover', e => {
+  const z = e.target.closest('[data-drop],[data-bdrop]'); const col = e.target.closest('[data-col]');
+  if (z && e.dataTransfer.types.includes('Files')) { e.preventDefault(); z.classList.add('dragging') }
+  if (col && S.dragCard) { e.preventDefault(); $$('.col').forEach(c => c.classList.toggle('over', c === col)) }
+});
+document.addEventListener('dragleave', e => { const z = e.target.closest('[data-drop],[data-bdrop]'); if (z && !z.contains(e.relatedTarget)) z.classList.remove('dragging') });
+document.addEventListener('dragstart', e => { const k = e.target.closest?.('[data-kcard]'); if (k) { S.dragCard = +k.dataset.kcard; e.dataTransfer.setData('text/plain', k.dataset.kcard) } });
+document.addEventListener('dragend', () => { S.dragCard = null; $$('.col').forEach(c => c.classList.remove('over')) });
+document.addEventListener('drop', e => {
+  const col = e.target.closest('[data-col]');
+  if (col && S.dragCard) { e.preventDefault(); const r = ROUTES.find(x => x.id === S.dragCard); const st = col.dataset.col; S.dragCard = null; if (st === r.status) return render(); if (st === 'rejected') return rejectRoute(r); if (st === 'approved') return approveRoute(r); r.status = 'pending'; r.published = false; return render() }
+  const z = e.target.closest('[data-drop],[data-bdrop]'); if (!z || !e.dataTransfer.files.length) return;
+  e.preventDefault(); z.classList.remove('dragging'); const files = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/'));
+  if (!files.length) return toast('Só imagens JPG, PNG ou WebP');
+  if (z.dataset.drop !== undefined) { insertMdAtCursor(files.map(f => `![](upload://${storeImg(f)} ""){${files.length > 1 ? 'gallery' : 'text'}}`).join('\n')); toast('Imagem inserida — adicione o texto alternativo'); return render() }
+  const b = L().blocks[+z.dataset.bdrop]; b.seeds = files.map(storeImg).slice(0, b.layout === 'gallery' ? 2 : 1); render();
+});
+document.addEventListener('paste', e => {
+  const ta = e.target.closest?.('[data-md-area]'); if (!ta) return;
+  const f = [...(e.clipboardData?.files || [])].find(f => f.type.startsWith('image/')); if (!f) return;
+  e.preventDefault(); insertMdAtCursor(`![](upload://${storeImg(f)} ""){text}`); render();
+});
+function storeImg(f) { const k = 'u' + (++imgSeq); IMG[k] = URL.createObjectURL(f); return k }
+function pickFiles(cb, multi) { const inp = $('#filepick'); inp.multiple = !!multi; inp.value = ''; inp.onchange = () => inp.files.length && cb(inp.files); inp.click() }
+let mdCaret = null;
+document.addEventListener('selectionchange', () => { const a = document.activeElement; if (a?.dataset?.mdArea !== undefined) mdCaret = [a.selectionStart, a.selectionEnd] });
+function insertMdAtCursor(snippet) {
+  const ta = $('[data-md-area]'); const v = ta ? ta.value : toMd(L().blocks); const [s, en] = mdCaret || [v.length, v.length];
+  const before = v.slice(0, s).replace(/\s*$/, ''), after = v.slice(en).replace(/^\s*/, '');
+  L().blocks = fromMd(`${before}\n\n${snippet}\n\n${after}`);
+}
+function mdAction(kind, arg) {
+  const ta = $('[data-md-area]'); if (!ta) return; const s = ta.selectionStart, en = ta.selectionEnd, v = ta.value, sel = v.slice(s, en);
+  let out;
+  if (kind === 'wrap') out = v.slice(0, s) + arg + (sel || 'texto') + arg + v.slice(en);
+  else if (kind === 'pre') { const ls = v.lastIndexOf('\n', s - 1) + 1; out = v.slice(0, ls) + arg + v.slice(ls) }
+  else if (kind === 'link') out = v.slice(0, s) + '[' + (sel || 'link') + '](https://)' + v.slice(en);
+  else if (kind === 'tip') { mdCaret = [s, en]; insertMdAtCursor(':::tip\nEscreva a dica aqui\n:::'); return render() }
+  else if (kind === 'route') { mdCaret = [s, en]; insertMdAtCursor('::route{slug="serra-da-estrela-n339"}'); toast('Card de rota inserido (o seletor de rotas já existe hoje)'); return render() }
+  ta.value = out; L().blocks = fromMd(out); $('[data-preview]').innerHTML = renderProse(L().blocks); ta.focus(); refreshSeo();
+}
+function slugify(s) { return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 90) }
+
+/* theme: start from OS preference but dark-first */
+(() => { const pref = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; document.documentElement.dataset.theme = 'dark'; $$('[data-theme-btn]').forEach(b => b.setAttribute('aria-pressed', b.dataset.themeBtn === 'dark')); void pref })();
+render();
+</script>

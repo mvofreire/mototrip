@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
 import { NO_INDEX } from '@/lib/seo'
-import { SubmitRouteForm } from '@/components/features/routes/submit-route-form'
+import { RouteWizard } from '@/components/features/routes/submit/route-wizard'
 import { ProtectedRoute } from '@/components/auth/protected-route'
 
 export async function generateMetadata({
@@ -25,23 +25,10 @@ export default async function SubmitRoutePage({
 }) {
   setRequestLocale(locale)
 
-  const t = await getTranslations({ locale, namespace: 'submit' })
-
   return (
     <ProtectedRoute>
-      <div className="container py-12">
-        <div className="max-w-3xl mx-auto">
-          <div className="space-y-8">
-            {/* Header */}
-            <div className="space-y-2 text-center">
-              <h1 className="text-4xl font-bold tracking-tight">{t('title')}</h1>
-              <p className="text-muted-foreground text-lg">{t('subtitle')}</p>
-            </div>
-
-            {/* Form */}
-            <SubmitRouteForm locale={locale} />
-          </div>
-        </div>
+      <div className="mx-auto w-full max-w-[1240px] px-4 pb-10 pt-8 sm:px-6 sm:pt-12">
+        <RouteWizard locale={locale} />
       </div>
     </ProtectedRoute>
   )

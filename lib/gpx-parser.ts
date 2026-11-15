@@ -25,6 +25,8 @@ export interface GPXWaypoint {
 }
 
 export interface GPXData {
+  /** <metadata>/<trk>/<rte> name, when the file has one */
+  name?: string
   points: GPXPoint[]
   /** Points of interest, ordered along the track */
   waypoints: GPXWaypoint[]
@@ -111,7 +113,13 @@ export async function parseGPXFile(file: File): Promise<GPXData> {
   // Calculate elevation gain and loss
   const { gain, loss } = calculateElevationChange(gpxPoints)
 
+  const name =
+    ['metadata > name', 'trk > name', 'rte > name']
+      .map((sel) => xmlDoc.querySelector(sel)?.textContent?.trim())
+      .find((n) => !!n) || undefined
+
   return {
+    name,
     points: gpxPoints,
     waypoints,
     bounds: {
