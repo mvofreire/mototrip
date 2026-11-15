@@ -2,14 +2,14 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { Archive, ExternalLink, Eye, Pencil, Plus, RefreshCw, Search, Trash2 } from 'lucide-react'
-import { useAuth } from '@/hooks/use-auth'
-import { AdminService } from '@/lib/services/admin.service'
 import { BlogAdminService } from '@/lib/services/blog-admin.service'
-import { pickTranslation, type BlogPost } from '@/lib/blog/posts'
-import { AdminNav } from '@/components/admin/admin-nav'
+import { coverOf, pickTranslation, type BlogPost } from '@/lib/blog/posts'
+import { seoChecks } from '@/lib/blog/seo'
+import { AdminPageHeader } from '@/components/admin/admin-shell'
+import { FilterChip } from '@/components/admin/filter-chip'
+import { SeoScore } from '@/components/admin/seo-score'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -36,12 +36,9 @@ const STATUS_STYLE: Record<BlogPostStatus, string> = {
 }
 
 export default function AdminBlogPage() {
-  const { user, loading: authLoading } = useAuth()
-  const router = useRouter()
   const locale = useLocale()
   const t = useTranslations('admin')
   const tb = useTranslations('admin.blog')
-  const [allowed, setAllowed] = useState(false)
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<Filter>('all')
@@ -60,22 +57,8 @@ export default function AdminBlogPage() {
   }, [])
 
   useEffect(() => {
-    const init = async () => {
-      if (authLoading) return
-      if (!user) {
-        router.push(`/${locale}/auth/login?redirect=${encodeURIComponent(`/${locale}/profile/admin/blog`)}`)
-        return
-      }
-      const role = await AdminService.getRole()
-      if (role !== 'admin' && role !== 'curator') {
-        router.push(`/${locale}/profile`)
-        return
-      }
-      setAllowed(true)
-      await load()
-    }
-    init()
-  }, [user, authLoading, router, locale, load])
+    load()
+  }, [load])
 
   const counts = useMemo(() => {
     const c: Record<Filter, number> = { all: posts.length, published: 0, draft: 0, archived: 0 }
@@ -115,59 +98,41 @@ export default function AdminBlogPage() {
     }
   }
 
-  if (authLoading || !allowed) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex min-h-[400px] items-center justify-center">
-          <RefreshCw className="h-8 w-8 animate-spin text-muted-foreground" />
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold">{t('pageTitle')}</h1>
-        <p className="text-muted-foreground">{tb('title')}</p>
-      </div>
-
-      <AdminNav />
-
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-2">
-          {FILTERS.map((f) => (
-            <Button key={f} size="sm" variant={filter === f ? 'default' : 'outline'} onClick={() => setFilter(f)}>
-              {f === 'all' ? tb('all') : tb(`status.${f}`)} ({counts[f]})
-            </Button>
-          ))}
-        </div>
-        <Button asChild>
+    <div>
+      <AdminPageHeader title={t('shell.blog')} description={tb('title')}>
+        <Button onClick={load} variant="outline" size="icon" disabled={loading} aria-label={t('refresh')} title={t('refresh')}>
+          <RefreshCw className={cn('h-4 w-4', loading && 'animate-spin')} />
+        </Button>
+        {/* The global "primary button" fix only covers <button>, so the link gets the color itself */}
+        <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
           <Link href={`/${locale}/profile/admin/blog/new`}>
             <Plus className="mr-2 h-4 w-4" />
             {tb('newPost')}
           </Link>
         </Button>
-      </div>
+      </AdminPageHeader>
 
-      <div className="mb-6 flex flex-wrap items-center gap-4">
-        <div className="relative min-w-[200px] max-w-md flex-1">
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        {FILTERS.map((f) => (
+          <FilterChip key={f} active={filter === f} count={counts[f]} onClick={() => setFilter(f)}>
+            {f === 'all' ? tb('all') : tb(`status.${f}`)}
+          </FilterChip>
+        ))}
+        <div className="relative ml-auto w-full sm:w-72">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input placeholder={tb('search')} value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10" />
+          <Input placeholder={tb('search')} value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
         </div>
-        <Button onClick={load} variant="outline" disabled={loading}>
-          <RefreshCw className={cn('mr-2 h-4 w-4', loading && 'animate-spin')} />
-          {t('refresh')}
-        </Button>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border">
+      <div className="overflow-x-auto rounded-xl border bg-card">
         <table className="w-full text-sm">
           <thead className="bg-muted/50 text-left text-muted-foreground">
             <tr>
               <th className="p-3 font-medium">{tb('columns.title')}</th>
               <th className="p-3 font-medium">{tb('columns.status')}</th>
               <th className="p-3 font-medium">{tb('columns.languages')}</th>
+              <th className="p-3 font-medium">{tb('columns.seo')}</th>
               <th className="p-3 font-medium">{tb('columns.date')}</th>
               <th className="p-3 font-medium">{tb('columns.updated')}</th>
               <th className="p-3 text-right font-medium">{tb('columns.actions')}</th>
@@ -176,20 +141,30 @@ export default function AdminBlogPage() {
           <tbody>
             {visible.length === 0 && (
               <tr>
-                <td colSpan={6} className="p-8 text-center text-muted-foreground">
+                <td colSpan={7} className="p-8 text-center text-muted-foreground">
                   {loading ? <RefreshCw className="mx-auto h-5 w-5 animate-spin" /> : tb('empty')}
                 </td>
               </tr>
             )}
             {visible.map((post) => {
               const tr = pickTranslation(post, locale)
+              const cover = coverOf(post)
+              const seoTr = post.translations.find((x) => x.locale === 'pt') ?? post.translations[0]
               return (
-                <tr key={post.id} className="border-t align-top">
+                <tr key={post.id} className="border-t align-middle">
                   <td className="p-3">
-                    <Link href={`/${locale}/profile/admin/blog/${post.id}`} className="font-medium hover:text-primary">
-                      {tr?.title ?? post.slug}
-                    </Link>
-                    <div className="text-xs text-muted-foreground">/blog/{post.slug}</div>
+                    <div className="flex min-w-[240px] items-center gap-3">
+                      <div className="h-10 w-16 shrink-0 overflow-hidden rounded-md border bg-muted">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        {cover && <img src={cover} alt="" className="h-full w-full object-cover" />}
+                      </div>
+                      <div className="min-w-0">
+                        <Link href={`/${locale}/profile/admin/blog/${post.id}`} className="font-medium hover:text-primary">
+                          {tr?.title ?? post.slug}
+                        </Link>
+                        <div className="text-xs text-muted-foreground">/blog/{post.slug}</div>
+                      </div>
+                    </div>
                   </td>
                   <td className="p-3">
                     <Badge variant="outline" className={STATUS_STYLE[post.status]}>
@@ -198,6 +173,13 @@ export default function AdminBlogPage() {
                   </td>
                   <td className="p-3 uppercase text-muted-foreground">
                     {post.translations.map((x) => x.locale).sort().join(' · ')}
+                  </td>
+                  <td className="p-3">
+                    {seoTr && (
+                      <Link href={`/${locale}/profile/admin/blog/${post.id}?tab=seo`} title={tb('seo.scoreTitle')}>
+                        <SeoScore score={seoChecks(seoTr, post.slug).score} size="sm" />
+                      </Link>
+                    )}
                   </td>
                   <td className="whitespace-nowrap p-3">{fmt(post.published_at)}</td>
                   <td className="whitespace-nowrap p-3 text-muted-foreground">{fmt(post.updated_at)}</td>

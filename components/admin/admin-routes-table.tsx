@@ -38,7 +38,11 @@ interface AdminRoutesTableProps {
   routes: AdminRouteWithUser[]
   /** Only admins can delete routes */
   canDelete: boolean
+  /** Open the route's detail panel */
+  onOpen: (id: string) => void
   onApprove: (id: string) => Promise<void>
+  onApproveBulk: (ids: string[]) => Promise<void>
+  onFeatureBulk: (ids: string[], featured: boolean) => Promise<void>
   onReject: (id: string, note: string) => Promise<void>
   onToggleFeatured: (id: string, featured: boolean) => Promise<void>
   onDelete: (id: string) => Promise<void>
@@ -48,7 +52,10 @@ interface AdminRoutesTableProps {
 export function AdminRoutesTable({
   routes,
   canDelete,
+  onOpen,
   onApprove,
+  onApproveBulk,
+  onFeatureBulk,
   onReject,
   onToggleFeatured,
   onDelete,
@@ -82,7 +89,19 @@ export function AdminRoutesTable({
     setSelected(next)
   }
 
-  const allSelected = routes.length > 0 && selected.size === routes.length
+  // Selection only counts routes still in the (filtered) list
+  const selectedIds = routes.filter((r) => selected.has(r.id)).map((r) => r.id)
+  const allSelected = routes.length > 0 && selectedIds.length === routes.length
+  const [bulkBusy, setBulkBusy] = useState(false)
+  const bulk = async (fn: () => Promise<void>) => {
+    setBulkBusy(true)
+    try {
+      await fn()
+      setSelected(new Set())
+    } finally {
+      setBulkBusy(false)
+    }
+  }
 
   const handleReject = async () => {
     if (!rejectTarget || !rejectNote.trim()) return
@@ -94,33 +113,46 @@ export function AdminRoutesTable({
 
   return (
     <>
-      {canDelete && selected.size > 0 && (
-        <div className="mb-4 flex items-center justify-between rounded-lg border bg-muted/50 p-4">
+      {selectedIds.length > 0 && (
+        <div className="mb-3 flex flex-wrap items-center gap-2 rounded-lg border border-primary/50 bg-primary/5 px-3 py-2">
           <span className="text-sm font-medium">
-            {selected.size} {t('selectedRoutes')}
+            {selectedIds.length} {t('selectedRoutes')}
           </span>
-          <Button variant="destructive" size="sm" onClick={() => setBulkDeleteOpen(true)}>
-            <Trash2 className="mr-2 h-4 w-4" />
-            {t('deleteSelected')}
+          <span className="flex-1" />
+          <Button size="sm" variant="outline" disabled={bulkBusy} onClick={() => bulk(() => onApproveBulk(selectedIds))}>
+            <Check className="mr-1.5 h-4 w-4 text-green-600" />
+            {t('bulk.approve')}
+          </Button>
+          <Button size="sm" variant="outline" disabled={bulkBusy} onClick={() => bulk(() => onFeatureBulk(selectedIds, true))}>
+            <Star className="mr-1.5 h-4 w-4 text-yellow-500" />
+            {t('bulk.feature')}
+          </Button>
+          <Button size="sm" variant="outline" disabled={bulkBusy} onClick={() => bulk(() => onFeatureBulk(selectedIds, false))}>
+            {t('bulk.unfeature')}
+          </Button>
+          {canDelete && (
+            <Button variant="destructive" size="sm" disabled={bulkBusy} onClick={() => setBulkDeleteOpen(true)}>
+              <Trash2 className="mr-1.5 h-4 w-4" />
+              {t('deleteSelected')}
+            </Button>
+          )}
+          <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>
+            {t('bulk.clear')}
           </Button>
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-md border">
+      <div className="overflow-x-auto rounded-xl border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
-              {canDelete && (
-                <TableHead className="w-[50px]">
-                  <Checkbox
-                    checked={allSelected}
-                    onCheckedChange={() =>
-                      setSelected(allSelected ? new Set() : new Set(routes.map((r) => r.id)))
-                    }
-                    aria-label="Select all"
-                  />
-                </TableHead>
-              )}
+              <TableHead className="w-[44px]">
+                <Checkbox
+                  checked={allSelected}
+                  onCheckedChange={() => setSelected(allSelected ? new Set() : new Set(routes.map((r) => r.id)))}
+                  aria-label={t('bulk.selectAll')}
+                />
+              </TableHead>
               <TableHead>{t('table.title')}</TableHead>
               <TableHead>{t('table.user')}</TableHead>
               <TableHead>{t('table.category')}</TableHead>
@@ -141,29 +173,37 @@ export function AdminRoutesTable({
               </TableRow>
             ) : (
               routes.map((route) => (
-                <TableRow key={route.id}>
-                  {canDelete && (
-                    <TableCell>
-                      <Checkbox
-                        checked={selected.has(route.id)}
-                        onCheckedChange={() => toggleSelect(route.id)}
-                        aria-label={`Select ${route.title}`}
-                      />
-                    </TableCell>
-                  )}
-                  <TableCell className="max-w-[260px] truncate">
-                    <Link
-                      href={routePath(locale, route)}
-                      target="_blank"
-                      className="inline-flex items-center gap-1 font-medium hover:underline"
-                    >
-                      <span className="truncate">{route.title}</span>
-                      <ExternalLink className="h-3 w-3 shrink-0 text-muted-foreground" />
-                    </Link>
-                    <div className="mt-1 flex flex-wrap gap-1">
-                      <Badge className={getDifficultyColor(route.difficulty)} variant="outline">
-                        {tAll(`difficulty.${route.difficulty}`)}
-                      </Badge>
+                <TableRow key={route.id} data-state={selected.has(route.id) ? 'selected' : undefined}>
+                  <TableCell>
+                    <Checkbox
+                      checked={selected.has(route.id)}
+                      onCheckedChange={() => toggleSelect(route.id)}
+                      aria-label={route.title}
+                    />
+                  </TableCell>
+                  <TableCell className="min-w-[240px] max-w-[320px]">
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => onOpen(route.id)}
+                        className="h-10 w-14 shrink-0 overflow-hidden rounded-md border bg-muted"
+                        aria-label={route.title}
+                        tabIndex={-1}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        {route.thumbnail_url && <img src={route.thumbnail_url} alt="" className="h-full w-full object-cover" />}
+                      </button>
+                      <div className="min-w-0">
+                        <button type="button" onClick={() => onOpen(route.id)} className="block max-w-full truncate text-left font-medium hover:underline">
+                          {route.title}
+                        </button>
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <span className="truncate">{[route.region, route.country].filter(Boolean).join(', ')}</span>
+                          <Link href={routePath(locale, route)} target="_blank" title={t('drawer.viewOnSite')} aria-label={t('drawer.viewOnSite')} className="shrink-0 hover:text-foreground">
+                            <ExternalLink className="h-3 w-3" />
+                          </Link>
+                        </div>
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -175,9 +215,14 @@ export function AdminRoutesTable({
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge className={getCategoryColor(route.category)} variant="outline">
-                      {tAll(`categories.${route.category}`)}
-                    </Badge>
+                    <div className="flex flex-col items-start gap-1">
+                      <Badge className={getCategoryColor(route.category)} variant="outline">
+                        {tAll(`categories.${route.category}`)}
+                      </Badge>
+                      <Badge className={getDifficultyColor(route.difficulty)} variant="outline">
+                        {tAll(`difficulty.${route.difficulty}`)}
+                      </Badge>
+                    </div>
                   </TableCell>
                   <TableCell className="whitespace-nowrap text-right">
                     {Number(route.distance_km).toFixed(1)} km
@@ -323,7 +368,7 @@ export function AdminRoutesTable({
           <DialogHeader>
             <DialogTitle>{t('bulkDeleteDialog.title')}</DialogTitle>
             <DialogDescription>
-              {t('bulkDeleteDialog.description', { count: selected.size })}
+              {t('bulkDeleteDialog.description', { count: selectedIds.length })}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -333,7 +378,7 @@ export function AdminRoutesTable({
             <Button
               variant="destructive"
               onClick={async () => {
-                await onDeleteBulk(Array.from(selected))
+                await onDeleteBulk(selectedIds)
                 setSelected(new Set())
                 setBulkDeleteOpen(false)
               }}

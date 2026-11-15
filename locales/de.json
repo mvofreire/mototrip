@@ -879,7 +879,8 @@
         "show_content": "Inhalte wieder sichtbar",
         "withHiddenContent": "Mit ausgeblendeten Inhalten"
       },
-      "contentHidden": "Inhalte ausgeblendet"
+      "contentHidden": "Inhalte ausgeblendet",
+      "adminOnly": "Nutzerverwaltung ist nur für Admins."
     },
     "review": {
       "approve": "Freigeben",
@@ -908,7 +909,8 @@
         "languages": "Sprachen",
         "date": "Veröffentlicht",
         "updated": "Aktualisiert",
-        "actions": "Aktionen"
+        "actions": "Aktionen",
+        "seo": "SEO"
       },
       "edit": "Bearbeiten",
       "view": "Auf der Seite ansehen",
@@ -939,7 +941,7 @@
       "removeLanguage": "Sprache entfernen",
       "removeLanguageConfirm": "{language} aus diesem Beitrag entfernen? Der Text wird beim Speichern gelöscht.",
       "fieldTitle": "Titel",
-      "fieldDescription": "Beschreibung (SEO)",
+      "fieldDescription": "Beschreibung",
       "fieldBody": "Text",
       "bodyPlaceholder": "In Markdown schreiben. Mit dem Button Route eine Routenkarte einfügen.",
       "preview": "Vorschau",
@@ -982,13 +984,147 @@
       "coverCreditPlaceholder": "Bildnachweis (z. B. Foto: Ana Silva / Unsplash)",
       "imageAltPlaceholder": "Bild beschreiben",
       "imageInvalid": "Verwende ein JPG-, PNG- oder WebP-Bild bis 5 MB.",
-      "imageUploadFailed": "Das Bild konnte nicht hochgeladen werden. Bitte erneut versuchen."
+      "imageUploadFailed": "Das Bild konnte nicht hochgeladen werden. Bitte erneut versuchen.",
+      "sideBySide": "Nebeneinander",
+      "viewMode": "Editor-Modus",
+      "publishTab": "Veröffentlichung",
+      "unsavedChanges": "Ungespeicherte Änderungen",
+      "seo": {
+        "tab": "SEO",
+        "scoreTitle": "SEO-Wert auf Portugiesisch",
+        "score": "SEO-Wert · {language}",
+        "perLanguage": "Jede Sprache hat eigene Meta-Tags",
+        "metaTitle": "Meta-Title",
+        "metaTitlePlaceholder": "Titel in Google",
+        "metaTitleHelp": "Leer = Titel des Beitrags. Hier eingetragen, wird er genau so verwendet (ohne „| MotoTrip“).",
+        "metaDescription": "Meta-Description",
+        "metaDescriptionPlaceholder": "Zusammenfassung in Google",
+        "metaDescriptionHelp": "Leer = Beschreibung des Beitrags.",
+        "keywords": "Keywords",
+        "keywordsPlaceholder": "z. B. Motorradstrecken",
+        "keywordsHelp": "Enter oder Komma zum Hinzufügen. Das erste ist das Haupt-Keyword. Ideal: {min} bis {max}.",
+        "mainKeyword": "Haupt-Keyword",
+        "removeKeyword": "{keyword} entfernen",
+        "googlePreview": "Google-Vorschau",
+        "sharePreview": "Vorschau beim Teilen",
+        "untitled": "Titel des Beitrags",
+        "noDescription": "Füge eine Beschreibung hinzu, um diesen Text zu steuern.",
+        "noCover": "Kein Titelbild",
+        "checks": {
+          "titleLength": "Meta-Title zwischen {min} und {max} Zeichen ({n})",
+          "descriptionLength": "Meta-Description zwischen {dmin} und {dmax} Zeichen ({n})",
+          "keywordCount": "Zwischen {kmin} und {kmax} Keywords ({n})",
+          "keywordInTitle": "Haupt-Keyword im Titel",
+          "keywordInDescription": "Haupt-Keyword in der Beschreibung",
+          "hasHeadings": "Text mit Zwischenüberschriften (##)",
+          "imagesAlt": "Bilder im Text, alle mit Alt-Text ({n}/{total})",
+          "slug": "Kurze Adresse (Slug), bis 60 Zeichen"
+        }
+      },
+      "image": {
+        "title": "Bild einfügen",
+        "description": "Wird an der Cursorposition in den Text eingefügt.",
+        "addMore": "Weitere Bilder hinzufügen",
+        "drop": "Klicke oder ziehe Bilder hierher",
+        "formats": "JPG, PNG oder WebP bis 5 MB",
+        "alt": "Alt-Text",
+        "altPlaceholder": "Alt-Text: Was zeigt das Bild?",
+        "caption": "Bildunterschrift",
+        "captionPlaceholder": "Bildunterschrift (optional)",
+        "remove": "Entfernen",
+        "width": "Breite",
+        "layout": {
+          "text": "Textspalte",
+          "wide": "Breit",
+          "gallery": "Galerie"
+        },
+        "layoutHelp": {
+          "text": "Gleiche Breite wie der Text.",
+          "wide": "Breiter als der Text auf großen Bildschirmen.",
+          "gallery": "Nebeneinander, zwei pro Zeile."
+        },
+        "altMissing": "Bilder ohne Alt-Text schaden SEO und Barrierefreiheit.",
+        "insert": "In den Text einfügen",
+        "dropHint": "Bilder in den Text ziehen oder einfügen, um sie an dieser Stelle einzusetzen."
+      }
     },
     "curatorFilter": {
       "label": "MotoTrip-Bewertung",
       "any": "Alle",
       "missing": "Ohne Bewertung",
       "low": "Geringe Sicherheit"
+    },
+    "shell": {
+      "overview": "Übersicht",
+      "routes": "Routen",
+      "users": "Nutzer",
+      "blog": "Blog",
+      "general": "Allgemein",
+      "shortcuts": "Schnellzugriff",
+      "reviewQueue": "Prüfwarteschlange",
+      "newPost": "Neuer Beitrag",
+      "role": {
+        "admin": "Admin",
+        "curator": "Kurator"
+      }
+    },
+    "dashboard": {
+      "title": "Übersicht",
+      "description": "Was auf MotoTrip passiert",
+      "period": "Zeitraum",
+      "days": "{n} Tage",
+      "refresh": "Aktualisieren",
+      "error": "Das Dashboard konnte nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "vsPrevious": "vs. vorherige {days} Tage",
+      "kpi": {
+        "users": "Nutzer",
+        "newUsers": "+{n} im Zeitraum",
+        "routes": "Freigegebene Routen",
+        "submitted": "{n} eingereicht im Zeitraum",
+        "posts": "Veröffentlichte Beiträge",
+        "drafts": "{n} Entwürfe",
+        "weakSeo": "{n} mit schwachem SEO",
+        "pending": "Wartet auf Prüfung",
+        "oldest": "die älteste wartet seit {time}",
+        "noneWaiting": "Warteschlange leer"
+      },
+      "reviewNow": "Jetzt prüfen",
+      "activity": "Registrierungen und eingereichte Routen pro Tag",
+      "series": {
+        "signups": "Registrierungen",
+        "submitted": "Eingereichte Routen"
+      },
+      "queue": "Prüfwarteschlange",
+      "seeAll": "Alle ansehen",
+      "queueEmpty": "Keine Routen warten auf Prüfung",
+      "approve": "Freigeben",
+      "byStatus": "Routen nach Status",
+      "byCountry": "Routen nach Land",
+      "approvedOnly": "freigegeben",
+      "byCategory": "Neue Routen nach Typ",
+      "lastMonths": "letzte 6 Monate",
+      "routesCount": "{n} Routen",
+      "seoTodo": "Veröffentlichte Beiträge mit schwachem SEO",
+      "seoTodoHint": "Wert unter 60 auf Portugiesisch",
+      "fixSeo": "SEO verbessern"
+    },
+    "bulk": {
+      "approve": "Freigeben",
+      "feature": "Hervorheben",
+      "unfeature": "Hervorhebung entfernen",
+      "clear": "Auswahl aufheben",
+      "selectAll": "Alle auswählen"
+    },
+    "drawer": {
+      "distance": "Distanz",
+      "duration": "Dauer",
+      "difficulty": "Schwierigkeit",
+      "author": "Autor",
+      "created": "Eingereicht",
+      "rejectReason": "Ablehnungsgrund",
+      "curatorReview": "MotoTrip-Bewertung",
+      "viewOnSite": "Auf der Website ansehen"
     }
   },
   "riders": {

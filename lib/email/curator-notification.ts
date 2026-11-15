@@ -54,7 +54,7 @@ export async function notifyCuratorNewRoutes(routes: NewRouteSummary[]): Promise
   }
 
   const site = getSiteUrl()
-  const adminUrl = `${site}/pt/profile/admin`
+  const adminUrl = `${site}/pt/profile/admin/routes?status=pending`
   const items = routes.map((r) => ({ r, url: `${site}${routePath('pt', r)}` }))
   const subject =
     routes.length === 1

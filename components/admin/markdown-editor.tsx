@@ -38,7 +38,11 @@ interface MarkdownEditorProps {
   placeholder?: string
   /** Filled with the toolbar commands once the editor is ready */
   editorRef?: MutableRefObject<MarkdownEditorHandle | null>
+  /** Image files dropped or pasted into the text; the cursor is moved to the drop point first */
+  onFiles?: (files: File[]) => void
 }
+
+const imageFiles = (list: FileList | null | undefined) => Array.from(list ?? []).filter((f) => f.type.startsWith('image/'))
 
 // ----------------------------------------------------------------- commands
 
@@ -158,11 +162,13 @@ const theme = EditorView.theme({
 
 // ------------------------------------------------------------------- editor
 
-export function MarkdownEditor({ value, onChange, placeholder, editorRef }: MarkdownEditorProps) {
+export function MarkdownEditor({ value, onChange, placeholder, editorRef, onFiles }: MarkdownEditorProps) {
   const host = useRef<HTMLDivElement>(null)
   const view = useRef<EditorView | null>(null)
   const onChangeRef = useRef(onChange)
   onChangeRef.current = onChange
+  const onFilesRef = useRef(onFiles)
+  onFilesRef.current = onFiles
 
   useEffect(() => {
     if (!host.current) return
@@ -178,6 +184,24 @@ export function MarkdownEditor({ value, onChange, placeholder, editorRef }: Mark
       theme,
       EditorView.updateListener.of((u) => {
         if (u.docChanged) onChangeRef.current(u.state.doc.toString())
+      }),
+      EditorView.domEventHandlers({
+        drop(e, v) {
+          const files = imageFiles(e.dataTransfer?.files)
+          if (!files.length || !onFilesRef.current) return false
+          e.preventDefault()
+          const pos = v.posAtCoords({ x: e.clientX, y: e.clientY })
+          if (pos != null) v.dispatch({ selection: { anchor: pos } })
+          onFilesRef.current(files)
+          return true
+        },
+        paste(e) {
+          const files = imageFiles(e.clipboardData?.files)
+          if (!files.length || !onFilesRef.current) return false
+          e.preventDefault()
+          onFilesRef.current(files)
+          return true
+        },
       }),
     ]
     if (placeholder) extensions.push(placeholderExt(placeholder))

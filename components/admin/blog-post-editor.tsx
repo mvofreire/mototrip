@@ -26,7 +26,11 @@ import {
 } from 'lucide-react'
 import { BlogAdminService, InvalidImageError, uploadBlogImage, type RouteOption } from '@/lib/services/blog-admin.service'
 import { ACCEPTED_IMAGE_TYPES } from '@/lib/images/prepare-image'
-import { BLOG_LOCALES, type BlogLocale, type BlogPost } from '@/lib/blog/posts'
+import { BLOG_LOCALES, type BlogLocale, type BlogPost, type BlogTranslation } from '@/lib/blog/posts'
+import { seoChecks } from '@/lib/blog/seo'
+import { SeoPanel } from '@/components/admin/seo-panel'
+import { SeoScore } from '@/components/admin/seo-score'
+import { InsertImageDialog } from '@/components/admin/insert-image-dialog'
 import { BlogMarkdown, routeDirective, routeSlugsIn } from '@/lib/blog/markdown'
 import type { MarkdownEditorHandle } from '@/components/admin/markdown-editor'
 import { RoutePickerDialog } from '@/components/admin/route-picker-dialog'
@@ -46,7 +50,7 @@ const MarkdownEditor = dynamic(() => import('@/components/admin/markdown-editor'
 const SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/
 const DESCRIPTION_MAX = 160
 
-type Content = { title: string; description: string; body_md: string }
+type Content = Pick<BlogTranslation, 'title' | 'description' | 'body_md' | 'meta_title' | 'meta_description' | 'keywords'>
 type Cover = Pick<RouteOption, 'id' | 'slug' | 'title' | 'thumbnail_url'>
 
 interface EditorState {
@@ -59,7 +63,7 @@ interface EditorState {
   translations: Partial<Record<BlogLocale, Content>>
 }
 
-const emptyContent = (): Content => ({ title: '', description: '', body_md: '' })
+const emptyContent = (): Content => ({ title: '', description: '', body_md: '', meta_title: '', meta_description: '', keywords: [] })
 
 function slugify(s: string) {
   return s
@@ -80,7 +84,17 @@ function fromPost(post: BlogPost): EditorState {
     coverImage: post.cover_image_url ? { url: post.cover_image_url, credit: post.cover_image_credit ?? '' } : null,
     date: post.published_at ? post.published_at.slice(0, 10) : '',
     translations: Object.fromEntries(
-      post.translations.map((t) => [t.locale, { title: t.title, description: t.description, body_md: t.body_md }]),
+      post.translations.map((t) => [
+        t.locale,
+        {
+          title: t.title,
+          description: t.description,
+          body_md: t.body_md,
+          meta_title: t.meta_title ?? '',
+          meta_description: t.meta_description ?? '',
+          keywords: t.keywords ?? [],
+        },
+      ]),
     ),
   }
 }
@@ -106,15 +120,22 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
   const [slugTouched, setSlugTouched] = useState(!!postId)
   const [savedLocales, setSavedLocales] = useState<BlogLocale[]>([])
   const [active, setActive] = useState<BlogLocale>('pt')
-  const [mobileView, setMobileView] = useState<'write' | 'preview'>('write')
+  /** Editor layout: write only, side by side (large screens) or preview only */
+  const [view, setView] = useState<'write' | 'split' | 'preview'>('split')
+  const [aside, setAside] = useState<'seo' | 'publish'>('publish')
+  const [imageDialog, setImageDialog] = useState<{ open: boolean; files: File[] }>({ open: false, files: [] })
   const [picker, setPicker] = useState<'route' | 'cover' | null>(null)
   const [saving, setSaving] = useState(false)
   const [justSaved, setJustSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [uploading, setUploading] = useState<'cover' | 'body' | null>(null)
+  const [uploading, setUploading] = useState<'cover' | null>(null)
   const coverInput = useRef<HTMLInputElement>(null)
-  const bodyInput = useRef<HTMLInputElement>(null)
   const editor = useRef<MarkdownEditorHandle | null>(null)
+
+  // Links from the dashboard and post list open the SEO panel (?tab=seo)
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('tab') === 'seo') setAside('seo')
+  }, [])
 
   // ------------------------------------------------------------------ load
   useEffect(() => {
@@ -278,18 +299,13 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
   }
 
   // ---------------------------------------------------------------- images
-  const upload = async (file: File | undefined, target: 'cover' | 'body') => {
+  const uploadCover = async (file: File | undefined) => {
     if (!file) return
     setError(null)
-    setUploading(target)
+    setUploading('cover')
     try {
       const url = await uploadBlogImage(file)
-      if (target === 'cover') {
-        setState((s) => ({ ...s, cover: null, coverImage: { url, credit: '' } }))
-      } else {
-        editor.current?.insertBlock(`![${tb('imageAltPlaceholder')}](${url})`)
-        window.setTimeout(() => editor.current?.focus(), 50)
-      }
+      setState((s) => ({ ...s, cover: null, coverImage: { url, credit: '' } }))
     } catch (e) {
       console.error(e)
       setError(e instanceof InvalidImageError ? tb('imageInvalid') : tb('imageUploadFailed'))
@@ -297,6 +313,12 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
       setUploading(null)
     }
   }
+
+  const insertImages = (markdown: string) => {
+    editor.current?.insertBlock(markdown)
+    window.setTimeout(() => editor.current?.focus(), 50)
+  }
+  const onEditorFiles = useCallback((files: File[]) => setImageDialog({ open: true, files }), [])
 
   // ------------------------------------------------------------------- UI
   if (loading) {
@@ -320,19 +342,27 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
     { icon: Lightbulb, label: tb('toolbar.tip'), run: () => editor.current?.insertBlock(`:::tip\n${tb('tipPlaceholder')}\n:::`) },
   ]
 
+  const seo = seoChecks({ ...content }, state.slug)
+  const coverUrl = state.coverImage?.url ?? state.cover?.thumbnail_url ?? null
+  const views = [
+    ['write', tb('write')],
+    ['split', tb('sideBySide')],
+    ['preview', tb('preview')],
+  ] as const
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
+        <div className="min-w-0">
           <Link href={`/${locale}/profile/admin/blog`} onClick={leave} className="mb-1 inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft className="mr-1 h-4 w-4" />
             {tb('back')}
           </Link>
-          <h2 className="flex items-center gap-3 text-2xl font-bold">
+          <h1 className="flex flex-wrap items-center gap-3 text-2xl font-bold md:text-3xl">
             {postId ? tb('editTitle') : tb('newTitle')}
-            <span className="rounded-full border px-2.5 py-0.5 text-xs font-medium text-muted-foreground">{tb(`status.${status}`)}</span>
-          </h2>
+            <span className="rounded-full border px-2.5 py-0.5 font-sans text-xs font-medium normal-case tracking-normal text-muted-foreground">{tb(`status.${status}`)}</span>
+          </h1>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {justSaved && (
@@ -340,6 +370,7 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
               <Check className="h-4 w-4" /> {tb('saved')}
             </span>
           )}
+          {dirty && !justSaved && <span className="text-xs text-muted-foreground">{tb('unsavedChanges')}</span>}
           {status === 'published' && postId && (
             <Button variant="ghost" asChild>
               <a href={`/${locale}/blog/${state.slug}`} target="_blank" rel="noreferrer">{tb('view')}</a>
@@ -372,213 +403,246 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
         </div>
       )}
 
-      {/* Post settings */}
-      <div className="grid gap-4 rounded-lg border p-4 md:grid-cols-3">
-        <div className="space-y-1.5">
-          <Label htmlFor="slug">{tb('slug')}</Label>
-          <Input
-            id="slug"
-            value={state.slug}
-            disabled={slugLocked}
-            onChange={(e) => {
-              setSlugTouched(true)
-              setState((s) => ({ ...s, slug: e.target.value.toLowerCase() }))
-            }}
-            className={cn(state.slug && slugError && 'border-destructive')}
-          />
-          <p className="text-xs text-muted-foreground">
-            {slugLocked ? tb('slugLocked') : state.slug && slugError ? slugError : tb('slugHelp', { slug: state.slug || '…' })}
-          </p>
+      <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="min-w-0 space-y-4">
+          {/* Languages */}
+          <div className="flex flex-wrap items-center gap-1 border-b">
+            {languages.map((l) => {
+              const sc = seoChecks({ ...(state.translations[l] as Content) }, state.slug).score
+              return (
+                <button
+                  key={l}
+                  type="button"
+                  onClick={() => setActive(l)}
+                  className={cn(
+                    '-mb-px flex items-center gap-1.5 border-b-2 px-3 py-2 text-sm font-medium',
+                    active === l ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  <span className={cn('h-1.5 w-1.5 rounded-full', sc >= 75 ? 'bg-green-500' : 'bg-amber-500')} title={`SEO ${sc}`} />
+                  {languageName(l)}
+                  {!state.translations[l]?.title.trim() && <span className="text-amber-600">•</span>}
+                </button>
+              )
+            })}
+            {missingLanguages.length > 0 && (
+              <select
+                aria-label={tb('addLanguage')}
+                value=""
+                onChange={(e) => e.target.value && addLanguage(e.target.value as BlogLocale)}
+                className="ml-2 h-8 rounded-md border bg-background px-2 text-sm text-muted-foreground"
+              >
+                <option value="">+ {tb('addLanguage')}</option>
+                {missingLanguages.map((l) => (
+                  <option key={l} value={l}>{languageName(l)}</option>
+                ))}
+              </select>
+            )}
+            {languages.length > 1 && (
+              <Button size="sm" variant="ghost" className="ml-auto text-muted-foreground" onClick={() => removeLanguage(active)}>
+                {tb('removeLanguage')}
+              </Button>
+            )}
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label htmlFor="title">{tb('fieldTitle')}</Label>
+              <Input id="title" value={content.title} onChange={(e) => setContent({ title: e.target.value })} />
+            </div>
+            <div className="space-y-1.5">
+              <div className="flex justify-between">
+                <Label htmlFor="description">{tb('fieldDescription')}</Label>
+                <span className={cn('text-xs text-muted-foreground', content.description.length > DESCRIPTION_MAX && 'text-amber-600')}>
+                  {content.description.length}/{DESCRIPTION_MAX}
+                </span>
+              </div>
+              <Textarea id="description" rows={2} value={content.description} onChange={(e) => setContent({ description: e.target.value })} />
+            </div>
+          </div>
+
+          <div className="flex justify-end">
+            <div className="inline-flex rounded-lg border bg-muted/50 p-0.5" role="group" aria-label={tb('viewMode')}>
+              {views.map(([v, label]) => (
+                <button
+                  key={v}
+                  type="button"
+                  aria-pressed={view === v}
+                  onClick={() => setView(v)}
+                  className={cn(
+                    'rounded-md px-3 py-1 text-sm font-medium',
+                    v === 'split' && 'hidden lg:block',
+                    view === v ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className={cn('grid gap-4', view === 'split' && 'lg:grid-cols-2')}>
+            <div className={cn('flex min-w-0 flex-col overflow-hidden rounded-lg border', view === 'preview' && 'hidden', view === 'split' && 'max-lg:flex')}>
+              <div className="flex flex-wrap items-center gap-0.5 border-b bg-muted/40 p-1">
+                {tools.map(({ icon: Icon, label, run }) => (
+                  <Button key={label} type="button" size="icon" variant="ghost" className="h-8 w-8" title={label} aria-label={label} onClick={run}>
+                    <Icon className="h-4 w-4" />
+                  </Button>
+                ))}
+                <span className="ml-auto flex gap-1">
+                  <Button type="button" size="sm" variant="secondary" className="h-8" onClick={() => setPicker('route')}>
+                    <MapPin className="mr-1.5 h-4 w-4" /> {tb('toolbar.route')}
+                  </Button>
+                  <Button type="button" size="sm" className="h-8" onClick={() => setImageDialog({ open: true, files: [] })}>
+                    <ImageIcon className="mr-1.5 h-4 w-4" /> {tb('toolbar.image')}
+                  </Button>
+                </span>
+              </div>
+              <div className="h-[65vh] min-h-[420px]">
+                <MarkdownEditor key={active} value={content.body_md} onChange={onBodyChange} placeholder={tb('bodyPlaceholder')} editorRef={editor} onFiles={onEditorFiles} />
+              </div>
+              <p className="border-t px-3 py-1.5 text-xs text-muted-foreground">{tb('image.dropHint')}</p>
+            </div>
+
+            <div className={cn('min-w-0 overflow-y-auto rounded-lg border p-6', view === 'split' && 'max-lg:hidden lg:h-[calc(65vh+74px)]', view === 'write' && 'hidden')}>
+              <p className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">{tb('preview')}</p>
+              {content.title && <h1 className="mb-3 text-3xl font-bold leading-tight tracking-tight">{content.title}</h1>}
+              {content.description && <p className="mb-6 text-muted-foreground">{content.description}</p>}
+              {previewBody.trim() ? (
+                <BlogMarkdown
+                  markdown={previewBody}
+                  locale={active}
+                  routes={previewRoutes}
+                  renderMissingRoute={(slug) =>
+                    routeCache.has(slug) ? (
+                      <div className="mx-auto max-w-md rounded-lg border-2 border-dashed border-amber-400 p-4 text-sm text-amber-700">
+                        {tb('missingRouteCard', { slug })}
+                      </div>
+                    ) : (
+                      <div className="mx-auto h-40 max-w-md animate-pulse rounded-lg bg-muted" />
+                    )
+                  }
+                />
+              ) : (
+                <p className="text-sm text-muted-foreground">{tb('emptyPreview')}</p>
+              )}
+            </div>
+          </div>
         </div>
-        <div className="space-y-1.5">
-          <Label>{tb('cover')}</Label>
-          {state.coverImage ? (
-            <div className="space-y-2 rounded-md border p-1.5">
-              <div className="flex items-center gap-2">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={state.coverImage.url} alt="" className="h-9 w-14 shrink-0 rounded object-cover" />
-                <span className="min-w-0 flex-1 truncate text-sm">{tb('coverImage')}</span>
-                <Button size="sm" variant="ghost" disabled={!!uploading} onClick={() => coverInput.current?.click()}>
-                  {uploading === 'cover' ? <Loader2 className="h-4 w-4 animate-spin" /> : tb('changeImage')}
-                </Button>
-                <Button size="icon" variant="ghost" className="h-8 w-8" title={tb('removeCover')} onClick={() => setState((s) => ({ ...s, coverImage: null }))}>
+
+        {/* Settings: SEO for the active language, and publishing */}
+        <aside className="space-y-3 xl:sticky xl:top-20">
+          <div className="grid grid-cols-2 rounded-lg border bg-muted/50 p-0.5" role="tablist">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={aside === 'seo'}
+              onClick={() => setAside('seo')}
+              className={cn('flex items-center justify-center gap-2 rounded-md py-1.5 text-sm font-medium', aside === 'seo' ? 'bg-background shadow-sm' : 'text-muted-foreground')}
+            >
+              {tb('seo.tab')}
+              <SeoScore score={seo.score} size="sm" />
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={aside === 'publish'}
+              onClick={() => setAside('publish')}
+              className={cn('rounded-md py-1.5 text-sm font-medium', aside === 'publish' ? 'bg-background shadow-sm' : 'text-muted-foreground')}
+            >
+              {tb('publishTab')}
+            </button>
+          </div>
+
+          <div className="rounded-xl border bg-card p-4">
+            {aside === 'seo' ? (
+              <SeoPanel value={content} slug={state.slug} locale={active} cover={coverUrl} onChange={setContent} />
+            ) : (
+              <div className="space-y-5">
+                <div className="space-y-1.5">
+                  <Label htmlFor="slug">{tb('slug')}</Label>
+                  <Input
+                    id="slug"
+                    value={state.slug}
+                    disabled={slugLocked}
+                    onChange={(e) => {
+                      setSlugTouched(true)
+                      setState((s) => ({ ...s, slug: e.target.value.toLowerCase() }))
+                    }}
+                    className={cn(state.slug && slugError && 'border-destructive')}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {slugLocked ? tb('slugLocked') : state.slug && slugError ? slugError : tb('slugHelp', { slug: state.slug || '…' })}
+                  </p>
+                </div>
+                <div className="space-y-1.5">
+                  <Label>{tb('cover')}</Label>
+            {state.coverImage ? (
+              <div className="space-y-2 rounded-md border p-1.5">
+                <div className="flex items-center gap-2">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={state.coverImage.url} alt="" className="h-9 w-14 shrink-0 rounded object-cover" />
+                  <span className="min-w-0 flex-1 truncate text-sm">{tb('coverImage')}</span>
+                  <Button size="sm" variant="ghost" disabled={!!uploading} onClick={() => coverInput.current?.click()}>
+                    {uploading === 'cover' ? <Loader2 className="h-4 w-4 animate-spin" /> : tb('changeImage')}
+                  </Button>
+                  <Button size="icon" variant="ghost" className="h-8 w-8" title={tb('removeCover')} onClick={() => setState((s) => ({ ...s, coverImage: null }))}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                <Input
+                  aria-label={tb('coverCredit')}
+                  placeholder={tb('coverCreditPlaceholder')}
+                  maxLength={200}
+                  value={state.coverImage.credit}
+                  onChange={(e) => setState((s) => (s.coverImage ? { ...s, coverImage: { ...s.coverImage, credit: e.target.value } } : s))}
+                  className="h-8 text-sm"
+                />
+              </div>
+            ) : state.cover ? (
+              <div className="flex items-center gap-2 rounded-md border p-1.5">
+                {state.cover.thumbnail_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={state.cover.thumbnail_url} alt="" className="h-9 w-14 shrink-0 rounded object-cover" />
+                )}
+                <span className="min-w-0 flex-1 truncate text-sm">{state.cover.title}</span>
+                <Button size="sm" variant="ghost" onClick={() => setPicker('cover')}>{tb('changeRoute')}</Button>
+                <Button size="icon" variant="ghost" className="h-8 w-8" title={tb('removeCover')} onClick={() => setState((s) => ({ ...s, cover: null }))}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-              <Input
-                aria-label={tb('coverCredit')}
-                placeholder={tb('coverCreditPlaceholder')}
-                maxLength={200}
-                value={state.coverImage.credit}
-                onChange={(e) => setState((s) => (s.coverImage ? { ...s, coverImage: { ...s.coverImage, credit: e.target.value } } : s))}
-                className="h-8 text-sm"
-              />
-            </div>
-          ) : state.cover ? (
-            <div className="flex items-center gap-2 rounded-md border p-1.5">
-              {state.cover.thumbnail_url && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={state.cover.thumbnail_url} alt="" className="h-9 w-14 shrink-0 rounded object-cover" />
-              )}
-              <span className="min-w-0 flex-1 truncate text-sm">{state.cover.title}</span>
-              <Button size="sm" variant="ghost" onClick={() => setPicker('cover')}>{tb('changeRoute')}</Button>
-              <Button size="icon" variant="ghost" className="h-8 w-8" title={tb('removeCover')} onClick={() => setState((s) => ({ ...s, cover: null }))}>
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" className="justify-start" onClick={() => setPicker('cover')}>
-                <MapPin className="mr-2 h-4 w-4" /> {tb('chooseRoute')}
-              </Button>
-              <Button variant="outline" className="justify-start" disabled={!!uploading} onClick={() => coverInput.current?.click()}>
-                {uploading === 'cover' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ImagePlus className="mr-2 h-4 w-4" />}
-                {tb('uploadImage')}
-              </Button>
-            </div>
-          )}
-          <input
-            ref={coverInput}
-            type="file"
-            accept={ACCEPTED_IMAGE_TYPES.join(',')}
-            className="hidden"
-            onChange={(e) => {
-              upload(e.target.files?.[0], 'cover')
-              e.target.value = ''
-            }}
-          />
-          <p className="text-xs text-muted-foreground">{tb('coverHelp')}</p>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="date">{tb('date')}</Label>
-          <Input id="date" type="date" value={state.date} onChange={(e) => setState((s) => ({ ...s, date: e.target.value }))} />
-          <p className="text-xs text-muted-foreground">{tb('dateHelp')}</p>
-        </div>
-      </div>
-
-      {/* Languages */}
-      <div className="flex flex-wrap items-center gap-2 border-b">
-        {languages.map((l) => (
-          <button
-            key={l}
-            type="button"
-            onClick={() => setActive(l)}
-            className={cn(
-              '-mb-px border-b-2 px-3 py-2 text-sm font-medium',
-              active === l ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground',
+            ) : (
+              <div className="grid grid-cols-2 gap-2">
+                <Button variant="outline" className="justify-start" onClick={() => setPicker('cover')}>
+                  <MapPin className="mr-2 h-4 w-4" /> {tb('chooseRoute')}
+                </Button>
+                <Button variant="outline" className="justify-start" disabled={!!uploading} onClick={() => coverInput.current?.click()}>
+                  {uploading === 'cover' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ImagePlus className="mr-2 h-4 w-4" />}
+                  {tb('uploadImage')}
+                </Button>
+              </div>
             )}
-          >
-            {languageName(l)}
-            {!state.translations[l]?.title.trim() && <span className="ml-1 text-amber-600">•</span>}
-          </button>
-        ))}
-        {missingLanguages.length > 0 && (
-          <select
-            aria-label={tb('addLanguage')}
-            value=""
-            onChange={(e) => e.target.value && addLanguage(e.target.value as BlogLocale)}
-            className="ml-2 h-8 rounded-md border bg-background px-2 text-sm text-muted-foreground"
-          >
-            <option value="">+ {tb('addLanguage')}</option>
-            {missingLanguages.map((l) => (
-              <option key={l} value={l}>{languageName(l)}</option>
-            ))}
-          </select>
-        )}
-        {languages.length > 1 && (
-          <Button size="sm" variant="ghost" className="ml-auto text-muted-foreground" onClick={() => removeLanguage(active)}>
-            {tb('removeLanguage')}
-          </Button>
-        )}
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor="title">{tb('fieldTitle')}</Label>
-          <Input id="title" value={content.title} onChange={(e) => setContent({ title: e.target.value })} />
-        </div>
-        <div className="space-y-1.5">
-          <div className="flex justify-between">
-            <Label htmlFor="description">{tb('fieldDescription')}</Label>
-            <span className={cn('text-xs text-muted-foreground', content.description.length > DESCRIPTION_MAX && 'text-amber-600')}>
-              {content.description.length}/{DESCRIPTION_MAX}
-            </span>
-          </div>
-          <Textarea id="description" rows={2} value={content.description} onChange={(e) => setContent({ description: e.target.value })} />
-        </div>
-      </div>
-
-      {/* Write / preview toggle on small screens */}
-      <div className="flex gap-1 lg:hidden">
-        {(['write', 'preview'] as const).map((v) => (
-          <Button key={v} size="sm" variant={mobileView === v ? 'default' : 'outline'} onClick={() => setMobileView(v)}>
-            {v === 'write' ? tb('write') : tb('preview')}
-          </Button>
-        ))}
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <div className={cn('flex min-w-0 flex-col overflow-hidden rounded-lg border', mobileView !== 'write' && 'hidden lg:flex')}>
-          <div className="flex flex-wrap items-center gap-0.5 border-b bg-muted/40 p-1">
-            {tools.map(({ icon: Icon, label, run }) => (
-              <Button key={label} type="button" size="icon" variant="ghost" className="h-8 w-8" title={label} aria-label={label} onClick={run}>
-                <Icon className="h-4 w-4" />
-              </Button>
-            ))}
-            <Button
-              type="button"
-              size="icon"
-              variant="ghost"
-              className="h-8 w-8"
-              title={tb('toolbar.image')}
-              aria-label={tb('toolbar.image')}
-              disabled={!!uploading}
-              onClick={() => bodyInput.current?.click()}
-            >
-              {uploading === 'body' ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
-            </Button>
             <input
-              ref={bodyInput}
+              ref={coverInput}
               type="file"
               accept={ACCEPTED_IMAGE_TYPES.join(',')}
               className="hidden"
               onChange={(e) => {
-                upload(e.target.files?.[0], 'body')
+                uploadCover(e.target.files?.[0])
                 e.target.value = ''
               }}
             />
-            <Button type="button" size="sm" variant="secondary" className="ml-auto h-8" onClick={() => setPicker('route')}>
-              <MapPin className="mr-1.5 h-4 w-4" /> {tb('toolbar.route')}
-            </Button>
+                  <p className="text-xs text-muted-foreground">{tb('coverHelp')}</p>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="date">{tb('date')}</Label>
+                  <Input id="date" type="date" value={state.date} onChange={(e) => setState((s) => ({ ...s, date: e.target.value }))} />
+                  <p className="text-xs text-muted-foreground">{tb('dateHelp')}</p>
+                </div>
+              </div>
+            )}
           </div>
-          <div className="h-[65vh] min-h-[420px]">
-            <MarkdownEditor key={active} value={content.body_md} onChange={onBodyChange} placeholder={tb('bodyPlaceholder')} editorRef={editor} />
-          </div>
-        </div>
-
-        <div className={cn('min-w-0 overflow-y-auto rounded-lg border p-6 lg:h-[calc(65vh+41px)]', mobileView !== 'preview' && 'hidden lg:block')}>
-          <p className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">{tb('preview')}</p>
-          {content.title && <h1 className="mb-3 text-3xl font-bold leading-tight tracking-tight">{content.title}</h1>}
-          {content.description && <p className="mb-6 text-muted-foreground">{content.description}</p>}
-          {previewBody.trim() ? (
-            <BlogMarkdown
-              markdown={previewBody}
-              locale={active}
-              routes={previewRoutes}
-              renderMissingRoute={(slug) =>
-                routeCache.has(slug) ? (
-                  <div className="mx-auto max-w-md rounded-lg border-2 border-dashed border-amber-400 p-4 text-sm text-amber-700">
-                    {tb('missingRouteCard', { slug })}
-                  </div>
-                ) : (
-                  <div className="mx-auto h-40 max-w-md animate-pulse rounded-lg bg-muted" />
-                )
-              }
-            />
-          ) : (
-            <p className="text-sm text-muted-foreground">{tb('emptyPreview')}</p>
-          )}
-        </div>
+        </aside>
       </div>
 
       <RoutePickerDialog
@@ -586,6 +650,12 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
         title={picker === 'cover' ? tb('pickerCoverTitle') : tb('pickerTitle')}
         onOpenChange={(o) => !o && setPicker(null)}
         onPick={onPick}
+      />
+      <InsertImageDialog
+        open={imageDialog.open}
+        files={imageDialog.files}
+        onOpenChange={(open) => setImageDialog((d) => ({ ...d, open }))}
+        onInsert={insertImages}
       />
     </div>
   )

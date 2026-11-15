@@ -367,6 +367,9 @@ export type Database = {
           title: string
           description: string
           body_md: string
+          meta_title: string
+          meta_description: string
+          keywords: string[]
           updated_at: string
         }
         Insert: {
@@ -375,11 +378,17 @@ export type Database = {
           title: string
           description?: string
           body_md?: string
+          meta_title?: string
+          meta_description?: string
+          keywords?: string[]
         }
         Update: {
           title?: string
           description?: string
           body_md?: string
+          meta_title?: string
+          meta_description?: string
+          keywords?: string[]
         }
       }
     }

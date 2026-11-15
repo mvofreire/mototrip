@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { formatDistanceToNow } from 'date-fns'
 import { de, enUS, es, fr, pt } from 'date-fns/locale'
@@ -21,6 +20,7 @@ import {
   RotateCcw,
   Route as RouteIcon,
   Search,
+  Shield,
   ShieldCheck,
   UserCheck,
   Users,
@@ -28,7 +28,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
 import { AdminService, AdminUser, AccountStatus } from '@/lib/services/admin.service'
-import { AdminNav } from '@/components/admin/admin-nav'
+import { AdminPageHeader, useAdmin } from '@/components/admin/admin-shell'
 import { UserModerationDialog, type ModerationMode } from '@/components/admin/user-moderation-dialog'
 import { UserHistoryDialog } from '@/components/admin/user-history-dialog'
 import { Badge } from '@/components/ui/badge'
@@ -82,13 +82,12 @@ function initials(u: AdminUser) {
 }
 
 export default function AdminUsersPage() {
-  const { user, loading: authLoading } = useAuth()
-  const router = useRouter()
+  const { user } = useAuth()
+  const { isAdmin } = useAdmin()
   const locale = useLocale()
   const t = useTranslations('admin')
   const tu = useTranslations('admin.users')
 
-  const [isAdmin, setIsAdmin] = useState(false)
   const [users, setUsers] = useState<AdminUser[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
@@ -113,25 +112,10 @@ export default function AdminUsersPage() {
     }
   }, [])
 
+  // Managing users is admin-only (curators see a notice below)
   useEffect(() => {
-    const init = async () => {
-      if (authLoading) return
-      if (!user) {
-        router.push(
-          `/${locale}/auth/login?redirect=${encodeURIComponent(`/${locale}/profile/admin/users`)}`,
-        )
-        return
-      }
-      const admin = await AdminService.isAdmin()
-      setIsAdmin(admin)
-      if (!admin) {
-        router.push(`/${locale}/profile`)
-        return
-      }
-      await loadUsers()
-    }
-    init()
-  }, [user, authLoading, router, locale, loadUsers])
+    if (isAdmin) loadUsers()
+  }, [isAdmin, loadUsers])
 
   useEffect(() => {
     if (!notice) return
@@ -267,17 +251,14 @@ export default function AdminUsersPage() {
   const fullDate = (date: string | null) =>
     date ? new Date(date).toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short' }) : undefined
 
-  if (authLoading || (loading && !isAdmin)) {
+  if (!isAdmin) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex min-h-[400px] items-center justify-center">
-          <RefreshCw className="h-8 w-8 animate-spin text-muted-foreground" />
-        </div>
+      <div className="rounded-xl border p-10 text-center text-muted-foreground">
+        <Shield className="mx-auto mb-3 h-6 w-6" />
+        {tu('adminOnly')}
       </div>
     )
   }
-
-  if (!isAdmin) return null
 
   const stats: { key: StatusFilter; label: string; value: number; icon: typeof Users; tone: string }[] = [
     { key: 'all', label: tu('stats.all'), value: counts.all, icon: Users, tone: 'text-foreground' },
@@ -288,13 +269,8 @@ export default function AdminUsersPage() {
   ]
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold">{t('pageTitle')}</h1>
-        <p className="text-muted-foreground">{tu('description')}</p>
-      </div>
-
-      <AdminNav />
+    <div>
+      <AdminPageHeader title={t('shell.users')} description={tu('description')} />
 
       {/* Stats double as status filters */}
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">

@@ -92,11 +92,13 @@ export default function EditRoutePage({ params }: { params: { id: string; locale
 
             {/* MotoTrip review: staff only, goes live on save */}
             {isStaff(user) && (
-              <CuratorReviewEditor
-                routeId={route.id}
-                review={route.curator_review}
-                onSaved={(review) => setRoute((r) => (r ? { ...r, curator_review: review } : r))}
-              />
+              <div id="curator-review" className="scroll-mt-24">
+                <CuratorReviewEditor
+                  routeId={route.id}
+                  review={route.curator_review}
+                  onSaved={(review) => setRoute((r) => (r ? { ...r, curator_review: review } : r))}
+                />
+              </div>
             )}
 
             <Card className="p-6">
