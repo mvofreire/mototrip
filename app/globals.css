@@ -193,3 +193,51 @@ html, body {
 .route-live-map .leaflet-top.leaflet-left {
   top: calc(env(safe-area-inset-top) + 4.25rem);
 }
+
+/* Cookie banner (vanilla-cookieconsent) on the site's tokens: follows the dark/light theme */
+#cc-main {
+  --cc-font-family: inherit;
+  --cc-bg: hsl(var(--card));
+  --cc-primary-color: hsl(var(--card-foreground));
+  --cc-secondary-color: hsl(var(--muted-foreground));
+  --cc-link-color: hsl(var(--primary));
+  --cc-modal-border-radius: calc(var(--radius) * 2);
+  --cc-btn-border-radius: var(--radius);
+  --cc-btn-primary-bg: hsl(var(--primary));
+  --cc-btn-primary-color: hsl(var(--primary-foreground));
+  --cc-btn-primary-border-color: hsl(var(--primary));
+  --cc-btn-primary-hover-bg: hsl(var(--primary) / 0.85);
+  --cc-btn-primary-hover-color: hsl(var(--primary-foreground));
+  --cc-btn-primary-hover-border-color: hsl(var(--primary) / 0.85);
+  /* "Reject" looks as strong as "Accept" (equal weight is required by the GDPR guidance) */
+  --cc-btn-secondary-bg: hsl(var(--foreground));
+  --cc-btn-secondary-color: hsl(var(--background));
+  --cc-btn-secondary-border-color: hsl(var(--foreground));
+  --cc-btn-secondary-hover-bg: hsl(var(--foreground) / 0.85);
+  --cc-btn-secondary-hover-color: hsl(var(--background));
+  --cc-btn-secondary-hover-border-color: hsl(var(--foreground) / 0.85);
+  --cc-separator-border-color: hsl(var(--border));
+  --cc-toggle-on-bg: hsl(var(--primary));
+  --cc-toggle-off-bg: hsl(var(--muted-foreground) / 0.5);
+  --cc-toggle-on-knob-bg: #fff;
+  --cc-toggle-off-knob-bg: #fff;
+  --cc-toggle-readonly-bg: hsl(var(--muted));
+  --cc-toggle-readonly-knob-bg: hsl(var(--muted-foreground));
+  --cc-toggle-readonly-knob-icon-color: hsl(var(--muted));
+  --cc-cookie-category-block-bg: hsl(var(--muted) / 0.5);
+  --cc-cookie-category-block-border: hsl(var(--border));
+  --cc-cookie-category-block-hover-bg: hsl(var(--muted));
+  --cc-cookie-category-block-hover-border: hsl(var(--border));
+  --cc-cookie-category-expanded-block-bg: hsl(var(--muted) / 0.3);
+  --cc-cookie-category-expanded-block-hover-bg: hsl(var(--muted) / 0.6);
+  --cc-overlay-bg: rgba(0, 0, 0, 0.6);
+  --cc-footer-bg: hsl(var(--muted) / 0.5);
+  --cc-footer-color: hsl(var(--muted-foreground));
+  --cc-footer-border-color: hsl(var(--border));
+  --cc-webkit-scrollbar-bg: hsl(var(--muted));
+  --cc-webkit-scrollbar-hover-bg: hsl(var(--muted-foreground));
+}
+#cc-main .cm,
+#cc-main .pm {
+  border: 1px solid hsl(var(--border));
+}

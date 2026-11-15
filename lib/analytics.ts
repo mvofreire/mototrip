@@ -1,5 +1,6 @@
 import { track } from '@vercel/analytics'
 import { HOMEPAGE_COOKIE } from '@/lib/flags/homepage-config'
+import { pushDataLayer } from '@/lib/consent'
 
 type Props = Record<string, string | number | boolean | null>
 
@@ -25,5 +26,8 @@ export function trackEvent(name: string, props: Props = {}) {
       ;(w.vaq ??= []).push(params)
     }
   }
-  track(name, { ...props, home_variant: homeVariant() })
+  const data = { ...props, home_variant: homeVariant() }
+  track(name, data)
+  // Same event for GTM (GA4, Meta Pixel…). Tags there are gated on consent.
+  pushDataLayer({ event: name, ...data })
 }

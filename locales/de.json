@@ -342,7 +342,8 @@
     "builtForRiders": "Von Fahrern für Fahrer gebaut 🏍️",
     "followInstagram": "Folge MotoTrip auf Instagram",
     "followFacebook": "Folge MotoTrip auf Facebook",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "cookiePreferences": "Cookie-Einstellungen"
   },
   "notFound": {
     "title": "404",
@@ -617,7 +618,7 @@
     },
     "cookies": {
       "title": "Cookies",
-      "description": "Wir verwenden Cookies und ähnliche Technologien, um Ihr Erlebnis zu verbessern, die Plattformnutzung zu analysieren und Inhalte zu personalisieren. Sie können die Cookie-Nutzung über Ihre Browser-Einstellungen steuern."
+      "description": "Wir verwenden notwendige Cookies, um Sie angemeldet zu halten und Ihre Sprache, das Design und Ihre Cookie-Auswahl zu speichern. Nur mit Ihrer Zustimmung verwenden wir Statistik-Cookies (Google Analytics) und Marketing-Cookies (Google Ads und Meta Pixel), die über den Google Tag Manager geladen werden, um die Nutzung der Website zu verstehen und unsere Anzeigen zu messen. Außerdem nutzen wir Vercel Analytics, das Besuche zusammengefasst, ohne Cookies und ohne Identifizierung zählt. Sie können Ihre Auswahl jederzeit unter „Cookie-Einstellungen“ im Seitenfuß akzeptieren, ablehnen oder ändern."
     },
     "children": {
       "title": "Privatsphäre von Kindern",
@@ -1376,5 +1377,37 @@
     "statsReviews": "Bewertungen",
     "confirmPassword": "Passwort bestätigen",
     "emailLabel": "E-Mail"
+  },
+  "cookieConsent": {
+    "acceptAll": "Alle akzeptieren",
+    "rejectAll": "Alle ablehnen",
+    "privacyLink": "Datenschutzerklärung",
+    "banner": {
+      "title": "Cookies bei MotoTrip",
+      "description": "Wir verwenden notwendige Cookies, damit die Website funktioniert. Mit Ihrer Zustimmung verwenden wir außerdem Statistik-Cookies (Google Analytics), um die Website zu verbessern, und Marketing-Cookies (Google Ads, Meta), um unsere Anzeigen zu messen. Sie können Ihre Wahl jederzeit ändern.",
+      "preferences": "Anpassen"
+    },
+    "preferences": {
+      "title": "Cookie-Einstellungen",
+      "save": "Auswahl speichern",
+      "close": "Schließen",
+      "intro": "Wählen Sie, welche Cookies Sie zulassen. Notwendige Cookies können nicht deaktiviert werden, da die Website sie zum Funktionieren benötigt.",
+      "necessary": {
+        "title": "Notwendig",
+        "description": "Halten Sie angemeldet und speichern Sprache, Design und diese Auswahl. Immer aktiv."
+      },
+      "analytics": {
+        "title": "Statistik",
+        "description": "Google Analytics: zeigt uns zusammengefasst, welche Seiten und Routen am meisten genutzt werden, damit wir die Website verbessern können."
+      },
+      "marketing": {
+        "title": "Marketing",
+        "description": "Google Ads und Meta (Facebook, Instagram): messen, ob unsere Anzeigen Besuche und Registrierungen bringen, und machen die Anzeigen, die Sie sehen, relevanter."
+      },
+      "more": {
+        "title": "Weitere Informationen",
+        "description": "Wie wir Ihre Daten verarbeiten, erfahren Sie in unserer"
+      }
+    }
   }
 }

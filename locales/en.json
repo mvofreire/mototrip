@@ -342,7 +342,8 @@
     "builtForRiders": "Built for riders, by riders 🏍️",
     "followInstagram": "Follow MotoTrip on Instagram",
     "followFacebook": "Follow MotoTrip on Facebook",
-    "contact": "Contact"
+    "contact": "Contact",
+    "cookiePreferences": "Cookie preferences"
   },
   "notFound": {
     "title": "404",
@@ -617,7 +618,7 @@
     },
     "cookies": {
       "title": "Cookies",
-      "description": "We use cookies and similar technologies to improve your experience, analyze platform usage, and personalize content. You can control cookie usage through your browser settings."
+      "description": "We use essential cookies to keep you signed in and remember your language, theme and cookie choice. Only with your permission do we use statistics cookies (Google Analytics) and marketing cookies (Google Ads and Meta Pixel), loaded through Google Tag Manager, to understand how the site is used and to measure our ads. We also use Vercel Analytics, which counts visits in aggregate without cookies and without identifying anyone. You can accept, reject or change your choice at any time under \"Cookie preferences\" in the site footer."
     },
     "children": {
       "title": "Children's Privacy",
@@ -1376,5 +1377,37 @@
     "statsReviews": "Reviews",
     "confirmPassword": "Confirm password",
     "emailLabel": "Email"
+  },
+  "cookieConsent": {
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject all",
+    "privacyLink": "Privacy Policy",
+    "banner": {
+      "title": "Cookies on MotoTrip",
+      "description": "We use essential cookies to make the site work. With your permission, we also use statistics cookies (Google Analytics) to improve the site and marketing cookies (Google Ads, Meta) to measure our ads. You can change your mind at any time.",
+      "preferences": "Customize"
+    },
+    "preferences": {
+      "title": "Cookie preferences",
+      "save": "Save choices",
+      "close": "Close",
+      "intro": "Choose which cookies you accept. Essential cookies can't be turned off because the site needs them to work.",
+      "necessary": {
+        "title": "Essential",
+        "description": "Keep you signed in and remember your language, theme and this choice. Always on."
+      },
+      "analytics": {
+        "title": "Statistics",
+        "description": "Google Analytics: shows us, in aggregate, which pages and routes are used most so we can improve the site."
+      },
+      "marketing": {
+        "title": "Marketing",
+        "description": "Google Ads and Meta (Facebook, Instagram): measure whether our ads bring visits and sign-ups and make the ads you see more relevant."
+      },
+      "more": {
+        "title": "More information",
+        "description": "Learn how we handle your data in our"
+      }
+    }
   }
 }

@@ -14,6 +14,9 @@ import { Pwa } from '@/components/pwa/pwa'
 import { SOCIAL_PROFILES } from '@/lib/social'
 import { getSiteUrl } from '@/lib/site-url'
 import { OG_LOCALE } from '@/lib/seo'
+import { GTM_ID } from '@/lib/consent'
+import { ConsentScripts } from '@/components/consent/consent-scripts'
+import { CookieConsentBanner } from '@/components/consent/cookie-consent'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -140,6 +143,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={`${inter.className} ${display.variable}`}>
+        <ConsentScripts />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -152,6 +156,7 @@ export default async function LocaleLayout({
               <Footer />
             </div>
             <Pwa />
+            {GTM_ID && <CookieConsentBanner />}
           </Providers>
         </NextIntlClientProvider>
         <Analytics />
