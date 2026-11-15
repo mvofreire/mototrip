@@ -55,6 +55,7 @@ function TrackMap({ w, className, onMapClick }: { w: WizardModel; className?: st
       <Map
         center={w.points[Math.floor(w.points.length / 2)]}
         zoom={10}
+        scrollWheelZoom
         polyline={w.points}
         polylineColor="#e11d2e"
         markers={markers}
@@ -231,7 +232,9 @@ export function DetailsStep({ w }: { w: WizardModel }) {
     <AutoBadge state={w.edited(k) ? 'edited' : 'auto'} onReset={() => w.resetValue(k)} label={label} />
   )
   const f = w.facts
-  const via = w.places.filter(Boolean) as string[]
+  const via = w.places
+  // The places are added after the |; a name with them typed in repeats them
+  const nameHasPlaces = /[|>]/.test(w.values.name)
 
   return (
     <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
@@ -286,25 +289,32 @@ export function DetailsStep({ w }: { w: WizardModel }) {
                   placeholder={t('namePlaceholder')}
                   onChange={(e) => w.setValue('name', e.target.value)}
                 />
-                <span className="text-xs text-muted-foreground">{t('nameHint')}</span>
+                {nameHasPlaces ? (
+                  <span className="text-xs font-medium text-amber-600 dark:text-amber-400">{t('nameHasPlaces')}</span>
+                ) : (
+                  <span className="text-xs text-muted-foreground">{t('nameHint')}</span>
+                )}
               </div>
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="wz-via" className="text-sm font-semibold">
                   {t('viaLabel')}
                 </label>
-                <select
+                <input
                   id="wz-via"
                   className={input}
-                  value={w.viaKey ?? ''}
-                  onChange={(e) => w.setViaKey(e.target.value || null)}
-                >
-                  <option value="">{t('viaNone')}</option>
-                  {w.stops.map((s) => (
-                    <option key={s.key} value={s.key}>
-                      {s.name}
-                    </option>
-                  ))}
-                </select>
+                  list="wz-via-stops"
+                  maxLength={60}
+                  value={w.viaText}
+                  placeholder={t('viaPlaceholder')}
+                  onChange={(e) => w.setViaText(e.target.value)}
+                />
+                <datalist id="wz-via-stops">
+                  {w.stops
+                    .filter((s) => s.name.trim())
+                    .map((s) => (
+                      <option key={s.key} value={s.name.trim()} />
+                    ))}
+                </datalist>
                 <span className="text-xs text-muted-foreground">{t('viaHint')}</span>
               </div>
             </div>
@@ -314,22 +324,34 @@ export function DetailsStep({ w }: { w: WizardModel }) {
         {/* Numbers */}
         <WizardCard className="grid gap-3 sm:grid-cols-3">
           <div className="flex min-w-0 flex-col gap-2">
-            <FieldLabel htmlFor="wz-km" badge={badge('distanceKm')}>
-              {tSubmit('distanceLabel')}
-            </FieldLabel>
+            <div className="flex flex-col items-start gap-1.5">
+              <label htmlFor="wz-km" className="text-sm font-semibold">
+                {tSubmit('distanceLabel')}
+              </label>
+              {badge('distanceKm')}
+            </div>
             <NumberField id="wz-km" value={w.values.distanceKm} step={1} unit="km" min={1} label={tSubmit('distanceLabel')} onChange={(v) => w.setValue('distanceKm', v)} />
           </div>
           <div className="flex min-w-0 flex-col gap-2">
-            <FieldLabel htmlFor="wz-dur-h" badge={badge('durationMin')}>
-              {tSubmit('durationLabel')}
-            </FieldLabel>
+            <div className="flex flex-col items-start gap-1.5">
+              <label htmlFor="wz-dur-h" className="text-sm font-semibold">
+                {tSubmit('durationLabel')}
+              </label>
+              {badge('durationMin')}
+            </div>
             <DurationField id="wz-dur" minutes={w.values.durationMin} onChange={(v) => w.setValue('durationMin', v)} />
           </div>
           <div className="flex min-w-0 flex-col gap-2">
-            <FieldLabel htmlFor="wz-gain" badge={badge('elevationGainM')}>
-              {tSubmit('elevationLabel')}
-            </FieldLabel>
+            <div className="flex flex-col items-start gap-1.5">
+              <label htmlFor="wz-gain" className="text-sm font-semibold">
+                {tSubmit('elevationLabel')}
+              </label>
+              {badge('elevationGainM')}
+            </div>
             <NumberField id="wz-gain" value={w.values.elevationGainM} step={10} unit="m" label={tSubmit('elevationLabel')} onChange={(v) => w.setValue('elevationGainM', v)} />
+            {f && f.maxElevationM === null && !w.edited('elevationGainM') && (
+              <span className="text-xs text-muted-foreground">{t('noElevation')}</span>
+            )}
           </div>
         </WizardCard>
 
@@ -767,7 +789,7 @@ export function ReviewStep({ w }: { w: WizardModel }) {
   const tSubmit = useTranslations('submit')
   const country = w.countries.find((c) => c.code === w.values.country)
   const path = routeSvgPath(w.points, 600, 338, 24)
-  const via = w.places.filter(Boolean) as string[]
+  const via = w.places
   const cover = w.photos[0]
   const tDiff = useTranslations('difficulty')
   const diffLabel = tDiff(w.values.difficulty)

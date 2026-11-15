@@ -14,6 +14,7 @@ import { useRoutesCreateMutation, useRoutesUpdateMutation } from '@/hooks/use-ro
 import { gpxPointsToGeoJSON, type GPXData, type GPXPoint } from '@/lib/gpx-parser'
 import {
   buildRouteTitle,
+  titlePlaces,
   positionOnTrack,
   regionAt,
   suggestCategory,
@@ -118,7 +119,8 @@ export interface WizardModel {
   setValue: <K extends keyof Values>(k: K, v: Values[K]) => void
   resetValue: (k: AutoKey) => void
   title: string
-  places: (string | null | undefined)[]
+  /** Start, middle and end of the title, ready to show */
+  places: string[]
   countries: Places['countries']
   regions: Places['regions']
   region: Places['regions'][number] | null
@@ -127,8 +129,8 @@ export interface WizardModel {
   stops: PlacedStop[]
   setStops: React.Dispatch<React.SetStateAction<WizardStop[]>>
   via: PlacedStop | null
-  viaKey: string | null
-  setViaKey: (k: string | null) => void
+  viaText: string
+  setViaText: (v: string) => void
   photos: WizardPhoto[]
   setPhotos: React.Dispatch<React.SetStateAction<WizardPhoto[]>>
   checks: { key: string; ok: boolean; step: number; optional?: boolean }[]
@@ -218,18 +220,19 @@ export function RouteWizard({ locale }: { locale: string }) {
         .sort((a, b) => a.km - b.km),
     [stops, points, hasTrack],
   )
-  /** undefined: picked automatically; null: no stop in the title */
-  const [viaKey, setViaKey] = useState<string | null | undefined>(undefined)
+  /** Place in the middle of the title. undefined: the stop nearest the middle of the ride */
+  const [viaText, setViaText] = useState<string | undefined>(undefined)
   const autoVia = useMemo(() => {
-    if (!facts) return null
+    if (!facts) return ''
     const mid = facts.distanceKm / 2
     return (
       placedStops
-        .filter((s) => s.type !== 'gas_station' && s.offRouteKm <= 2)
-        .sort((a, b) => Math.abs(a.km - mid) - Math.abs(b.km - mid))[0]?.key ?? null
+        .filter((s) => s.type !== 'gas_station' && s.offRouteKm <= 2 && s.name.trim())
+        .sort((a, b) => Math.abs(a.km - mid) - Math.abs(b.km - mid))[0]?.name.trim() ?? ''
     )
   }, [placedStops, facts])
-  const via = placedStops.find((s) => s.key === (viaKey === undefined ? autoVia : viaKey)) ?? null
+  const viaName = viaText ?? autoVia
+  const via = placedStops.find((s) => s.name.trim() && s.name.trim() === viaName.trim()) ?? null
 
   // ---- photos (uploaded after the route exists: the storage path needs its id)
   const [photos, setPhotos] = useState<WizardPhoto[]>([])
@@ -288,18 +291,19 @@ export function RouteWizard({ locale }: { locale: string }) {
         lng: w.lng,
       })),
     )
-    setViaKey(undefined)
+    setViaText(undefined)
     setOverrides(keepWords)
   }
   const clearGpx = () => {
     setGpx(null)
     setStops([])
-    setViaKey(undefined)
+    setViaText(undefined)
     setOverrides(keepWords)
   }
 
   const region = regions.find((r) => r.id === values.regionId) ?? null
-  const places = [geo?.signature === signature ? geo.start : null, via?.name, geo?.signature === signature ? geo.end : null]
+  const geoNow = geo?.signature === signature ? geo : null
+  const places = titlePlaces([geoNow?.start, viaName, geoNow?.end])
   const title = buildRouteTitle(values.name, places)
 
   // ---- completeness
@@ -435,8 +439,8 @@ export function RouteWizard({ locale }: { locale: string }) {
     stops: placedStops,
     setStops,
     via,
-    viaKey: viaKey === undefined ? autoVia : viaKey,
-    setViaKey,
+    viaText: viaName,
+    setViaText,
     photos,
     setPhotos,
     checks,

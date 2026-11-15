@@ -122,13 +122,18 @@ export function suggestCategory(f: TrackFacts): Category {
  * Repeated places (a loop's start and end) are written once.
  */
 export function buildRouteTitle(name: string, places: (string | null | undefined)[]) {
-  const via = places
-    .map((p) => p?.trim())
-    .filter((p): p is string => !!p)
-    .filter((p, i, all) => i === 0 || p.toLowerCase() !== all[i - 1].toLowerCase())
+  const via = titlePlaces(places)
   const head = name.trim()
   if (!via.length) return head
   return `${head} | ${via.join(' > ')}`
+}
+
+/** Places of the title, blanks dropped and repeats in a row written once */
+export function titlePlaces(places: (string | null | undefined)[]) {
+  return places
+    .map((p) => p?.trim())
+    .filter((p): p is string => !!p)
+    .filter((p, i, all) => i === 0 || p.toLowerCase() !== all[i - 1].toLowerCase())
 }
 
 export interface RegionBox {

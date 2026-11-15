@@ -1487,13 +1487,12 @@
       "placesMissing": "Namen von Start und Ziel nicht gefunden. Der Kurator ergänzt sie bei der Prüfung.",
       "titleClose": "Schließen",
       "titleEdit": "Titel bearbeiten",
-      "titleHint": "Start und Ziel kommen aus dem Track.",
+      "titleHint": "Format: Name | Start > Über > Ziel. Start und Ziel kommen aus dem Track.",
       "nameLabel": "Hauptname",
       "namePlaceholder": "z. B. N222",
       "nameHint": "Die Straße oder der Name, unter dem die Route bekannt ist.",
-      "viaLabel": "Stopp in der Mitte des Titels",
-      "viaNone": "Keiner",
-      "viaHint": "Ein bekannter Stopp macht die Route leichter erkennbar.",
+      "viaLabel": "Über",
+      "viaHint": "Ein bekannter Ort unterwegs. Wähle einen Stopp oder gib einen Namen ein; leer lassen, um ihn wegzulassen.",
       "suggested": "vorgeschlagen",
       "whyDifficulty": "{climb} m/km Anstieg · {curves} Kurven/km",
       "whyCategory": "höchster Punkt {max} m",
@@ -1503,7 +1502,10 @@
       "descriptionPlaceholder": "Was macht diese Straße besonders? Beste Jahreszeit, Belag, wo man anhält.",
       "descriptionHint": "Optional, hilft aber dem Kurator und anderen Fahrern.",
       "typeLoop": "Rundtour",
-      "typeOutAndBack": "Hin und zurück"
+      "typeOutAndBack": "Hin und zurück",
+      "viaPlaceholder": "z. B. Pinhão",
+      "nameHasPlaces": "Gib nur den Namen ein. Start und Ziel werden nach dem | automatisch ergänzt.",
+      "noElevation": "Diese GPX-Datei hat keine Höhendaten. Trage die Höhenmeter ein, wenn du sie kennst."
     },
     "place": {
       "label": "Land und Region",

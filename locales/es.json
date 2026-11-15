@@ -1487,13 +1487,12 @@
       "placesMissing": "No encontramos los nombres de salida y llegada. El curador los completa en la revisión.",
       "titleClose": "Cerrar",
       "titleEdit": "Editar título",
-      "titleHint": "La salida y la llegada vienen del trazado.",
+      "titleHint": "Formato: Nombre | Salida > Pasando por > Llegada. La salida y la llegada vienen del trazado.",
       "nameLabel": "Nombre principal",
       "namePlaceholder": "Ej.: N222",
       "nameHint": "La carretera o el nombre por el que se conoce la ruta.",
-      "viaLabel": "Parada en medio del título",
-      "viaNone": "Ninguna",
-      "viaHint": "Una parada conocida ayuda a reconocer la ruta.",
+      "viaLabel": "Pasando por",
+      "viaHint": "Un lugar conocido a mitad de camino. Elige una parada o escribe un nombre; déjalo vacío para no usarlo.",
       "suggested": "sugerido",
       "whyDifficulty": "{climb} m/km de subida · {curves} curvas/km",
       "whyCategory": "altitud máxima de {max} m",
@@ -1503,7 +1502,10 @@
       "descriptionPlaceholder": "¿Qué hace especial esta carretera? Mejor época, firme, dónde parar.",
       "descriptionHint": "Opcional, pero ayuda al curador y a quien haga la ruta.",
       "typeLoop": "Circular",
-      "typeOutAndBack": "Ida y vuelta"
+      "typeOutAndBack": "Ida y vuelta",
+      "viaPlaceholder": "Ej.: Pinhão",
+      "nameHasPlaces": "Escribe solo el nombre. La salida y la llegada se añaden solas después del |.",
+      "noElevation": "Este GPX no tiene altitud. Rellena el desnivel si lo conoces."
     },
     "place": {
       "label": "País y región",

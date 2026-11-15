@@ -1487,13 +1487,12 @@
       "placesMissing": "We couldn't find the start and end names. The curator will complete them in review.",
       "titleClose": "Close",
       "titleEdit": "Edit title",
-      "titleHint": "Start and end come from the track.",
+      "titleHint": "Format: Name | Start > Via > End. Start and end come from the track.",
       "nameLabel": "Main name",
       "namePlaceholder": "E.g. N222",
       "nameHint": "The road, or the name the route is known by.",
-      "viaLabel": "Stop in the middle of the title",
-      "viaNone": "None",
-      "viaHint": "A well-known stop helps people recognise the route.",
+      "viaLabel": "Via",
+      "viaHint": "A well-known place along the way. Pick a stop or type a name; leave it empty to skip it.",
       "suggested": "suggested",
       "whyDifficulty": "{climb} m/km of climb · {curves} bends/km",
       "whyCategory": "highest point {max} m",
@@ -1503,7 +1502,10 @@
       "descriptionPlaceholder": "What makes this road special? Best season, surface, where to stop.",
       "descriptionHint": "Optional, but it helps the curator and other riders.",
       "typeLoop": "Loop",
-      "typeOutAndBack": "Out and back"
+      "typeOutAndBack": "Out and back",
+      "viaPlaceholder": "E.g. Pinhão",
+      "nameHasPlaces": "Type only the name. Start and end are added after the | automatically.",
+      "noElevation": "This GPX has no altitude. Fill in the climb if you know it."
     },
     "place": {
       "label": "Country and region",

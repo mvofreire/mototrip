@@ -1487,13 +1487,12 @@
       "placesMissing": "Não encontramos os nomes da partida e da chegada. O curador completa na avaliação.",
       "titleClose": "Fechar",
       "titleEdit": "Editar título",
-      "titleHint": "Partida e chegada vêm do traçado.",
+      "titleHint": "Formato: Nome | Partida > Passando por > Chegada. Partida e chegada vêm do traçado.",
       "nameLabel": "Nome principal",
       "namePlaceholder": "Ex.: N222",
       "nameHint": "A estrada ou o nome pelo qual a rota é conhecida.",
-      "viaLabel": "Parada no meio do título",
-      "viaNone": "Nenhuma",
-      "viaHint": "Uma parada conhecida ajuda a reconhecer a rota.",
+      "viaLabel": "Passando por",
+      "viaHint": "Um lugar conhecido no meio do caminho. Escolha uma parada ou escreva um nome; deixe vazio para não usar.",
       "suggested": "sugerido",
       "whyDifficulty": "{climb} m/km de subida · {curves} curvas/km",
       "whyCategory": "altitude máxima de {max} m",
@@ -1503,7 +1502,10 @@
       "descriptionPlaceholder": "O que torna esta estrada especial? Melhor época, piso, onde parar.",
       "descriptionHint": "Opcional, mas ajuda o curador e quem vai fazer a rota.",
       "typeLoop": "Circular",
-      "typeOutAndBack": "Ida e volta"
+      "typeOutAndBack": "Ida e volta",
+      "viaPlaceholder": "Ex.: Pinhão",
+      "nameHasPlaces": "Escreva só o nome. Partida e chegada já entram sozinhas depois do |.",
+      "noElevation": "Este GPX não tem altitude. Preencha o desnível se souber."
     },
     "place": {
       "label": "País e região",

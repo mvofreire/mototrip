@@ -1487,13 +1487,12 @@
       "placesMissing": "Noms du départ et de l'arrivée introuvables. Le curateur les complétera.",
       "titleClose": "Fermer",
       "titleEdit": "Modifier le titre",
-      "titleHint": "Le départ et l'arrivée viennent du tracé.",
+      "titleHint": "Format : Nom | Départ > En passant par > Arrivée. Le départ et l'arrivée viennent du tracé.",
       "nameLabel": "Nom principal",
       "namePlaceholder": "Ex. : N222",
       "nameHint": "La route, ou le nom sous lequel l'itinéraire est connu.",
-      "viaLabel": "Arrêt au milieu du titre",
-      "viaNone": "Aucun",
-      "viaHint": "Un arrêt connu aide à reconnaître l'itinéraire.",
+      "viaLabel": "En passant par",
+      "viaHint": "Un lieu connu en chemin. Choisissez un arrêt ou tapez un nom ; laissez vide pour ne pas l'utiliser.",
       "suggested": "suggéré",
       "whyDifficulty": "{climb} m/km de montée · {curves} virages/km",
       "whyCategory": "point culminant à {max} m",
@@ -1503,7 +1502,10 @@
       "descriptionPlaceholder": "Qu'est-ce qui rend cette route spéciale ? Saison, revêtement, où s'arrêter.",
       "descriptionHint": "Facultatif, mais utile au curateur et aux autres motards.",
       "typeLoop": "Boucle",
-      "typeOutAndBack": "Aller-retour"
+      "typeOutAndBack": "Aller-retour",
+      "viaPlaceholder": "Ex. : Pinhão",
+      "nameHasPlaces": "Tapez seulement le nom. Le départ et l'arrivée sont ajoutés automatiquement après le |.",
+      "noElevation": "Ce GPX n'a pas d'altitude. Indiquez le dénivelé si vous le connaissez."
     },
     "place": {
       "label": "Pays et région",
