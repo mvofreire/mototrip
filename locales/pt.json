@@ -564,7 +564,7 @@
     "title": "Política de Privacidade",
     "description": "Como coletamos, usamos e protegemos suas informações",
     "lastUpdated": "Última atualização",
-    "date": "10 de março de 2026",
+    "date": "15 de novembro de 2026",
     "intro": "No MotoTrip, respeitamos sua privacidade e nos comprometemos a proteger suas informações pessoais. Esta Política de Privacidade explica como coletamos, usamos e compartilhamos informações quando você usa nossa plataforma.",
     "collection": {
       "title": "Informações que Coletamos",
@@ -582,6 +582,10 @@
         "item2": "Fotos e descrições",
         "item3": "Avaliações e comentários"
       }
+    },
+    "googleSignIn": {
+      "title": "Login com Google",
+      "description": "Se você optar por entrar com o Google, o Google compartilha conosco apenas seu nome, endereço de e-mail e foto de perfil. Usamos esses dados somente para criar e identificar sua conta no MotoTrip. Não acessamos seus contatos, Gmail, Drive ou quaisquer outros dados do Google, e nunca vendemos nem compartilhamos essas informações para fins de publicidade. Você pode revogar o acesso do MotoTrip a qualquer momento nas configurações da sua Conta Google (myaccount.google.com/permissions) e solicitar a exclusão da sua conta entrando em contato conosco."
     },
     "usage": {
       "title": "Como Usamos Suas Informações",
