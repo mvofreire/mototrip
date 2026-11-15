@@ -171,6 +171,9 @@ export type Database = {
           code: string
           flag: string
           name: Record<string, string>
+          slug: string
+          intro: Record<string, string> | null
+          sort_order: number
           is_active: boolean
           created_by: string | null
           created_at: string
@@ -179,6 +182,10 @@ export type Database = {
           code: string
           flag: string
           name: Record<string, string>
+          /** Generated from the name when omitted (migration 027) */
+          slug?: string
+          intro?: Record<string, string> | null
+          sort_order?: number
           is_active?: boolean
           created_by?: string | null
           created_at?: string
@@ -187,6 +194,8 @@ export type Database = {
           code?: string
           flag?: string
           name?: Record<string, string>
+          intro?: Record<string, string> | null
+          sort_order?: number
           is_active?: boolean
         }
       }
@@ -198,6 +207,9 @@ export type Database = {
           name: Record<string, string>
           aliases: string[]
           bbox: number[] | null
+          slug: string
+          intro: Record<string, string> | null
+          sort_order: number
           is_active: boolean
           created_by: string | null
           created_at: string
@@ -209,6 +221,10 @@ export type Database = {
           name: Record<string, string>
           aliases?: string[]
           bbox?: number[] | null
+          /** Generated from route_region when omitted (migration 027) */
+          slug?: string
+          intro?: Record<string, string> | null
+          sort_order?: number
           is_active?: boolean
           created_by?: string | null
           created_at?: string
@@ -219,6 +235,8 @@ export type Database = {
           name?: Record<string, string>
           aliases?: string[]
           bbox?: number[] | null
+          intro?: Record<string, string> | null
+          sort_order?: number
           is_active?: boolean
         }
       }

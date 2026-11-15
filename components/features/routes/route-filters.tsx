@@ -9,7 +9,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { COUNTRIES, countryName } from '@/lib/countries'
-import { REGIONS, textFor } from '@/lib/regions'
+import { getRegions, textFor } from '@/lib/regions'
 import {
   countOptions, countRatings, DISTANCE_BUCKETS, DURATION_BUCKETS, ELEVATION_BUCKETS, HIGHLIGHTS,
   RATING_STEPS, STOP_TYPES, type ExploreFilters, type FilterGroup,
@@ -73,7 +73,7 @@ export function useFilterSections(locale: string): FilterSection[] {
     {
       group: 'region',
       title: t('groups.region'),
-      options: REGIONS.filter((r) => r.kind === 'region').map((r) => ({
+      options: getRegions().filter((r) => r.kind === 'region').map((r) => ({
         value: r.slug,
         label: textFor(r.name, locale),
         prefix: COUNTRIES.find((c) => c.code === r.country)?.flag,
@@ -198,7 +198,7 @@ export function toggleValue(filters: ExploreFilters, group: FilterGroup, value: 
   // Regions that no longer fit the chosen countries are dropped
   if (group === 'country' && updated.region?.length && next.length) {
     const keep = updated.region.filter((slug) => {
-      const region = REGIONS.find((r) => r.slug === slug)
+      const region = getRegions().find((r) => r.slug === slug)
       return region && next.includes(region.country)
     })
     updated.region = keep.length ? keep : undefined
@@ -220,7 +220,7 @@ export function RouteFilters({ routes, filters, onFiltersChange, locale, section
     if (section.group === 'region') {
       options = options.filter((o) => {
         if (selected.includes(o.value)) return true
-        const region = REGIONS.find((r) => r.slug === o.value)
+        const region = getRegions().find((r) => r.slug === o.value)
         if (filters.country?.length && region && !filters.country.includes(region.country)) return false
         return counts[o.value] > 0
       })

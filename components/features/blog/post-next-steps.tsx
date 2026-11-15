@@ -5,6 +5,7 @@ import type { RouteWithDetails } from '@/types'
 import { routePath } from '@/lib/route-url'
 import { localizeRoute } from '@/lib/localize'
 import { regionForRoute, regionLabel, textFor, type Region } from '@/lib/regions'
+import { loadRegions } from '@/lib/regions.server'
 import { formatDistance, formatDuration } from '@/lib/utils'
 import { coverOf, pickTranslation, type BlogPost } from '@/lib/blog/posts'
 import { TrackedLink } from './tracked-link'
@@ -26,6 +27,7 @@ interface PostNextStepsProps {
  */
 export async function PostNextSteps({ locale, postSlug, routes, related }: PostNextStepsProps) {
   const t = await getTranslations({ locale, namespace: 'blog' })
+  await loadRegions()
 
   const regions: Region[] = []
   for (const r of routes) {

@@ -17,6 +17,8 @@ import { OG_LOCALE } from '@/lib/seo'
 import { GTM_ID } from '@/lib/consent'
 import { ConsentScripts } from '@/components/consent/consent-scripts'
 import { CookieConsentBanner } from '@/components/consent/cookie-consent'
+import { RegionsHydrator } from '@/components/regions/regions-hydrator'
+import { loadRegions } from '@/lib/regions.server'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -113,6 +115,8 @@ export default async function LocaleLayout({
 
   // Providing all messages to the client
   const messages = await getMessages()
+  // Destination names for client components (intros stay on the server)
+  const regions = (await loadRegions()).map(({ intro: _intro, ...r }) => r)
 
   // Organization ties the site to its official profiles; WebSite gives Google
   // the site name to show above results ("MotoTrip" instead of the domain)
@@ -148,6 +152,7 @@ export default async function LocaleLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+        <RegionsHydrator regions={regions} />
         <NextIntlClientProvider messages={messages}>
           <Providers>
             <div className="flex min-h-screen flex-col">

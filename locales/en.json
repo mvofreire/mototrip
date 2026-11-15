@@ -1341,7 +1341,27 @@
     "viewAll": "See all routes: {name}",
     "footerTitle": "Destinations",
     "otherRegions": "Other regions",
-    "indexCtaTitle": "Know a route that isn't here yet?"
+    "indexCtaTitle": "Know a route that isn't here yet?",
+    "all": "All",
+    "countryFilter": "Filter by country",
+    "explore": "See routes",
+    "emptyShort": "No routes here yet.",
+    "destinationCount": "{count, plural, =0 {no regions} one {# region} other {# regions}}",
+    "statRoutes": "Routes",
+    "statKm": "Km of road",
+    "statDestinations": "Regions",
+    "statHours": "Hours of riding",
+    "mapTitle": "All routes on the map",
+    "regionsIn": "Regions: {name}",
+    "introFallback": "Motorcycle routes in {name} with map, stops and free GPX, shared by the MotoTrip community.",
+    "sortLabel": "Sort",
+    "sort": {
+      "featured": "Featured",
+      "shortest": "Shortest",
+      "longest": "Longest",
+      "rating": "Top rated"
+    },
+    "difficultyLabel": "Difficulty"
   },
   "oauth": {
     "continueWithGoogle": "Continue with Google",
