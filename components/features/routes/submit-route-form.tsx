@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
+import { DurationField, NumberField } from "./submit/wizard-fields";
 import { useTranslations } from "next-intl";
 import { COUNTRIES, countryName } from "@/lib/countries";
 import { FileUp, Loader2, MapPin, Route, Save, Trash2 } from "lucide-react";
@@ -40,10 +40,6 @@ interface SubmitRouteFormProps {
 
 /** Keeps a route being drawn on the map across reloads (new routes) */
 const DRAFT_STORAGE_KEY = "mototrip:route-builder-draft";
-
-/** Slider upper bound that never cuts off the current value */
-const sliderMax = (base: number, value: number, step: number) =>
-  Math.max(base, Math.ceil(value / step) * step);
 
 export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps) {
   const t = useTranslations("submit");
@@ -478,22 +474,21 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
               {formData.distance_km} {t("distanceUnit")}
             </span>
           </div>
-          <Slider
+          <NumberField
             id="distance"
-            min={10}
-            max={sliderMax(500, formData.distance_km, 50)}
-            step={5}
-            value={[formData.distance_km]}
-            onValueChange={([value]) =>
-              setFormData({ ...formData, distance_km: value })
-            }
+            label={t("distanceLabel")}
+            unit={t("distanceUnit")}
+            step={1}
+            min={1}
+            value={formData.distance_km}
+            onChange={(value) => setFormData({ ...formData, distance_km: value })}
           />
         </div>
 
         {/* Duration */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label htmlFor="duration">
+            <Label htmlFor="duration-h">
               {t("durationLabel")}{" "}
               <span className="text-destructive">{t("required")}</span>
             </Label>
@@ -504,15 +499,10 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
               })}
             </span>
           </div>
-          <Slider
+          <DurationField
             id="duration"
-            min={30}
-            max={sliderMax(720, formData.duration_minutes, 60)}
-            step={15}
-            value={[formData.duration_minutes]}
-            onValueChange={([value]) =>
-              setFormData({ ...formData, duration_minutes: value })
-            }
+            minutes={formData.duration_minutes}
+            onChange={(value) => setFormData({ ...formData, duration_minutes: value })}
           />
         </div>
 
@@ -524,15 +514,13 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
               {formData.elevation_gain_m} {t("elevationUnit")}
             </span>
           </div>
-          <Slider
+          <NumberField
             id="elevation"
-            min={0}
-            max={sliderMax(3000, formData.elevation_gain_m, 500)}
-            step={50}
-            value={[formData.elevation_gain_m]}
-            onValueChange={([value]) =>
-              setFormData({ ...formData, elevation_gain_m: value })
-            }
+            label={t("elevationLabel")}
+            unit={t("elevationUnit")}
+            step={10}
+            value={formData.elevation_gain_m}
+            onChange={(value) => setFormData({ ...formData, elevation_gain_m: value })}
           />
         </div>
       </Card>

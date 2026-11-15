@@ -166,6 +166,62 @@ export type Database = {
           created_at?: string
         }
       }
+      countries: {
+        Row: {
+          code: string
+          flag: string
+          name: Record<string, string>
+          is_active: boolean
+          created_by: string | null
+          created_at: string
+        }
+        Insert: {
+          code: string
+          flag: string
+          name: Record<string, string>
+          is_active?: boolean
+          created_by?: string | null
+          created_at?: string
+        }
+        Update: {
+          code?: string
+          flag?: string
+          name?: Record<string, string>
+          is_active?: boolean
+        }
+      }
+      regions: {
+        Row: {
+          id: string
+          country: string
+          route_region: string
+          name: Record<string, string>
+          aliases: string[]
+          bbox: number[] | null
+          is_active: boolean
+          created_by: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          country: string
+          route_region: string
+          name: Record<string, string>
+          aliases?: string[]
+          bbox?: number[] | null
+          is_active?: boolean
+          created_by?: string | null
+          created_at?: string
+        }
+        Update: {
+          country?: string
+          route_region?: string
+          name?: Record<string, string>
+          aliases?: string[]
+          bbox?: number[] | null
+          is_active?: boolean
+        }
+      }
       route_photos: {
         Row: {
           id: string

@@ -189,6 +189,13 @@ html, body {
   0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.5); }
   50% { box-shadow: 0 0 0 8px hsl(var(--primary) / 0); }
 }
+/* Submit wizard: soft pulse on "Send for review" when everything is filled in */
+.cta-pulse {
+  animation: cta-glow 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cta-pulse { animation: none; }
+}
 /* Zoom buttons below the full-screen map's close bar */
 .route-live-map .leaflet-top.leaflet-left {
   top: calc(env(safe-area-inset-top) + 4.25rem);

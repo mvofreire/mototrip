@@ -1,0 +1,1039 @@
+<title>MotoTrip Criar Rota</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: page header with prototype tabs, each prototype rendered as a full app screen. Dark-first, MotoTrip racing red on steel. */
+:root{
+  --bg:#0d0f14; --surface:#151922; --surface-2:#1d222d; --line:#2b313f; --line-soft:#222834;
+  --fg:#f6f7f9; --fg-2:#d5d9e2; --muted:#8592aa;
+  --brand:#f5293d; --brand-strong:#d90f25; --brand-soft:rgba(245,41,61,.14); --brand-text:#ff99a3;
+  --ok:#34d399; --ok-soft:rgba(52,211,153,.13); --warn:#fbbf24; --warn-soft:rgba(251,191,36,.13);
+  --info:#7dd3fc; --info-soft:rgba(125,211,252,.12);
+  --map-bg:#11141b; --contour:#232a37; --contour-2:#1a1f29; --route-glow:rgba(245,41,61,.35);
+  --shadow:0 30px 60px -30px rgba(0,0,0,.8);
+  --display:"Barlow Condensed","Arial Narrow",ui-sans-serif,system-ui,sans-serif;
+  --body:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#f6f7f9; --surface:#ffffff; --surface-2:#eceef2; --line:#d5d9e2; --line-soft:#e4e7ed;
+  --fg:#0f1218; --fg-2:#2b313f; --muted:#515d77;
+  --brand:#d90f25; --brand-strong:#b50a1e; --brand-soft:rgba(217,15,37,.09); --brand-text:#b50a1e;
+  --ok:#059669; --ok-soft:rgba(5,150,105,.1); --warn:#b45309; --warn-soft:rgba(217,119,6,.12);
+  --info:#0369a1; --info-soft:rgba(3,105,161,.09);
+  --map-bg:#eef0f4; --contour:#d9dde5; --contour-2:#e4e7ed; --route-glow:rgba(217,15,37,.22);
+  --shadow:0 24px 50px -28px rgba(15,18,24,.35); color-scheme:light;
+}}
+:root[data-theme="light"]{
+  --bg:#f6f7f9; --surface:#ffffff; --surface-2:#eceef2; --line:#d5d9e2; --line-soft:#e4e7ed;
+  --fg:#0f1218; --fg-2:#2b313f; --muted:#515d77;
+  --brand:#d90f25; --brand-strong:#b50a1e; --brand-soft:rgba(217,15,37,.09); --brand-text:#b50a1e;
+  --ok:#059669; --ok-soft:rgba(5,150,105,.1); --warn:#b45309; --warn-soft:rgba(217,119,6,.12);
+  --info:#0369a1; --info-soft:rgba(3,105,161,.09);
+  --map-bg:#eef0f4; --contour:#d9dde5; --contour-2:#e4e7ed; --route-glow:rgba(217,15,37,.22);
+  --shadow:0 24px 50px -28px rgba(15,18,24,.35); color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 60px}
+.wrap{max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{text-wrap:balance;margin:0}
+.display{font-family:var(--display);font-weight:800;text-transform:uppercase;line-height:.95;letter-spacing:.005em}
+.eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+a{color:var(--brand-text)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.num-tab{font-variant-numeric:tabular-nums}
+
+/* ---------- Page header ---------- */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.top h1{font-size:clamp(2rem,4.4vw,3.2rem)}
+.top h1 span{color:var(--brand)}
+.top p{margin:6px 0 0;color:var(--muted);max-width:62ch}
+.role{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:7px 12px;border-radius:7px;cursor:pointer;color:var(--muted);font-weight:600;font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 0 var(--line)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px}
+.tab{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 14px;cursor:pointer;text-align:left;display:flex;gap:10px;align-items:center;min-width:0;transition:border-color .2s,transform .2s}
+.tab:hover{transform:translateY(-1px)}
+.tab b{font-family:var(--display);font-size:22px;line-height:1;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);flex:none}
+.tab span{display:flex;flex-direction:column;font-size:13px;color:var(--muted)}
+.tab span strong{color:var(--fg);font-size:14px}
+.tab[aria-selected="true"]{border-color:var(--brand)}
+.tab[aria-selected="true"] b{background:var(--brand);color:#fff}
+
+/* ---------- App screen ---------- */
+.screen{background:var(--bg);border:1px solid var(--line);border-radius:18px;overflow:clip;box-shadow:var(--shadow)}
+.appbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--surface)}
+.logo{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:.02em;text-transform:uppercase}
+.logo i{font-style:normal;color:var(--brand)}
+.appbar nav{display:flex;gap:16px;font-size:13px;color:var(--muted)}
+@media (max-width:640px){.appbar nav{display:none}}
+.screen-body{padding:24px clamp(14px,3vw,32px) 32px}
+.proto-note{font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:flex-start;background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:10px 14px}
+.proto-note b{color:var(--fg)}
+
+/* ---------- Shared bits ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.lbl-row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.lbl{font-size:13px;font-weight:600;color:var(--fg-2)}
+.hint{font-size:12.5px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.pill.auto{background:var(--info-soft);color:var(--info)}
+.pill.edited{background:var(--warn-soft);color:var(--warn)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.brand{background:var(--brand-soft);color:var(--brand-text)}
+.pill.muted{background:var(--surface-2);color:var(--muted)}
+.pill button{border:0;background:transparent;cursor:pointer;color:inherit;padding:0;font-weight:700}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:10px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);text-decoration:none;transition:background .2s,transform .15s,border-color .2s}
+.btn:hover{border-color:var(--muted)}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--brand-strong);border-color:var(--brand-strong);color:#fff}
+.btn.primary:hover{background:var(--brand)}
+.btn.ghost{background:transparent}
+.btn.sm{min-height:34px;padding:0 12px;font-size:13px;border-radius:8px}
+.btn.big{min-height:54px;font-size:16px;padding:0 24px}
+.btn.cta{animation:cta-glow 2.4s ease-in-out infinite}
+@keyframes cta-glow{0%,100%{box-shadow:0 0 0 0 var(--route-glow)}50%{box-shadow:0 0 0 9px transparent}}
+.input,select.input,textarea.input{width:100%;min-height:42px;border:1px solid var(--line);background:var(--surface-2);border-radius:9px;padding:9px 12px;color:var(--fg)}
+textarea.input{min-height:110px;resize:vertical}
+.input:focus{border-color:var(--brand);outline:none}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:14px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));gap:12px}
+.fade-up{animation:fade-up .45s ease-out both}
+@keyframes fade-up{from{opacity:.001;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ico{width:16px;height:16px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ico.lg{width:20px;height:20px}
+
+/* Title block */
+.title-block{display:flex;flex-direction:column;gap:10px}
+.title-preview{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line-soft)}
+.t-name{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(28px,3.4vw,38px);line-height:.95}
+.t-via{font-size:14px;color:var(--fg-2)}
+.t-via i{font-style:normal;color:var(--brand);padding:0 3px}
+.t-raw{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+
+/* Number field (replaces sliders) */
+.stat-ed{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line-soft);min-width:0}
+.stat-ed .big-val{font-family:var(--display);font-weight:800;font-size:34px;line-height:1}
+.numf{display:flex;align-items:stretch;border:1px solid var(--line);border-radius:9px;background:var(--surface);overflow:hidden;min-height:40px}
+.numf button{border:0;background:transparent;width:36px;cursor:pointer;color:var(--muted);font-size:18px;flex:none}
+.numf button:hover{color:var(--fg);background:var(--surface-2)}
+.numf input{flex:1;min-width:0;border:0;background:transparent;text-align:center;font-weight:600;font-variant-numeric:tabular-nums;padding:0 4px}
+.numf input:focus{outline:none}
+.numf .unit{display:grid;place-items:center;padding:0 8px;font-size:12px;color:var(--muted);border-left:1px solid var(--line-soft)}
+.dur{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.why{font-size:12px;color:var(--muted)}
+
+/* Choice chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{position:relative;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;cursor:pointer;color:var(--fg-2);transition:all .18s}
+.chip:hover{border-color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chip .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--info);margin-left:6px;vertical-align:middle}
+.char-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:14px}
+.char{display:flex;flex-direction:column;gap:8px;min-width:0}
+
+/* Place picker */
+.flags{display:flex;gap:6px;flex-wrap:wrap}
+.flag{display:inline-flex;gap:7px;align-items:center;border:1px solid var(--line);background:var(--surface);padding:7px 12px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px}
+.flag[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft)}
+.new-region{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(160px,100%),1fr));gap:8px;padding:12px;border:1px dashed var(--brand);border-radius:10px;background:var(--brand-soft)}
+
+/* Stops */
+.stops{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.stop{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.stop .n{width:28px;height:28px;border-radius:50%;background:var(--brand-strong);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.stop .fields{display:flex;gap:8px;flex-wrap:wrap;align-items:center;min-width:0}
+.stop .fields input{flex:1 1 180px;min-width:0;min-height:36px}
+.stop .fields select{width:auto;flex:0 1 170px;min-height:36px;padding:6px 10px}
+.stop .meta{display:flex;gap:6px;flex-wrap:wrap}
+.icon-btn{border:0;background:transparent;width:34px;height:34px;border-radius:8px;cursor:pointer;color:var(--muted);display:grid;place-items:center}
+.icon-btn:hover{background:var(--surface-2);color:var(--brand)}
+.stop.new{animation:fade-up .35s ease-out both}
+
+/* Photos */
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.ph{position:relative;aspect-ratio:4/3;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--surface-2);max-width:100%}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph .cover{position:absolute;left:8px;top:8px}
+.ph .tools{position:absolute;right:6px;bottom:6px;display:flex;gap:4px;opacity:.95}
+.ph .tools button{width:28px;height:28px;border-radius:7px;border:0;background:rgba(13,15,20,.78);color:#fff;cursor:pointer;display:grid;place-items:center}
+.ph.add{display:grid;place-items:center;border-style:dashed;cursor:pointer;color:var(--muted);text-align:center;font-size:13px;font-weight:600;padding:8px}
+.ph.add:hover{border-color:var(--brand);color:var(--fg)}
+.ph.add input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.perm{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+
+/* Map */
+.map{position:relative;border-radius:14px;overflow:hidden;background:var(--map-bg);border:1px solid var(--line)}
+.map svg{display:block;width:100%;height:auto}
+.map .route{fill:none;stroke:var(--brand);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.map .route-glow{fill:none;stroke:var(--route-glow);stroke-width:12;stroke-linecap:round}
+.map .contour{fill:none;stroke:var(--contour);stroke-width:1.2}
+.map .contour.b{stroke:var(--contour-2)}
+.map .river{fill:none;stroke:var(--info-soft);stroke-width:9;stroke-linecap:round}
+.map.draw .route,.map.draw .route-glow{stroke-dasharray:1;stroke-dashoffset:1;animation:road-draw 2.6s ease-out .15s forwards}
+@keyframes road-draw{to{stroke-dashoffset:0}}
+.pulse{transform-box:fill-box;transform-origin:center;animation:road-pulse 2.2s ease-in-out infinite}
+@keyframes road-pulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.8);opacity:.2}}
+.map-chips{position:absolute;left:10px;bottom:10px;display:flex;gap:6px;flex-wrap:wrap}
+.map-chips span{background:rgba(13,15,20,.82);color:#f6f7f9;border-radius:8px;padding:5px 9px;font-size:12px;font-weight:600}
+.map-tip{position:absolute;right:10px;top:10px;background:rgba(13,15,20,.82);color:#f6f7f9;border-radius:8px;padding:6px 10px;font-size:12px}
+.map.clickable{cursor:crosshair}
+.elev{display:block;width:100%;height:56px}
+.elev path.a{fill:var(--brand-soft);stroke:none}
+.elev path.l{fill:none;stroke:var(--brand);stroke-width:1.5}
+
+/* Dropzone */
+.drop{position:relative;border:2px dashed var(--line);border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center;background:var(--surface);transition:border-color .2s,background .2s}
+.drop:hover,.drop.over{border-color:var(--brand);background:var(--brand-soft)}
+.drop .gpx-ico{width:54px;height:54px;border-radius:14px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center}
+.drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.drop .actions{position:relative;z-index:1;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.loaded-file{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--ok-soft);border:1px solid transparent;flex-wrap:wrap}
+.loaded-file .check{width:30px;height:30px;border-radius:50%;background:var(--ok);color:var(--bg);display:grid;place-items:center;flex:none}
+.loaded-file .check svg{stroke-dasharray:24;stroke-dashoffset:24;animation:check .5s .2s ease-out forwards}
+@keyframes check{to{stroke-dashoffset:0}}
+.loaded-file strong{display:block;overflow-wrap:anywhere}
+.loaded-file .lf-text{flex:1 1 200px;min-width:0}
+.src-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--surface-2);border-radius:11px;padding:4px}
+.src-tabs button{border:0;background:transparent;min-height:42px;border-radius:8px;font-weight:600;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:8px}
+.src-tabs button[aria-pressed="true"]{background:var(--surface);color:var(--fg)}
+
+/* gpx.studio guide */
+.guide{position:relative;border-radius:16px;padding:18px;background:linear-gradient(160deg,var(--brand-soft),transparent 60%),var(--surface);border:1px solid var(--brand);display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.guide h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:26px;line-height:.95}
+.guide ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:g}
+.guide li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start;font-size:13.5px;color:var(--fg-2)}
+.guide li::before{counter-increment:g;content:counter(g);width:26px;height:26px;border-radius:8px;background:var(--brand-strong);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.guide li b{color:var(--fg)}
+.icon-map{display:flex;flex-wrap:wrap;gap:6px}
+.icon-map span{font-size:11.5px;background:var(--surface-2);border:1px solid var(--line-soft);border-radius:7px;padding:3px 8px;color:var(--fg-2)}
+.icon-map span em{font-style:normal;color:var(--muted)}
+.guide-strip{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1px solid var(--brand);background:var(--brand-soft);flex-wrap:wrap}
+.guide-strip .gi{width:36px;height:36px;border-radius:10px;background:var(--brand-strong);color:#fff;display:grid;place-items:center;flex:none}
+.guide-strip div{flex:1 1 220px;min-width:0;font-size:13.5px}
+.guide-strip strong{display:block;font-size:14.5px}
+
+/* Review / submit */
+.review{display:flex;flex-direction:column;gap:14px}
+.timeline{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;position:relative}
+.timeline div{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;font-size:12px;color:var(--muted);position:relative;z-index:1}
+.timeline b{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);border:2px solid var(--line);color:var(--muted)}
+.timeline div.on b{border-color:var(--brand);color:var(--brand)}
+.timeline div strong{color:var(--fg);font-size:12.5px}
+.timeline::before{content:"";position:absolute;left:16%;right:16%;top:15px;height:2px;background:var(--line)}
+.review-note{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--fg-2);padding:12px;border-radius:12px;background:var(--info-soft)}
+.review-note svg{color:var(--info);margin-top:2px}
+
+/* Preview card (as on the site) */
+.pv{border-radius:16px;border:1px solid var(--line);background:var(--surface);overflow:hidden;display:flex;flex-direction:column}
+.pv .pv-map{position:relative;aspect-ratio:16/9;background:var(--map-bg);max-width:100%}
+.pv .pv-map img,.pv .pv-map svg{width:100%;height:100%;object-fit:cover;display:block}
+.pv .pv-body{padding:16px;display:flex;flex-direction:column;gap:10px}
+.pv .pv-name{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:30px;line-height:.95}
+.pv .pv-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.pv .pv-stats div{font-family:var(--display);font-weight:800;font-size:22px;line-height:1}
+.pv .pv-stats small{display:block;font-family:var(--body);font-weight:500;font-size:11.5px;color:var(--muted);text-transform:none;margin-top:3px}
+
+/* Success overlay */
+.done{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:rgba(5,6,9,.72);padding:16px;animation:fade-up .3s ease-out}
+.done .box{max-width:440px;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px;text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
+.done .ring{width:68px;height:68px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center}
+
+/* ---------- Prototype A: wizard ---------- */
+.wz-head{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+.wz-head h2{font-size:clamp(30px,4vw,44px)}
+.stepper{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:22px;position:relative}
+.stepper button{border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;gap:8px;padding:0;text-align:left;color:var(--muted);min-width:0}
+.stepper .bar{height:4px;border-radius:4px;background:var(--line);overflow:hidden}
+.stepper .bar i{display:block;height:100%;width:0;background:var(--brand);transition:width .5s ease}
+.stepper .s-lbl{display:flex;gap:8px;align-items:center;font-size:13px;font-weight:600;min-width:0}
+.stepper .s-lbl b{width:22px;height:22px;flex:none;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:11px}
+.stepper .s-lbl span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stepper button.cur{color:var(--fg)}
+.stepper button.cur b{border-color:var(--brand);color:var(--brand)}
+.stepper button.past b{background:var(--brand-strong);border-color:var(--brand-strong);color:#fff}
+@media (max-width:560px){.stepper .s-lbl span{display:none}}
+.wz-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.wz-layout{grid-template-columns:1fr}}
+.wz-foot{display:flex;justify-content:space-between;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line);flex-wrap:wrap}
+.wz-foot .btn{flex:0 1 auto}
+.sect-title{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.sect-title h3{font-family:var(--display);font-weight:700;text-transform:uppercase;font-size:22px;letter-spacing:.01em}
+.check-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.check-list li{display:flex;gap:10px;align-items:center;font-size:13.5px}
+.check-list li .ck{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--ok-soft);color:var(--ok)}
+.check-list li.no .ck{background:var(--surface-2);color:var(--muted)}
+.check-list li button{margin-left:auto}
+
+/* ---------- Prototype B: map studio ---------- */
+.studio{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0;min-height:720px}
+@media (max-width:960px){.studio{grid-template-columns:1fr}}
+.studio-map{position:relative;background:var(--map-bg);border-right:1px solid var(--line);display:flex;flex-direction:column}
+.studio-map .map{border:0;border-radius:0;flex:1;display:flex;align-items:center}
+.studio-map .map svg{height:100%;max-height:640px}
+.studio-hud{position:absolute;left:14px;right:14px;top:14px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;z-index:2}
+.hud-card{background:rgba(13,15,20,.85);color:#f6f7f9;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;backdrop-filter:blur(6px)}
+.hud-card .t-name{font-size:24px}
+.hud-card .t-via{color:#b0b8c8;font-size:12.5px}
+.studio-elev{padding:10px 14px 14px;border-top:1px solid var(--line);background:var(--surface)}
+.studio-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:6px}
+.studio-stats div{font-family:var(--display);font-weight:800;font-size:24px;line-height:1}
+.studio-stats small{display:block;font-family:var(--body);font-weight:500;font-size:11px;color:var(--muted)}
+.studio-panel{display:flex;flex-direction:column;background:var(--bg);min-width:0}
+.studio-scroll{padding:18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.acc{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+.acc>button{width:100%;display:flex;align-items:center;gap:12px;padding:14px 16px;border:0;background:transparent;cursor:pointer;text-align:left}
+.acc>button .st{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--surface-2);color:var(--muted);font-size:12px;font-weight:700}
+.acc.complete>button .st{background:var(--ok-soft);color:var(--ok)}
+.acc>button .tt{flex:1;min-width:0;display:flex;flex-direction:column}
+.acc>button .tt strong{font-size:15px}
+.acc>button .tt span{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acc>button .chev{transition:transform .25s;color:var(--muted)}
+.acc.open>button .chev{transform:rotate(180deg)}
+.acc .acc-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.acc.open .acc-body{grid-template-rows:1fr}
+.acc .acc-inner{overflow:hidden}
+.acc .acc-pad{padding:0 16px 16px;display:flex;flex-direction:column;gap:14px}
+.studio-bar{position:sticky;bottom:0;padding:14px 18px;border-top:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;gap:10px}
+.prog{height:6px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--ok);transition:width .5s ease}
+
+/* ---------- Prototype C: single page + live preview ---------- */
+.c-hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;margin-bottom:24px}
+@media (max-width:900px){.c-hero{grid-template-columns:1fr}}
+.c-hero h2{font-size:clamp(34px,4.6vw,56px)}
+.c-hero h2 span{color:var(--brand)}
+.c-main{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:960px){.c-main{grid-template-columns:1fr}}
+.c-side{position:sticky;top:16px;display:flex;flex-direction:column;gap:14px}
+.c-sec{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px}
+.c-sec .rail{display:flex;flex-direction:column;align-items:center;gap:6px}
+.c-sec .rail b{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.c-sec.complete .rail b{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.c-sec .rail i{flex:1;width:2px;background:var(--line);min-height:20px}
+.c-sec:last-child .rail i{display:none}
+.c-sec .card{margin-bottom:14px}
+
+/* ---------- Analysis tab ---------- */
+.an{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.an{grid-template-columns:1fr}}
+.an h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:26px}
+.an p,.an li{color:var(--fg-2);font-size:14px}
+.an ul{padding-left:18px;margin:0;display:flex;flex-direction:column;gap:6px}
+.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px;overflow-x:auto;white-space:pre;color:var(--fg-2)}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+td.bad{color:var(--warn)}
+.cmp td:first-child{font-weight:600;color:var(--fg)}
+
+/* Read-mode stop row + collapsed title editor (all widths) */
+.stop-read{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:left;border:0;background:transparent;padding:0;cursor:pointer;color:inherit}
+.stop-read strong{font-size:14.5px;line-height:1.3;overflow-wrap:anywhere}
+.stop.editing{border-color:var(--brand)}
+.title-fields[data-collapsed]{display:none}
+.step-now{display:none;font-size:13px;color:var(--muted);margin:-12px 0 18px}
+.step-now b{color:var(--fg)}
+
+/* ---------- Phone: wizard A ---------- */
+@media (max-width:640px){
+  .stepper{margin-bottom:22px}
+  .stepper .s-lbl{display:none}
+  .step-now{display:block}
+  .sect-title .hint{display:none}
+  .wz-foot{position:sticky;bottom:0;z-index:5;margin:22px calc(-1 * clamp(14px,3vw,32px)) -32px;padding:12px clamp(14px,3vw,32px) calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -12px 24px -16px rgba(0,0,0,.6)}
+  .wz-foot .btn{flex:1 1 0;min-height:50px}
+  .wz-foot .btn.ghost{flex:0 0 auto}
+  .loaded-file .lf-text{flex:1 1 calc(100% - 42px)}
+  .loaded-file .btn{flex:1 1 0}
+  .chip{padding:11px 14px}
+  .icon-btn{width:44px;height:44px}
+  .ph .tools button{width:38px;height:38px}
+  .stat-ed .big-val{display:none}
+  .grid-3{gap:8px}
+  .t-raw{display:none}
+  .wz-layout>.m-first{order:-1}
+  .wz-layout .m-hide{display:none}
+  .card{padding:14px}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .map.draw .route,.map.draw .route-glow{stroke-dashoffset:0}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="5" r="2.5"/><path d="M8.5 19H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h6.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-4.5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M9 7h6"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.8z"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M8 16l2-3 2 2 3-4"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">MotoTrip · protótipos de layout</div>
+      <h1 class="display">Criar rota <span>· 3 propostas</span></h1>
+      <p>Os três usam os mesmos dados de exemplo (N222, Peso da Régua › Pinhão › São João da Pesqueira). Pode carregar um .gpx seu para ver o título, os números e as paradas saírem dele.</p>
+    </div>
+    <div class="role">
+      <span class="eyebrow">Ver como</span>
+      <div class="seg" id="role-seg">
+        <button type="button" data-role="author" aria-pressed="true">Autor</button>
+        <button type="button" data-role="curator" aria-pressed="false">Curador</button>
+        <button type="button" data-role="admin" aria-pressed="false">Admin</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="a" aria-selected="true"><b>A</b><span><strong>Wizard em 4 passos</strong>Um assunto por tela</span></button>
+    <button class="tab" role="tab" data-tab="b" aria-selected="false"><b>B</b><span><strong>Estúdio com mapa</strong>Mapa fixo, painel ao lado</span></button>
+    <button class="tab" role="tab" data-tab="c" aria-selected="false"><b>C</b><span><strong>Página única + prévia</strong>Card da rota ao vivo</span></button>
+    <button class="tab" role="tab" data-tab="x" aria-selected="false"><b>?</b><span><strong>Análise e decisões</strong>Regiões, auto-campos, fotos</span></button>
+  </div>
+
+  <!-- ===================== A: WIZARD ===================== -->
+  <section class="proto" data-proto="a">
+    <div class="screen">
+      <div class="appbar"><span class="logo">Moto<i>Trip</i></span><nav><span>Explorar</span><span>Destinos</span><span>Blog</span><span style="color:var(--fg)">Enviar rota</span></nav></div>
+      <div class="screen-body">
+        <div class="wz-head">
+          <span class="eyebrow">Enviar uma rota</span>
+          <h2 class="display">Partilhe a sua estrada</h2>
+        </div>
+        <div class="stepper" id="a-stepper"></div>
+        <div id="a-step"></div>
+        <div class="wz-foot">
+          <button type="button" class="btn ghost" id="a-back"><svg class="ico"><use href="#i-left"/></svg>Voltar</button>
+          <button type="button" class="btn primary" id="a-next">Continuar<svg class="ico"><use href="#i-right"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== B: STUDIO ===================== -->
+  <section class="proto" data-proto="b" hidden>
+    <div class="screen">
+      <div class="appbar"><span class="logo">Moto<i>Trip</i></span><nav><span>Explorar</span><span>Destinos</span><span>Blog</span><span style="color:var(--fg)">Enviar rota</span></nav></div>
+      <div class="studio">
+        <div class="studio-map">
+          <div class="studio-hud">
+            <div class="hud-card" data-slot="hudTitle"></div>
+            <div class="hud-card" style="font-size:12px">Clique no mapa para adicionar uma parada</div>
+          </div>
+          <div data-slot="bigMap" style="flex:1;display:flex"></div>
+          <div class="studio-elev" data-slot="elev"></div>
+        </div>
+        <div class="studio-panel">
+          <div class="studio-scroll" id="b-scroll"></div>
+          <div class="studio-bar" data-slot="bBar"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== C: SINGLE PAGE ===================== -->
+  <section class="proto" data-proto="c" hidden>
+    <div class="screen">
+      <div class="appbar"><span class="logo">Moto<i>Trip</i></span><nav><span>Explorar</span><span>Destinos</span><span>Blog</span><span style="color:var(--fg)">Enviar rota</span></nav></div>
+      <div class="screen-body">
+        <div class="c-hero">
+          <div class="stack">
+            <span class="eyebrow">Enviar uma rota</span>
+            <h2 class="display">Comece pelo <span>GPX.</span><br>O resto a gente preenche.</h2>
+            <div data-slot="drop"></div>
+          </div>
+          <div data-slot="guide"></div>
+        </div>
+        <div class="c-main">
+          <div id="c-form"></div>
+          <aside class="c-side">
+            <span class="eyebrow">Como vai aparecer no site</span>
+            <div data-slot="preview"></div>
+            <div class="card" data-slot="submit"></div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ANALYSIS ===================== -->
+  <section class="proto" data-proto="x" hidden>
+    <div class="an">
+      <div class="card stack">
+        <span class="eyebrow">Países e regiões</span>
+        <h3>Sim, vale criar as tabelas</h3>
+        <p>Hoje o país vem de uma lista fixa em <code>lib/countries.ts</code> (PT, ES, FR) e a região é texto livre. As landing pages de destino dependem de <code>lib/regions.ts</code>, que já precisa de listas de apelidos (<code>match</code>) para juntar grafias diferentes. Os dados de produção mostram o problema:</p>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>País</th><th>Valor em routes.region</th><th>Rotas</th></tr></thead>
+          <tbody>
+            <tr><td>PT</td><td>Norte</td><td class="num-tab">9</td></tr>
+            <tr><td>PT</td><td class="bad">Norte Portugal</td><td class="num-tab">4</td></tr>
+            <tr><td>PT</td><td class="bad">North Portugal</td><td class="num-tab">1</td></tr>
+            <tr><td>ES</td><td class="bad">North Spain</td><td class="num-tab">1</td></tr>
+            <tr><td>FR</td><td>Alpes, Provença, Córsega…</td><td class="num-tab">22</td></tr>
+          </tbody>
+        </table></div>
+        <p>"North Portugal" não está no <code>match</code> da região Norte, então essa rota não aparece em /regions/norte. E a Normandia não tem página de destino. Com uma tabela, o autor escolhe de uma lista, os erros de grafia acabam e uma região nova vira página de destino sem deploy.</p>
+        <ul>
+          <li><b>Leitura:</b> pública.</li>
+          <li><b>Criar e editar:</b> só <code>curator</code> e <code>admin</code> (RLS com a função de staff que já existe na migração 014).</li>
+          <li><b>Autor sem região na lista:</b> escolhe a mais próxima e escreve uma sugestão; o curador cria a região na avaliação.</li>
+          <li><b>Detecção automática:</b> guardar um bbox por região permite pré-selecionar país e região a partir do primeiro ponto do GPX.</li>
+        </ul>
+      </div>
+      <div class="card stack">
+        <span class="eyebrow">Esboço do schema</span>
+        <div class="code">create table countries (
+  code        char(2) primary key,   -- ISO 3166-1
+  flag        text not null,
+  name        jsonb not null,         -- {pt,en,es,fr,de}
+  is_active   boolean default true
+);
+
+create table regions (
+  id          uuid primary key default gen_random_uuid(),
+  slug        text unique not null,   -- /regions/[slug]
+  country     char(2) references countries,
+  name        jsonb not null,
+  intro       jsonb,
+  aliases     text[] default '{}',    -- substitui match[]
+  bbox        numeric[4],             -- auto-detecção pelo GPX
+  created_by  uuid references profiles,
+  created_at  timestamptz default now()
+);
+
+alter table routes add column region_id uuid references regions;
+-- backfill com os aliases de lib/regions.ts;
+-- routes.region (texto) fica até migrar tudo
+
+-- RLS: select para todos;
+-- insert/update/delete só is_staff()</div>
+      </div>
+      <div class="card stack" style="grid-column:1/-1">
+        <span class="eyebrow">O que é igual nos três protótipos</span>
+        <div class="tbl-wrap"><table class="cmp">
+          <thead><tr><th>Campo</th><th>Como é preenchido</th><th>O autor pode</th></tr></thead>
+          <tbody>
+            <tr><td>Título</td><td>Padrão <code>Nome | Partida &gt; Parada &gt; Chegada</code>. O nome sai da estrada principal ou do nome do ficheiro; partida e chegada por geocodificação reversa do primeiro e do último ponto; o meio é a parada principal.</td><td>Trocar o nome principal e escolher qual parada entra no meio.</td></tr>
+            <tr><td>Distância, desnível</td><td>Do GPX (já é feito hoje) ou do route builder.</td><td>Corrigir num campo numérico com −/+, sem limite máximo.</td></tr>
+            <tr><td>Duração estimada</td><td>Tempos do GPX quando existem; senão distância a ~40 km/h, arredondada a 5 min. O builder já calcula a sua.</td><td>Editar horas e minutos separadamente.</td></tr>
+            <tr><td>Tipo de rota</td><td>Partida e chegada a menos de 1,5 km = circular; senão ida e volta. (Vale considerar um terceiro valor "só ida".)</td><td>Trocar com um toque.</td></tr>
+            <tr><td>Dificuldade</td><td>Pontuação a partir de desnível por km e curvas por km (variação de rumo).</td><td>Trocar com um toque; o curador confirma.</td></tr>
+            <tr><td>Categoria</td><td>Sugestão: montanha se altitude máx. &gt; 1200 m ou &gt; 25 m/km de subida; senão cênica. Costeira e aventura ficam como escolha do autor.</td><td>Trocar com um toque.</td></tr>
+            <tr><td>País e região</td><td>Pré-seleção pelo bbox da região que contém o primeiro ponto.</td><td>Escolher de uma lista. Curador e admin também criam regiões.</td></tr>
+            <tr><td>Paradas</td><td>Waypoints do GPX ou pontos do builder, ordenados pela posição no traçado.</td><td>Renomear, mudar o tipo, remover, adicionar.</td></tr>
+            <tr><td>Fotos</td><td>Ficam na fila no navegador e sobem para <code>route_photos</code> logo depois de criar a rota (o caminho precisa do id).</td><td>Autor, curador e admin gerem. A RLS da migração 014 já permite isso.</td></tr>
+          </tbody>
+        </table></div>
+        <p class="hint">Campos marcados com <span class="pill auto">auto</span> vieram do traçado; ao editar viram <span class="pill edited">editado</span> e podem voltar ao valor calculado. Os sliders saem todos.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="overlay"></div>
+
+<script>
+(function(){
+const BLOG_URL = 'https://mototrip.pt/pt/blog/como-criar-gpx-de-rota-de-moto-no-gpx-studio';
+const STUDIO_URL = 'https://gpx.studio/app';
+const SAMPLE_PATH = 'M58,322 C96,318 118,282 150,268 S214,276 236,238 S228,176 262,160 S322,176 352,150 S372,96 410,92 S470,118 498,96 S530,58 556,52';
+const COUNTRIES = [{code:'PT',flag:'🇵🇹',name:'Portugal'},{code:'ES',flag:'🇪🇸',name:'Espanha'},{code:'FR',flag:'🇫🇷',name:'França'}];
+const REGIONS = {
+  PT:['Norte','Centro','Lisboa','Alentejo','Algarve'],
+  ES:['Picos de Europa','Pirenéus','Andaluzia','Galiza','Costa Brava'],
+  FR:['Alpes','Córsega','Maciço Central','Normandia','Pirenéus','Provença','Vosges e Alsácia']
+};
+const STOP_TYPES = {viewpoint:'Miradouro',cafe:'Café',gas_station:'Combustível',restaurant:'Restaurante',landmark:'Ponto turístico',accommodation:'Alojamento'};
+const CATS = {scenic:'Cênica',mountain:'Montanha',coastal:'Costeira',weekend:'Fim de semana',adventure:'Aventura'};
+const DIFFS = {easy:'Fácil',moderate:'Moderada',challenging:'Desafiante',expert:'Experiente'};
+const TYPES = {loop:'Circular',out_and_back:'Ida e volta'};
+
+function photoSVG(a,b,c){
+  const s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="400" height="300" fill="url(#g)"/><circle cx="300" cy="80" r="34" fill="#ffd9a8" opacity=".85"/><path d="M0 210 L80 140 L150 190 L230 110 L320 180 L400 130 L400 300 L0 300Z" fill="${c}" opacity=".75"/><path d="M0 250 L100 200 L190 240 L280 190 L400 230 L400 300 L0 300Z" fill="${c}"/><path d="M40 300 C120 260 170 270 230 250 S330 230 400 240" stroke="#f5293d" stroke-width="5" fill="none"/></svg>`;
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s);
+}
+const SAMPLE_PHOTOS = [
+  {src:photoSVG('#f2a65a','#7a4d6b','#2f3b2f'),name:'Socalcos do Douro (exemplo)'},
+  {src:photoSVG('#8fb8de','#d9e4ec','#3d5a40'),name:'Miradouro (exemplo)'}
+];
+
+function sampleState(){
+  return {
+    loaded:true, justLoaded:true, file:'n222-regua-pinhao.gpx', points:1874,
+    path:SAMPLE_PATH, elev:[95,110,140,180,240,310,380,450,520,590,612,560,480,400,330,260,200,160,140,180,230,300,380,450,500],
+    name:'N222', start:'Peso da Régua', end:'São João da Pesqueira', viaIdx:1,
+    calc:{km:47,min:70,gain:820,maxEle:612,curvesPerKm:6.6,endGapKm:31},
+    km:47, min:70, gain:820, edited:{},
+    category:'scenic', difficulty:'moderate', type:'out_and_back',
+    country:'PT', region:'Norte', regionAuto:true, newRegionOpen:false, regionSuggestion:'',
+    stops:[
+      {name:'Pinhão',type:'landmark',f:.56,km:26},
+      {name:'Miradouro de Casal de Loivos',type:'viewpoint',f:.62,km:29,far:0},
+      {name:'Bomba de combustível da Régua',type:'gas_station',f:.03,km:1},
+      {name:'Quinta com vista (marcada fora)',type:'restaurant',f:.85,km:40,far:2.6}
+    ].sort((a,b)=>a.f-b.f),
+    photos:SAMPLE_PHOTOS.slice(),
+    desc:'A estrada mais fotografada do Douro: curvas lentas entre socalcos de vinha, sempre com o rio ao lado. Melhor no outono, nas vindimas.',
+    source:'gpx', role:'author', step:0, bOpen:'title'
+  };
+}
+let S = sampleState();
+function suggested(){
+  const c=S.calc; const gpk=c.gain/Math.max(c.km,1);
+  const score=gpk+c.curvesPerKm*1.2;
+  return {
+    difficulty: score<12?'easy':score<26?'moderate':score<40?'challenging':'expert',
+    category: (c.maxEle>1200||gpk>25)?'mountain':'scenic',
+    type: c.endGapKm<1.5?'loop':'out_and_back'
+  };
+}
+const esc = s => String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const ico = (id,cls='') => `<svg class="ico ${cls}" aria-hidden="true"><use href="#i-${id}"/></svg>`;
+const fmtDur = m => `${Math.floor(m/60)} h ${String(m%60).padStart(2,'0')}`;
+const isStaff = () => S.role!=='author';
+function via(){ return S.stops[S.viaIdx]?.name || ''; }
+function titleParts(){ const p=[S.start]; if(via()) p.push(via()); p.push(S.end); return p; }
+function rawTitle(){ return `${S.name} | ${titleParts().join(' > ')}`; }
+
+/* ---------------- slot renderers ---------------- */
+function autoPill(key, label){
+  if(!S.loaded) return `<span class="pill muted">aguarda GPX</span>`;
+  if(key && S.edited[key]) return `<span class="pill edited">editado <button type="button" data-reset="${key}" title="Voltar ao valor calculado">${ico('reset')}</button></span>`;
+  return `<span class="pill auto">${ico('route')}${label||'auto · GPX'}</span>`;
+}
+const R = {};
+R.title = p => {
+  if(!S.loaded) return `<div class="title-block"><div class="lbl-row"><span class="lbl">Título da rota</span>${autoPill()}</div><div class="title-preview"><span class="t-name" style="color:var(--muted)">Nome | Partida › Chegada</span><span class="hint">Gerado assim que carregar o traçado.</span></div></div>`;
+  const opts = S.stops.map((s,i)=>`<option value="${i}" ${i===S.viaIdx?'selected':''}>${esc(s.name)}</option>`).join('');
+  return `<div class="title-block">
+    <div class="lbl-row"><span class="lbl">Título da rota</span>${autoPill('name','gerado do GPX')}</div>
+    <div class="title-preview">
+      <span class="t-name" data-live="name">${esc(S.name)}</span>
+      <span class="t-via" data-live="via">${titleParts().map(esc).join(' <i>›</i> ')}</span>
+    </div>
+    <div class="row"><button type="button" class="btn sm" data-act="toggle-title" aria-expanded="${!!S.titleOpen}">${S.titleOpen?'Fechar':'Editar título'}</button><span class="hint">Partida e chegada vêm do traçado.</span></div>
+    <div class="grid-2 title-fields" ${S.titleOpen?'':'data-collapsed'}>
+      <div class="stack" style="gap:6px"><label class="lbl" for="${p}-name">Nome principal</label>
+        <input class="input" id="${p}-name" data-bind="name" value="${esc(S.name)}" maxlength="40">
+        <span class="hint">A estrada ou o nome por que a rota é conhecida.</span></div>
+      <div class="stack" style="gap:6px"><label class="lbl" for="${p}-via">Parada no meio do título</label>
+        <select class="input" id="${p}-via" data-bind="viaIdx">${opts}</select>
+        <span class="hint">Partida e chegada vêm do primeiro e do último ponto.</span></div>
+    </div>
+    <span class="t-raw" data-live="raw">${esc(rawTitle())}</span>
+  </div>`;
+};
+R.place = p => {
+  const flags = COUNTRIES.map(c=>`<button type="button" class="flag" data-country="${c.code}" aria-pressed="${S.country===c.code}">${c.flag} ${c.name}</button>`).join('');
+  const regs = (REGIONS[S.country]||[]).map(r=>`<option ${r===S.region?'selected':''}>${esc(r)}</option>`).join('');
+  const staffOpt = isStaff()?`<option value="__new">＋ Nova região…</option>`:'';
+  const extra = isStaff()
+    ? (S.newRegionOpen?`<div class="new-region fade-up">
+        <input class="input" id="${p}-nr-pt" placeholder="Nome (pt), ex.: Beira Baixa">
+        <input class="input" id="${p}-nr-en" placeholder="Nome (en), ex.: Beira Baixa">
+        <div class="row"><button type="button" class="btn sm primary" data-act="create-region" data-p="${p}">${ico('plus')}Criar região</button><button type="button" class="btn sm ghost" data-act="cancel-region">Cancelar</button></div>
+        <span class="hint" style="grid-column:1/-1">Só curadores e admins criam regiões. Ela ganha uma página em /regions automaticamente.</span></div>`:'')
+    : `<div class="stack" style="gap:6px"><label class="hint" for="${p}-sug">Não encontra a sua região? Escolha a mais próxima e sugira o nome. O curador cria na avaliação.</label><input class="input" id="${p}-sug" data-bind="regionSuggestion" value="${esc(S.regionSuggestion)}" placeholder="Sugestão de região (opcional)"></div>`;
+  return `<div class="stack" style="gap:12px">
+    <div class="lbl-row"><span class="lbl">País e região</span>${S.loaded&&S.regionAuto?`<span class="pill auto">${ico('pin')}detectado pela partida</span>`:''}</div>
+    <div class="flags">${flags}</div>
+    <select class="input" id="${p}-region" data-bind="region" aria-label="Região">${regs}${staffOpt}</select>
+    ${extra}
+  </div>`;
+};
+function numField(p,key,unit,step,label){
+  return `<div class="numf"><button type="button" data-step="${key}" data-d="-${step}" aria-label="Diminuir ${label}">−</button><input id="${p}-${key}" data-num="${key}" inputmode="numeric" value="${S[key]}" aria-label="${label}"><span class="unit">${unit}</span><button type="button" data-step="${key}" data-d="${step}" aria-label="Aumentar ${label}">+</button></div>`;
+}
+R.stats = p => {
+  const dis = !S.loaded;
+  const h=Math.floor(S.min/60), m=S.min%60;
+  const cnt = S.justLoaded?' data-count':'';
+  return `<div class="grid-3" ${dis?'style="opacity:.5;pointer-events:none"':''}>
+    <div class="stat-ed"><div class="lbl-row"><span class="lbl">Distância</span>${autoPill('km')}</div>
+      <div class="big-val num-tab"><span${cnt} data-to="${S.km}">${S.loaded?S.km:'—'}</span> km</div>${numField(p,'km','km',1,'distância')}</div>
+    <div class="stat-ed"><div class="lbl-row"><span class="lbl">Duração estimada</span>${autoPill('min')}</div>
+      <div class="big-val num-tab" data-live="dur">${S.loaded?fmtDur(S.min):'—'}</div>
+      <div class="dur">
+        <div class="numf"><input id="${p}-h" data-dur="h" inputmode="numeric" value="${h}" aria-label="Horas"><span class="unit">h</span></div>
+        <div class="numf"><input id="${p}-m" data-dur="m" inputmode="numeric" value="${m}" aria-label="Minutos"><span class="unit">min</span></div>
+      </div></div>
+    <div class="stat-ed"><div class="lbl-row"><span class="lbl">Desnível positivo</span>${autoPill('gain')}</div>
+      <div class="big-val num-tab"><span${cnt} data-to="${S.gain}">${S.loaded?S.gain:'—'}</span> m</div>${numField(p,'gain','m',10,'desnível')}</div>
+  </div>`;
+};
+function chipGroup(key,map,sug){
+  return `<div class="chips">${Object.entries(map).map(([k,v])=>`<button type="button" class="chip" data-chip="${key}" data-v="${k}" aria-pressed="${S[key]===k}">${v}${S.loaded&&sug===k?'<span class="dot" title="Sugerido pelo traçado"></span>':''}</button>`).join('')}</div>`;
+}
+R.chars = p => {
+  const sg = suggested(); const c=S.calc;
+  const why = {
+    difficulty:`${Math.round(c.gain/c.km)} m/km de subida · ${String(c.curvesPerKm).replace('.',',')} curvas/km`,
+    category:`altitude máx. ${c.maxEle} m`,
+    type: c.endGapKm<1.5?'partida e chegada no mesmo sítio':`chegada a ${c.endGapKm} km da partida`
+  };
+  const block=(key,label,map)=>`<div class="char"><div class="lbl-row"><span class="lbl">${label}</span>${S.loaded?(S[key]===sg[key]?`<span class="pill auto">sugerido</span>`:`<span class="pill edited">escolhido por si <button type="button" data-chip="${key}" data-v="${sg[key]}" title="Voltar à sugestão">${ico('reset')}</button></span>`):autoPill()}</div>${chipGroup(key,map,sg[key])}${S.loaded?`<span class="why">${why[key]}</span>`:''}</div>`;
+  return `<div class="char-grid">${block('difficulty','Dificuldade',DIFFS)}${block('category','Categoria',CATS)}${block('type','Tipo de rota',TYPES)}</div>`;
+};
+R.stops = p => {
+  const items = S.stops.map((s,i)=>S.stopOpen!==i?`<li class="stop ${s.isNew?'new':''}">
+      <span class="n">${i+1}</span>
+      <button type="button" class="stop-read" data-open-stop="${i}" aria-label="Editar parada ${i+1}"><strong>${esc(s.name)}</strong>
+        <span class="meta" style="display:flex;gap:6px;flex-wrap:wrap"><span class="pill muted">${STOP_TYPES[s.type]}</span><span class="pill muted num-tab">km ${s.km}</span>${s.far?`<span class="pill edited">a ${String(s.far).replace('.',',')} km do traçado</span>`:''}${i===S.viaIdx?`<span class="pill brand">no título</span>`:''}</span></button>
+      <button type="button" class="icon-btn" data-rm-stop="${i}" aria-label="Remover parada ${i+1}">${ico('trash')}</button>
+    </li>`:`<li class="stop editing ${s.isNew?'new':''}">
+      <span class="n">${i+1}</span>
+      <div class="stack" style="gap:6px;min-width:0">
+        <div class="fields" style="flex-direction:column;align-items:stretch">
+          <input class="input" data-stop="${i}" data-f="name" value="${esc(s.name)}" aria-label="Nome da parada ${i+1}" placeholder="Nome da parada">
+          <select class="input" data-stop="${i}" data-f="type" aria-label="Tipo da parada ${i+1}">${Object.entries(STOP_TYPES).map(([k,v])=>`<option value="${k}" ${k===s.type?'selected':''}>${v}</option>`).join('')}</select>
+        </div>
+        <div class="row" style="justify-content:space-between"><span class="pill muted num-tab">km ${s.km}</span><button type="button" class="btn sm" data-open-stop="-1">${ico('check')}Pronto</button></div>
+      </div>
+      <button type="button" class="icon-btn" data-rm-stop="${i}" aria-label="Remover parada ${i+1}">${ico('trash')}</button>
+    </li>`).join('');
+  S.stops.forEach(s=>delete s.isNew);
+  return `<div class="stack" style="gap:10px">
+    <div class="lbl-row"><span class="lbl">Paradas · ${S.stops.length}</span>${S.loaded?`<span class="pill auto">${ico('route')}lidas do GPX</span>`:''}</div>
+    ${S.stops.length?`<ol class="stops">${items}</ol>`:`<p class="hint">Nenhuma parada ainda. Adicione miradouros, cafés e bombas de combustível.</p>`}
+    <div class="row"><button type="button" class="btn sm" data-act="add-stop">${ico('plus')}Adicionar parada</button><span class="hint">${p==='b'?'ou clique no mapa':'Ordenadas pela posição no traçado.'}</span></div>
+  </div>`;
+};
+R.photos = p => {
+  const tiles = S.photos.map((ph,i)=>`<div class="ph"><img src="${ph.src}" alt="${esc(ph.name)}">${i===0?`<span class="pill brand cover">${ico('star')}Capa</span>`:''}
+    <div class="tools">${i>0?`<button type="button" data-ph-cover="${i}" title="Usar como capa" aria-label="Usar como capa">${ico('star')}</button>`:''}<button type="button" data-ph-rm="${i}" title="Remover" aria-label="Remover foto">${ico('x')}</button></div></div>`).join('');
+  const who = S.role==='author'
+    ? 'Você, o curador e o admin podem gerir estas fotos, também depois de publicada.'
+    : `Como ${S.role==='admin'?'admin':'curador'}, pode reordenar, trocar a capa e remover fotos de qualquer rota.`;
+  return `<div class="stack" style="gap:10px">
+    <div class="lbl-row"><span class="lbl">Fotos · ${S.photos.length}</span><span class="hint">JPG, PNG ou WebP até 5 MB</span></div>
+    <div class="photos">${tiles}<label class="ph add">${ico('image','lg')}<span>Adicionar fotos</span><input type="file" accept="image/jpeg,image/png,image/webp" multiple data-ph-add aria-label="Adicionar fotos"></label></div>
+    <div class="perm">${ico('shield')}${who}</div>
+  </div>`;
+};
+R.desc = p => `<div class="stack" style="gap:6px"><div class="lbl-row"><label class="lbl" for="${p}-desc">Descrição</label><span class="hint num-tab" data-live="desccount">${S.desc.length}/1000</span></div>
+  <textarea class="input" id="${p}-desc" data-bind="desc" maxlength="1000" placeholder="O que torna esta estrada especial? Melhor época, piso, onde parar.">${esc(S.desc)}</textarea>
+  <span class="hint">Opcional, mas ajuda o curador e quem vai fazer a rota.</span></div>`;
+
+function contours(){
+  let out=''; const centers=[[180,150,9],[450,280,7],[520,120,5]];
+  centers.forEach(([cx,cy,n],ci)=>{for(let i=1;i<=n;i++){const r=i*20;let d='';for(let a=0;a<=64;a++){const t=a/64*Math.PI*2;const k=1+.13*Math.sin(3*t+i*.7+ci)+.07*Math.sin(5*t+ci*2);const x=cx+Math.cos(t)*r*k*1.25,y=cy+Math.sin(t)*r*k;d+=(a?'L':'M')+x.toFixed(1)+','+y.toFixed(1);}out+=`<path class="contour ${i%2?'':'b'}" d="${d}Z"/>`;}});
+  return out;
+}
+const CONTOURS = contours();
+function mapSVG(opts={}){
+  const h = opts.h||400;
+  if(!S.loaded) return `<div class="map" style="aspect-ratio:3/2;display:grid;place-items:center"><svg viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;height:100%">${CONTOURS}</svg><span class="hint" style="position:relative">O traçado aparece aqui</span></div>`;
+  return `<div class="map ${S.justLoaded?'draw':''} ${opts.click?'clickable':''}" ${opts.click?'data-map-click':''}>
+    <svg viewBox="0 0 600 ${h}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa do traçado">
+      <rect width="600" height="${h}" fill="transparent"/>
+      ${CONTOURS}
+      ${S.path===SAMPLE_PATH?'<path class="river" d="M0,360 C120,350 170,300 260,300 S380,250 460,230 S560,190 600,180"/>':''}
+      <path class="route-glow" d="${S.path}" pathLength="1"/>
+      <path class="route" d="${S.path}" pathLength="1" data-route/>
+      <g data-markers></g>
+    </svg>
+    ${opts.chips!==false?`<div class="map-chips"><span class="num-tab">${S.km} km</span><span class="num-tab">↑ ${S.gain} m</span><span>${fmtDur(S.min)}</span></div>`:''}
+  </div>`;
+}
+R.map = p => mapSVG();
+R.bigMap = p => mapSVG({click:true,chips:false});
+R.elev = p => {
+  const e=S.elev, mx=Math.max(...e), mn=Math.min(...e), w=600,h=56;
+  const pts=e.map((v,i)=>[i/(e.length-1)*w, h-4-(v-mn)/Math.max(mx-mn,1)*(h-10)]);
+  const l='M'+pts.map(p=>p.map(n=>n.toFixed(1)).join(',')).join('L');
+  return `<div class="studio-stats">
+    <div class="num-tab">${S.km}<small>km</small></div><div>${fmtDur(S.min)}<small>estimado</small></div><div class="num-tab">${S.gain}<small>m de subida</small></div><div class="num-tab">${S.calc.maxEle}<small>m alt. máx.</small></div></div>
+    <svg class="elev" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-label="Perfil de elevação"><path class="a" d="${l}L${w},${h}L0,${h}Z"/><path class="l" d="${l}"/></svg>`;
+};
+R.hudTitle = p => S.loaded?`<div class="t-name" data-live="name">${esc(S.name)}</div><div class="t-via" data-live="via">${titleParts().map(esc).join(' <i>›</i> ')}</div>`:`<div class="t-name">Nova rota</div>`;
+R.guide = p => `<div class="guide">
+  <div class="row" style="justify-content:space-between"><span class="pill brand">${ico('book')}Guia do blog</span><span class="hint">5 min · grátis, no navegador</span></div>
+  <h3>Ainda não tem o GPX? Crie no gpx.studio</h3>
+  <ol>
+    <li><span>Abra o <b>gpx.studio</b>, clique no lápis e escolha a atividade <b>Motorcycle</b>.</span></li>
+    <li><span>Clique na partida e no destino. Use pontos intermédios para <b>prender a estrada certa</b>.</span></li>
+    <li><span>Marque as paradas com o <b>marcador de pontos de interesse</b>. O ícone define o tipo:</span></li>
+    <li><span><b>File › Export › Download file</b> para baixar o .gpx.</span></li>
+    <li><span><b>Carregue aqui.</b> Título, distância, desnível e paradas preenchem-se sozinhos.</span></li>
+  </ol>
+  <div class="icon-map"><span>Fuel Station <em>→ combustível</em></span><span>Restaurant <em>→ restaurante</em></span><span>Hotel · Campsite <em>→ alojamento</em></span><span>Scenic Area · Summit <em>→ miradouro</em></span><span>"café" no nome <em>→ café</em></span></div>
+  <div class="row"><a class="btn primary sm" href="${BLOG_URL}" target="_blank" rel="noopener">${ico('book')}Ler o guia com imagens</a><a class="btn sm" href="${STUDIO_URL}" target="_blank" rel="noopener">${ico('ext')}Abrir gpx.studio</a></div>
+</div>`;
+R.guideStrip = p => `<div class="guide-strip"><span class="gi">${ico('book','lg')}</span><div><strong>Novo no GPX? Crie o seu no gpx.studio</strong>Desenhe a estrada, marque as paradas e baixe o ficheiro. Guia passo a passo no blog.</div><a class="btn sm primary" href="${BLOG_URL}" target="_blank" rel="noopener">Ver guia</a></div>`;
+R.drop = p => {
+  if(S.loaded) return `<div class="loaded-file fade-up"><span class="check"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div class="lf-text"><strong>${esc(S.file)}</strong><span class="hint num-tab">${S.points.toLocaleString('pt-PT')} pontos · ${S.km} km · ${S.stops.length} paradas encontradas</span></div><label class="btn sm" style="position:relative">Trocar ficheiro<input type="file" accept=".gpx" data-gpx style="position:absolute;inset:0;opacity:0;cursor:pointer" aria-label="Trocar ficheiro GPX"></label><button type="button" class="btn sm ghost" data-act="clear">Recomeçar</button></div>`;
+  return `<div class="drop" data-drop><span class="gpx-ico">${ico('file','lg')}</span><div><strong style="font-size:16px">Arraste o ficheiro .gpx para aqui</strong><div class="hint">ou clique para escolher. Lemos o traçado e as paradas.</div></div><input type="file" accept=".gpx" data-gpx aria-label="Escolher ficheiro GPX"><div class="actions"><button type="button" class="btn sm" data-act="sample">Usar GPX de exemplo</button></div></div>`;
+};
+R.source = p => `<div class="src-tabs" role="group" aria-label="Origem do traçado"><button type="button" data-src="gpx" aria-pressed="${S.source==='gpx'}">${ico('upload')}Carregar GPX</button><button type="button" data-src="map" aria-pressed="${S.source==='map'}">${ico('route')}Desenhar</button></div>
+  ${S.source==='map'?`<p class="hint">Route builder (hoje atrás da flag): clique no mapa para traçar. Os mesmos campos automáticos funcionam aqui.</p>`:''}`;
+R.preview = p => {
+  const reg = S.region ? `${COUNTRIES.find(c=>c.code===S.country)?.flag||''} ${esc(S.region)}` : '';
+  const cover = S.photos[0];
+  return `<div class="pv">
+    <div class="pv-map">${cover?`<img src="${cover.src}" alt="">`:`<svg viewBox="0 0 600 338" preserveAspectRatio="xMidYMid slice">${CONTOURS}<path d="${S.path}" fill="none" stroke="var(--brand)" stroke-width="5" stroke-linecap="round"/></svg>`}
+      <span class="pill ${S.loaded?'edited':'muted'}" style="position:absolute;left:10px;top:10px;background:rgba(13,15,20,.8)">${S.loaded?'Em avaliação após envio':'Rascunho'}</span></div>
+    <div class="pv-body">
+      <div class="row" style="justify-content:space-between;font-size:12.5px;color:var(--muted)"><span>${reg}</span><span>${DIFFS[S.difficulty]} · ${CATS[S.category]}</span></div>
+      <div class="pv-name" data-live="name">${S.loaded?esc(S.name):'Nome da rota'}</div>
+      <div class="t-via" data-live="via">${S.loaded?titleParts().map(esc).join(' <i>›</i> '):'Partida › Chegada'}</div>
+      <div class="pv-stats"><div class="num-tab">${S.loaded?S.km:'—'} km<small>Distância</small></div><div data-live="dur">${S.loaded?fmtDur(S.min):'—'}<small>Duração</small></div><div class="num-tab">${S.loaded?S.stops.length:'—'}<small>Paradas</small></div></div>
+    </div></div>`;
+};
+function completeness(){
+  const items=[
+    {k:'track',label:'Traçado carregado',ok:S.loaded,step:0},
+    {k:'title',label:'Título gerado',ok:S.loaded&&S.name.trim().length>1,step:1},
+    {k:'place',label:'País e região',ok:!!S.country&&!!S.region,step:1},
+    {k:'chars',label:'Dados confirmados',ok:S.loaded,step:1},
+    {k:'stops',label:'Pelo menos uma parada',ok:S.stops.length>0,step:2},
+    {k:'photos',label:'Pelo menos uma foto (recomendado)',ok:S.photos.length>0,step:2,opt:true}
+  ];
+  return items;
+}
+R.submitInfo = p => `<div class="review">
+    <div class="timeline"><div class="on"><b>${ico('send')}</b><strong>Você envia</strong></div><div><b>${ico('shield')}</b><strong>Curador revê</strong>ajusta ou pede mudanças</div><div><b>${ico('check')}</b><strong>Publicada</strong>para toda a comunidade</div></div>
+    <div class="review-note">${ico('shield')}<span>Toda rota passa por um curador antes de ser publicada. Você recebe um aviso quando for aprovada ou se precisar de ajustes, e pode acompanhar em <b>Minhas rotas</b>.</span></div></div>`;
+R.submit = p => {
+  const items=completeness(); const req=items.filter(i=>!i.opt); const ready=req.every(i=>i.ok);
+  return `<div class="review">
+    <div class="timeline"><div class="on"><b>${ico('send')}</b><strong>Você envia</strong></div><div><b>${ico('shield')}</b><strong>Curador revê</strong>ajusta ou pede mudanças</div><div><b>${ico('check')}</b><strong>Publicada</strong>para toda a comunidade</div></div>
+    <div class="review-note">${ico('shield')}<span>Toda rota passa por um curador antes de ser publicada. Você recebe um aviso quando for aprovada ou se precisar de ajustes, e pode acompanhar em <b>Minhas rotas</b>.</span></div>
+    <button type="button" class="btn primary big ${ready?'cta':''}" data-act="submit" ${ready?'':'disabled style="opacity:.5;cursor:not-allowed"'}>${ico('send')}Enviar para avaliação</button>
+    ${ready?'':`<span class="hint">Falta: ${req.filter(i=>!i.ok).map(i=>i.label.toLowerCase()).join(', ')}.</span>`}
+  </div>`;
+};
+R.bBar = p => {
+  const items=completeness(); const done=items.filter(i=>i.ok).length;
+  const req=items.filter(i=>!i.opt); const ready=req.every(i=>i.ok);
+  return `<div class="row" style="justify-content:space-between"><span class="lbl num-tab">${done} de ${items.length} completos</span><span class="hint">Revisto por um curador antes de publicar</span></div>
+    <div class="prog"><i style="width:${done/items.length*100}%"></i></div>
+    <button type="button" class="btn primary big ${ready?'cta':''}" data-act="submit" ${ready?'':'disabled style="opacity:.5"'}>${ico('send')}Enviar para avaliação</button>`;
+};
+
+/* ---------------- prototype A: wizard ---------------- */
+const A_STEPS=['Traçado','Detalhes','Paradas e fotos','Revisar e enviar'];
+function renderA(){
+  const st=S.step;
+  document.getElementById('a-stepper').innerHTML = A_STEPS.map((n,i)=>`<button type="button" data-a-go="${i}" class="${i===st?'cur':i<st?'past':''}" ${i>0&&!S.loaded?'disabled':''}><span class="bar"><i style="width:${i<st?100:i===st?50:0}%"></i></span><span class="s-lbl"><b>${i<st?'✓':i+1}</b><span>${n}</span></span></button>`).join('');
+  const body = [
+    `<div class="wz-layout fade-up"><div class="stack">
+        <div class="sect-title"><h3>De onde vem o traçado?</h3><span class="hint">Passo 1 de 4</span></div>
+        <div data-slot="source"></div><div data-slot="drop"></div><div data-slot="map" class="${S.loaded?'':'m-hide'}"></div>
+      </div><div data-slot="guide"></div></div>`,
+    `<div class="wz-layout fade-up"><div class="stack">
+        <div class="sect-title"><h3>Confira os detalhes</h3><span class="hint">Tudo calculado do traçado. Mude só o que estiver errado.</span></div>
+        <div class="card" data-slot="title"></div>
+        <div class="card" data-slot="stats"></div>
+        <div class="card" data-slot="chars"></div>
+      </div><div class="stack"><div class="card" data-slot="place"></div><div class="card" data-slot="desc"></div></div></div>`,
+    `<div class="wz-layout fade-up"><div class="stack">
+        <div class="sect-title"><h3>Paradas e fotos</h3><span class="hint">Passo 3 de 4</span></div>
+        <div class="card" data-slot="stops"></div><div class="card" data-slot="photos"></div>
+      </div><div class="stack m-first"><div data-slot="map"></div></div></div>`,
+    `<div class="wz-layout fade-up"><div class="stack">
+        <div class="sect-title"><h3>Tudo pronto?</h3><span class="hint">Passo 4 de 4</span></div>
+        <div class="card"><ul class="check-list">${completeness().map(i=>`<li class="${i.ok?'':'no'}"><span class="ck">${i.ok?ico('check'):'·'}</span>${i.label}<button type="button" class="btn sm ghost" data-a-go="${i.step}">Editar</button></li>`).join('')}</ul></div>
+        <div class="card" data-slot="submitInfo"></div>
+      </div><div class="stack m-first"><span class="eyebrow">Prévia no site</span><div data-slot="preview"></div></div></div>`
+  ][st];
+  document.getElementById('a-step').innerHTML = `<div class="step-now">Passo ${st+1} de 4 · <b>${A_STEPS[st]}</b></div>` + body;
+  const back=document.getElementById('a-back'), next=document.getElementById('a-next');
+  back.style.visibility = st===0?'hidden':'visible';
+  const req=completeness().filter(i=>!i.opt), ready=req.every(i=>i.ok);
+  if(st===3){ next.innerHTML=`${ico('send')}Enviar para avaliação`; next.dataset.act='submit'; next.disabled=!ready; next.style.opacity=ready?1:.5; next.classList.toggle('cta',ready); }
+  else { next.innerHTML=`Continuar${ico('right')}`; delete next.dataset.act; next.classList.remove('cta'); next.disabled=!S.loaded; next.style.opacity=S.loaded?1:.5; }
+}
+
+/* ---------------- prototype B: studio ---------------- */
+const B_SECS=[
+  {k:'title',label:'Título',sub:()=>S.loaded?rawTitle():'gerado do GPX',ok:()=>S.loaded,slots:['title']},
+  {k:'place',label:'País e região',sub:()=>S.region?`${S.country} · ${S.region}`:'escolha',ok:()=>!!S.region,slots:['place']},
+  {k:'data',label:'Dados do traçado',sub:()=>`${S.km} km · ${fmtDur(S.min)} · ${DIFFS[S.difficulty]}`,ok:()=>S.loaded,slots:['stats','chars']},
+  {k:'stops',label:'Paradas',sub:()=>`${S.stops.length} paradas`,ok:()=>S.stops.length>0,slots:['stops']},
+  {k:'photos',label:'Fotos',sub:()=>S.photos.length?`${S.photos.length} fotos · 1.ª é a capa`:'recomendado',ok:()=>S.photos.length>0,slots:['photos']},
+  {k:'desc',label:'Descrição',sub:()=>S.desc?S.desc.slice(0,60)+'…':'opcional',ok:()=>!!S.desc,slots:['desc']}
+];
+function renderB(){
+  const top = `<div data-slot="guideStrip"></div><div data-slot="drop"></div>`;
+  document.getElementById('b-scroll').innerHTML = top + B_SECS.map((s,i)=>`<div class="acc ${S.bOpen===s.k?'open':''} ${s.ok()?'complete':''}">
+      <button type="button" data-b-open="${s.k}" aria-expanded="${S.bOpen===s.k}"><span class="st">${s.ok()?ico('check'):i+1}</span><span class="tt"><strong>${s.label}</strong><span>${esc(s.sub())}</span></span><svg class="ico chev"><use href="#i-down"/></svg></button>
+      <div class="acc-body"><div class="acc-inner"><div class="acc-pad">${s.slots.map(sl=>`<div data-slot="${sl}"></div>`).join('')}</div></div></div></div>`).join('');
+}
+
+/* ---------------- prototype C ---------------- */
+function renderC(){
+  const secs=[
+    {t:'Título e local',ok:S.loaded&&!!S.region,slots:['title','place']},
+    {t:'Dados do traçado',ok:S.loaded,slots:['stats','chars']},
+    {t:'Paradas',ok:S.stops.length>0,slots:['stops','map']},
+    {t:'Fotos',ok:S.photos.length>0,slots:['photos']},
+    {t:'Descrição',ok:!!S.desc,slots:['desc']}
+  ];
+  document.getElementById('c-form').innerHTML = secs.map((s,i)=>`<div class="c-sec ${s.ok?'complete':''}"><div class="rail"><b>${s.ok?ico('check'):i+1}</b><i></i></div>
+    <div><div class="sect-title" style="margin:6px 0 10px"><h3 style="font-family:var(--display);font-weight:700;text-transform:uppercase;font-size:22px">${s.t}</h3></div>
+    <div class="card stack" style="gap:18px">${s.slots.map(sl=>`<div data-slot="${sl}"></div>`).join('')}</div></div></div>`).join('');
+}
+
+/* ---------------- render all ---------------- */
+let current='a';
+function renderAll(){
+  renderA(); renderB(); renderC();
+  document.querySelectorAll('.proto').forEach(root=>{
+    const p=root.dataset.proto;
+    root.querySelectorAll('[data-slot]').forEach(el=>{ const fn=R[el.dataset.slot]; if(fn) el.innerHTML=fn(p); });
+  });
+  placeMarkers(); countUp(); S.justLoaded=false;
+}
+function placeMarkers(){
+  document.querySelectorAll('.map').forEach(m=>{
+    const path=m.querySelector('[data-route]'), g=m.querySelector('[data-markers]'); if(!path||!g) return;
+    const L=path.getTotalLength(); const at=f=>path.getPointAtLength(Math.max(0,Math.min(1,f))*L);
+    const s=at(0), e=at(1); let out='';
+    out+=`<circle cx="${s.x}" cy="${s.y}" r="7" fill="var(--fg)" stroke="var(--map-bg)" stroke-width="3"/>`;
+    S.stops.forEach((st,i)=>{const pt=at(st.f); const fx=st.far?pt.x+18:pt.x, fy=st.far?pt.y-22:pt.y;
+      if(st.far) out+=`<line x1="${pt.x}" y1="${pt.y}" x2="${fx}" y2="${fy}" stroke="var(--warn)" stroke-dasharray="3 3"/>`;
+      out+=`<g><circle cx="${fx}" cy="${fy}" r="11" fill="${st.far?'var(--warn)':'var(--brand-strong)'}" stroke="var(--map-bg)" stroke-width="2.5"/><text x="${fx}" y="${fy+4}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="Inter,sans-serif">${i+1}</text></g>`;});
+    out+=`<circle class="pulse" cx="${e.x}" cy="${e.y}" r="9" fill="var(--brand)" opacity=".5"/><circle cx="${e.x}" cy="${e.y}" r="7" fill="var(--brand)" stroke="var(--map-bg)" stroke-width="3"/>`;
+    g.innerHTML=out;
+  });
+}
+function countUp(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const to=+el.dataset.to, t0=performance.now(), d=900;
+    const tick=t=>{const k=Math.min(1,(t-t0)/d); el.textContent=Math.round(to*(1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(tick);};
+    requestAnimationFrame(tick);
+  });
+}
+function refreshLive(){
+  document.querySelectorAll('[data-live="name"]').forEach(e=>e.textContent=S.name||'—');
+  document.querySelectorAll('[data-live="via"]').forEach(e=>e.innerHTML=titleParts().map(esc).join(' <i>›</i> '));
+  document.querySelectorAll('[data-live="raw"]').forEach(e=>e.textContent=rawTitle());
+  document.querySelectorAll('[data-live="dur"]').forEach(e=>{const sm=e.querySelector('small'); e.firstChild.nodeType===3&&sm?e.firstChild.textContent=fmtDur(S.min):e.textContent=fmtDur(S.min);});
+  document.querySelectorAll('[data-live="desccount"]').forEach(e=>e.textContent=`${S.desc.length}/1000`);
+  document.querySelectorAll('.studio-elev').forEach(e=>e.innerHTML=R.elev());
+  document.querySelectorAll('[data-slot="bBar"]').forEach(e=>e.innerHTML=R.bBar());
+}
+
+/* ---------------- GPX parsing (real files) ---------------- */
+function hav(a,b){const R=6371,t=Math.PI/180;const dLa=(b[0]-a[0])*t,dLo=(b[1]-a[1])*t;const x=Math.sin(dLa/2)**2+Math.cos(a[0]*t)*Math.cos(b[0]*t)*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
+function stopType(sym,name){sym=(sym||'').toLowerCase();name=(name||'').toLowerCase();
+  if(/fuel|gas/.test(sym))return'gas_station'; if(/restaurant/.test(sym))return'restaurant';
+  if(/hotel|lodg|accommodation|campsite/.test(sym))return'accommodation'; if(/scenic|summit|binocular/.test(sym))return'viewpoint';
+  if(/caf[eé]|coffee/.test(name))return'cafe'; return'landmark';}
+function parseGPX(text,file){
+  const xml=new DOMParser().parseFromString(text,'application/xml');
+  const pts=[...xml.querySelectorAll('trkpt,rtept')].map(n=>[+n.getAttribute('lat'),+n.getAttribute('lon'),+(n.querySelector('ele')?.textContent||NaN)]);
+  if(pts.length<2) throw new Error('Este ficheiro não tem um traçado (trkpt ou rtept).');
+  const cum=[0]; let gain=0, maxEle=-Infinity, turns=0;
+  for(let i=1;i<pts.length;i++){cum.push(cum[i-1]+hav(pts[i-1],pts[i])); const d=pts[i][2]-pts[i-1][2]; if(d>0) gain+=d; if(!isNaN(pts[i][2])) maxEle=Math.max(maxEle,pts[i][2]);}
+  for(let i=2;i<pts.length;i+=3){const b1=Math.atan2(pts[i-1][1]-pts[i-2][1],pts[i-1][0]-pts[i-2][0]),b2=Math.atan2(pts[i][1]-pts[i-1][1],pts[i][0]-pts[i-1][0]);let d=Math.abs(b2-b1);if(d>Math.PI)d=2*Math.PI-d;if(d>.35)turns++;}
+  const km=Math.max(1,Math.round(cum[cum.length-1]));
+  const la=pts.map(p=>p[0]),lo=pts.map(p=>p[1]); const mnA=Math.min(...la),mxA=Math.max(...la),mnO=Math.min(...lo),mxO=Math.max(...lo);
+  const sx=(mxO-mnO)*Math.cos((mnA+mxA)/2*Math.PI/180)||1e-6, sy=(mxA-mnA)||1e-6; const sc=Math.min(520/sx,320/sy);
+  const ox=(600-sx*sc)/2, oy=(400-sy*sc)/2; const cosM=Math.cos((mnA+mxA)/2*Math.PI/180);
+  const step=Math.max(1,Math.floor(pts.length/600));
+  let d=''; for(let i=0;i<pts.length;i+=step){const x=ox+(pts[i][1]-mnO)*cosM*sc, y=400-oy-(pts[i][0]-mnA)*sc; d+=(d?'L':'M')+x.toFixed(1)+','+y.toFixed(1);}
+  const L=pts[pts.length-1]; d+='L'+(ox+(L[1]-mnO)*cosM*sc).toFixed(1)+','+(400-oy-(L[0]-mnA)*sc).toFixed(1);
+  const wpts=[...xml.querySelectorAll('wpt')].map(n=>{const lat=+n.getAttribute('lat'),lon=+n.getAttribute('lon');let bi=0,bd=Infinity;for(let i=0;i<pts.length;i+=step){const dd=hav([lat,lon],pts[i]);if(dd<bd){bd=dd;bi=i;}}
+    const name=n.querySelector('name')?.textContent?.trim()||'Parada'; return {name,type:stopType(n.querySelector('sym')?.textContent||n.querySelector('type')?.textContent,name),f:cum[bi]/cum[cum.length-1],km:Math.round(cum[bi]),far:bd>2?Math.round(bd*10)/10:0};}).sort((a,b)=>a.f-b.f);
+  const ele=[]; for(let i=0;i<25;i++){const v=pts[Math.floor(i/24*(pts.length-1))][2]; ele.push(isNaN(v)?0:v);}
+  const base=(file.name||'rota').replace(/\.gpx$/i,'').replace(/[-_]+/g,' ').trim();
+  const nm = (xml.querySelector('trk>name,rte>name,metadata>name')?.textContent||base).split(/[|,-]/)[0].trim().slice(0,40);
+  const min=Math.max(5,Math.round(km/40*60/5)*5);
+  const c={km,min,gain:Math.round(gain),maxEle:isFinite(maxEle)?Math.round(maxEle):0,curvesPerKm:Math.round(turns/km*10)/10,endGapKm:Math.round(hav(pts[0],L)*10)/10};
+  Object.assign(S,{loaded:true,justLoaded:true,file:file.name,points:pts.length,path:d,elev:ele,name:nm||'Rota',start:'Partida',end:'Chegada',viaIdx:0,calc:c,km:c.km,min:c.min,gain:c.gain,edited:{},stops:wpts,regionAuto:false});
+  const sg=suggested(); S.difficulty=sg.difficulty; S.category=sg.category; S.type=sg.type;
+}
+
+/* ---------------- events ---------------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,[data-map-click]'); if(!t) return;
+  if(t.dataset.tab){ current=t.dataset.tab; document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',b===t)); document.querySelectorAll('.proto').forEach(s=>s.hidden=s.dataset.proto!==current); S.justLoaded=true; renderAll(); return; }
+  if(t.dataset.role){ S.role=t.dataset.role; document.querySelectorAll('#role-seg button').forEach(b=>b.setAttribute('aria-pressed',b===t)); S.newRegionOpen=false; renderAll(); return; }
+  if(t.dataset.aGo!==undefined){ S.step=+t.dataset.aGo; if(S.step>0)S.justLoaded=S.step===2; renderAll(); return; }
+  if(t.dataset.openStop!==undefined){ const i=+t.dataset.openStop; S.stopOpen = i<0?null:i; renderAll(); return; }
+  if(t.dataset.act==='toggle-title'){ S.titleOpen=!S.titleOpen; renderAll(); return; }
+  if(t.id==='a-next' && !t.dataset.act){ if(!S.loaded) return; S.step=Math.min(3,S.step+1); S.justLoaded=S.step===2; renderAll(); document.querySelector('[data-proto="a"]').scrollIntoView({behavior:'smooth',block:'start'}); return; }
+  if(t.id==='a-back'){ S.step=Math.max(0,S.step-1); renderAll(); return; }
+  if(t.dataset.bOpen){ S.bOpen = S.bOpen===t.dataset.bOpen?'':t.dataset.bOpen; renderAll(); return; }
+  if(t.dataset.src){ S.source=t.dataset.src; renderAll(); return; }
+  if(t.dataset.country){ S.country=t.dataset.country; S.region=REGIONS[S.country][0]; S.regionAuto=false; renderAll(); return; }
+  if(t.dataset.chip){ S[t.dataset.chip]=t.dataset.v; renderAll(); return; }
+  if(t.dataset.reset){ const k=t.dataset.reset; if(k==='name'){S.name=S.file==='n222-regua-pinhao.gpx'?'N222':S.name;} else S[k]=S.calc[k]; delete S.edited[k]; renderAll(); return; }
+  if(t.dataset.step){ const k=t.dataset.step; S[k]=Math.max(0,(+S[k]||0)+(+t.dataset.d)); S.edited[k]=true; renderAll(); return; }
+  if(t.dataset.rmStop!==undefined){ const i=+t.dataset.rmStop; S.stops.splice(i,1); S.stopOpen=null; if(S.viaIdx>=S.stops.length) S.viaIdx=0; renderAll(); return; }
+  if(t.dataset.phRm!==undefined){ S.photos.splice(+t.dataset.phRm,1); renderAll(); return; }
+  if(t.dataset.phCover!==undefined){ const [ph]=S.photos.splice(+t.dataset.phCover,1); S.photos.unshift(ph); renderAll(); return; }
+  if(t.hasAttribute('data-map-click')){
+    const svg=t.querySelector('svg'), path=t.querySelector('[data-route]'); if(!svg||!path) return;
+    const r=svg.getBoundingClientRect(), vb=svg.viewBox.baseVal; const sc=Math.min(r.width/vb.width,r.height/vb.height);
+    const x=(e.clientX-r.left-(r.width-vb.width*sc)/2)/sc, y=(e.clientY-r.top-(r.height-vb.height*sc)/2)/sc;
+    const L=path.getTotalLength(); let bf=0,bd=Infinity; for(let i=0;i<=200;i++){const p=path.getPointAtLength(i/200*L);const d=(p.x-x)**2+(p.y-y)**2;if(d<bd){bd=d;bf=i/200;}}
+    S.stops.push({name:'Nova parada',type:'viewpoint',f:bf,km:Math.round(bf*S.km),isNew:true}); S.stops.sort((a,b)=>a.f-b.f); S.bOpen='stops'; renderAll();
+    const inp=[...document.querySelectorAll('[data-proto="b"] [data-f="name"]')].find(i=>i.value==='Nova parada'); inp?.select(); return;
+  }
+  const act=t.dataset.act;
+  if(act==='add-stop'){ S.stops.push({name:'Nova parada',type:'viewpoint',f:.99,km:S.km,isNew:true}); S.stopOpen=S.stops.length-1; renderAll(); return; }
+  if(act==='sample'){ const role=S.role,cur=S.step; S=sampleState(); S.role=role; S.step=cur; renderAll(); return; }
+  if(act==='clear'){ Object.assign(S,{loaded:false,stops:[],photos:[],desc:'',name:'',edited:{},step:0}); renderAll(); return; }
+  if(act==='cancel-region'){ S.newRegionOpen=false; renderAll(); return; }
+  if(act==='create-region'){ const v=document.getElementById(t.dataset.p+'-nr-pt')?.value.trim(); if(!v) return; REGIONS[S.country].push(v); S.region=v; S.newRegionOpen=false; renderAll(); return; }
+  if(act==='submit'){ document.getElementById('overlay').innerHTML=`<div class="done" role="dialog" aria-modal="true" aria-labelledby="done-t"><div class="box"><span class="ring">${ico('shield','lg')}</span><span class="pill edited">Em avaliação</span><h3 id="done-t" class="display" style="font-size:32px">Rota enviada para avaliação</h3><p class="hint" style="font-size:14px">${esc(rawTitle())}<br>Um curador vai rever e você recebe um aviso. Ela já está em Minhas rotas.</p><button type="button" class="btn primary" data-act="close-done">Ver Minhas rotas</button></div></div>`; return; }
+  if(act==='close-done'){ document.getElementById('overlay').innerHTML=''; return; }
+});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset.bind){ const k=t.dataset.bind;
+    if(k==='region'){ if(t.value==='__new'){S.newRegionOpen=true; renderAll(); return;} S.region=t.value; S.regionAuto=false; renderAll(); return; }
+    if(k==='viaIdx'){ S.viaIdx=+t.value; renderAll(); return; }
+    S[k]=t.value; if(k==='name') S.edited.name=true; refreshLive(); return; }
+  if(t.dataset.num){ const v=parseInt(t.value.replace(/\D/g,''),10); if(!isNaN(v)){S[t.dataset.num]=v; S.edited[t.dataset.num]=true; refreshLive();} return; }
+  if(t.dataset.dur){ const root=t.closest('.dur'); const h=parseInt(root.querySelector('[data-dur="h"]').value,10)||0, m=parseInt(root.querySelector('[data-dur="m"]').value,10)||0; S.min=h*60+Math.min(m,59); S.edited.min=true; refreshLive(); return; }
+  if(t.dataset.stop!==undefined){ const s=S.stops[+t.dataset.stop]; s[t.dataset.f]=t.value; if(t.dataset.f==='type'||+t.dataset.stop===S.viaIdx) refreshLive(); return; }
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.dataset.num||t.dataset.dur||t.dataset.bind==='name') { renderAll(); return; }
+  if(t.hasAttribute('data-gpx') && t.files[0]){ const f=t.files[0]; f.text().then(txt=>{ try{ parseGPX(txt,f); renderAll(); }catch(err){ alertBox(err.message); } }); return; }
+  if(t.hasAttribute('data-ph-add') && t.files.length){
+    const files=[...t.files].filter(f=>/image\/(jpeg|png|webp)/.test(f.type)&&f.size<=5*1024*1024);
+    Promise.all(files.map(f=>new Promise(res=>{const r=new FileReader(); r.onload=()=>res({src:r.result,name:f.name}); r.readAsDataURL(f);}))).then(list=>{S.photos.push(...list); renderAll();});
+  }
+});
+['dragover','dragleave','drop'].forEach(ev=>document.addEventListener(ev,e=>{
+  const z=e.target.closest&&e.target.closest('[data-drop]'); if(!z) return;
+  if(ev==='dragover'){e.preventDefault(); z.classList.add('over');}
+  if(ev==='dragleave') z.classList.remove('over');
+  if(ev==='drop'){e.preventDefault(); z.classList.remove('over'); const f=e.dataTransfer.files[0]; if(f) f.text().then(txt=>{try{parseGPX(txt,f);renderAll();}catch(err){alertBox(err.message);}});}
+}));
+function alertBox(msg){ document.getElementById('overlay').innerHTML=`<div class="done" role="alertdialog"><div class="box"><h3 class="display" style="font-size:28px">Não deu para ler o GPX</h3><p class="hint">${esc(msg)}</p><button type="button" class="btn" data-act="close-done">Fechar</button></div></div>`; }
+
+renderAll();
+})();
+</script>
