@@ -6,6 +6,8 @@ import { INSTAGRAM, FACEBOOK } from "@/lib/social"
 import { REGIONS, textFor } from "@/lib/regions"
 import { Separator } from "@/components/ui/separator"
 import { useLocale, useTranslations } from 'next-intl'
+import { GTM_ID } from "@/lib/consent"
+import { showCookiePreferences } from "@/components/consent/cookie-consent"
 
 export function Footer() {
   const locale = useLocale()
@@ -152,6 +154,17 @@ export function Footer() {
                   {t('termsOfService')}
                 </Link>
               </li>
+              {GTM_ID && (
+                <li>
+                  <button
+                    type="button"
+                    onClick={showCookiePreferences}
+                    className="text-left text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {t('cookiePreferences')}
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
         </div>
