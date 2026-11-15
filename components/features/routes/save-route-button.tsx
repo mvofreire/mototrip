@@ -11,9 +11,11 @@ import { cn } from "@/lib/utils";
 interface SaveRouteButtonProps {
   routeId: string;
   className?: string;
+  /** Round icon-only button (over the route map / next to the title) */
+  iconOnly?: boolean;
 }
 
-export function SaveRouteButton({ routeId, className }: SaveRouteButtonProps) {
+export function SaveRouteButton({ routeId, className, iconOnly }: SaveRouteButtonProps) {
   const t = useTranslations("route");
   const locale = useLocale();
   const router = useRouter();
@@ -34,6 +36,26 @@ export function SaveRouteButton({ routeId, className }: SaveRouteButtonProps) {
   };
 
   const Icon = busy ? Loader2 : isSaved ? BookmarkCheck : Bookmark;
+
+  if (iconOnly) {
+    return (
+      <button
+        type="button"
+        onClick={handleClick}
+        disabled={busy}
+        aria-pressed={isSaved}
+        aria-label={isSaved ? t("savedRoute") : t("saveRoute")}
+        title={!user && !authLoading ? t("loginToSave") : undefined}
+        className={cn(
+          "flex h-11 w-11 items-center justify-center rounded-full transition-transform active:scale-95 disabled:opacity-70",
+          isSaved && "text-primary",
+          className,
+        )}
+      >
+        <Icon className={cn("h-[18px] w-[18px]", busy && "animate-spin", isSaved && "fill-current")} aria-hidden />
+      </button>
+    );
+  }
 
   return (
     <Button

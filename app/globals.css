@@ -169,3 +169,27 @@ html, body {
   .road-draw { animation: none; stroke-dashoffset: 0; }
   .road-pulse, .road-float { animation: none; }
 }
+
+/* Route page: static map image (LCP) and live map, muted so the red line stands out */
+.dark .route-static-map {
+  filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.92);
+}
+.route-live-map {
+  background: hsl(var(--muted));
+}
+.route-live-map .leaflet-tile-pane {
+  filter: grayscale(0.85) contrast(1.05) brightness(0.97);
+}
+.dark .route-live-map .leaflet-tile-pane {
+  filter: grayscale(1) invert(1) brightness(1.05) contrast(0.95);
+}
+
+/* Route page: soft pulse on the "Google Maps" button */
+@keyframes cta-glow {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.5); }
+  50% { box-shadow: 0 0 0 8px hsl(var(--primary) / 0); }
+}
+/* Zoom buttons below the full-screen map's close bar */
+.route-live-map .leaflet-top.leaflet-left {
+  top: calc(env(safe-area-inset-top) + 4.25rem);
+}

@@ -104,6 +104,19 @@ function FitBounds({ points }: { points: LatLng[] }) {
   return null;
 }
 
+/** Keeps tiles aligned when the container is resized (e.g. a panel folds away) */
+function AutoResize() {
+  const map = useMap();
+  useEffect(() => {
+    const el = map.getContainer();
+    if (typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(() => map.invalidateSize());
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [map]);
+  return null;
+}
+
 function ClickHandler({ onClick }: { onClick: (p: LatLng) => void }) {
   useMapEvents({
     click: (e) => onClick({ lat: e.latlng.lat, lng: e.latlng.lng }),
@@ -157,6 +170,7 @@ export default function OsmMap({
         </Marker>
       ))}
       {fitBounds && <FitBounds points={boundsPoints} />}
+      <AutoResize />
       {onMapClick && <ClickHandler onClick={onMapClick} />}
     </MapContainer>
   );

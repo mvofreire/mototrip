@@ -10,7 +10,7 @@ import { regionForRoute } from '@/lib/regions'
 import { getSiteUrl } from '@/lib/site-url'
 import { PrivateRouteDetail } from '@/components/features/routes/private-route-detail'
 import { Metadata } from 'next'
-import { languageAlternates } from '@/lib/seo'
+import { OG_LOCALE, languageAlternates } from '@/lib/seo'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 // Served from the edge cache and rebuilt in the background every 5 minutes
@@ -20,6 +20,14 @@ export const revalidate = 300
 // then served from the cache (an empty list is what turns that on)
 export function generateStaticParams() {
   return []
+}
+
+/** Search snippets show ~155 characters: cut at a word, never mid-word */
+function metaDescription(text: string, max = 155) {
+  const clean = text.replace(/\s+/g, ' ').trim()
+  if (clean.length <= max) return clean
+  const cut = clean.slice(0, max - 1)
+  return `${cut.slice(0, cut.lastIndexOf(' ')).replace(/[,;:.\s]+$/, '')}…`
 }
 
 interface RoutePageProps {
@@ -33,12 +41,13 @@ export async function generateMetadata({ params }: RoutePageProps): Promise<Meta
   try {
     const route = localizeRoute(await RoutesService.getRouteByIdOrSlug(params.id), params.locale)
     const t = await getTranslations({ locale: params.locale })
-    const description =
+    const description = metaDescription(
       route.description ||
-      t('route.metaDescription', {
-        category: t(`categories.${route.category}`),
-        region: route.region || 'Portugal',
-      })
+        t('route.metaDescription', {
+          category: t(`categories.${route.category}`),
+          region: route.region || 'Portugal',
+        }),
+    )
     return {
       title: route.title,
       description,
@@ -46,11 +55,16 @@ export async function generateMetadata({ params }: RoutePageProps): Promise<Meta
         canonical: routePath(params.locale, route),
         languages: languageAlternates((l) => routePath(l, route)),
       },
+      // A page's openGraph replaces the layout's, so site name and locale are repeated
       openGraph: {
         type: 'article',
+        siteName: 'MotoTrip',
+        locale: OG_LOCALE[params.locale] ?? 'en_US',
         title: route.title,
         description,
         url: routePath(params.locale, route),
+        publishedTime: route.created_at,
+        modifiedTime: route.updated_at,
         // image: opengraph-image.tsx next to this page
       },
       twitter: {
