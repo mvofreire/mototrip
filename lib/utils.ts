@@ -54,18 +54,6 @@ export function formatRating(rating: number | null | undefined): string {
   return rating.toFixed(1)
 }
 
-export function getStopIcon(type: string): string {
-  const icons = {
-    viewpoint: '🏔️',
-    cafe: '☕',
-    gas_station: '⛽',
-    restaurant: '🍽️',
-    landmark: '🏛️',
-    accommodation: '🏨',
-  }
-  return icons[type as keyof typeof icons] || '📍'
-}
-
 export function escapeXml(unsafe: string): string {
     return unsafe.replace(/[<>&'"]/g, (c) => {
       switch (c) {

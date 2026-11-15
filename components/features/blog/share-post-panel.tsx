@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Check, Link2, Share2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { FacebookIcon, WhatsAppIcon } from '@/components/features/routes/share-route-panel'
+import { FacebookIcon, WhatsAppIcon } from '@/components/icons/social'
 import { copyText, facebookLink, tagUrl, whatsappLink, xLink, type ShareSource } from '@/lib/share'
 
 function XIcon({ className }: { className?: string }) {

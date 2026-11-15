@@ -1,6 +1,6 @@
 import { RoutesService } from '@/lib/services/routes.service'
 import { localizeRoute } from '@/lib/localize'
-import { buildGpx, gpxFileName, routePoints } from '@/lib/route-export'
+import { buildGpx, gpxFileName, routePoints, sortStops } from '@/lib/route-export'
 import { locales } from '@/i18n'
 
 // GPX file of a published route, so a plain link can download it
@@ -21,7 +21,7 @@ export async function GET(request: Request, { params }: { params: { slug: string
 
   const localized =
     locale && (locales as readonly string[]).includes(locale) ? localizeRoute(route, locale) : route
-  return new Response(buildGpx(points, localized.title, localized.description || ''), {
+  return new Response(buildGpx(points, localized.title, localized.description || '', sortStops(localized.stops)), {
     headers: {
       'Content-Type': 'application/gpx+xml; charset=utf-8',
       'Content-Disposition': `attachment; filename="${gpxFileName(localized.title)}"`,

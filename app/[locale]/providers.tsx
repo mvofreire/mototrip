@@ -20,7 +20,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+      {/* Dark by default for everyone (the OS preference is ignored); the
+          header toggle switches to light and remembers it. The storage key is
+          new so earlier saved choices don't override the new default. */}
+      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="mototrip-theme">
         <AuthProvider>
           {children}
         </AuthProvider>

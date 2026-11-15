@@ -86,10 +86,8 @@ export async function generateMetadata({
 }
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#0d0f14' },
-    { media: '(prefers-color-scheme: light)', color: '#f5f6f8' },
-  ],
+  // The site is dark by default, whatever the OS theme
+  themeColor: '#0d0f14',
   viewportFit: 'cover',
 }
 
