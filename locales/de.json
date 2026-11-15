@@ -564,7 +564,7 @@
     "title": "Datenschutzrichtlinie",
     "description": "Wie wir Ihre Informationen sammeln, verwenden und schützen",
     "lastUpdated": "Zuletzt aktualisiert",
-    "date": "10. März 2026",
+    "date": "15. November 2026",
     "intro": "Bei MotoTrip respektieren wir Ihre Privatsphäre und verpflichten uns, Ihre persönlichen Informationen zu schützen. Diese Datenschutzrichtlinie erklärt, wie wir Informationen sammeln, verwenden und teilen, wenn Sie unsere Plattform nutzen.",
     "collection": {
       "title": "Informationen, Die Wir Sammeln",
@@ -582,6 +582,10 @@
         "item2": "Fotos und Beschreibungen",
         "item3": "Bewertungen und Kommentare"
       }
+    },
+    "googleSignIn": {
+      "title": "Anmeldung mit Google",
+      "description": "Wenn Sie sich mit Google anmelden, übermittelt Google uns ausschließlich Ihren Namen, Ihre E-Mail-Adresse und Ihr Profilbild. Wir verwenden diese Daten nur, um Ihr MotoTrip-Konto zu erstellen und zu identifizieren. Wir greifen nicht auf Ihre Kontakte, Gmail, Drive oder andere Google-Daten zu und verkaufen oder teilen diese Informationen niemals zu Werbezwecken. Sie können den Zugriff von MotoTrip jederzeit in den Einstellungen Ihres Google-Kontos (myaccount.google.com/permissions) widerrufen und die Löschung Ihres Kontos beantragen, indem Sie uns kontaktieren."
     },
     "usage": {
       "title": "Wie Wir Ihre Informationen Verwenden",

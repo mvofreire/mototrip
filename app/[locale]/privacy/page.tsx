@@ -67,6 +67,14 @@ export default async function PrivacyPage({
             </div>
           </section>
 
+          {/* Sign in with Google */}
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold">{t('googleSignIn.title')}</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              {t('googleSignIn.description')}
+            </p>
+          </section>
+
           {/* How We Use Your Information */}
           <section className="space-y-4">
             <h2 className="text-2xl font-bold">{t('usage.title')}</h2>
