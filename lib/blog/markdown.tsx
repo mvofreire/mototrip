@@ -7,6 +7,10 @@
  *   Text of the tip box
  *   :::
  *
+ * Images: ![alt](url "caption") on its own line becomes a figure; the title is
+ * the caption. Ending the URL with #wide makes it wider than the text column.
+ * Two or more images on consecutive lines (one paragraph) become a gallery.
+ *
  * Used by the public post page and by the admin preview, so the preview is
  * exactly what goes live. Raw HTML in the Markdown is not rendered.
  */
@@ -19,6 +23,17 @@ import { visit, SKIP } from 'unist-util-visit'
 import { Lightbulb } from 'lucide-react'
 import { BlogRouteCard } from '@/components/features/blog/blog-route-card'
 import type { RouteWithDetails } from '@/types'
+import { cn } from '@/lib/utils'
+
+/** Marks an image URL as wider than the text column */
+export const WIDE_IMAGE = '#wide'
+
+/** Markdown for an image inserted by the editor */
+export function imageMarkdown({ url, alt, caption, wide }: { url: string; alt: string; caption?: string; wide?: boolean }) {
+  const clean = (s: string) => s.replace(/[\[\]"\n]/g, ' ').trim()
+  const title = caption?.trim() ? ` "${clean(caption)}"` : ''
+  return `![${clean(alt)}](${url}${wide ? WIDE_IMAGE : ''}${title})`
+}
 
 const ROUTE_DIRECTIVE = /::route\{[^}]*?slug=["']([^"']+)["'][^}]*\}/g
 
@@ -46,6 +61,17 @@ function textOf(node: any): string {
 function remarkBlogDirectives() {
   return (tree: any) => {
     visit(tree, (node: any, index, parent: any) => {
+      // A paragraph made only of images: a figure, or a gallery when there are several
+      if (node.type === 'paragraph') {
+        const images = node.children.filter((c: any) => c.type === 'image')
+        const onlyImages =
+          images.length > 0 && node.children.every((c: any) => c.type === 'image' || (c.type === 'text' && !c.value.trim()))
+        if (onlyImages) {
+          node.children = images
+          node.data = { hName: 'blog-images', hProperties: { count: images.length } }
+        }
+        return
+      }
       if (node.type === 'leafDirective' && node.name === 'route') {
         node.data = { hName: 'route-card', hProperties: { slug: node.attributes?.slug ?? '' } }
         return
@@ -109,8 +135,20 @@ export function BlogMarkdown({ markdown, locale, routes, renderMissingRoute, pos
     code: ({ children }) => <code className="rounded bg-muted px-1.5 py-0.5 text-[0.9em]">{children}</code>,
     pre: ({ children }) => <pre className="overflow-x-auto rounded-lg bg-muted p-4 text-sm [&_code]:bg-transparent [&_code]:p-0">{children}</pre>,
     hr: () => <hr className="my-8 border-border" />,
-    // eslint-disable-next-line @next/next/no-img-element
-    img: ({ src, alt }) => <img src={src} alt={alt ?? ''} loading="lazy" className="w-full rounded-lg border" />,
+    img: ({ src, alt, title }) => {
+      const wide = !!src?.endsWith(WIDE_IMAGE)
+      const url = wide ? src!.slice(0, -WIDE_IMAGE.length) : src
+      return (
+        <figure className={cn('my-0', wide && 'md:-mx-12 lg:-mx-24')}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={url} alt={alt ?? ''} loading="lazy" className="w-full rounded-lg border" />
+          {title && <figcaption className="mt-2 text-center text-sm text-muted-foreground">{title}</figcaption>}
+        </figure>
+      )
+    },
+    'blog-images': ({ children, count }: { children?: ReactNode; count?: number | string }) => (
+      <div className={cn(Number(count) > 1 ? 'grid gap-3 sm:grid-cols-2 [&_img]:aspect-[4/3] [&_img]:object-cover' : 'block')}>{children}</div>
+    ),
     table: ({ children }) => (
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-sm">{children}</table>

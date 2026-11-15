@@ -730,7 +730,9 @@
       "actions": "Ações",
       "noRoutes": "Nenhuma rota encontrada",
       "updated": "Atualizada",
-      "curator": "MotoTrip"
+      "curator": "MotoTrip",
+      "by": "por {name}",
+      "details": "Ver detalhes"
     },
     "categories": {
       "scenic": "Cênica",
@@ -831,7 +833,8 @@
         "copyEmail": "Copiar email",
         "history": "Ver histórico",
         "hideContent": "Ocultar conteúdo",
-        "showContent": "Mostrar conteúdo"
+        "showContent": "Mostrar conteúdo",
+        "changeRole": "Alterar função…"
       },
       "moderation": {
         "suspendTitle": "Suspender {name}",
@@ -879,7 +882,15 @@
         "show_content": "Conteúdo visível novamente",
         "withHiddenContent": "Com o conteúdo ocultado"
       },
-      "contentHidden": "Conteúdo oculto"
+      "contentHidden": "Conteúdo oculto",
+      "adminOnly": "Gerenciar usuários é exclusivo de admins.",
+      "roleDialog": {
+        "title": "Alterar função",
+        "description": "Escolha a nova função de {name}.",
+        "contributorHelp": "Envia rotas e edita as próprias.",
+        "curatorHelp": "Revisa e aprova rotas, edita qualquer rota e escreve no blog.",
+        "confirm": "Alterar função"
+      }
     },
     "review": {
       "approve": "Aprovar",
@@ -908,7 +919,8 @@
         "languages": "Idiomas",
         "date": "Publicado em",
         "updated": "Atualizado",
-        "actions": "Ações"
+        "actions": "Ações",
+        "seo": "SEO"
       },
       "edit": "Editar",
       "view": "Ver no site",
@@ -939,7 +951,7 @@
       "removeLanguage": "Remover idioma",
       "removeLanguageConfirm": "Remover o {language} deste post? O texto deste idioma será apagado ao salvar.",
       "fieldTitle": "Título",
-      "fieldDescription": "Descrição (SEO)",
+      "fieldDescription": "Descrição",
       "fieldBody": "Texto",
       "bodyPlaceholder": "Escreva em Markdown. Use o botão Rota para inserir o card de uma rota.",
       "preview": "Pré-visualização",
@@ -982,13 +994,148 @@
       "coverCreditPlaceholder": "Crédito da foto (ex.: Foto: Ana Silva / Unsplash)",
       "imageAltPlaceholder": "descreva a imagem",
       "imageInvalid": "Use uma imagem JPG, PNG ou WebP de até 5 MB.",
-      "imageUploadFailed": "Não foi possível enviar a imagem. Tente de novo."
+      "imageUploadFailed": "Não foi possível enviar a imagem. Tente de novo.",
+      "sideBySide": "Lado a lado",
+      "viewMode": "Modo de edição",
+      "publishTab": "Publicação",
+      "unsavedChanges": "Alterações não salvas",
+      "seo": {
+        "tab": "SEO",
+        "scoreTitle": "Pontuação SEO em português",
+        "score": "Pontuação SEO · {language}",
+        "perLanguage": "Cada idioma tem as suas próprias meta tags",
+        "metaTitle": "Meta title",
+        "metaTitlePlaceholder": "Título que aparece no Google",
+        "metaTitleHelp": "Vazio = usa o título do post. Escrito aqui, aparece exatamente assim (sem “| MotoTrip”).",
+        "metaDescription": "Meta description",
+        "metaDescriptionPlaceholder": "Resumo que aparece no Google",
+        "metaDescriptionHelp": "Vazio = usa a descrição do post.",
+        "keywords": "Palavras-chave",
+        "keywordsPlaceholder": "ex.: estradas de moto",
+        "keywordsHelp": "Enter ou vírgula para adicionar. A primeira é a principal. Ideal: {min} a {max}.",
+        "mainKeyword": "Principal",
+        "removeKeyword": "Remover {keyword}",
+        "googlePreview": "Prévia no Google",
+        "sharePreview": "Prévia ao partilhar",
+        "untitled": "Título do post",
+        "noDescription": "Adicione uma descrição para controlar este texto.",
+        "noCover": "Sem capa",
+        "checks": {
+          "titleLength": "Meta title entre {min} e {max} caracteres ({n})",
+          "descriptionLength": "Meta description entre {dmin} e {dmax} caracteres ({n})",
+          "keywordCount": "Entre {kmin} e {kmax} palavras-chave ({n})",
+          "keywordInTitle": "Palavra-chave principal no título",
+          "keywordInDescription": "Palavra-chave principal na descrição",
+          "hasHeadings": "Texto dividido com subtítulos (##)",
+          "imagesAlt": "Imagens no texto, todas com texto alternativo ({n}/{total})",
+          "slug": "Endereço (slug) curto, até 60 caracteres"
+        }
+      },
+      "image": {
+        "title": "Inserir imagem",
+        "description": "Entra no texto onde está o cursor.",
+        "addMore": "Adicionar mais imagens",
+        "drop": "Clique ou arraste imagens aqui",
+        "formats": "JPG, PNG ou WebP até 5 MB",
+        "alt": "Texto alternativo",
+        "altPlaceholder": "Texto alternativo: o que aparece na imagem?",
+        "caption": "Legenda",
+        "captionPlaceholder": "Legenda (opcional)",
+        "remove": "Remover",
+        "width": "Largura",
+        "layout": {
+          "text": "Coluna do texto",
+          "wide": "Larga",
+          "gallery": "Galeria"
+        },
+        "layoutHelp": {
+          "text": "Mesma largura do texto.",
+          "wide": "Mais larga que o texto em ecrãs grandes.",
+          "gallery": "Lado a lado, duas por linha."
+        },
+        "altMissing": "Imagens sem texto alternativo pioram o SEO e a acessibilidade.",
+        "insert": "Inserir no texto",
+        "dropHint": "Arraste ou cole imagens no texto para inserir onde soltar."
+      },
+      "editSeo": "Editar SEO"
     },
     "curatorFilter": {
       "label": "Avaliação MotoTrip",
       "any": "Todas",
       "missing": "Sem avaliação",
       "low": "Confiança baixa"
+    },
+    "shell": {
+      "overview": "Visão geral",
+      "routes": "Rotas",
+      "users": "Usuários",
+      "blog": "Blog",
+      "general": "Geral",
+      "shortcuts": "Atalhos",
+      "reviewQueue": "Fila de revisão",
+      "newPost": "Novo post",
+      "role": {
+        "admin": "Admin",
+        "curator": "Curador"
+      }
+    },
+    "dashboard": {
+      "title": "Visão geral",
+      "description": "O que está acontecendo na MotoTrip",
+      "period": "Período",
+      "days": "{n} dias",
+      "refresh": "Atualizar",
+      "error": "Não foi possível carregar o painel.",
+      "retry": "Tentar de novo",
+      "vsPrevious": "vs. {days} dias anteriores",
+      "kpi": {
+        "users": "Usuários",
+        "newUsers": "+{n} no período",
+        "routes": "Rotas aprovadas",
+        "submitted": "{n} enviadas no período",
+        "posts": "Posts publicados",
+        "drafts": "{n} rascunhos",
+        "weakSeo": "{n} com SEO fraco",
+        "pending": "Aguardando revisão",
+        "oldest": "a mais antiga espera há {time}",
+        "noneWaiting": "nada na fila"
+      },
+      "reviewNow": "Revisar agora",
+      "activity": "Cadastros e rotas enviadas por dia",
+      "series": {
+        "signups": "Cadastros",
+        "submitted": "Rotas enviadas"
+      },
+      "queue": "Fila de revisão",
+      "seeAll": "Ver todas",
+      "queueEmpty": "Nenhuma rota esperando revisão",
+      "approve": "Aprovar",
+      "byStatus": "Rotas por status",
+      "byCountry": "Rotas por país",
+      "approvedOnly": "aprovadas",
+      "byCategory": "Novas rotas por tipo",
+      "lastMonths": "últimos 6 meses",
+      "routesCount": "{n} rotas",
+      "seoTodo": "Posts publicados com SEO fraco",
+      "seoTodoHint": "pontuação abaixo de 60 em português",
+      "fixSeo": "Melhorar SEO"
+    },
+    "bulk": {
+      "approve": "Aprovar",
+      "feature": "Destacar",
+      "unfeature": "Remover destaque",
+      "clear": "Limpar seleção",
+      "selectAll": "Selecionar todas"
+    },
+    "drawer": {
+      "distance": "Distância",
+      "duration": "Duração",
+      "difficulty": "Dificuldade",
+      "author": "Autor",
+      "created": "Enviada",
+      "rejectReason": "Motivo da rejeição",
+      "curatorReview": "Avaliação MotoTrip",
+      "viewOnSite": "Ver no site"
     }
   },
   "riders": {

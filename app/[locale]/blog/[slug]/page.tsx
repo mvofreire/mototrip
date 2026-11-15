@@ -9,6 +9,7 @@ import { languageAlternates } from '@/lib/seo'
 import { coverOf, getPublishedPost, getPublishedPosts, pickTranslation, routesBySlug } from '@/lib/blog/posts'
 import { BlogMarkdown, routeSlugsIn } from '@/lib/blog/markdown'
 import { getSiteUrl } from '@/lib/site-url'
+import { effectiveDescription, effectiveTitle } from '@/lib/blog/seo'
 import { SharePostPanel } from '@/components/features/blog/share-post-panel'
 import { PostNextSteps } from '@/components/features/blog/post-next-steps'
 
@@ -26,9 +27,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const c = post && pickTranslation(post, params.locale)
   if (!post || !c) return {}
   const cover = coverOf(post)
+  const metaTitle = effectiveTitle(c)
+  const metaDescription = effectiveDescription(c)
   return {
-    title: c.title,
-    description: c.description,
+    // A custom meta title is used as written (no " | MotoTrip" suffix added)
+    title: c.meta_title?.trim() ? { absolute: metaTitle } : metaTitle,
+    description: metaDescription,
+    keywords: c.keywords?.length ? c.keywords : undefined,
     alternates: {
       // A fallback translation points at the language it is written in
       canonical: `/${c.locale}/blog/${post.slug}`,
@@ -39,8 +44,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     openGraph: {
       type: 'article',
-      title: c.title,
-      description: c.description,
+      title: metaTitle,
+      description: metaDescription,
       url: `/${c.locale}/blog/${post.slug}`,
       publishedTime: post.published_at ?? undefined,
       modifiedTime: post.updated_at,
@@ -80,6 +85,7 @@ export default async function BlogPostPage({ params }: Props) {
     headline: c.title,
     description: c.description,
     inLanguage: c.locale,
+    keywords: c.keywords?.length ? c.keywords.join(', ') : undefined,
     datePublished: post.published_at,
     dateModified: post.updated_at,
     image: cover ? [cover] : undefined,

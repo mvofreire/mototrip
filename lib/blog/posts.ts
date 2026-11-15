@@ -20,6 +20,11 @@ export interface BlogTranslation {
   title: string
   description: string
   body_md: string
+  /** SEO overrides (migration 026); empty = use title / description */
+  meta_title: string
+  meta_description: string
+  /** First one is the main keyword */
+  keywords: string[]
 }
 
 export interface BlogPost {
@@ -68,7 +73,7 @@ export async function getPublishedPosts(): Promise<BlogPost[]> {
 export async function getPublishedPost(slug: string): Promise<BlogPost | null> {
   const { data, error } = await supabase
     .from('blog_posts')
-    .select(`${POST_FIELDS}, translations:blog_post_translations(locale, title, description, body_md)`)
+    .select(`${POST_FIELDS}, translations:blog_post_translations(locale, title, description, body_md, meta_title, meta_description, keywords)`)
     .eq('status', 'published')
     .eq('slug', slug)
     .maybeSingle()

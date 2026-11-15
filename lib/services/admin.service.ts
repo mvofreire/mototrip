@@ -14,6 +14,18 @@ export interface AdminRouteWithUser extends Route {
   curator_confidence?: 'high' | 'medium' | 'low' | null
 }
 
+export type DashboardRoute = Pick<
+  Route,
+  'id' | 'title' | 'slug' | 'status' | 'country' | 'category' | 'created_at' | 'updated_at' | 'thumbnail_url' | 'user_id'
+>
+
+export interface DashboardData {
+  routes: DashboardRoute[]
+  /** Sign-up dates in the period */
+  signups: string[]
+  totalUsers: number
+}
+
 export type AccountStatus = 'active' | 'suspended' | 'banned'
 
 export interface AdminUser {
@@ -268,6 +280,40 @@ export class AdminService {
     if (error) {
       console.error('Error deleting routes:', error)
       throw new Error('Failed to delete routes')
+    }
+  }
+
+  /** Routes waiting for review (sidebar badge) */
+  static async countPendingRoutes(): Promise<number> {
+    const { count, error } = await supabase
+      .from('routes')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'pending')
+    if (error) throw error
+    return count ?? 0
+  }
+
+  /**
+   * Raw rows for the admin dashboard charts (staff see every route through
+   * RLS; profiles are public). Aggregated in the browser: the site has
+   * hundreds of routes, not millions.
+   */
+  static async getDashboardData(sinceDays = 90): Promise<DashboardData> {
+    const since = new Date(Date.now() - sinceDays * 86400000).toISOString()
+    const [routes, signups, total] = await Promise.all([
+      supabase
+        .from('routes')
+        .select('id, title, slug, status, country, category, created_at, updated_at, thumbnail_url, user_id')
+        .order('created_at', { ascending: false }),
+      supabase.from('profiles').select('created_at').gte('created_at', since),
+      supabase.from('profiles').select('id', { count: 'exact', head: true }),
+    ])
+    if (routes.error) throw routes.error
+    if (signups.error) throw signups.error
+    return {
+      routes: (routes.data ?? []) as DashboardRoute[],
+      signups: ((signups.data ?? []) as { created_at: string | null }[]).map((p) => p.created_at).filter((d): d is string => !!d),
+      totalUsers: total.count ?? 0,
     }
   }
 

@@ -67,7 +67,7 @@ export class BlogAdminService {
   static async listPosts(): Promise<BlogPost[]> {
     const { data, error } = await supabase
       .from('blog_posts')
-      .select(`${POST_FIELDS}, translations:blog_post_translations(locale, title, description)`)
+      .select(`${POST_FIELDS}, translations:blog_post_translations(locale, title, description, meta_title, meta_description, keywords)`)
       .order('updated_at', { ascending: false })
     if (error) throw error
     return (data ?? []) as unknown as BlogPost[]
@@ -76,7 +76,7 @@ export class BlogAdminService {
   static async getPost(id: string): Promise<BlogPost | null> {
     const { data, error } = await supabase
       .from('blog_posts')
-      .select(`${POST_FIELDS}, translations:blog_post_translations(locale, title, description, body_md)`)
+      .select(`${POST_FIELDS}, translations:blog_post_translations(locale, title, description, body_md, meta_title, meta_description, keywords)`)
       .eq('id', id)
       .maybeSingle()
     if (error) throw error

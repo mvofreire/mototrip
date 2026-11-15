@@ -730,7 +730,9 @@
       "actions": "Actions",
       "noRoutes": "Aucun itinéraire trouvé",
       "updated": "Mis à jour",
-      "curator": "MotoTrip"
+      "curator": "MotoTrip",
+      "by": "par {name}",
+      "details": "Voir les détails"
     },
     "categories": {
       "scenic": "Panoramique",
@@ -831,7 +833,8 @@
         "copyEmail": "Copier l’email",
         "history": "Voir l’historique",
         "hideContent": "Masquer le contenu",
-        "showContent": "Afficher le contenu"
+        "showContent": "Afficher le contenu",
+        "changeRole": "Changer le rôle…"
       },
       "moderation": {
         "suspendTitle": "Suspendre {name}",
@@ -879,7 +882,15 @@
         "show_content": "Contenu de nouveau visible",
         "withHiddenContent": "Avec contenu masqué"
       },
-      "contentHidden": "Contenu masqué"
+      "contentHidden": "Contenu masqué",
+      "adminOnly": "La gestion des utilisateurs est réservée aux admins.",
+      "roleDialog": {
+        "title": "Changer le rôle",
+        "description": "Choisissez le nouveau rôle de {name}.",
+        "contributorHelp": "Envoie des itinéraires et modifie les siens.",
+        "curatorHelp": "Valide les itinéraires, modifie n’importe lequel et écrit sur le blog.",
+        "confirm": "Changer le rôle"
+      }
     },
     "review": {
       "approve": "Approuver",
@@ -908,7 +919,8 @@
         "languages": "Langues",
         "date": "Publié le",
         "updated": "Mis à jour",
-        "actions": "Actions"
+        "actions": "Actions",
+        "seo": "SEO"
       },
       "edit": "Modifier",
       "view": "Voir sur le site",
@@ -939,7 +951,7 @@
       "removeLanguage": "Retirer la langue",
       "removeLanguageConfirm": "Retirer le {language} de cet article ? Son texte sera supprimé à l'enregistrement.",
       "fieldTitle": "Titre",
-      "fieldDescription": "Description (SEO)",
+      "fieldDescription": "Description",
       "fieldBody": "Texte",
       "bodyPlaceholder": "Écrivez en Markdown. Utilisez le bouton Itinéraire pour insérer la carte d'un itinéraire.",
       "preview": "Aperçu",
@@ -982,13 +994,148 @@
       "coverCreditPlaceholder": "Crédit photo (ex. : Photo : Ana Silva / Unsplash)",
       "imageAltPlaceholder": "décrivez l'image",
       "imageInvalid": "Utilisez une image JPG, PNG ou WebP de 5 Mo maximum.",
-      "imageUploadFailed": "Impossible d'importer l'image. Réessayez."
+      "imageUploadFailed": "Impossible d'importer l'image. Réessayez.",
+      "sideBySide": "Côte à côte",
+      "viewMode": "Mode d’édition",
+      "publishTab": "Publication",
+      "unsavedChanges": "Modifications non enregistrées",
+      "seo": {
+        "tab": "SEO",
+        "scoreTitle": "Score SEO en portugais",
+        "score": "Score SEO · {language}",
+        "perLanguage": "Chaque langue a ses propres balises meta",
+        "metaTitle": "Meta title",
+        "metaTitlePlaceholder": "Titre affiché sur Google",
+        "metaTitleHelp": "Vide = utilise le titre de l’article. Saisi ici, il est utilisé tel quel (sans « | MotoTrip »).",
+        "metaDescription": "Meta description",
+        "metaDescriptionPlaceholder": "Résumé affiché sur Google",
+        "metaDescriptionHelp": "Vide = utilise la description de l’article.",
+        "keywords": "Mots-clés",
+        "keywordsPlaceholder": "ex. : routes à moto",
+        "keywordsHelp": "Entrée ou virgule pour ajouter. Le premier est le principal. Idéal : {min} à {max}.",
+        "mainKeyword": "Principal",
+        "removeKeyword": "Retirer {keyword}",
+        "googlePreview": "Aperçu Google",
+        "sharePreview": "Aperçu du partage",
+        "untitled": "Titre de l’article",
+        "noDescription": "Ajoutez une description pour contrôler ce texte.",
+        "noCover": "Pas de couverture",
+        "checks": {
+          "titleLength": "Meta title entre {min} et {max} caractères ({n})",
+          "descriptionLength": "Meta description entre {dmin} et {dmax} caractères ({n})",
+          "keywordCount": "Entre {kmin} et {kmax} mots-clés ({n})",
+          "keywordInTitle": "Mot-clé principal dans le titre",
+          "keywordInDescription": "Mot-clé principal dans la description",
+          "hasHeadings": "Texte découpé en intertitres (##)",
+          "imagesAlt": "Images dans le texte, toutes avec texte alternatif ({n}/{total})",
+          "slug": "Adresse (slug) courte, 60 caractères max."
+        }
+      },
+      "image": {
+        "title": "Insérer une image",
+        "description": "Elle est insérée dans le texte à l’emplacement du curseur.",
+        "addMore": "Ajouter d’autres images",
+        "drop": "Cliquez ou glissez des images ici",
+        "formats": "JPG, PNG ou WebP jusqu’à 5 Mo",
+        "alt": "Texte alternatif",
+        "altPlaceholder": "Texte alternatif : que montre l’image ?",
+        "caption": "Légende",
+        "captionPlaceholder": "Légende (facultatif)",
+        "remove": "Retirer",
+        "width": "Largeur",
+        "layout": {
+          "text": "Colonne du texte",
+          "wide": "Large",
+          "gallery": "Galerie"
+        },
+        "layoutHelp": {
+          "text": "Même largeur que le texte.",
+          "wide": "Plus large que le texte sur grand écran.",
+          "gallery": "Côte à côte, deux par ligne."
+        },
+        "altMissing": "Les images sans texte alternatif nuisent au SEO et à l’accessibilité.",
+        "insert": "Insérer dans le texte",
+        "dropHint": "Glissez ou collez des images dans le texte pour les insérer là où vous les déposez."
+      },
+      "editSeo": "Modifier le SEO"
     },
     "curatorFilter": {
       "label": "Note MotoTrip",
       "any": "Toutes",
       "missing": "Sans note",
       "low": "Confiance faible"
+    },
+    "shell": {
+      "overview": "Vue d’ensemble",
+      "routes": "Itinéraires",
+      "users": "Utilisateurs",
+      "blog": "Blog",
+      "general": "Général",
+      "shortcuts": "Raccourcis",
+      "reviewQueue": "File de validation",
+      "newPost": "Nouvel article",
+      "role": {
+        "admin": "Admin",
+        "curator": "Curateur"
+      }
+    },
+    "dashboard": {
+      "title": "Vue d’ensemble",
+      "description": "Ce qui se passe sur MotoTrip",
+      "period": "Période",
+      "days": "{n} jours",
+      "refresh": "Actualiser",
+      "error": "Impossible de charger le tableau de bord.",
+      "retry": "Réessayer",
+      "vsPrevious": "vs. {days} jours précédents",
+      "kpi": {
+        "users": "Utilisateurs",
+        "newUsers": "+{n} sur la période",
+        "routes": "Itinéraires approuvés",
+        "submitted": "{n} envoyés sur la période",
+        "posts": "Articles publiés",
+        "drafts": "{n} brouillons",
+        "weakSeo": "{n} avec un SEO faible",
+        "pending": "En attente de validation",
+        "oldest": "le plus ancien attend depuis {time}",
+        "noneWaiting": "file vide"
+      },
+      "reviewNow": "Valider maintenant",
+      "activity": "Inscriptions et itinéraires envoyés par jour",
+      "series": {
+        "signups": "Inscriptions",
+        "submitted": "Itinéraires envoyés"
+      },
+      "queue": "File de validation",
+      "seeAll": "Tout voir",
+      "queueEmpty": "Aucun itinéraire en attente",
+      "approve": "Approuver",
+      "byStatus": "Itinéraires par statut",
+      "byCountry": "Itinéraires par pays",
+      "approvedOnly": "approuvés",
+      "byCategory": "Nouveaux itinéraires par type",
+      "lastMonths": "6 derniers mois",
+      "routesCount": "{n} itinéraires",
+      "seoTodo": "Articles publiés avec un SEO faible",
+      "seoTodoHint": "score inférieur à 60 en portugais",
+      "fixSeo": "Améliorer le SEO"
+    },
+    "bulk": {
+      "approve": "Approuver",
+      "feature": "Mettre en avant",
+      "unfeature": "Retirer la mise en avant",
+      "clear": "Effacer la sélection",
+      "selectAll": "Tout sélectionner"
+    },
+    "drawer": {
+      "distance": "Distance",
+      "duration": "Durée",
+      "difficulty": "Difficulté",
+      "author": "Auteur",
+      "created": "Envoyé",
+      "rejectReason": "Motif du refus",
+      "curatorReview": "Avis MotoTrip",
+      "viewOnSite": "Voir sur le site"
     }
   },
   "riders": {

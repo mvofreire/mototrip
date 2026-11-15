@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { formatDistanceToNow } from 'date-fns'
 import { de, enUS, es, fr, pt } from 'date-fns/locale'
@@ -21,14 +20,17 @@ import {
   RotateCcw,
   Route as RouteIcon,
   Search,
+  Shield,
   ShieldCheck,
+  UserCog,
   UserCheck,
   Users,
   X,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
 import { AdminService, AdminUser, AccountStatus } from '@/lib/services/admin.service'
-import { AdminNav } from '@/components/admin/admin-nav'
+import { AdminPageHeader, useAdmin } from '@/components/admin/admin-shell'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { UserModerationDialog, type ModerationMode } from '@/components/admin/user-moderation-dialog'
 import { UserHistoryDialog } from '@/components/admin/user-history-dialog'
 import { Badge } from '@/components/ui/badge'
@@ -82,13 +84,12 @@ function initials(u: AdminUser) {
 }
 
 export default function AdminUsersPage() {
-  const { user, loading: authLoading } = useAuth()
-  const router = useRouter()
+  const { user } = useAuth()
+  const { isAdmin } = useAdmin()
   const locale = useLocale()
   const t = useTranslations('admin')
   const tu = useTranslations('admin.users')
 
-  const [isAdmin, setIsAdmin] = useState(false)
   const [users, setUsers] = useState<AdminUser[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
@@ -100,6 +101,8 @@ export default function AdminUsersPage() {
   const [moderate, setModerate] = useState<{ user: AdminUser; mode: ModerationMode } | null>(null)
   const [reactivate, setReactivate] = useState<AdminUser | null>(null)
   const [history, setHistory] = useState<AdminUser | null>(null)
+  const [roleTarget, setRoleTarget] = useState<AdminUser | null>(null)
+  const [roleChoice, setRoleChoice] = useState<'contributor' | 'curator'>('contributor')
 
   const loadUsers = useCallback(async () => {
     setLoading(true)
@@ -113,25 +116,10 @@ export default function AdminUsersPage() {
     }
   }, [])
 
+  // Managing users is admin-only (curators see a notice below)
   useEffect(() => {
-    const init = async () => {
-      if (authLoading) return
-      if (!user) {
-        router.push(
-          `/${locale}/auth/login?redirect=${encodeURIComponent(`/${locale}/profile/admin/users`)}`,
-        )
-        return
-      }
-      const admin = await AdminService.isAdmin()
-      setIsAdmin(admin)
-      if (!admin) {
-        router.push(`/${locale}/profile`)
-        return
-      }
-      await loadUsers()
-    }
-    init()
-  }, [user, authLoading, router, locale, loadUsers])
+    if (isAdmin) loadUsers()
+  }, [isAdmin, loadUsers])
 
   useEffect(() => {
     if (!notice) return
@@ -267,17 +255,14 @@ export default function AdminUsersPage() {
   const fullDate = (date: string | null) =>
     date ? new Date(date).toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short' }) : undefined
 
-  if (authLoading || (loading && !isAdmin)) {
+  if (!isAdmin) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex min-h-[400px] items-center justify-center">
-          <RefreshCw className="h-8 w-8 animate-spin text-muted-foreground" />
-        </div>
+      <div className="rounded-xl border p-10 text-center text-muted-foreground">
+        <Shield className="mx-auto mb-3 h-6 w-6" />
+        {tu('adminOnly')}
       </div>
     )
   }
-
-  if (!isAdmin) return null
 
   const stats: { key: StatusFilter; label: string; value: number; icon: typeof Users; tone: string }[] = [
     { key: 'all', label: tu('stats.all'), value: counts.all, icon: Users, tone: 'text-foreground' },
@@ -288,13 +273,8 @@ export default function AdminUsersPage() {
   ]
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold">{t('pageTitle')}</h1>
-        <p className="text-muted-foreground">{tu('description')}</p>
-      </div>
-
-      <AdminNav />
+    <div>
+      <AdminPageHeader title={t('shell.users')} description={tu('description')} />
 
       {/* Stats double as status filters */}
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
@@ -381,16 +361,16 @@ export default function AdminUsersPage() {
       {loadError ? (
         <p className="text-sm text-destructive">{loadError}</p>
       ) : (
-        <div className="overflow-x-auto rounded-md border">
+        <div className="overflow-hidden rounded-xl border bg-card">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>{tu('columns.user')}</TableHead>
                 <TableHead>{tu('columns.role')}</TableHead>
                 <TableHead>{tu('columns.status')}</TableHead>
-                <TableHead>{tu('columns.activity')}</TableHead>
-                <TableHead>{tu('columns.created')}</TableHead>
-                <TableHead>{tu('columns.lastSignIn')}</TableHead>
+                <TableHead className="hidden xl:table-cell">{tu('columns.activity')}</TableHead>
+                <TableHead className="hidden whitespace-nowrap 2xl:table-cell">{tu('columns.created')}</TableHead>
+                <TableHead className="hidden whitespace-nowrap lg:table-cell">{tu('columns.lastSignIn')}</TableHead>
                 <TableHead className="w-12 text-right">
                   <span className="sr-only">{tu('columns.actions')}</span>
                 </TableHead>
@@ -411,7 +391,8 @@ export default function AdminUsersPage() {
                   const blocked = u.account_status !== 'active'
                   return (
                     <TableRow key={u.id} className={cn(blocked && 'bg-muted/40')}>
-                      <TableCell>
+                      {/* w-full + max-w-0: the user column takes the free space and truncates */}
+                      <TableCell className="w-full max-w-0">
                         <div className="flex items-center gap-3">
                           {u.avatar_url ? (
                             // eslint-disable-next-line @next/next/no-img-element
@@ -446,26 +427,7 @@ export default function AdminUsersPage() {
                       </TableCell>
 
                       <TableCell>
-                        {u.role === 'admin' ? (
-                          <Badge>
-                            <ShieldCheck className="mr-1 h-3 w-3" />
-                            {tu('roles.admin')}
-                          </Badge>
-                        ) : (
-                          <Select
-                            value={u.role}
-                            disabled={busy === u.id}
-                            onValueChange={(v) => handleRoleChange(u, v as 'contributor' | 'curator')}
-                          >
-                            <SelectTrigger className="h-8 w-[140px]" aria-label={tu('columns.role')}>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="contributor">{tu('roles.contributor')}</SelectItem>
-                              <SelectItem value="curator">{tu('roles.curator')}</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        )}
+                        <RoleChip role={u.role} label={tu(`roles.${u.role}`)} />
                       </TableCell>
 
                       <TableCell>
@@ -516,7 +478,7 @@ export default function AdminUsersPage() {
                         </div>
                       </TableCell>
 
-                      <TableCell>
+                      <TableCell className="hidden xl:table-cell">
                         <div className="flex items-center gap-3 text-sm tabular-nums text-muted-foreground">
                           <span className="flex items-center gap-1" title={tu('routesCount', { count: u.routes_count })}>
                             <RouteIcon className="h-3.5 w-3.5" />
@@ -529,10 +491,10 @@ export default function AdminUsersPage() {
                         </div>
                       </TableCell>
 
-                      <TableCell className="whitespace-nowrap text-sm" title={fullDate(u.created_at)}>
+                      <TableCell className="hidden whitespace-nowrap text-sm 2xl:table-cell" title={fullDate(u.created_at)}>
                         {ago(u.created_at)}
                       </TableCell>
-                      <TableCell className="whitespace-nowrap text-sm" title={fullDate(u.last_sign_in_at)}>
+                      <TableCell className="hidden whitespace-nowrap text-sm lg:table-cell" title={fullDate(u.last_sign_in_at)}>
                         {u.last_sign_in_at ? ago(u.last_sign_in_at) : tu('never')}
                       </TableCell>
 
@@ -573,6 +535,15 @@ export default function AdminUsersPage() {
                             {!protectedUser && (
                               <>
                                 <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onSelect={() => {
+                                    setRoleChoice(u.role === 'curator' ? 'curator' : 'contributor')
+                                    setRoleTarget(u)
+                                  }}
+                                >
+                                  <UserCog className="mr-2 h-4 w-4" />
+                                  {tu('actions.changeRole')}
+                                </DropdownMenuItem>
                                 {blocked ? (
                                   <DropdownMenuItem onSelect={() => setReactivate(u)}>
                                     <RotateCcw className="mr-2 h-4 w-4" />
@@ -630,6 +601,54 @@ export default function AdminUsersPage() {
 
       <UserHistoryDialog user={history} onClose={() => setHistory(null)} />
 
+      {/* Change role: contributor or curator (admins are set in the database) */}
+      <Dialog open={!!roleTarget} onOpenChange={(o) => !o && setRoleTarget(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-sans normal-case tracking-normal">{tu('roleDialog.title')}</DialogTitle>
+            <DialogDescription>{roleTarget && tu('roleDialog.description', { name: nameOf(roleTarget) })}</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2" role="radiogroup" aria-label={tu('columns.role')}>
+            {(['contributor', 'curator'] as const).map((r) => (
+              <label
+                key={r}
+                className={cn(
+                  'flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors hover:bg-muted/50',
+                  roleChoice === r && 'border-primary bg-primary/5',
+                )}
+              >
+                <input
+                  type="radio"
+                  name="role"
+                  value={r}
+                  checked={roleChoice === r}
+                  onChange={() => setRoleChoice(r)}
+                  className="mt-1 accent-[hsl(var(--primary))]"
+                />
+                <span>
+                  <span className="block text-sm font-medium">{tu(`roles.${r}`)}</span>
+                  <span className="block text-xs text-muted-foreground">{tu(`roleDialog.${r}Help`)}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setRoleTarget(null)}>
+              {tu('moderation.cancel')}
+            </Button>
+            <Button
+              disabled={!roleTarget || roleChoice === roleTarget.role || busy === roleTarget.id}
+              onClick={() => {
+                if (roleTarget) handleRoleChange(roleTarget, roleChoice)
+                setRoleTarget(null)
+              }}
+            >
+              {tu('roleDialog.confirm')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <AlertDialog open={!!reactivate} onOpenChange={(open) => !open && setReactivate(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -652,5 +671,20 @@ export default function AdminUsersPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+  )
+}
+
+const ROLE_STYLE: Record<string, string> = {
+  admin: 'border-primary/40 bg-primary/10 text-primary',
+  curator: 'border-sky-400/40 bg-sky-500/10 text-sky-700 dark:text-sky-300',
+  contributor: 'border-border bg-muted text-muted-foreground',
+}
+
+function RoleChip({ role, label }: { role: string; label: string }) {
+  return (
+    <span className={cn('inline-flex items-center gap-1 whitespace-nowrap rounded-full border px-2.5 py-0.5 text-xs font-medium', ROLE_STYLE[role] ?? ROLE_STYLE.contributor)}>
+      {role === 'admin' && <ShieldCheck className="h-3 w-3" />}
+      {label}
+    </span>
   )
 }
