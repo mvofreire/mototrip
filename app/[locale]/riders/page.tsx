@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import { buildAlternates } from '@/lib/seo'
 import { Trophy, MapPin, Gauge } from 'lucide-react'
 import { RoutesService } from '@/lib/services/routes.service'
+import { ProfileAvatar } from '@/components/profile/profile-avatar'
 
 // Served from the edge cache and rebuilt in the background every hour
 export const revalidate = 3600
@@ -70,10 +71,9 @@ export default async function RidersPage({
                   <div key={c.id} className="p-6 rounded-lg border bg-card space-y-4">
                     <div className="flex items-center gap-4">
                       {c.avatar_url ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={c.avatar_url} alt="" className="h-16 w-16 rounded-full object-cover" />
+                        <ProfileAvatar src={c.avatar_url} name={c.full_name} size={64} />
                       ) : (
-                        <div className="h-16 w-16 rounded-full bg-gradient-brand flex items-center justify-center text-white font-bold text-xl">
+                        <div className="h-16 w-16 shrink-0 rounded-full bg-gradient-brand flex items-center justify-center text-white font-bold text-xl">
                           #{i + 1}
                         </div>
                       )}

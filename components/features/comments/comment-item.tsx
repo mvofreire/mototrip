@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { CommentForm } from './comment-form'
+import { ProfileAvatar } from '@/components/profile/profile-avatar'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -98,19 +99,8 @@ export function CommentItem({
     <div className="flex gap-3 p-4 border rounded-lg bg-card">
       {/* Avatar */}
       <div className="flex-shrink-0">
-        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
-          {comment.user.avatar_url ? (
-            <img
-              src={comment.user.avatar_url}
-              alt={comment.user.name || t('item.anonymous')}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <span className="text-lg font-semibold text-primary">
-              {(comment.user.name || 'U')[0].toUpperCase()}
-            </span>
-          )}
-        </div>
+        {/* Below the fold: next/image loads it lazily, sized for 40px */}
+        <ProfileAvatar src={comment.user.avatar_url} name={comment.user.name || t('item.anonymous')} size={40} />
       </div>
 
       {/* Content */}
