@@ -26,42 +26,7 @@
     "hero": {
       "title": "Entdecken Sie die Besten",
       "titleHighlight": "Motorradrouten",
-      "subtitle": "Erkunden Sie kuratierte Fahrrouten von Fahrern aus der ganzen Welt. Finden Sie malerische Straßen, Bergpässe und Küstenstraßen, die jede Reise unvergesslich machen.",
-      "exploreRoutes": "Routen Erkunden",
-      "submitRoute": "Route Einreichen"
-    },
-    "stats": {
-      "routes": "Routen",
-      "riders": "Fahrer",
-      "reviews": "Bewertungen",
-      "km": "Kilometer",
-      "regions": "Regionen"
-    },
-    "clarification": {
-      "title": "Wir sind kein GPS",
-      "subtitle": "Wir kuratieren schöne Routen für unvergessliche Reisen",
-      "description": "MotoTrip ist eine gemeinschaftsgetriebene Plattform, die die besten Motorradrouten der Welt teilt. Wir bieten keine Echtzeit-Navigation – stattdessen helfen wir Ihnen, malerische, gut organisierte Routen zu entdecken, die Ihre Reise schön, sicher und unvergesslich machen.",
-      "feature1Title": "Kuratierte Routen",
-      "feature1Desc": "Handverlesen von erfahrenen Fahrern",
-      "feature2Title": "Malerische Straßen",
-      "feature2Desc": "Schöne Landschaften und Aussichtspunkte",
-      "feature3Title": "Community-Bewertungen",
-      "feature3Desc": "Echtes Feedback von Mitfahrern"
-    },
-    "featured": {
-      "title": "Featured Routen",
-      "subtitle": "Handverlesene Routen, die außergewöhnliche Fahrerlebnisse bieten",
-      "viewAll": "Alle ansehen"
-    },
-    "popular": {
-      "title": "Beliebt Diesen Monat",
-      "subtitle": "Die beliebtesten Routen der Community"
-    },
-    "cta": {
-      "title": "Bereit, Loszufahren?",
-      "subtitle": "Schließen Sie sich Tausenden von Fahrern an, die neue Abenteuer entdecken. Teilen Sie Ihre Lieblingsrouten und inspirieren Sie andere.",
-      "startExploring": "Mit Erkunden Beginnen",
-      "submitYourRoute": "Ihre Route Einreichen"
+      "subtitle": "Erkunden Sie kuratierte Fahrrouten von Fahrern aus der ganzen Welt. Finden Sie malerische Straßen, Bergpässe und Küstenstraßen, die jede Reise unvergesslich machen."
     }
   },
   "homeRoad": {

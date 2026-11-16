@@ -26,42 +26,7 @@
     "hero": {
       "title": "Découvrez les Meilleurs",
       "titleHighlight": "Itinéraires Moto",
-      "subtitle": "Explorez des itinéraires sélectionnés par des motards du monde entier. Trouvez des routes panoramiques, des cols de montagne et des routes côtières qui rendent chaque voyage inoubliable.",
-      "exploreRoutes": "Explorer les Itinéraires",
-      "submitRoute": "Soumettre un Itinéraire"
-    },
-    "stats": {
-      "routes": "Itinéraires",
-      "riders": "Motards",
-      "reviews": "Avis",
-      "km": "Kilomètres",
-      "regions": "Régions"
-    },
-    "clarification": {
-      "title": "Nous ne sommes pas un GPS",
-      "subtitle": "Nous sélectionnons de beaux itinéraires pour des voyages mémorables",
-      "description": "MotoTrip est une plateforme communautaire qui partage les meilleurs itinéraires moto du monde. Nous ne fournissons pas de navigation en temps réel—au lieu de cela, nous vous aidons à découvrir des itinéraires panoramiques et bien organisés qui rendent votre voyage magnifique, sûr et inoubliable.",
-      "feature1Title": "Itinéraires Sélectionnés",
-      "feature1Desc": "Choisis par des motards expérimentés",
-      "feature2Title": "Routes Panoramiques",
-      "feature2Desc": "Beaux paysages et points de vue",
-      "feature3Title": "Avis de la Communauté",
-      "feature3Desc": "Vrais retours de motards"
-    },
-    "featured": {
-      "title": "Itinéraires en Vedette",
-      "subtitle": "Itinéraires sélectionnés offrant des expériences exceptionnelles",
-      "viewAll": "Voir tout"
-    },
-    "popular": {
-      "title": "Populaires ce Mois-ci",
-      "subtitle": "Itinéraires les plus appréciés par la communauté"
-    },
-    "cta": {
-      "title": "Prêt à Prendre la Route?",
-      "subtitle": "Rejoignez des milliers de motards découvrant de nouvelles aventures. Partagez vos itinéraires préférés et inspirez les autres.",
-      "startExploring": "Commencer à Explorer",
-      "submitYourRoute": "Soumettre Votre Itinéraire"
+      "subtitle": "Explorez des itinéraires sélectionnés par des motards du monde entier. Trouvez des routes panoramiques, des cols de montagne et des routes côtières qui rendent chaque voyage inoubliable."
     }
   },
   "homeRoad": {

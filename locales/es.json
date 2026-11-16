@@ -26,42 +26,7 @@
     "hero": {
       "title": "Descubre las Mejores",
       "titleHighlight": "Rutas en Moto",
-      "subtitle": "Explora rutas de conducción curadas por motociclistas de todo el mundo. Encuentra carreteras escénicas, puertos de montaña y rutas costeras que hacen cada viaje inolvidable.",
-      "exploreRoutes": "Explorar Rutas",
-      "submitRoute": "Enviar una Ruta"
-    },
-    "stats": {
-      "routes": "Rutas",
-      "riders": "Motociclistas",
-      "reviews": "Reseñas",
-      "km": "Kilómetros",
-      "regions": "Regiones"
-    },
-    "clarification": {
-      "title": "No Somos un GPS",
-      "subtitle": "Curamos rutas hermosas para viajes memorables",
-      "description": "MotoTrip es una plataforma colaborativa que comparte las mejores rutas de moto del mundo. No proporcionamos navegación en tiempo real—en cambio, te ayudamos a descubrir rutas escénicas, bien organizadas que hacen tu viaje hermoso, seguro e inolvidable.",
-      "feature1Title": "Rutas Curadas",
-      "feature1Desc": "Seleccionadas por motociclistas experimentados",
-      "feature2Title": "Carreteras Escénicas",
-      "feature2Desc": "Paisajes hermosos y miradores",
-      "feature3Title": "Reseñas de la Comunidad",
-      "feature3Desc": "Opiniones reales de otros motociclistas"
-    },
-    "featured": {
-      "title": "Rutas Destacadas",
-      "subtitle": "Rutas seleccionadas que ofrecen experiencias excepcionales de conducción",
-      "viewAll": "Ver todas"
-    },
-    "popular": {
-      "title": "Populares Este Mes",
-      "subtitle": "Rutas más queridas por la comunidad"
-    },
-    "cta": {
-      "title": "¿Listo para Salir a la Carretera?",
-      "subtitle": "Únete a miles de motociclistas descubriendo nuevas aventuras. Comparte tus rutas favoritas e inspira a otros.",
-      "startExploring": "Comenzar a Explorar",
-      "submitYourRoute": "Enviar Tu Ruta"
+      "subtitle": "Explora rutas de conducción curadas por motociclistas de todo el mundo. Encuentra carreteras escénicas, puertos de montaña y rutas costeras que hacen cada viaje inolvidable."
     }
   },
   "homeRoad": {
