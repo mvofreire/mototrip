@@ -170,7 +170,7 @@ export default function AdminDashboardPage() {
     )
 
   const kpi = (icon: React.ReactNode, label: string, value: number | string, extra: React.ReactNode, spark?: number[], className?: string) => (
-    <div className={cn('flex min-w-0 flex-col gap-1 rounded-xl border bg-card p-4', className)}>
+    <div className={cn('flex min-w-0 flex-col gap-1 rounded-xl border bg-card p-3 sm:p-4', className)}>
       <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
         {icon}
         {label}
@@ -224,7 +224,7 @@ export default function AdminDashboardPage() {
               {oldest ? t('kpi.oldest', { time: formatDistanceToNow(new Date(oldest.created_at), { locale: dateLocale }) }) : t('kpi.noneWaiting')}
             </span>
             {view.status.pending > 0 && (
-              <Button asChild size="sm" variant="outline" className="mt-auto self-start">
+              <Button asChild size="sm" variant="outline" className="mt-auto w-full px-2 sm:w-auto sm:self-start sm:px-3">
                 <Link href={`${base}/routes?status=pending`}>{t('reviewNow')} <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
               </Button>
             )}

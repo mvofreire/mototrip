@@ -137,12 +137,12 @@ export default function AdminBlogPage() {
           <thead className="bg-muted/50 text-left text-muted-foreground">
             <tr>
               <th className="p-3 font-medium">{tb('columns.title')}</th>
-              <th className="p-3 font-medium">{tb('columns.status')}</th>
+              <th className="hidden p-3 font-medium sm:table-cell">{tb('columns.status')}</th>
               <th className="hidden p-3 font-medium xl:table-cell">{tb('columns.languages')}</th>
-              <th className="p-3 font-medium">{tb('columns.seo')}</th>
+              <th className="hidden p-3 font-medium sm:table-cell">{tb('columns.seo')}</th>
               <th className="hidden whitespace-nowrap p-3 font-medium lg:table-cell">{tb('columns.date')}</th>
               <th className="hidden whitespace-nowrap p-3 font-medium 2xl:table-cell">{tb('columns.updated')}</th>
-              <th className="w-[52px] p-3">
+              <th className="w-[44px] p-2 sm:w-[52px] sm:p-3">
                 <span className="sr-only">{tb('columns.actions')}</span>
               </th>
             </tr>
@@ -163,7 +163,7 @@ export default function AdminBlogPage() {
                 <tr key={post.id} className="border-t align-middle">
                   <td className="w-full max-w-0 p-3">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-16 shrink-0 overflow-hidden rounded-md border bg-muted">
+                      <div className="hidden h-10 w-16 shrink-0 overflow-hidden rounded-md border bg-muted sm:block">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         {cover && <img src={cover} alt="" className="h-full w-full object-cover" />}
                       </div>
@@ -172,10 +172,21 @@ export default function AdminBlogPage() {
                           {tr?.title ?? post.slug}
                         </Link>
                         <div className="truncate text-xs text-muted-foreground">/blog/{post.slug}</div>
+                        {/* Phones: status and SEO under the title instead of their own columns */}
+                        <div className="mt-1.5 flex items-center gap-2 sm:hidden">
+                          <Badge variant="outline" className={STATUS_STYLE[post.status]}>
+                            {tb(`status.${post.status}`)}
+                          </Badge>
+                          {seoTr && (
+                            <Link href={`/${locale}/profile/admin/blog/${post.id}?tab=seo`} title={tb('seo.scoreTitle')}>
+                              <SeoScore score={seoChecks(seoTr, post.slug).score} size="sm" />
+                            </Link>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </td>
-                  <td className="p-3">
+                  <td className="hidden p-3 sm:table-cell">
                     <Badge variant="outline" className={STATUS_STYLE[post.status]}>
                       {tb(`status.${post.status}`)}
                     </Badge>
@@ -183,7 +194,7 @@ export default function AdminBlogPage() {
                   <td className="hidden whitespace-nowrap p-3 uppercase text-muted-foreground xl:table-cell">
                     {post.translations.map((x) => x.locale).sort().join(' · ')}
                   </td>
-                  <td className="p-3">
+                  <td className="hidden p-3 sm:table-cell">
                     {seoTr && (
                       <Link href={`/${locale}/profile/admin/blog/${post.id}?tab=seo`} title={tb('seo.scoreTitle')}>
                         <SeoScore score={seoChecks(seoTr, post.slug).score} size="sm" />
@@ -192,7 +203,7 @@ export default function AdminBlogPage() {
                   </td>
                   <td className="hidden whitespace-nowrap p-3 lg:table-cell">{fmt(post.published_at)}</td>
                   <td className="hidden whitespace-nowrap p-3 text-muted-foreground 2xl:table-cell">{fmt(post.updated_at)}</td>
-                  <td className="p-3 text-right">
+                  <td className="p-2 text-right sm:p-3">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-8 w-8" aria-label={tb('columns.actions')}>
