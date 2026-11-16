@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
+import { scrollToTop } from "@/lib/scroll";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -55,6 +56,9 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  useEffect(() => {
+    if (success) scrollToTop();
+  }, [success]);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -305,7 +309,7 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
 
   if (success) {
     return (
-      <Card className="p-12 text-center">
+      <Card role="status" className="p-12 text-center">
         <div className="space-y-4">
           <div className="text-6xl">✅</div>
           <h3 className="text-2xl font-bold">{t("successTitle")}</h3>

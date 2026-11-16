@@ -10,17 +10,25 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
 }
 
-const DISMISS_KEY = 'mototrip:pwa-dismissed-at'
-const DISMISS_DAYS = 14
+/** Set the first time the banner is shown: it is offered once per browser */
+const SEEN_KEY = 'mototrip:pwa-prompt-seen'
+/** Older key (dismissed within 14 days); treated as seen */
+const LEGACY_DISMISS_KEY = 'mototrip:pwa-dismissed-at'
 const SHOW_DELAY_MS = 20_000
 
-function recentlyDismissed() {
+function alreadySeen() {
   try {
-    const at = Number(localStorage.getItem(DISMISS_KEY) || 0)
-    return Date.now() - at < DISMISS_DAYS * 86_400_000
+    return Boolean(localStorage.getItem(SEEN_KEY) || localStorage.getItem(LEGACY_DISMISS_KEY))
   } catch {
-    return false
+    // No storage (private mode, blocked): don't nag on every page view
+    return true
   }
+}
+
+function markSeen() {
+  try {
+    localStorage.setItem(SEEN_KEY, String(Date.now()))
+  } catch {}
 }
 
 function isStandalone() {
@@ -51,31 +59,42 @@ export function Pwa() {
       navigator.serviceWorker.register('/sw.js').catch(() => {})
     }
 
-    if (isStandalone() || recentlyDismissed()) return
+    if (isStandalone() || alreadySeen()) return
+
+    // Chrome fires `beforeinstallprompt` again after the native prompt is
+    // dismissed, so a single timer decides, and the banner shows at most once.
+    let timer: number | undefined
+    const show = (next: 'android' | 'ios') => {
+      if (timer) return
+      timer = window.setTimeout(() => {
+        if (alreadySeen()) return
+        markSeen()
+        setMode(next)
+      }, SHOW_DELAY_MS)
+    }
 
     const onPrompt = (e: Event) => {
       e.preventDefault()
       setDeferred(e as BeforeInstallPromptEvent)
-      window.setTimeout(() => setMode('android'), SHOW_DELAY_MS)
+      show('android')
     }
     window.addEventListener('beforeinstallprompt', onPrompt)
+    if (isIosSafari()) show('ios')
 
-    let iosTimer: number | undefined
-    if (isIosSafari()) iosTimer = window.setTimeout(() => setMode('ios'), SHOW_DELAY_MS)
-
-    const onInstalled = () => setMode(null)
+    const onInstalled = () => {
+      markSeen()
+      setMode(null)
+    }
     window.addEventListener('appinstalled', onInstalled)
     return () => {
       window.removeEventListener('beforeinstallprompt', onPrompt)
       window.removeEventListener('appinstalled', onInstalled)
-      if (iosTimer) window.clearTimeout(iosTimer)
+      if (timer) window.clearTimeout(timer)
     }
   }, [])
 
   const dismiss = () => {
-    try {
-      localStorage.setItem(DISMISS_KEY, String(Date.now()))
-    } catch {}
+    markSeen()
     setMode(null)
   }
 

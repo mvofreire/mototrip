@@ -24,7 +24,8 @@ export function RouteSplit({ map, panel }: { map: ReactNode; panel: ReactNode })
       <div
         className={cn(
           'relative z-[5] -mt-7 min-w-0 rounded-t-[22px] border-t bg-card px-4 pb-8 pt-2.5 animate-in fade-in slide-in-from-bottom-6 duration-500 lg:mt-0 lg:rounded-none lg:border-l lg:border-t-0 lg:px-10 lg:pt-7 lg:slide-in-from-bottom-0 lg:slide-in-from-right-6',
-          expanded && 'lg:invisible lg:overflow-hidden',
+          // Folded: no height either, so the 0px-wide text doesn't stretch the page
+          expanded && 'lg:invisible lg:h-0 lg:overflow-hidden lg:p-0',
         )}
       >
         <div className="mx-auto mb-3.5 h-1 w-10 rounded-full bg-border lg:hidden" aria-hidden />

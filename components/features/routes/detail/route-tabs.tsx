@@ -25,11 +25,12 @@ export function RouteTabs({ tabs, label }: { tabs: Tab[]; label: string }) {
 
   return (
     <>
+      {/* In-flow marker: the bar itself is sticky, so its own box can't tell where the tabs start */}
+      <div ref={tabsRef} aria-hidden className="mt-6 scroll-mt-16" />
       <div
-        ref={tabsRef}
         role="tablist"
         aria-label={label}
-        className="sticky top-16 z-20 -mx-4 mt-6 flex scroll-mt-16 gap-1 border-b bg-card/95 px-4 py-2 backdrop-blur lg:-mx-10 lg:px-10"
+        className="sticky top-16 z-20 -mx-4 flex gap-1 border-b bg-card/95 px-4 py-2 backdrop-blur lg:-mx-10 lg:px-10"
       >
         {tabs.map((t, i) => {
           const active = t.id === tab

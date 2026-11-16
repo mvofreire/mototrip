@@ -62,6 +62,7 @@ export function RouteLiveMap({ coords, stops }: { coords: LatLng[]; stops: Route
       zoom={10}
       polyline={coords}
       markers={markers}
+      scrollWheelZoom
       className="route-live-map h-full w-full"
     />
   )

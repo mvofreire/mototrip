@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
@@ -13,6 +14,10 @@ import {
   PhotosService,
 } from '@/lib/services/photos.service'
 import type { RouteWithDetails } from '@/types'
+import { RouteGallery } from './route-gallery'
+
+/** Thumbnails shown in the grid; the rest open from the "+N" tile */
+const GRID_LIMIT = 6
 
 /**
  * Photo gallery of a route. The route's author and admins can add and
@@ -32,6 +37,7 @@ export function RoutePhotos({
   const inputRef = useRef<HTMLInputElement>(null)
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [viewing, setViewing] = useState<number | null>(null)
 
   const photos = [...(route.photos ?? [])].sort((a, b) => a.order_index - b.order_index)
   const canEdit = canEditRoute(user, route)
@@ -112,37 +118,58 @@ export function RoutePhotos({
       )}
 
       {photos.length > 0 && (
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-          {photos.map((photo) => (
-            <div key={photo.id} className="group relative aspect-[4/3] overflow-hidden rounded-md border bg-muted">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={photo.url}
-                alt={photo.caption ?? route.title}
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
-              {canEdit && (
-                <Button
+        <ul className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3">
+          {/* Editors see every photo (to remove them); visitors get a "+N" tile */}
+          {(canEdit ? photos : photos.slice(0, GRID_LIMIT)).map((photo, i) => {
+            const more = !canEdit && i === GRID_LIMIT - 1 && photos.length > GRID_LIMIT ? photos.length - GRID_LIMIT : 0
+            return (
+              <li key={photo.id} className="group relative aspect-[4/3] overflow-hidden rounded-lg border bg-muted">
+                <button
                   type="button"
-                  size="icon"
-                  variant="destructive"
-                  aria-label={t('removePhoto')}
-                  title={t('removePhoto')}
-                  disabled={busy !== null}
-                  onClick={() => handleRemove(photo.id)}
-                  className="absolute right-2 top-2 h-8 w-8 opacity-90"
+                  onClick={() => setViewing(i)}
+                  aria-label={t('openPhoto', { n: i + 1, total: photos.length })}
+                  className="absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
                 >
-                  {busy === photo.id ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Trash2 className="h-4 w-4" />
+                  <Image
+                    src={photo.url}
+                    alt={photo.caption ?? route.title}
+                    fill
+                    sizes="(min-width: 1024px) 180px, (min-width: 768px) 30vw, 50vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  />
+                  {more > 0 && (
+                    <span className="absolute inset-0 flex items-center justify-center bg-black/55 text-lg font-bold text-white">
+                      {t('morePhotos', { count: more })}
+                    </span>
                   )}
-                </Button>
-              )}
-            </div>
-          ))}
-        </div>
+                </button>
+                {canEdit && (
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="destructive"
+                    aria-label={t('removePhoto')}
+                    title={t('removePhoto')}
+                    disabled={busy !== null}
+                    onClick={() => handleRemove(photo.id)}
+                    className="absolute right-2 top-2 h-9 w-9 opacity-90"
+                  >
+                    {busy === photo.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Trash2 className="h-4 w-4" />
+                    )}
+                  </Button>
+                )}
+              </li>
+            )
+          })}
+        </ul>
+      )}
+
+      {/* Stays mounted (renders nothing while closed) so focus returns to the tapped photo */}
+      {photos.length > 0 && (
+        <RouteGallery photos={photos} title={route.title} index={viewing} onClose={() => setViewing(null)} />
       )}
     </div>
   )
