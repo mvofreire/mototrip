@@ -8,6 +8,7 @@ import { googleMapsStopUrl, type LatLng } from '@/lib/route-export'
 import { trackEvent } from '@/lib/analytics'
 import type { RouteStop } from '@/types'
 import { cn } from '@/lib/utils'
+import { scrollToTop } from '@/lib/scroll'
 import { useRouteView } from './route-view-context'
 import { RouteLiveMap } from './route-live-map'
 
@@ -115,7 +116,11 @@ export function RouteMapHero({ title, routeSlug, thumbnailUrl, coords, stops, mo
           </button>
           <button
             type="button"
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => {
+              setExpanded(!expanded)
+              // The page height changes with the panel: start again from the map / the panel top
+              scrollToTop()
+            }}
             aria-pressed={expanded}
             className="absolute right-5 top-5 z-[500] hidden h-11 items-center gap-2 rounded-xl bg-foreground px-4 text-sm font-bold text-background shadow-lg transition-transform active:scale-95 lg:inline-flex"
           >

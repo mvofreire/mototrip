@@ -97,22 +97,16 @@ export default async function RegionsIndexPage({ params: { locale } }: Props) {
 
       {/* HERO: every route on the site, drawn together */}
       <section className="relative overflow-hidden bg-[#0d0f14] text-steel-50">
-        <RegionNetworkHero
-          paths={networkPaths(routes, 800, 600, 24, 40)}
-          weight={1.8}
-          className="absolute inset-y-0 right-0 h-full w-full opacity-60 md:w-3/5 md:opacity-90"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d0f14] via-[#0d0f14]/85 to-[#0d0f14]/10" />
-        <div className="container relative mx-auto max-w-7xl px-4 pb-16 pt-14 md:pb-24 md:pt-20">
+        {/* Text first in the HTML: the h1 (LCP) is parsed before the ~45 KB of route paths */}
+        <div className="container relative z-[1] mx-auto max-w-7xl px-4 pb-16 pt-14 md:pb-24 md:pt-20">
           <div className="max-w-2xl space-y-6">
             <p className="dest-rise text-sm font-bold uppercase tracking-[0.14em] text-brand-400">{t('eyebrow')}</p>
-            <h1
-              className="dest-rise font-display text-[clamp(2.75rem,6.5vw,5.5rem)] font-extrabold uppercase !leading-[0.92]"
-              style={{ '--d': '80ms' } as React.CSSProperties}
-            >
+            {/* No entrance animation on the h1 and intro: text at opacity 0 isn't
+                counted as painted, which pushed LCP back by seconds on slow phones */}
+            <h1 className="font-display text-[clamp(2.75rem,6.5vw,5.5rem)] font-extrabold uppercase !leading-[0.92]">
               {t('indexTitle')}
             </h1>
-            <p className="dest-rise text-lg leading-relaxed text-steel-300" style={{ '--d': '160ms' } as React.CSSProperties}>
+            <p className="text-lg leading-relaxed text-steel-300">
               {t('indexDescription')}
             </p>
           </div>
@@ -134,6 +128,12 @@ export default async function RegionsIndexPage({ params: { locale } }: Props) {
             ))}
           </dl>
         </div>
+        <RegionNetworkHero
+          paths={networkPaths(routes, 800, 600, 24, 40)}
+          weight={1.8}
+          className="absolute inset-y-0 z-0 right-0 h-full w-full opacity-60 md:w-3/5 md:opacity-90"
+        />
+        <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#0d0f14] via-[#0d0f14]/85 to-[#0d0f14]/10" />
       </section>
 
       <div className="container mx-auto max-w-7xl px-4 py-10 md:py-14">

@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft, ArrowRight, Check, Loader2, Send } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
+import { scrollToTop } from '@/lib/scroll'
 import { useAuth } from '@/hooks/use-auth'
 import { isStaff } from '@/lib/auth/roles'
 import { useRouteBuilder } from '@/hooks/use-route-builder'
@@ -322,6 +323,10 @@ export function RouteWizard({ locale }: { locale: string }) {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [done, setDone] = useState(false)
+  // The message replaces a long form: bring it into view instead of leaving the page on the footer
+  useEffect(() => {
+    if (done) scrollToTop()
+  }, [done])
 
   const submit = async () => {
     if (!ready || submitting) return
@@ -449,7 +454,9 @@ export function RouteWizard({ locale }: { locale: string }) {
 
   if (done) {
     return (
-      <div className="mx-auto flex max-w-md flex-col items-center gap-4 rounded-2xl border bg-card p-8 text-center animate-in fade-in zoom-in-95 duration-300">
+      <div
+        role="status"
+        className="mx-auto flex max-w-md flex-col items-center gap-4 rounded-2xl border bg-card p-8 text-center animate-in fade-in zoom-in-95 duration-300">
         <span className="grid h-16 w-16 place-items-center rounded-full bg-brand-500/15 text-brand-600">
           <Send className="h-7 w-7" aria-hidden />
         </span>

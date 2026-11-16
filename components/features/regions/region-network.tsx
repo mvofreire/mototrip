@@ -39,7 +39,8 @@ export function RegionNetworkHero({
           )
         })}
       </g>
-      <g filter="url(#dest-glow)">
+      {/* The blur is repainted on every frame of the draw animation: wide screens only */}
+      <g className="md:[filter:url(#dest-glow)]">
         {paths.map((d, i) => (
           <path
             key={i}
