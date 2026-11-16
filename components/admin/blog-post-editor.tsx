@@ -504,7 +504,7 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
               <p className="border-t px-3 py-1.5 text-xs text-muted-foreground">{tb('image.dropHint')}</p>
             </div>
 
-            <div className={cn('min-w-0 overflow-y-auto rounded-lg border p-6', view === 'split' && 'max-lg:hidden lg:h-[calc(65vh+74px)]', view === 'write' && 'hidden')}>
+            <div className={cn('min-w-0 overflow-y-auto rounded-lg border p-4 sm:p-6', view === 'split' && 'max-lg:hidden lg:h-[calc(65vh+74px)]', view === 'write' && 'hidden')}>
               <p className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">{tb('preview')}</p>
               {content.title && <h1 className="mb-3 text-3xl font-bold leading-tight tracking-tight">{content.title}</h1>}
               {content.description && <p className="mb-6 text-muted-foreground">{content.description}</p>}
@@ -612,7 +612,7 @@ export function BlogPostEditor({ postId }: { postId: string | null }) {
                 </Button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid gap-2 sm:grid-cols-2">
                 <Button variant="outline" className="justify-start" onClick={() => setPicker('cover')}>
                   <MapPin className="mr-2 h-4 w-4" /> {tb('chooseRoute')}
                 </Button>
