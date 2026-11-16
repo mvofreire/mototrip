@@ -11,6 +11,10 @@ const nextConfig = {
         hostname: 'images.unsplash.com',
       },
     ],
+    // Supabase serves public files with a 1h max-age (or no-cache), which
+    // would make the optimizer refetch them hourly. Replaced files get a new
+    // URL (route thumbnails add ?v=), so a week is safe.
+    minimumCacheTTL: 60 * 60 * 24 * 7,
   },
   experimental: {
     optimizePackageImports: ['lucide-react'],

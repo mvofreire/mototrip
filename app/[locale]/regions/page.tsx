@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { toRouteCard } from '@/lib/routes/card'
 import type { Metadata } from 'next'
 import { buildAlternates } from '@/lib/seo'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
@@ -157,7 +158,7 @@ export default async function RegionsIndexPage({ params: { locale } }: Props) {
         {routes.length > 0 && (
           <section className="dest-reveal mt-16 space-y-5">
             <h2 className="font-display text-3xl font-extrabold uppercase">{t('mapTitle')}</h2>
-            <RoutesOverviewMap routes={routes} locale={locale} />
+            <RoutesOverviewMap routes={routes.map((r) => toRouteCard(r, locale))} locale={locale} />
           </section>
         )}
 

@@ -1,51 +1,44 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 import { MapPin } from "lucide-react";
-import type { RouteWithDetails } from "@/types";
+import { darkThumbnailUrl } from "@/lib/routes/thumbnail";
 
-const RouteCoverMap = dynamic(() => import("./route-cover-map"), {
-  ssr: false,
-  loading: () => <div className="absolute inset-0 bg-muted animate-pulse" />,
-});
+/** Grid cards: full width on phones, half on tablets, a third on desktop */
+const GRID_SIZES = "(min-width: 1280px) 400px, (min-width: 640px) 50vw, 100vw";
 
 /**
- * Route card thumbnail: an OpenStreetMap (Leaflet) render of the route,
- * styled like the cover of the route page. The map is only mounted once the
- * card is close to the viewport, so long lists don't load every map at once.
+ * Route card thumbnail: the route's stored map image (OpenStreetMap tiles
+ * with the red track, rendered when the route is created or its track
+ * changes). A plain <img> instead of a live Leaflet map per card: no map
+ * script, no tile requests, and next/image serves it as WebP/AVIF at the
+ * card's size.
+ *
+ * There is a light and a dark file and only one <img>, so each visitor
+ * downloads one (hidden <img>s still load). The server can't know the theme
+ * and renders the dark file, the site's default; a light-theme visitor gets
+ * the light file after hydration, and until then the card stays blank
+ * (.route-thumb-pending) rather than showing a dark map. If the dark file is
+ * missing, the light one is shown with a CSS dark filter instead.
  */
-export function RouteThumbnail({ route }: { route: RouteWithDetails }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+export function RouteThumbnail({
+  route,
+  priority = false,
+  sizes = GRID_SIZES,
+}: {
+  route: { title: string; thumbnail_url: string | null };
+  priority?: boolean;
+  sizes?: string;
+}) {
+  const [darkFailed, setDarkFailed] = useState(false);
+  const { resolvedTheme } = useTheme();
+  // The theme is only known in the browser; match the server's render until then
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-  const points = useMemo(() => {
-    const coords = (route.polyline_coordinates as { coordinates?: [number, number][] } | null)
-      ?.coordinates;
-    return coords?.map(([lng, lat]) => ({ lat, lng })) ?? [];
-  }, [route.polyline_coordinates]);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || visible) return;
-    if (typeof IntersectionObserver === "undefined") {
-      setVisible(true);
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px" },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [visible]);
-
-  if (points.length < 2) {
+  if (!route.thumbnail_url) {
     return (
       <>
         <div className="absolute inset-0 bg-gradient-to-br from-steel-200 to-steel-400 dark:from-steel-800 dark:to-steel-950" />
@@ -56,14 +49,26 @@ export function RouteThumbnail({ route }: { route: RouteWithDetails }) {
     );
   }
 
+  const dark = darkFailed ? null : darkThumbnailUrl(route.thumbnail_url);
+  const light = mounted && resolvedTheme === "light";
+  const src = light || !dark ? route.thumbnail_url : dark;
+
   return (
-    // Non-interactive: clicks go through to the card link
-    <div ref={ref} className="absolute inset-0 pointer-events-none" aria-hidden>
-      {visible ? (
-        <RouteCoverMap points={points} variant="thumbnail" />
-      ) : (
-        <div className="absolute inset-0 bg-muted" />
-      )}
-    </div>
+    // Same element when the src switches (no `key`): a re-created <img> can
+    // ignore loading="lazy" and fetch every card's image at once
+    <Image
+      src={src}
+      alt={route.title}
+      fill
+      sizes={sizes}
+      priority={priority}
+      onError={src === dark ? () => setDarkFailed(true) : undefined}
+      className={[
+        "object-cover",
+        // Light file in the dark theme: no dark file for this route
+        !light && src !== dark ? "route-thumb-filter" : "",
+        mounted ? "" : "route-thumb-pending",
+      ].join(" ")}
+    />
   );
 }

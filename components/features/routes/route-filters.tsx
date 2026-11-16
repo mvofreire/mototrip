@@ -14,7 +14,7 @@ import {
   countOptions, countRatings, DISTANCE_BUCKETS, DURATION_BUCKETS, ELEVATION_BUCKETS, HIGHLIGHTS,
   RATING_STEPS, STOP_TYPES, type ExploreFilters, type FilterGroup,
 } from '@/lib/route-filtering'
-import type { RouteWithDetails } from '@/types'
+import type { RouteCardData } from '@/lib/routes/card'
 
 export interface FilterOption {
   value: string
@@ -184,7 +184,7 @@ export function FilterChip({
 /* ---------- Panel ---------- */
 
 interface RouteFiltersProps {
-  routes: RouteWithDetails[]
+  routes: RouteCardData[]
   filters: ExploreFilters
   onFiltersChange: (filters: ExploreFilters) => void
   locale: string

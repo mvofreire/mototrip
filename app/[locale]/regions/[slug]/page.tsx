@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { toRouteCard } from '@/lib/routes/card'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { buildAlternates } from '@/lib/seo'
@@ -85,6 +86,8 @@ export default async function RegionPage({ params }: Props) {
   const allLocalized = all.map((r) => localizeRoute(r, locale))
   const routes = all.filter((r) => routeInRegion(r, region))
   const localized = allLocalized.filter((r) => routeInRegion(r, region))
+  // What the browser gets: card data, not the full routes with their tracks
+  const cards = routes.map((r) => toRouteCard(r, locale))
   const km = totalKm(routes)
   const minutes = routes.reduce((s, r) => s + (r.duration_minutes || 0), 0)
 
@@ -256,12 +259,12 @@ export default async function RegionPage({ params }: Props) {
                   </p>
                 )}
               </div>
-              <RegionRoutes routes={routes} locale={locale} />
+              <RegionRoutes routes={cards} locale={locale} />
             </section>
 
             <section className="dest-reveal mt-16 space-y-5">
               <h2 className="font-display text-3xl font-extrabold uppercase">{t('mapTitle')}</h2>
-              <RoutesOverviewMap routes={routes} locale={locale} />
+              <RoutesOverviewMap routes={cards} locale={locale} />
             </section>
           </>
         ) : (

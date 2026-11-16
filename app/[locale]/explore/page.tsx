@@ -10,7 +10,8 @@ export const revalidate = 600
 export default async function ExplorePage({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'explore' })
-  const routes = await RoutesService.getRoutes().catch(() => [])
+  // Card data only (no GPS tracks): this list is serialized into the page
+  const routes = await RoutesService.getRouteCards(locale).catch(() => [])
 
   // The interactive view reads its filters from the URL (useSearchParams), so
   // it only renders in the browser. Until then — and for search engines — the
@@ -23,8 +24,8 @@ export default async function ExplorePage({ params: { locale } }: { params: { lo
           <p className="text-muted-foreground text-lg">{t('subtitle', { count: routes.length })}</p>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {routes.map((route: any) => (
-            <RouteCard key={route.id} route={route} locale={locale} />
+          {routes.map((route, i) => (
+            <RouteCard key={route.id} route={route} locale={locale} priority={i < 3} />
           ))}
         </div>
       </div>

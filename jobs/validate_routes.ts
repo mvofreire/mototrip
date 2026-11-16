@@ -21,7 +21,7 @@ import * as dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import type { Database } from '../types/database.types';
-import { renderRouteThumbnail } from './lib/route_thumbnail';
+import { renderRouteThumbnail, thumbnailPath } from './lib/route_thumbnail';
 
 // Load environment variables
 const __filename = fileURLToPath(import.meta.url);
@@ -260,13 +260,15 @@ function generateDescription(
  */
 async function generateThumbnailUrl(routeId: string, coordinates: any[]): Promise<string | null> {
   if (!coordinates || coordinates.length < 2) return null;
-  const png = await renderRouteThumbnail(coordinates);
-  const path = `thumbnail-${routeId}.png`;
-  const { error } = await supabase.storage
-    .from('route_map')
-    .upload(path, png, { contentType: 'image/png', upsert: true, cacheControl: '3600' });
-  if (error) throw new Error(`thumbnail upload: ${error.message}`);
-  return supabase.storage.from('route_map').getPublicUrl(path).data.publicUrl;
+  for (const theme of ['light', 'dark'] as const) {
+    const png = await renderRouteThumbnail(coordinates, { theme });
+    const { error } = await supabase.storage
+      .from('route_map')
+      .upload(thumbnailPath(routeId, theme), png, { contentType: 'image/png', upsert: true, cacheControl: '31536000' });
+    if (error) throw new Error(`thumbnail upload (${theme}): ${error.message}`);
+  }
+  const url = supabase.storage.from('route_map').getPublicUrl(thumbnailPath(routeId)).data.publicUrl;
+  return `${url}?v=${Date.now()}`;
 }
 
 // ================================================================================

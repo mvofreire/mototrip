@@ -21,7 +21,7 @@ import { RoutesService } from "@/lib/services/routes.service";
 import type { StopType } from "@/types";
 import { useRoutesCreateMutation, useRoutesUpdateMutation } from "@/hooks/use-routes";
 import { RouteStorage } from "@/lib/storage/storage.service";
-import { renderRouteThumbnail } from "@/lib/map-thumbnail";
+import { renderRouteThumbnails } from "@/lib/map-thumbnail";
 import { RouteBuilder } from "./route-builder/route-builder";
 import { useRouteBuilder } from "@/hooks/use-route-builder";
 import { useRouteBuilderAccess } from "@/hooks/use-route-builder-access";
@@ -212,11 +212,11 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
       // Static OpenStreetMap image of the route (used for social previews).
       // A failure here must not fail the submission.
       try {
-        const image = await renderRouteThumbnail(track.points);
-        const publicThumbnail = await RouteStorage.uploadRouteThumbnail(image, result.id);
+        const images = await renderRouteThumbnails(track.points);
+        const publicThumbnail = await RouteStorage.uploadRouteThumbnails(images, result.id);
         await updateRouteMutation.mutateAsync({
           id: result.id,
-          routeData: { thumbnail_url: publicThumbnail },
+          routeData: { thumbnail_url: `${publicThumbnail}?v=${Date.now()}` },
         });
       } catch (thumbError) {
         console.warn("Could not create route thumbnail:", thumbError);
@@ -285,8 +285,8 @@ export function SubmitRouteForm({ locale, route, onSaved }: SubmitRouteFormProps
 
     if (newPoints) {
       try {
-        const image = await renderRouteThumbnail(newPoints);
-        const url = await RouteStorage.uploadRouteThumbnail(image, current.id);
+        const images = await renderRouteThumbnails(newPoints);
+        const url = await RouteStorage.uploadRouteThumbnails(images, current.id);
         // Bust caches: the file name doesn't change
         saved = await updateRouteMutation.mutateAsync({
           id: current.id,

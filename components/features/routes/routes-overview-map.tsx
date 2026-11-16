@@ -1,64 +1,42 @@
 'use client'
 
-import { RouteWithDetails } from '@/types'
+import { localizeCard, type RouteCardData } from '@/lib/routes/card'
 import { Card } from '@/components/ui/card'
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Map } from '@/components/features/maps/map'
 import { routePath } from '@/lib/route-url'
-import { localizeRoute } from '@/lib/localize'
 
 interface RoutesOverviewMapProps {
-  routes: RouteWithDetails[]
+  /** Card data (lib/routes/card.ts): only the start point of each track is used */
+  routes: RouteCardData[]
   locale: string
 }
 
 export function RoutesOverviewMap({ routes: original, locale }: RoutesOverviewMapProps) {
-  const routes = useMemo(() => original.map((r) => localizeRoute(r, locale)), [original, locale])
+  const routes = useMemo(() => original.map((r) => localizeCard(r, locale)), [original, locale])
   const [selectedRoute, setSelectedRoute] = useState<string | null>(null)
 
-  // Calculate center point from all routes
+  // One marker per route, at the start of its track
+  const routeMarkers = useMemo(
+    () =>
+      routes
+        .filter((route) => route.start)
+        .map((route) => {
+          const [lng, lat] = route.start!
+          return { id: route.id, position: { lat, lng }, title: route.title }
+        }),
+    [routes],
+  )
+
+  // Centre on the average start point
   const center = useMemo(() => {
-    if (routes.length === 0) {
-      return { lat: 40.4168, lng: -3.7038 } // Madrid default
-    }
-
-    const allCoords = routes.flatMap(route => {
-      if (route.polyline_coordinates?.coordinates) {
-        return route.polyline_coordinates.coordinates.map(
-          ([lng, lat]: [number, number]) => ({ lat, lng })
-        )
-      }
-      return []
-    })
-
-    if (allCoords.length === 0) {
-      return { lat: 40.4168, lng: -3.7038 }
-    }
-
-    const avgLat = allCoords.reduce((sum, coord) => sum + coord.lat, 0) / allCoords.length
-    const avgLng = allCoords.reduce((sum, coord) => sum + coord.lng, 0) / allCoords.length
-
-    return { lat: avgLat, lng: avgLng }
-  }, [routes])
-
-  // Get start point for each route
-  const routeMarkers = useMemo(() => {
-    return routes
-      .filter(route => route.polyline_coordinates?.coordinates?.[0])
-      .map(route => {
-        const [lng, lat] = route.polyline_coordinates.coordinates[0]
-        return {
-          id: route.id,
-          position: { lat, lng },
-          title: route.title,
-          difficulty: route.difficulty,
-          distance: route.distance_km,
-          category: route.category,
-        }
-      })
-  }, [routes])
+    if (routeMarkers.length === 0) return { lat: 40.4168, lng: -3.7038 } // Madrid default
+    const lat = routeMarkers.reduce((sum, m) => sum + m.position.lat, 0) / routeMarkers.length
+    const lng = routeMarkers.reduce((sum, m) => sum + m.position.lng, 0) / routeMarkers.length
+    return { lat, lng }
+  }, [routeMarkers])
 
   return (
     <Card className="overflow-hidden">
