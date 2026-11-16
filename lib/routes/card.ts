@@ -29,6 +29,7 @@ export type RouteCardData = Pick<
   | 'curator_road'
   | 'rating_average'
   | 'rating_count'
+  | 'comments_count'
   | 'created_at'
   | 'thumbnail_url'
 > & {
@@ -44,7 +45,7 @@ export type RouteCardData = Pick<
 export const ROUTE_CARD_SELECT = `
   id, slug, title, description, translations, category, difficulty, route_type,
   distance_km, duration_minutes, elevation_gain_m, country, region, featured,
-  curator_rating, curator_scenic, curator_fun, curator_road, rating_average, rating_count,
+  curator_rating, curator_scenic, curator_fun, curator_road, rating_average, rating_count, comments_count,
   created_at, thumbnail_url,
   start:polyline_coordinates->coordinates->0,
   stops:route_stops(type)
@@ -110,6 +111,7 @@ export function toRouteCard(route: CardSource, locale: string): RouteCardData {
     curator_road: route.curator_road,
     rating_average: route.rating_average,
     rating_count: route.rating_count,
+    comments_count: route.comments_count ?? 0,
     created_at: route.created_at,
     thumbnail_url: route.thumbnail_url,
     translations,
