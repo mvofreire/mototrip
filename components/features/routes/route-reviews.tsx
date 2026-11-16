@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { CheckCircle2, Loader2, Pencil, Star, Trash2 } from 'lucide-react'
+import { useQueryClient } from '@tanstack/react-query'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { useAuth } from '@/hooks/use-auth'
@@ -65,6 +66,7 @@ export function RouteReviews({ route }: { route: { id: string; user_id: string }
   const tr = useTranslations('reviews')
   const locale = useLocale()
   const { user } = useAuth()
+  const queryClient = useQueryClient()
   const pathname = usePathname()
   const [reviews, setReviews] = useState<RouteReview[] | null>(null)
   const [editing, setEditing] = useState(false)
@@ -114,6 +116,7 @@ export function RouteReviews({ route }: { route: { id: string; user_id: string }
     setError(null)
     try {
       await RatingsService.save(route.id, user.id, { ...scores, comment })
+      queryClient.invalidateQueries({ queryKey: ['my-review-count'] })
       setEditing(false)
       await load()
     } catch (e) {
@@ -129,6 +132,7 @@ export function RouteReviews({ route }: { route: { id: string; user_id: string }
     setBusy(true)
     try {
       await RatingsService.remove(review.id)
+      queryClient.invalidateQueries({ queryKey: ['my-review-count'] })
       if (review.user_id === user?.id) setEditing(false)
       await load()
     } catch (e) {

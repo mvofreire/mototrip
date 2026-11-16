@@ -62,6 +62,16 @@ export const RatingsService = {
     if (error) throw error
   },
 
+  /** How many routes the user rated ("I rode this route"); counts only, no rows */
+  async countByUser(userId: string): Promise<number> {
+    const { count, error } = await supabase
+      .from('route_ratings')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+    if (error) throw error
+    return count ?? 0
+  },
+
   async remove(id: string) {
     const { error } = await supabase.from('route_ratings').delete().eq('id', id)
     if (error) throw error

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 import { authService } from '@/lib/auth/auth.service'
-import type { AuthUser } from '@/types/auth.types'
+import type { AuthUser, Profile } from '@/types/auth.types'
 import { supabase } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import { rememberAccountBlock } from '@/lib/auth/account-block'
@@ -16,6 +16,8 @@ interface AuthContextType {
   signUp: (email: string, password: string, fullName: string) => Promise<{ needsConfirmation: boolean }>
   signOut: () => Promise<void>
   resetPassword: (email: string) => Promise<void>
+  /** Saves profile fields and updates the signed-in user everywhere (header, profile) */
+  updateProfile: (updates: Partial<Pick<Profile, 'full_name' | 'avatar_url'>>) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -94,8 +96,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await authService.resetPassword(email)
   }
 
+  const updateProfile = async (updates: Partial<Pick<Profile, 'full_name' | 'avatar_url'>>) => {
+    if (!user) throw new Error('Not authenticated')
+    const profile = await authService.updateProfile(user.id, updates)
+    setUser((current) =>
+      current && current.id === user.id
+        ? { ...current, profile: { ...(current.profile ?? profile), ...profile } }
+        : current,
+    )
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, resetPassword }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, resetPassword, updateProfile }}>
       {children}
     </AuthContext.Provider>
   )

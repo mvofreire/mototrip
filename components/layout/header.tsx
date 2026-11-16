@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sheet";
 import { useState } from "react";
 import { isStaff } from "@/lib/auth/roles";
+import { ProfileAvatar } from "@/components/profile/profile-avatar";
 import { useAuth } from "@/hooks/use-auth";
 
 export function Header() {
@@ -214,7 +215,11 @@ export function Header() {
                           variant="ghost"
                           className="w-full justify-start"
                         >
-                          <User className="h-4 w-4 mr-2" />
+                          {user.profile?.avatar_url ? (
+                            <ProfileAvatar src={user.profile.avatar_url} name={user.profile.full_name} size={20} className="mr-2" />
+                          ) : (
+                            <User className="h-4 w-4 mr-2" />
+                          )}
                           {user.profile?.full_name || user.email}
                         </Button>
                       </Link>
@@ -291,7 +296,11 @@ export function Header() {
                     title={user.profile?.full_name || user.email}
                     aria-label={user.profile?.full_name || user.email}
                   >
-                    <User className="h-4 w-4 xl:mr-2" />
+                    {user.profile?.avatar_url ? (
+                      <ProfileAvatar src={user.profile.avatar_url} name={user.profile.full_name} size={20} className="xl:mr-2" />
+                    ) : (
+                      <User className="h-4 w-4 xl:mr-2" />
+                    )}
                     <span className="hidden max-w-[160px] truncate xl:inline">
                       {user.profile?.full_name || user.email}
                     </span>

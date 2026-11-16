@@ -3,6 +3,15 @@ import { Metadata } from 'next'
 import { buildAlternates } from '@/lib/seo'
 import { Trophy, MapPin, Gauge } from 'lucide-react'
 import { RoutesService } from '@/lib/services/routes.service'
+import { ProfileAvatar } from '@/components/profile/profile-avatar'
+import { cn } from '@/lib/utils'
+
+// Rank badge colors: gold, silver, bronze
+const PODIUM = [
+  'border-amber-400/60 bg-amber-400/15 text-amber-500',
+  'border-slate-300/60 bg-slate-300/15 text-slate-400',
+  'border-orange-700/60 bg-orange-700/15 text-orange-600',
+]
 
 // Served from the edge cache and rebuilt in the background every hour
 export const revalidate = 3600
@@ -67,22 +76,26 @@ export default async function RidersPage({
             ) : (
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {contributors.map((c, i) => (
-                  <div key={c.id} className="p-6 rounded-lg border bg-card space-y-4">
+                  <div key={c.id} className="min-w-0 p-6 rounded-lg border bg-card space-y-4">
                     <div className="flex items-center gap-4">
-                      {c.avatar_url ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={c.avatar_url} alt="" className="h-16 w-16 rounded-full object-cover" />
-                      ) : (
-                        <div className="h-16 w-16 rounded-full bg-gradient-brand flex items-center justify-center text-white font-bold text-xl">
-                          #{i + 1}
-                        </div>
-                      )}
-                      <div className="min-w-0">
+                      {/* Photo, or initials when there is none */}
+                      <ProfileAvatar src={c.avatar_url} name={c.full_name || 'MotoTrip'} size={64} />
+                      <div className="min-w-0 flex-1">
                         <h3 className="font-semibold text-lg truncate">{c.full_name || 'MotoTrip'}</h3>
                         <p className="text-sm text-muted-foreground">
                           {t('topContributors.memberSince', { year: new Date(c.created_at).getFullYear() })}
                         </p>
                       </div>
+                      {/* Ranking position, smaller than the photo; podium colors for the top 3 */}
+                      <span
+                        aria-label={`#${i + 1}`}
+                        className={cn(
+                          'flex h-9 w-9 shrink-0 items-center justify-center rounded-full border font-display text-base font-extrabold tabular-nums',
+                          PODIUM[i] ?? 'bg-muted text-muted-foreground',
+                        )}
+                      >
+                        #{i + 1}
+                      </span>
                     </div>
                     <div className="grid grid-cols-2 gap-4 pt-4 border-t">
                       <div className="space-y-1">

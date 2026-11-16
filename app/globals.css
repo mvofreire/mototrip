@@ -331,3 +331,25 @@ html:not(.dark) .route-thumb-pending {
 #cc-main .pm {
   border: 1px solid hsl(var(--border));
 }
+
+/* Profile: light, one-shot motion only (no loops, compositor-friendly) */
+.profile-road {
+  animation: profile-road 1.2s ease-out both;
+}
+@keyframes profile-road {
+  from { stroke-dashoffset: 60; opacity: 0; }
+  to { stroke-dashoffset: 0; opacity: 1; }
+}
+.profile-panel {
+  animation: profile-panel 160ms ease-out both;
+}
+@keyframes profile-panel {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .profile-road,
+  .profile-panel {
+    animation: none;
+  }
+}

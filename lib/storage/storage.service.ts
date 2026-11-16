@@ -1,11 +1,12 @@
 import { supabase } from "../supabase/client";
 
-async function uploadFile(bucket: string, file: File, path: string, cacheControl = "3600") {
+async function uploadFile(bucket: string, file: File | Blob, path: string, cacheControl = "3600") {
   const { data, error } = await supabase.storage
     .from(bucket)
     .upload(path, file, {
       cacheControl,
       upsert: true,
+      contentType: file.type || undefined,
     });
 
   if (error) throw error;
@@ -64,5 +65,24 @@ export const RouteStorage = {
 
   deleteRouteThumbnail(routeId: string) {
     return deleteFiles(this.bucket, [`thumbnail-${routeId}.png`, `thumbnail-${routeId}-dark.png`]);
+  },
+};
+
+/**
+ * Profile photos: one file per user at <user id>/avatar (see migration 030),
+ * overwritten on change. The returned URL carries ?v= so caches (CDN, the
+ * Next image optimizer, browsers) pick up the new photo.
+ */
+export const AvatarStorage = {
+  bucket: "avatars",
+  path: (userId: string) => `${userId}/avatar`,
+  async upload(userId: string, image: Blob) {
+    const year = String(60 * 60 * 24 * 365);
+    await uploadFile(this.bucket, image, this.path(userId), year);
+    return `${getPublicUrl(this.bucket, this.path(userId))}?v=${Date.now()}`;
+  },
+  async remove(userId: string) {
+    const { error } = await deleteFiles(this.bucket, [this.path(userId)]);
+    if (error) throw error;
   },
 };

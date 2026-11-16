@@ -10,6 +10,11 @@ const intlMiddleware = createMiddleware({
   locales,
   defaultLocale,
   localePrefix: 'always',
+  // Pages declare canonical + hreflang in their own <head> (lib/seo.ts). The
+  // header next-intl would add says `pt` instead of `pt-PT` and points
+  // x-default at the redirecting `/`, contradicting it, and is wrong for pages
+  // whose slug differs per locale.
+  alternateLinks: false,
 })
 
 export default intlMiddleware

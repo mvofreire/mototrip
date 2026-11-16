@@ -10,6 +10,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      {
+        // Profile photos of Google sign-ups (copied at sign-up, migration 015)
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
     ],
     // Supabase serves public files with a 1h max-age (or no-cache), which
     // would make the optimizer refetch them hourly. Replaced files get a new
