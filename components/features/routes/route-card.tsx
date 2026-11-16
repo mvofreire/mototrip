@@ -202,7 +202,7 @@ export function RouteCard({ route: original, locale, variant = "grid", priority 
                         </span>
                       )}
                     </div>
-                    <CommentsCount routeId={route.id} />
+                    <CommentsCount count={route.comments_count ?? 0} />
                   </div>
                 </div>
               </div>
@@ -327,7 +327,7 @@ export function RouteCard({ route: original, locale, variant = "grid", priority 
           <div className="flex items-center justify-between w-full text-xs text-muted-foreground">
             <div className="flex items-center gap-3">
               {route.rating_count > 0 && <span>{t('route.reviews', { count: route.rating_count })}</span>}
-              <CommentsCount routeId={route.id} />
+              <CommentsCount count={route.comments_count ?? 0} />
             </div>
             {!!route.elevation_gain_m && (
               <div className="flex items-center gap-1">
