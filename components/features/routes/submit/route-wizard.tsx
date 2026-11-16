@@ -31,7 +31,7 @@ import { PlacesService } from '@/lib/services/places.service'
 import { PhotosService } from '@/lib/services/photos.service'
 import { RoutesService } from '@/lib/services/routes.service'
 import { RouteStorage } from '@/lib/storage/storage.service'
-import { renderRouteThumbnail } from '@/lib/map-thumbnail'
+import { renderRouteThumbnails } from '@/lib/map-thumbnail'
 import { trackEvent } from '@/lib/analytics'
 import type { StopType } from '@/types'
 import type { Database } from '@/types/database.types'
@@ -365,9 +365,9 @@ export function RouteWizard({ locale }: { locale: string }) {
 
       // The rest must not fail the submission: everything can be fixed in the editor
       try {
-        const image = await renderRouteThumbnail(points)
-        const url = await RouteStorage.uploadRouteThumbnail(image, result.id)
-        await updateRoute.mutateAsync({ id: result.id, routeData: { thumbnail_url: url } })
+        const images = await renderRouteThumbnails(points)
+        const url = await RouteStorage.uploadRouteThumbnails(images, result.id)
+        await updateRoute.mutateAsync({ id: result.id, routeData: { thumbnail_url: `${url}?v=${Date.now()}` } })
       } catch (e) {
         console.warn('Could not create route thumbnail:', e)
       }

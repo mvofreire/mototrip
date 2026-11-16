@@ -18,7 +18,7 @@ import {
   SORTS, type ExploreFilters, type SortKey,
 } from '@/lib/route-filtering'
 import { cn } from '@/lib/utils'
-import type { RouteWithDetails } from '@/types'
+import type { RouteCardData } from '@/lib/routes/card'
 
 type ViewMode = 'grid' | 'list' | 'map'
 
@@ -27,11 +27,11 @@ type ViewMode = 'grid' | 'list' | 'map'
  * (`initialRoutes`), so filters, search and sort all run in the browser: the
  * list updates instantly and the URL is kept in sync without a navigation.
  */
-export function ExploreView({ locale, initialRoutes }: { locale: string; initialRoutes: any[] }) {
+export function ExploreView({ locale, initialRoutes }: { locale: string; initialRoutes: RouteCardData[] }) {
   const t = useTranslations('explore')
   const tf = useTranslations('filters')
   const searchParams = useSearchParams()
-  const routes = initialRoutes as RouteWithDetails[]
+  const routes = initialRoutes
   const sections = useFilterSections(locale)
 
   const [filters, setFilters] = useState<ExploreFilters>(() => filtersFromParams(searchParams))
@@ -273,8 +273,8 @@ export function ExploreView({ locale, initialRoutes }: { locale: string; initial
                 </div>
               ) : viewMode === 'grid' ? (
                 <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                  {results.map((route) => (
-                    <RouteCard key={route.id} route={route} locale={locale} />
+                  {results.map((route, i) => (
+                    <RouteCard key={route.id} route={route} locale={locale} priority={i < 3} />
                   ))}
                 </div>
               ) : (

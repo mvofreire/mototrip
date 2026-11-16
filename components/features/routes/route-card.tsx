@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { RouteWithDetails } from "@/types";
+import { localizeCard, type RouteCardData } from "@/lib/routes/card";
 import {
   Card,
   CardContent,
@@ -24,7 +24,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { CommentsCount } from "@/components/features/comments";
 import { routePath } from "@/lib/route-url";
-import { localizeRoute } from "@/lib/localize";
 import { regionLabel } from "@/lib/regions";
 import { RouteThumbnail } from "@/components/features/routes/route-thumbnail";
 import {
@@ -51,14 +50,16 @@ function CuratorBadge({ rating, label, className = "" }: { rating: number; label
 }
 
 interface RouteCardProps {
-  route: RouteWithDetails;
+  route: RouteCardData;
   locale: string;
   variant?: "grid" | "list";
+  /** Load the thumbnail eagerly (cards above the fold, likely the LCP image) */
+  priority?: boolean;
 }
 
-export function RouteCard({ route: original, locale, variant = "grid" }: RouteCardProps) {
+export function RouteCard({ route: original, locale, variant = "grid", priority = false }: RouteCardProps) {
   const t = useTranslations();
-  const route = localizeRoute(original, locale);
+  const route = localizeCard(original, locale);
 
   const categoryLabels = {
     scenic: t("categories.scenic"),
@@ -82,7 +83,11 @@ export function RouteCard({ route: original, locale, variant = "grid" }: RouteCa
           <div className="flex flex-col md:flex-row">
             {/* Image */}
             <div className="relative w-full md:w-64 h-48 md:h-auto overflow-hidden bg-sand-100 shrink-0">
-              <RouteThumbnail route={route} />
+              <RouteThumbnail
+                route={route}
+                priority={priority}
+                sizes="(min-width: 768px) 256px, 100vw"
+              />
 
               {route.featured && (
                 <div className="absolute top-3 left-3">
@@ -213,7 +218,7 @@ export function RouteCard({ route: original, locale, variant = "grid" }: RouteCa
       <Card className="group overflow-hidden transition-all hover:shadow-lg">
         <CardHeader className="p-0">
           <div className="relative aspect-[16/9] overflow-hidden bg-sand-100">
-            <RouteThumbnail route={route} />
+            <RouteThumbnail route={route} priority={priority} />
 
             {/* Featured badge */}
             {route.featured && (

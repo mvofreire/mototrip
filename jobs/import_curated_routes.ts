@@ -18,7 +18,7 @@
 import { createClient } from '@supabase/supabase-js';
 import * as turf from '@turf/turf';
 import * as dotenv from 'dotenv';
-import { renderRouteThumbnail } from './lib/route_thumbnail';
+import { renderRouteThumbnail, thumbnailPath } from './lib/route_thumbnail';
 import * as curatorEmail from '../lib/email/curator-notification';
 import type { NewRouteSummary } from '../lib/email/curator-notification';
 
@@ -186,6 +186,7 @@ async function importRoute(route: CuratedRoute) {
   );
 
   const thumb = await renderRouteThumbnail(routed.coordinates);
+  const thumbDark = await renderRouteThumbnail(routed.coordinates, { theme: 'dark' });
   if (OUT_DIR) {
     mkdirSync(OUT_DIR, { recursive: true });
     writeFileSync(join(OUT_DIR, `${slug(route.title)}.png`), thumb);
@@ -245,15 +246,21 @@ async function importRoute(route: CuratedRoute) {
     if (stopsError) throw new Error(`insert stops: ${stopsError.message}`);
   }
 
-  const path = `thumbnail-${routeId}.png`;
-  const { error: uploadError } = await supabase.storage
-    .from(THUMB_BUCKET)
-    .upload(path, thumb, { contentType: 'image/png', upsert: true, cacheControl: '3600' });
+  // Light (also the OG image) and dark (dark theme cards) thumbnails
+  const uploads = await Promise.all(
+    ([['light', thumb], ['dark', thumbDark]] as const).map(([theme, png]) =>
+      supabase.storage
+        .from(THUMB_BUCKET)
+        .upload(thumbnailPath(routeId, theme), png, { contentType: 'image/png', upsert: true, cacheControl: '31536000' }),
+    ),
+  );
+  const uploadError = uploads.find((u) => u.error)?.error;
   if (uploadError) {
     console.warn(`  thumbnail upload failed: ${uploadError.message}`);
   } else {
-    const { data } = supabase.storage.from(THUMB_BUCKET).getPublicUrl(path);
-    await supabase.from('routes').update({ thumbnail_url: data.publicUrl }).eq('id', routeId);
+    const { data } = supabase.storage.from(THUMB_BUCKET).getPublicUrl(thumbnailPath(routeId));
+    // Same file name on re-import: version the URL so image caches refresh
+    await supabase.from('routes').update({ thumbnail_url: `${data.publicUrl}?v=${Date.now()}` }).eq('id', routeId);
   }
 
   console.log(`  ✓ inserted ${routeId}`);

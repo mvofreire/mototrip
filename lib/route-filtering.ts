@@ -7,7 +7,7 @@
  */
 
 import { getRegions, routeInRegion, textFor } from '@/lib/regions'
-import type { RouteWithDetails } from '@/types'
+import type { RouteCardData } from '@/lib/routes/card'
 
 export type FilterGroup =
   | 'category'
@@ -61,7 +61,7 @@ export const RATING_STEPS = [3.5, 4, 4.5]
 export const STOP_TYPES = ['viewpoint', 'cafe', 'restaurant', 'landmark', 'gas_station', 'accommodation'] as const
 
 /** Highlights computed from the MotoTrip review scores */
-export const HIGHLIGHTS: Record<string, (r: RouteWithDetails) => boolean> = {
+export const HIGHLIGHTS: Record<string, (r: RouteCardData) => boolean> = {
   featured: (r) => !!r.featured,
   views: (r) => Number(r.curator_scenic ?? 0) >= 4.5,
   curves: (r) => Number(r.curator_fun ?? 0) >= 4.5,
@@ -78,11 +78,11 @@ const inRange = (value: number | null | undefined, range: Range | undefined) => 
 const fold = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 
 /** Region slug (lib/regions) a route belongs to, if any */
-export function routeRegionSlug(route: RouteWithDetails) {
+export function routeRegionSlug(route: RouteCardData) {
   return getRegions().find((r) => r.kind === 'region' && routeInRegion(route, r))?.slug
 }
 
-function searchText(route: RouteWithDetails, locale: string) {
+function searchText(route: RouteCardData, locale: string) {
   const parts = [route.title, route.region ?? '']
   for (const t of Object.values(route.translations ?? {})) if (t?.title) parts.push(t.title)
   const region = getRegions().find((r) => r.kind === 'region' && routeInRegion(route, r))
@@ -91,7 +91,7 @@ function searchText(route: RouteWithDetails, locale: string) {
 }
 
 /** Does `route` match one group of the filters? */
-function matchesGroup(route: RouteWithDetails, group: FilterGroup, values: string[]) {
+function matchesGroup(route: RouteCardData, group: FilterGroup, values: string[]) {
   switch (group) {
     case 'category': return values.includes(route.category)
     case 'difficulty': return values.includes(route.difficulty)
@@ -114,7 +114,7 @@ function matchesGroup(route: RouteWithDetails, group: FilterGroup, values: strin
  * option counts are computed (how many routes would I get if I added this?).
  */
 export function filterRoutes(
-  routes: RouteWithDetails[],
+  routes: RouteCardData[],
   filters: ExploreFilters,
   locale: string,
   skip?: FilterGroup | 'rating',
@@ -134,7 +134,7 @@ export function filterRoutes(
 
 /** How many routes each option of a group would leave */
 export function countOptions(
-  routes: RouteWithDetails[],
+  routes: RouteCardData[],
   filters: ExploreFilters,
   locale: string,
   group: FilterGroup,
@@ -150,7 +150,7 @@ export function countOptions(
   ) as Record<string, number>
 }
 
-export function countRatings(routes: RouteWithDetails[], filters: ExploreFilters, locale: string) {
+export function countRatings(routes: RouteCardData[], filters: ExploreFilters, locale: string) {
   const base = filterRoutes(routes, filters, locale, 'rating')
   return Object.fromEntries(
     RATING_STEPS.map((step) => [step, base.filter((r) => Number(r.curator_rating ?? 0) >= step).length]),
@@ -163,9 +163,9 @@ export const isSortKey = (v: string | null): v is SortKey => !!v && (SORTS as re
 
 const byNullsLast = (a: number | null | undefined, b: number | null | undefined) =>
   (b ?? -Infinity) - (a ?? -Infinity)
-const newest = (a: RouteWithDetails, b: RouteWithDetails) => b.created_at.localeCompare(a.created_at)
+const newest = (a: RouteCardData, b: RouteCardData) => b.created_at.localeCompare(a.created_at)
 
-export function sortRoutes(routes: RouteWithDetails[], sort: SortKey) {
+export function sortRoutes(routes: RouteCardData[], sort: SortKey) {
   const list = [...routes]
   switch (sort) {
     case 'curator':

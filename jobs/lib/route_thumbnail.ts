@@ -36,10 +36,17 @@ async function fetchTile(z: number, x: number, y: number): Promise<Buffer | null
   return null;
 }
 
+export type ThumbnailTheme = 'light' | 'dark';
+
+/** Storage file of a route thumbnail (the light one is also the OG image) */
+export const thumbnailPath = (routeId: string, theme: ThumbnailTheme = 'light') =>
+  `thumbnail-${routeId}${theme === 'dark' ? '-dark' : ''}.png`;
+
 export async function renderRouteThumbnail(
   coordinates: LngLat[],
-  { width = 700, height = 400, padding = 40 } = {},
+  { width = 700, height = 400, padding = 40, theme = 'light' as ThumbnailTheme } = {},
 ): Promise<Buffer> {
+  const dark = theme === 'dark';
   if (coordinates.length < 2) throw new Error('Route needs at least two points');
 
   let zoom = 17;
@@ -83,17 +90,26 @@ export async function renderRouteThumbnail(
   }
   await Promise.all(jobs);
 
-  // Greyed base map, like `.route-cover-map` (grayscale .85, contrast 1.05, brightness .97)
+  // Base map restyled like `.route-cover-map`: light is greyed
+  // (grayscale .85, contrast 1.05, brightness .97); dark is
+  // `.dark .route-cover-map` (grayscale 1, invert 1, brightness 1.05, contrast .95)
   const base = await sharp({
     create: { width, height, channels: 3, background: '#e5e5e5' },
   })
     .composite(composites)
     .png()
     .toBuffer();
-  const grey = await sharp(base)
-    .modulate({ saturation: 0.15, brightness: 0.97 })
-    .linear(1.05, -0.025 * 255)
-    .toBuffer();
+  const grey = dark
+    ? await sharp(await sharp(base).greyscale().negate({ alpha: false }).toBuffer())
+        // brightness 1.05 then contrast .95 around mid-grey (separate pass:
+        // sharp runs linear before negate within one pipeline)
+        .linear(1.05 * 0.95, 128 * (1 - 0.95))
+        .toColorspace('srgb')
+        .toBuffer()
+    : await sharp(base)
+        .modulate({ saturation: 0.15, brightness: 0.97 })
+        .linear(1.05, -0.025 * 255)
+        .toBuffer();
 
   const d = px
     .map((p, i) => `${i === 0 ? 'M' : 'L'}${(p.x - originX).toFixed(1)},${(p.y - originY).toFixed(1)}`)
@@ -103,8 +119,8 @@ export async function renderRouteThumbnail(
     <path d="${d}" stroke-width="12" stroke-opacity="0.25"/>
     <path d="${d}" stroke-width="4"/>
   </g>
-  <rect x="${width - 150}" y="${height - 14}" width="150" height="14" fill="#fff" fill-opacity="0.75"/>
-  <text x="${width - 146}" y="${height - 4}" font-family="sans-serif" font-size="10" fill="#333">© OpenStreetMap contributors</text>
+  <rect x="${width - 150}" y="${height - 14}" width="150" height="14" fill="${dark ? '#000' : '#fff'}" fill-opacity="${dark ? 0.55 : 0.75}"/>
+  <text x="${width - 146}" y="${height - 4}" font-family="sans-serif" font-size="10" fill="${dark ? '#bbb' : '#333'}">© OpenStreetMap contributors</text>
 </svg>`;
 
   return sharp(grey)

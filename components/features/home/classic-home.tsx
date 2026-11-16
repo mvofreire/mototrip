@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { ArrowRight, MapPin, Gauge, Mountain, Star, Navigation, Map, MessageCircle } from 'lucide-react'
 import { RouteCard } from '@/components/features/routes/route-card'
+import { toRouteCard } from '@/lib/routes/card'
 import { RoutesService } from '@/lib/services/routes.service'
 import {
   Section,
@@ -157,7 +158,7 @@ export async function ClassicHome({ locale }: { locale: string }) {
 
           <SectionGrid cols={3}>
             {featuredRoutes.map((route) => (
-              <RouteCard key={route.id} route={route} locale={locale} />
+              <RouteCard key={route.id} route={toRouteCard(route, locale)} locale={locale} />
             ))}
           </SectionGrid>
         </SectionContainer>
@@ -173,7 +174,7 @@ export async function ClassicHome({ locale }: { locale: string }) {
 
           <SectionGrid cols={3}>
             {popularRoutes.map((route) => (
-              <RouteCard key={route.id} route={route} locale={locale} />
+              <RouteCard key={route.id} route={toRouteCard(route, locale)} locale={locale} />
             ))}
           </SectionGrid>
         </SectionContainer>

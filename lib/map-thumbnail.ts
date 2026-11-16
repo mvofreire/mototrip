@@ -1,7 +1,9 @@
 /**
  * Renders a static PNG of a route on OpenStreetMap tiles in the browser,
- * styled like the route cover map (greyed tiles, red route line). Used as the
- * route's stored thumbnail (social/OG image). Cards render a live Leaflet map.
+ * styled like the route cover map (greyed tiles, red route line), in a light
+ * and a dark version. Stored as the route's thumbnails: route cards show the
+ * one for the current theme, and the light one is the social/OG image.
+ * Mirrors jobs/lib/route_thumbnail.ts, which does the same in Node.
  */
 
 type LatLng = { lat: number; lng: number };
@@ -30,10 +32,37 @@ function loadTile(url: string) {
   });
 }
 
+export type ThumbnailTheme = "light" | "dark";
+
+/** Light and dark thumbnails of a route (the second render reuses cached tiles) */
+export async function renderRouteThumbnails(points: LatLng[]) {
+  const [light, dark] = await Promise.all([
+    renderRouteThumbnail(points, { theme: "light" }),
+    renderRouteThumbnail(points, { theme: "dark" }),
+  ]);
+  return { light, dark };
+}
+
+/**
+ * Dark map like `.dark .route-cover-map` (grayscale 1, invert 1, brightness
+ * 1.05, contrast .95), done on the pixels: ctx.filter is missing in older Safari.
+ */
+function darken(ctx: CanvasRenderingContext2D, width: number, height: number) {
+  const image = ctx.getImageData(0, 0, width, height);
+  const px = image.data;
+  for (let i = 0; i < px.length; i += 4) {
+    const grey = 0.2126 * px[i] + 0.7152 * px[i + 1] + 0.0722 * px[i + 2];
+    const v = Math.max(0, Math.min(255, (255 - grey) * 1.05 * 0.95 + 128 * 0.05));
+    px[i] = px[i + 1] = px[i + 2] = v;
+  }
+  ctx.putImageData(image, 0, 0);
+}
+
 export async function renderRouteThumbnail(
   points: LatLng[],
-  { width = 700, height = 400, padding = 40 } = {},
+  { width = 700, height = 400, padding = 40, theme = "light" as ThumbnailTheme } = {},
 ): Promise<Blob> {
+  const dark = theme === "dark";
   if (points.length < 2) throw new Error("Route needs at least two points");
 
   // Largest zoom where the route fits inside the padded canvas
@@ -72,8 +101,8 @@ export async function renderRouteThumbnail(
         loadTile(TILE_URL(zoom, wrappedX, ty)).then((img) => {
           if (!img) return;
           ctx.save();
-          // Same look as .route-cover-map in light mode
-          ctx.filter = "grayscale(0.85) contrast(1.05) brightness(0.97)";
+          // Same look as .route-cover-map in light mode (dark: see darken())
+          if (!dark) ctx.filter = "grayscale(0.85) contrast(1.05) brightness(0.97)";
           ctx.drawImage(img, tx * TILE_SIZE - originX, ty * TILE_SIZE - originY);
           ctx.restore();
         }),
@@ -81,6 +110,7 @@ export async function renderRouteThumbnail(
     }
   }
   await Promise.all(jobs);
+  if (dark) darken(ctx, width, height);
 
   // Route line with a soft glow underneath
   const drawLine = (lineWidth: number, alpha: number) => {
@@ -107,9 +137,9 @@ export async function renderRouteThumbnail(
   ctx.font = "10px sans-serif";
   const label = "© OpenStreetMap contributors";
   const lw = ctx.measureText(label).width + 8;
-  ctx.fillStyle = "rgba(255,255,255,0.75)";
+  ctx.fillStyle = dark ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.75)";
   ctx.fillRect(width - lw, height - 14, lw, 14);
-  ctx.fillStyle = "#333";
+  ctx.fillStyle = dark ? "#bbb" : "#333";
   ctx.fillText(label, width - lw + 4, height - 4);
 
   return new Promise<Blob>((resolve, reject) =>

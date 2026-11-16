@@ -83,10 +83,9 @@ export async function generateMetadata({
       'mobile-web-app-capable': 'yes',
     },
     formatDetection: { telephone: false },
-    robots: {
-      index: true,
-      follow: true,
-    },
+    // No site-wide robots: indexing is the default, and a layout-level
+    // `index, follow` was emitted next to Next's `noindex` on 404 pages.
+    // Pages that must stay out of search set NO_INDEX (lib/seo.ts).
   }
 }
 

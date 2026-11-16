@@ -44,6 +44,42 @@ export const PhotosService = {
     return data as RoutePhoto
   },
 
+  /**
+   * Storage paths of every photo file of these routes: the files in each
+   * route's folder (orphans included) plus any the photo rows point at.
+   * Read before deleting the routes: their photo rows go with them (cascade).
+   */
+  async filePathsForRoutes(routeIds: string[]): Promise<string[]> {
+    if (!routeIds.length) return []
+    const paths = new Set<string>()
+
+    const { data: rows } = await supabase.from('route_photos').select('url').in('route_id', routeIds)
+    for (const row of (rows ?? []) as { url: string }[]) {
+      const path = storagePathFromUrl(row.url)
+      if (path) paths.add(path)
+    }
+
+    const PAGE = 100
+    for (const routeId of routeIds) {
+      for (let offset = 0; ; offset += PAGE) {
+        const { data: files, error } = await supabase.storage.from(BUCKET).list(routeId, { limit: PAGE, offset })
+        if (error || !files?.length) break
+        for (const file of files) if (file.id) paths.add(`${routeId}/${file.name}`)
+        if (files.length < PAGE) break
+      }
+    }
+    return Array.from(paths)
+  },
+
+  /** Deletes photo files (storage only; the rows are deleted with the route) */
+  async removeFiles(paths: string[]) {
+    // The Storage API takes up to 1000 paths per call
+    for (let i = 0; i < paths.length; i += 1000) {
+      const { error } = await supabase.storage.from(BUCKET).remove(paths.slice(i, i + 1000))
+      if (error) throw error
+    }
+  },
+
   async remove(photo: RoutePhoto) {
     const { error } = await supabase.from('route_photos').delete().eq('id', photo.id)
     if (error) throw error

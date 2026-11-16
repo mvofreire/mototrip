@@ -155,6 +155,16 @@ html, body {
   font-size: 10px;
   opacity: 0.7;
 }
+/* Before hydration a route thumbnail shows the dark file (the default theme);
+   keep it out of sight if the visitor's theme is light */
+html:not(.dark) .route-thumb-pending {
+  visibility: hidden;
+}
+/* Fallback for a route thumbnail without its dark file: invert the light one
+   and turn the hue back (the track turns pinkish, so it's only a fallback) */
+.dark .route-thumb-filter {
+  filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.95);
+}
 /* Route card thumbnails: attribution back at the bottom, clear of the badges */
 .route-thumb-map .leaflet-bottom.leaflet-right {
   top: auto;

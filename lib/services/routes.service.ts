@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase/client";
 import { isUuid } from "@/lib/route-url";
+import { ROUTE_CARD_SELECT, toRouteCard, type RouteCardData } from "@/lib/routes/card";
 import {
   RouteWithDetails,
   RouteFilters,
@@ -11,6 +12,21 @@ import {
 } from "@/types";
 
 export class RoutesService {
+  /**
+   * Every published route as card data in `locale`, newest first. Only the
+   * columns the listings read (see lib/routes/card.ts), not the GPS tracks.
+   */
+  static async getRouteCards(locale: string): Promise<RouteCardData[]> {
+    const { data, error } = await supabase
+      .from("routes")
+      .select(ROUTE_CARD_SELECT)
+      .eq("published", true)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    return ((data ?? []) as unknown as Parameters<typeof toRouteCard>[0][]).map((r) => toRouteCard(r, locale));
+  }
+
   /**
    * Fetch routes with optional filters and sorting
    */

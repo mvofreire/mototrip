@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase/client'
 import type { Database } from '@/types/database.types'
 import { RouteStorage } from '@/lib/storage/storage.service'
+import { PhotosService } from '@/lib/services/photos.service'
 import { authRedirectUrl } from '@/lib/auth/redirects'
 import type { UserRole } from '@/types/auth.types'
 
@@ -235,43 +236,28 @@ export class AdminService {
   }
 
   /**
-   * Delete route (admin only)
+   * Delete route (admin only), with its map thumbnails and photo files
    */
   static async deleteRoute(id: string): Promise<void> {
-    // Delete thumbnail from storage
-    try {
-      await RouteStorage.deleteRouteThumbnail(id)
-    } catch (error) {
-      console.warn('Error deleting thumbnail:', error)
-      // Continue even if thumbnail deletion fails
-    }
-
-    // Delete route from database
-    const { error } = await supabase
-      .from('routes')
-      .delete()
-      .eq('id', id)
-
-    if (error) {
-      console.error('Error deleting route:', error)
-      throw new Error('Failed to delete route')
-    }
+    return this.deleteRoutesBulk([id])
   }
 
   /**
-   * Delete multiple routes (admin only)
+   * Delete routes (admin only), with their map thumbnails and photo files.
+   * Photo paths are read first (the photo rows are deleted with the routes),
+   * and files are only removed once the routes are gone, so a failed delete
+   * never leaves a route without its images.
    */
   static async deleteRoutesBulk(ids: string[]): Promise<void> {
     if (ids.length === 0) {
       throw new Error('No routes to delete')
     }
 
-    // Delete thumbnails from storage
-    await Promise.allSettled(
-      ids.map(id => RouteStorage.deleteRouteThumbnail(id))
-    )
+    const photoPaths = await PhotosService.filePathsForRoutes(ids).catch((error) => {
+      console.warn('Error listing route photos:', error)
+      return [] as string[]
+    })
 
-    // Delete routes from database
     const { error } = await supabase
       .from('routes')
       .delete()
@@ -279,7 +265,16 @@ export class AdminService {
 
     if (error) {
       console.error('Error deleting routes:', error)
-      throw new Error('Failed to delete routes')
+      throw new Error(ids.length === 1 ? 'Failed to delete route' : 'Failed to delete routes')
+    }
+
+    // Storage cleanup is best effort: the routes are already deleted
+    const cleanup = await Promise.allSettled([
+      ...ids.map((id) => RouteStorage.deleteRouteThumbnail(id)),
+      PhotosService.removeFiles(photoPaths),
+    ])
+    for (const result of cleanup) {
+      if (result.status === 'rejected') console.warn('Error deleting route files:', result.reason)
     }
   }
 

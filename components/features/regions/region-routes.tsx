@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { RouteCard } from '@/components/features/routes/route-card'
 import { cn } from '@/lib/utils'
-import type { RouteWithDetails } from '@/types'
+import type { RouteCardData } from '@/lib/routes/card'
 
 const SORTS = ['featured', 'shortest', 'longest', 'rating'] as const
 type Sort = (typeof SORTS)[number]
@@ -17,7 +17,7 @@ const chip = (active: boolean) =>
   )
 
 /** Route grid of a destination page with sort and difficulty chips */
-export function RegionRoutes({ routes, locale }: { routes: RouteWithDetails[]; locale: string }) {
+export function RegionRoutes({ routes, locale }: { routes: RouteCardData[]; locale: string }) {
   const t = useTranslations('regions')
   const tAll = useTranslations()
   const [sort, setSort] = useState<Sort>('featured')
@@ -26,8 +26,8 @@ export function RegionRoutes({ routes, locale }: { routes: RouteWithDetails[]; l
   const available = DIFFICULTIES.filter((d) => routes.some((r) => r.difficulty === d))
   const shown = useMemo(() => {
     const list = difficulty ? routes.filter((r) => r.difficulty === difficulty) : [...routes]
-    const km = (r: RouteWithDetails) => Number(r.distance_km || 0)
-    const rating = (r: RouteWithDetails) => Number(r.curator_rating ?? r.rating_average ?? 0)
+    const km = (r: RouteCardData) => Number(r.distance_km || 0)
+    const rating = (r: RouteCardData) => Number(r.curator_rating ?? r.rating_average ?? 0)
     if (sort === 'shortest') list.sort((a, b) => km(a) - km(b))
     else if (sort === 'longest') list.sort((a, b) => km(b) - km(a))
     else if (sort === 'rating') list.sort((a, b) => rating(b) - rating(a))
