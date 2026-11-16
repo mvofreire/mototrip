@@ -18,14 +18,14 @@ import { routePath } from '@/lib/route-url'
 import { googleMapsUrl, gpxFileName, routePoints, routeSvgPath } from '@/lib/route-export'
 import { formatDuration, formatRating } from '@/lib/utils'
 import type { RouteWithDetails } from '@/types'
-import { HomeTracker } from './home-tracker'
+import { TrackedLink } from '@/components/features/blog/tracked-link'
 import { GpxFileIcon, RoadBand, RouteLine, TopoRoute } from './road-art'
 
 const container = 'mx-auto w-full max-w-[1240px] px-4 sm:px-6'
 const eyebrow = 'text-sm font-bold uppercase tracking-[0.12em]'
 const display = 'font-display font-extrabold uppercase leading-[0.95]'
 
-/** Cinematic homepage (variant "road", prototype A) */
+/** The homepage */
 export async function RoadHome({ locale }: { locale: string }) {
   const t = await getTranslations({ locale, namespace: 'homeRoad' })
   const tAll = await getTranslations({ locale })
@@ -95,11 +95,9 @@ export async function RoadHome({ locale }: { locale: string }) {
   ]
 
   return (
-    <div className="flex flex-col" data-home-variant="road">
-      <HomeTracker variant="road" />
-
+    <div className="flex flex-col">
       {/* HERO */}
-      <section data-home-section="hero" className="relative overflow-hidden bg-[#0d0f14] text-steel-50">
+      <section className="relative overflow-hidden bg-[#0d0f14] text-steel-50">
         <TopoRoute className="absolute inset-0 h-full w-full" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0d0f14]/95 via-[#0d0f14]/75 to-[#0d0f14]/20" />
 
@@ -178,25 +176,31 @@ export async function RoadHome({ locale }: { locale: string }) {
                 )}
               </div>
               <div className="flex flex-wrap gap-2.5">
-                <a
+                <TrackedLink
                   href={hero.gpxHref}
+                  prefetch={false}
+                  event="gpx_download"
+                  data={{ route: hero.route.slug, from: 'home' }}
                   download
                   rel="nofollow"
                   className="inline-flex min-h-[46px] flex-[1_1_140px] items-center justify-center gap-2 rounded-lg bg-steel-50 text-sm font-semibold text-steel-950 transition-colors hover:bg-white"
                 >
                   <Download className="h-4 w-4" aria-hidden />
                   {t('heroCard.gpx')}
-                </a>
+                </TrackedLink>
                 {hero.mapsHref && (
-                  <a
+                  <TrackedLink
                     href={hero.mapsHref}
+                    prefetch={false}
+                    event="google_maps_open"
+                    data={{ route: hero.route.slug, from: 'home' }}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
                     className="inline-flex min-h-[46px] flex-[1_1_140px] items-center justify-center gap-2 rounded-lg border border-steel-600 text-sm font-semibold text-steel-50 transition-colors hover:bg-white/5"
                   >
                     <MapPin className="h-4 w-4" aria-hidden />
                     Google Maps
-                  </a>
+                  </TrackedLink>
                 )}
               </div>
             </div>
@@ -224,7 +228,7 @@ export async function RoadHome({ locale }: { locale: string }) {
       )}
 
       {/* HOW IT WORKS */}
-      <section data-home-section="how" className={`${container} flex flex-col gap-14 py-20 sm:py-28`}>
+      <section className={`${container} flex flex-col gap-14 py-20 sm:py-28`}>
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="flex max-w-2xl flex-col gap-3">
             <span className={`${eyebrow} text-brand-600 dark:text-brand-400`}>{t('how.eyebrow')}</span>
@@ -266,7 +270,7 @@ export async function RoadHome({ locale }: { locale: string }) {
       </section>
 
       {/* GPX + GOOGLE MAPS */}
-      <section data-home-section="export" className="overflow-hidden bg-steel-900 text-steel-50">
+      <section className="overflow-hidden bg-steel-900 text-steel-50">
         <div className={`${container} flex flex-wrap items-center gap-16 py-20 sm:py-24`}>
           <div className="relative mx-auto min-w-0 flex-[0_1_360px]">
             <div className="mx-auto w-[300px] max-w-full rounded-[42px] border border-steel-700 bg-steel-950 p-3 shadow-[0_40px_80px_-30px_rgba(0,0,0,.9)]">
@@ -328,7 +332,7 @@ export async function RoadHome({ locale }: { locale: string }) {
 
       {/* FEATURED ROUTES */}
       {routes.length > 0 && (
-        <section data-home-section="featured" className={`${container} flex flex-col gap-10 pb-12 pt-20 sm:pt-28`}>
+        <section className={`${container} flex flex-col gap-10 pb-12 pt-20 sm:pt-28`}>
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="flex flex-col gap-2.5">
               <span className={`${eyebrow} text-brand-600 dark:text-brand-400`}>{t('featured.eyebrow')}</span>
@@ -371,7 +375,7 @@ export async function RoadHome({ locale }: { locale: string }) {
 
       {/* DESTINATIONS */}
       {destinations.length > 0 && (
-        <section data-home-section="destinations" className={`${container} flex flex-col gap-7 pb-20 pt-12 sm:pb-28`}>
+        <section className={`${container} flex flex-col gap-7 pb-20 pt-12 sm:pb-28`}>
           <h2 className={`${display} text-[clamp(2rem,4vw,2.75rem)] leading-none`}>{t('destinations.title')}</h2>
           <ul className="flex flex-wrap gap-3">
             {destinations.map((d) => (
@@ -401,7 +405,7 @@ export async function RoadHome({ locale }: { locale: string }) {
       )}
 
       {/* CTA */}
-      <section data-home-section="cta" className="relative overflow-hidden bg-[#0d0f14] text-steel-50">
+      <section className="relative overflow-hidden bg-[#0d0f14] text-steel-50">
         <RoadBand className="absolute inset-0 h-full w-full" />
         <div className="relative mx-auto flex max-w-[860px] flex-col items-center gap-6 px-4 py-24 text-center sm:py-28">
           <h2 className={`${display} text-[clamp(2.75rem,6vw,5rem)] !leading-[0.92]`}>{t('cta.title')}</h2>

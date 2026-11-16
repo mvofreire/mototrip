@@ -26,42 +26,7 @@
     "hero": {
       "title": "Descubra as Melhores",
       "titleHighlight": "Rotas de Moto",
-      "subtitle": "Explore rotas de pilotagem curadas por motociclistas ao redor do mundo. Encontre estradas cênicas, passagens de montanha e rotas costeiras que tornam cada viagem inesquecível.",
-      "exploreRoutes": "Explorar Rotas",
-      "submitRoute": "Enviar uma Rota"
-    },
-    "stats": {
-      "routes": "Rotas",
-      "riders": "Motociclistas",
-      "reviews": "Avaliações",
-      "km": "Quilômetros",
-      "regions": "Regiões"
-    },
-    "clarification": {
-      "title": "Não Somos um GPS",
-      "subtitle": "Curamos rotas bonitas para viagens memoráveis",
-      "description": "MotoTrip é uma plataforma colaborativa que compartilha as melhores rotas de moto do mundo. Não fornecemos navegação em tempo real—em vez disso, ajudamos você a descobrir rotas cênicas, bem organizadas e que tornam sua viagem bonita, segura e inesquecível.",
-      "feature1Title": "Rotas Curadas",
-      "feature1Desc": "Selecionadas por motociclistas experientes",
-      "feature2Title": "Estradas Cênicas",
-      "feature2Desc": "Paisagens lindas e mirantes",
-      "feature3Title": "Avaliações da Comunidade",
-      "feature3Desc": "Feedback real de outros motociclistas"
-    },
-    "featured": {
-      "title": "Rotas em Destaque",
-      "subtitle": "Rotas selecionadas que oferecem experiências excepcionais de pilotagem",
-      "viewAll": "Ver todas"
-    },
-    "popular": {
-      "title": "Populares Este Mês",
-      "subtitle": "Rotas mais amadas pela comunidade"
-    },
-    "cta": {
-      "title": "Pronto para Pegar a Estrada?",
-      "subtitle": "Junte-se a milhares de motociclistas descobrindo novas aventuras. Compartilhe suas rotas favoritas e inspire outros.",
-      "startExploring": "Começar a Explorar",
-      "submitYourRoute": "Enviar Sua Rota"
+      "subtitle": "Explore rotas de pilotagem curadas por motociclistas ao redor do mundo. Encontre estradas cênicas, passagens de montanha e rotas costeiras que tornam cada viagem inesquecível."
     }
   },
   "homeRoad": {
