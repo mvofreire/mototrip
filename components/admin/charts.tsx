@@ -87,7 +87,9 @@ export function LineChart({ labels, series, height = 220, bare }: { labels: stri
   // Whole-number gridlines: 4 or 5 steps, whichever divides the axis evenly
   const steps = max % 4 === 0 ? 4 : max % 5 === 0 ? 5 : 2
   const ticks = Array.from({ length: steps + 1 }, (_, i) => (max * i) / steps)
-  const step = Math.max(1, Math.ceil(n / 6))
+  // As many date labels as fit (about 56px each), spread evenly from first to last
+  const fit = Math.max(2, Math.min(n, Math.floor((W - padL - padR) / 56)))
+  const shown = new Set(n > 1 ? Array.from({ length: fit }, (_, k) => Math.round((k * (n - 1)) / (fit - 1))) : [0])
 
   return (
     <div ref={ref} className="relative w-full" style={{ height }}>
@@ -104,8 +106,14 @@ export function LineChart({ labels, series, height = 220, bare }: { labels: stri
             ))}
           {!bare &&
             labels.map((l, i) =>
-              i % step === 0 || i === n - 1 ? (
-                <text key={i} x={x(i)} y={height - 6} textAnchor="middle" className="fill-muted-foreground text-[10px]">
+              shown.has(i) ? (
+                <text
+                  key={i}
+                  x={x(i)}
+                  y={height - 6}
+                  textAnchor={i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}
+                  className="fill-muted-foreground text-[10px]"
+                >
                   {l}
                 </text>
               ) : null,

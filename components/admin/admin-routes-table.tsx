@@ -153,19 +153,19 @@ export function AdminRoutesTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[44px]">
+              <TableHead className="w-[36px] px-2 sm:w-[44px] sm:px-4">
                 <Checkbox
                   checked={allSelected}
                   onCheckedChange={() => setSelected(allSelected ? new Set() : new Set(routes.map((r) => r.id)))}
                   aria-label={t('bulk.selectAll')}
                 />
               </TableHead>
-              <TableHead>{t('table.title')}</TableHead>
+              <TableHead className="px-2 sm:px-4">{t('table.title')}</TableHead>
               <TableHead className="hidden xl:table-cell">{t('table.category')}</TableHead>
-              <TableHead>{t('table.status')}</TableHead>
+              <TableHead className="hidden sm:table-cell">{t('table.status')}</TableHead>
               <TableHead className="hidden whitespace-nowrap lg:table-cell">{t('table.curator')}</TableHead>
               <TableHead className="hidden whitespace-nowrap 2xl:table-cell">{t('table.updated')}</TableHead>
-              <TableHead className="w-[52px]">
+              <TableHead className="w-[44px] px-1 sm:w-[52px] sm:px-4">
                 <span className="sr-only">{t('table.actions')}</span>
               </TableHead>
             </TableRow>
@@ -180,16 +180,16 @@ export function AdminRoutesTable({
             ) : (
               routes.map((route) => (
                 <TableRow key={route.id} data-state={selected.has(route.id) ? 'selected' : undefined}>
-                  <TableCell>
+                  <TableCell className="px-2 sm:px-4">
                     <Checkbox checked={selected.has(route.id)} onCheckedChange={() => toggleSelect(route.id)} aria-label={route.title} />
                   </TableCell>
                   {/* w-full + max-w-0 lets the title column take the free space and truncate instead of scrolling */}
-                  <TableCell className="w-full max-w-0">
+                  <TableCell className="w-full max-w-0 px-2 sm:px-4">
                     <div className="flex items-center gap-3">
                       <button
                         type="button"
                         onClick={() => onOpen(route.id)}
-                        className="h-10 w-14 shrink-0 overflow-hidden rounded-md border bg-muted"
+                        className="hidden h-10 w-14 shrink-0 overflow-hidden rounded-md border bg-muted sm:block"
                         aria-label={route.title}
                         tabIndex={-1}
                       >
@@ -214,6 +214,10 @@ export function AdminRoutesTable({
                             .filter(Boolean)
                             .join(' · ')}
                         </p>
+                        {/* Phones: status under the title instead of its own column */}
+                        <div className="mt-1 sm:hidden">
+                          <RouteStatusBadge status={route.status} />
+                        </div>
                       </div>
                     </div>
                   </TableCell>
@@ -227,7 +231,7 @@ export function AdminRoutesTable({
                       </Badge>
                     </div>
                   </TableCell>
-                  <TableCell className="max-w-[200px]">
+                  <TableCell className="hidden max-w-[200px] sm:table-cell">
                     <RouteStatusBadge status={route.status} />
                     {route.status === 'rejected' && route.review_note && (
                       <p className="mt-1 truncate text-xs text-muted-foreground" title={route.review_note}>
@@ -252,7 +256,7 @@ export function AdminRoutesTable({
                   <TableCell className="hidden whitespace-nowrap text-sm text-muted-foreground 2xl:table-cell">
                     {formatDistanceToNow(new Date(route.updated_at ?? route.created_at), { addSuffix: true, locale: dateLocale })}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="px-1 sm:px-4">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-8 w-8" disabled={busy === route.id} aria-label={t('table.actions')}>

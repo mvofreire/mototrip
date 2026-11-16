@@ -285,7 +285,7 @@ export default function AdminUsersPage() {
             onClick={() => setStatusFilter(key)}
             aria-pressed={statusFilter === key}
             className={cn(
-              'rounded-lg border bg-card p-4 text-left transition-colors hover:bg-accent',
+              'rounded-lg border bg-card p-3 text-left transition-colors hover:bg-accent sm:p-4',
               statusFilter === key && 'border-primary ring-1 ring-primary',
             )}
           >
@@ -298,8 +298,8 @@ export default function AdminUsersPage() {
         ))}
       </div>
 
-      <div className="mb-4 flex flex-wrap items-center gap-3">
-        <div className="relative min-w-[200px] max-w-md flex-1">
+      <div className="mb-4 flex flex-wrap items-center gap-2 sm:gap-3">
+        <div className="relative w-full sm:w-auto sm:min-w-[200px] sm:max-w-md sm:flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder={tu('searchPlaceholder')}
@@ -309,7 +309,7 @@ export default function AdminUsersPage() {
           />
         </div>
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as StatusFilter)}>
-          <SelectTrigger className="w-[180px]" aria-label={tu('columns.status')}>
+          <SelectTrigger className="min-w-0 flex-1 sm:w-[180px] sm:flex-none" aria-label={tu('columns.status')}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -321,7 +321,7 @@ export default function AdminUsersPage() {
           </SelectContent>
         </Select>
         <Select value={roleFilter} onValueChange={(v) => setRoleFilter(v as RoleFilter)}>
-          <SelectTrigger className="w-[160px]" aria-label={tu('columns.role')}>
+          <SelectTrigger className="min-w-0 flex-1 sm:w-[160px] sm:flex-none" aria-label={tu('columns.role')}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -331,9 +331,9 @@ export default function AdminUsersPage() {
             <SelectItem value="contributor">{tu('roles.contributor')}</SelectItem>
           </SelectContent>
         </Select>
-        <Button onClick={loadUsers} variant="outline" disabled={loading}>
-          <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-          {t('refresh')}
+        <Button onClick={loadUsers} variant="outline" disabled={loading} aria-label={t('refresh')} title={t('refresh')}>
+          <RefreshCw className={cn('h-4 w-4 sm:mr-2', loading && 'animate-spin')} />
+          <span className="hidden sm:inline">{t('refresh')}</span>
         </Button>
       </div>
 
@@ -365,9 +365,9 @@ export default function AdminUsersPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{tu('columns.user')}</TableHead>
-                <TableHead>{tu('columns.role')}</TableHead>
-                <TableHead>{tu('columns.status')}</TableHead>
+                <TableHead className="px-3 sm:px-4">{tu('columns.user')}</TableHead>
+                <TableHead className="hidden sm:table-cell">{tu('columns.role')}</TableHead>
+                <TableHead className="hidden sm:table-cell">{tu('columns.status')}</TableHead>
                 <TableHead className="hidden xl:table-cell">{tu('columns.activity')}</TableHead>
                 <TableHead className="hidden whitespace-nowrap 2xl:table-cell">{tu('columns.created')}</TableHead>
                 <TableHead className="hidden whitespace-nowrap lg:table-cell">{tu('columns.lastSignIn')}</TableHead>
@@ -389,10 +389,42 @@ export default function AdminUsersPage() {
                   const isSelf = u.id === user?.id
                   const protectedUser = isSelf || u.role === 'admin'
                   const blocked = u.account_status !== 'active'
+                  const statusBadges = (
+                    <>
+                      {u.account_status === 'banned' ? (
+                        <Badge variant="destructive">
+                          <Ban className="mr-1 h-3 w-3" />
+                          {tu('status.banned')}
+                        </Badge>
+                      ) : u.account_status === 'suspended' ? (
+                        <Badge variant="outline" className="border-amber-400 bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-200">
+                          <Clock className="mr-1 h-3 w-3" />
+                          {tu('status.suspended')}
+                        </Badge>
+                      ) : confirmed ? (
+                        <Badge variant="outline" className="border-green-300 text-green-700 dark:text-green-400">
+                          <CheckCircle2 className="mr-1 h-3 w-3" />
+                          {tu('status.active')}
+                        </Badge>
+                      ) : null}
+                      {u.content_hidden && (
+                        <Badge variant="outline" className="text-muted-foreground">
+                          <EyeOff className="mr-1 h-3 w-3" />
+                          {tu('contentHidden')}
+                        </Badge>
+                      )}
+                      {!confirmed && (
+                        <Badge variant="outline" className="border-sky-300 text-sky-700 dark:text-sky-400">
+                          <Mail className="mr-1 h-3 w-3" />
+                          {tu('pending')}
+                        </Badge>
+                      )}
+                    </>
+                  )
                   return (
                     <TableRow key={u.id} className={cn(blocked && 'bg-muted/40')}>
                       {/* w-full + max-w-0: the user column takes the free space and truncates */}
-                      <TableCell className="w-full max-w-0">
+                      <TableCell className="w-full max-w-0 px-3 sm:px-4">
                         <div className="flex items-center gap-3">
                           {u.avatar_url ? (
                             // eslint-disable-next-line @next/next/no-img-element
@@ -400,10 +432,10 @@ export default function AdminUsersPage() {
                               src={u.avatar_url}
                               alt=""
                               referrerPolicy="no-referrer"
-                              className={cn('h-9 w-9 rounded-full object-cover', blocked && 'grayscale')}
+                              className={cn('h-9 w-9 shrink-0 rounded-full object-cover', blocked && 'grayscale')}
                             />
                           ) : (
-                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-xs font-semibold">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold">
                               {initials(u)}
                             </div>
                           )}
@@ -422,44 +454,22 @@ export default function AdminUsersPage() {
                                 <span className="rounded border px-1 text-[10px] uppercase">Google</span>
                               )}
                             </div>
+                            {/* Phones: role and status under the name instead of their own columns */}
+                            <div className="mt-1.5 flex flex-wrap items-center gap-1 sm:hidden">
+                              <RoleChip role={u.role} label={tu(`roles.${u.role}`)} />
+                              {statusBadges}
+                            </div>
                           </div>
                         </div>
                       </TableCell>
 
-                      <TableCell>
+                      <TableCell className="hidden sm:table-cell">
                         <RoleChip role={u.role} label={tu(`roles.${u.role}`)} />
                       </TableCell>
 
-                      <TableCell>
+                      <TableCell className="hidden sm:table-cell">
                         <div className="flex max-w-[260px] flex-col items-start gap-1">
-                          {u.account_status === 'banned' ? (
-                            <Badge variant="destructive">
-                              <Ban className="mr-1 h-3 w-3" />
-                              {tu('status.banned')}
-                            </Badge>
-                          ) : u.account_status === 'suspended' ? (
-                            <Badge variant="outline" className="border-amber-400 bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-200">
-                              <Clock className="mr-1 h-3 w-3" />
-                              {tu('status.suspended')}
-                            </Badge>
-                          ) : confirmed ? (
-                            <Badge variant="outline" className="border-green-300 text-green-700 dark:text-green-400">
-                              <CheckCircle2 className="mr-1 h-3 w-3" />
-                              {tu('status.active')}
-                            </Badge>
-                          ) : null}
-                          {u.content_hidden && (
-                            <Badge variant="outline" className="text-muted-foreground">
-                              <EyeOff className="mr-1 h-3 w-3" />
-                              {tu('contentHidden')}
-                            </Badge>
-                          )}
-                          {!confirmed && (
-                            <Badge variant="outline" className="border-sky-300 text-sky-700 dark:text-sky-400">
-                              <Mail className="mr-1 h-3 w-3" />
-                              {tu('pending')}
-                            </Badge>
-                          )}
+                          {statusBadges}
                           {u.account_status === 'suspended' && u.suspended_until && (
                             <span className="text-xs text-muted-foreground" title={fullDate(u.suspended_until)}>
                               {tu('endsIn', { when: ago(u.suspended_until) })}
@@ -498,7 +508,7 @@ export default function AdminUsersPage() {
                         {u.last_sign_in_at ? ago(u.last_sign_in_at) : tu('never')}
                       </TableCell>
 
-                      <TableCell className="text-right">
+                      <TableCell className="px-2 text-right sm:px-4">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button

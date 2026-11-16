@@ -4,15 +4,16 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { Clock, FileText, LayoutDashboard, Map, Plus, RefreshCw, Shield, Users, type LucideIcon } from 'lucide-react'
+import { ChevronDown, Clock, FileText, LayoutDashboard, Map, Plus, RefreshCw, Shield, Users, type LucideIcon } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { AdminService } from '@/lib/services/admin.service'
 import type { UserRole } from '@/types/auth.types'
 import { cn } from '@/lib/utils'
 
 /**
  * Admin and curator area: checks the role once, then shows a sidebar
- * (a scrolling bar of links on small screens) next to the page.
+ * next to the page (a slide-in menu on phones).
  */
 
 interface AdminContextValue {
@@ -38,6 +39,10 @@ export function AdminShell({ children }: { children: ReactNode }) {
   const t = useTranslations('admin.shell')
   const [role, setRole] = useState<UserRole | null>(null)
   const [pending, setPending] = useState<number | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  // Close the phone menu after following a link
+  useEffect(() => setMenuOpen(false), [pathname])
 
   useEffect(() => {
     if (authLoading) return
@@ -101,22 +106,52 @@ export function AdminShell({ children }: { children: ReactNode }) {
     </Link>
   )
 
+  const current = nav.find((n) => isActive(n.href, n.exact)) ?? nav[0]
+  const CurrentIcon = current.icon
+
+  const links = (
+    <nav className="flex flex-col gap-1">
+      <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t('general')}</p>
+      {nav.map((n) => item(n.href, n.label, n.icon, isActive(n.href, n.exact), n.badge))}
+      <p className="px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t('shortcuts')}</p>
+      {shortcuts.map((s) => item(s.href, s.label, s.icon, false))}
+      <div className="mt-6 flex items-center gap-2 rounded-lg border p-3 text-sm">
+        <Shield className="h-4 w-4 text-primary" />
+        <span className="text-muted-foreground">{t(`role.${role}`)}</span>
+      </div>
+    </nav>
+  )
+
   return (
     <AdminContext.Provider value={{ role, isAdmin: role === 'admin', refreshPending }}>
-      <div className="container py-6 md:py-8">
+      <div className="container py-4 md:py-8">
+        {/* Phones: one button with the current section that opens the menu */}
+        <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+          <SheetTrigger asChild>
+            <button
+              type="button"
+              className="mb-4 flex w-full items-center gap-2.5 rounded-lg border bg-card px-3 py-2.5 text-sm font-medium md:hidden"
+            >
+              <CurrentIcon className="h-4 w-4 text-primary" />
+              {current.label}
+              <span className="ml-auto flex items-center gap-2">
+                {!!pending && (
+                  <span className="rounded-full bg-amber-500/15 px-2 text-xs font-semibold text-amber-700 dark:text-amber-400" title={t('reviewQueue')}>
+                    {pending}
+                  </span>
+                )}
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              </span>
+            </button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-72 overflow-y-auto p-4 pt-12">
+            <SheetTitle className="sr-only">{t(`role.${role}`)}</SheetTitle>
+            {links}
+          </SheetContent>
+        </Sheet>
+
         <div className="grid gap-6 md:grid-cols-[200px_minmax(0,1fr)] lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8">
-          <aside className="md:sticky md:top-20 md:self-start">
-            <nav className="-mx-4 flex gap-1 overflow-x-auto border-b px-4 pb-2 md:mx-0 md:flex-col md:overflow-visible md:border-0 md:px-0 md:pb-0">
-              <p className="hidden px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground md:block">{t('general')}</p>
-              {nav.map((n) => item(n.href, n.label, n.icon, isActive(n.href, n.exact), n.badge))}
-              <p className="hidden px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground md:block">{t('shortcuts')}</p>
-              <div className="hidden md:contents">{shortcuts.map((s) => item(s.href, s.label, s.icon, false))}</div>
-              <div className="mt-6 hidden items-center gap-2 rounded-lg border p-3 text-sm md:flex">
-                <Shield className="h-4 w-4 text-primary" />
-                <span className="text-muted-foreground">{t(`role.${role}`)}</span>
-              </div>
-            </nav>
-          </aside>
+          <aside className="hidden md:sticky md:top-20 md:block md:self-start">{links}</aside>
           <main className="min-w-0">{children}</main>
         </div>
       </div>
