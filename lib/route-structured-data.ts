@@ -21,6 +21,11 @@ const iso8601Duration = (minutes: number) => {
  * - TouristTrip with its stops as the itinerary
  * - BreadcrumbList Destinations › Country › Region › Route (shown by Google
  *   in place of the URL in search results)
+ *
+ * No `review` / `aggregateRating`: Google only accepts them on some types
+ * (Product, Recipe, LocalBusiness…), not TouristTrip, and flags the page in
+ * Search Console; MotoTrip's own review would be a self-serving review anyway.
+ * The ratings stay visible on the page.
  */
 export function routeStructuredData(route: RouteWithDetails, locale: string, labels: Labels) {
   const base = getSiteUrl()
@@ -31,16 +36,6 @@ export function routeStructuredData(route: RouteWithDetails, locale: string, lab
   const images = [...photos, route.thumbnail_url].filter((u): u is string => !!u)
   const stops = [...(route.stops ?? [])].sort((a, b) => a.order_index - b.order_index)
   const coords = (route.polyline_coordinates?.coordinates ?? []) as [number, number][]
-
-  const ratingCount = Number(route.rating_count ?? 0)
-  const avg = ratingCount > 0 && route.rating_average != null ? Number(route.rating_average) : null
-
-  const curator = route.curator_review
-  // MotoTrip's own review, in the page's locale when translated
-  const curatorText =
-    curator && locale !== 'pt'
-      ? (curator.translations as Record<string, { verdict?: string }> | null)?.[locale]?.verdict || curator.verdict
-      : curator?.verdict
 
   const trip: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -98,33 +93,6 @@ export function routeStructuredData(route: RouteWithDetails, locale: string, lab
                 geo: { '@type': 'GeoCoordinates', latitude: Number(s.latitude), longitude: Number(s.longitude) },
               },
             })),
-          },
-        }
-      : {}),
-    ...(curator
-      ? {
-          review: {
-            '@type': 'Review',
-            author: { '@type': 'Organization', name: 'MotoTrip', url: base },
-            datePublished: (curator.researched_at ?? curator.created_at).slice(0, 10),
-            reviewBody: curatorText,
-            reviewRating: {
-              '@type': 'Rating',
-              ratingValue: Number(curator.overall),
-              bestRating: 5,
-              worstRating: 1,
-            },
-          },
-        }
-      : {}),
-    ...(avg !== null
-      ? {
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: Math.round(avg * 10) / 10,
-            bestRating: 5,
-            worstRating: 1,
-            ratingCount,
           },
         }
       : {}),
